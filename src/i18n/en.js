@@ -51,7 +51,7 @@ export default {
   work: {
     sectionTitle: 'selected projects',
     intro:
-      'Local heritage, seasonal food, sustainable gardening, urban data, property finance, media — I have designed across wildly different sectors. The subject keeps changing; the job stays the same: making tangled things clear.',
+      'I have designed across wildly different sectors. The subject keeps changing; the job stays the same: making tangled things clear.',
     counterSeparator: '/',
     filters: {
       all: 'All',
