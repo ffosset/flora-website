@@ -95,6 +95,49 @@ const { title } = Astro.props; // optional per-page <title> override
       // Keep the copyright year current without a rebuild.
       const yearEl = document.querySelector('[data-year]');
       if (yearEl) yearEl.textContent = String(new Date().getFullYear());
+
+      // The footer is position:fixed, so a plain #contact anchor doesn't move.
+      // Intercept "let's chat" links (nav + hero photo) and scroll to the
+      // bottom of the page, which reveals the footer drawer.
+      document.addEventListener('click', (e) => {
+        const link = e.target instanceof Element ? e.target.closest('a[href="#contact"]') : null;
+        if (!link) return;
+        e.preventDefault();
+        window.scrollTo({ top: document.documentElement.scrollHeight, behavior: 'smooth' });
+      });
+
+      // Active nav state: highlight the link for the section currently in view.
+      const navLinks = Array.from(document.querySelectorAll('.nav-links a[data-nav-link]'));
+      if (navLinks.length) {
+        const setActive = (hash) => {
+          navLinks.forEach((a) => a.classList.toggle('is-active', a.getAttribute('href') === hash));
+        };
+        const spied = ['work', 'about']
+          .map((id) => document.getElementById(id))
+          .filter(Boolean);
+        if (spied.length && 'IntersectionObserver' in window) {
+          const io = new IntersectionObserver(
+            (entries) => {
+              entries.forEach((en) => {
+                if (en.isIntersecting) setActive('#' + en.target.id);
+              });
+            },
+            // Effective viewport is a thin band at the vertical centre.
+            { rootMargin: '-45% 0px -45% 0px', threshold: 0 }
+          );
+          spied.forEach((s) => io.observe(s));
+        }
+        // At the bottom, the revealed footer is the active "section".
+        window.addEventListener(
+          'scroll',
+          () => {
+            const atBottom =
+              window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 4;
+            if (atBottom) setActive('#contact');
+          },
+          { passive: true }
+        );
+      }
     </script>
 
     <style>
@@ -146,17 +189,40 @@ const { title } = Astro.props; // optional per-page <title> override
         font-weight: 300;
       }
       .nav-links a {
+        position: relative;
         text-decoration: none;
         color: inherit;
         white-space: nowrap;
         transition: color 0.2s var(--ease);
       }
-      .nav-links a:hover { color: var(--color-primary); }
-      /* "let's chat" — the underlined, heavier CTA. */
-      .nav-cta {
-        font-weight: 600;
-        text-decoration: underline;
-        text-underline-position: from-font;
+      /* Underline that wipes in from the left on hover / focus / active. */
+      .nav-links a::after {
+        content: '';
+        position: absolute;
+        left: 0;
+        right: 0;
+        bottom: -0.3em;
+        height: 1.5px;
+        background: currentColor;
+        transform: scaleX(0);
+        transform-origin: left;
+        transition: transform 0.25s var(--ease);
+      }
+      .nav-links a:hover,
+      .nav-links a:focus-visible,
+      .nav-links a.is-active {
+        color: var(--color-primary);
+      }
+      .nav-links a:hover::after,
+      .nav-links a:focus-visible::after,
+      .nav-links a.is-active::after {
+        transform: scaleX(1);
+      }
+      /* "let's chat" — the heavier CTA (underline now comes from the wipe). */
+      .nav-cta { font-weight: 600; }
+
+      @media (prefers-reduced-motion: reduce) {
+        .nav-links a::after { transition: none; }
       }
 
       /* Hamburger — hidden on desktop. */
