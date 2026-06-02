@@ -19,34 +19,34 @@ const home = locale === 'en' ? base : `${base}${locale}/`;
     <link rel="icon" type="image/svg+xml" href={`${base}favicon.svg`} />
   </head>
   <body>
-    <header class="site-header" data-header>
-      <div class="container header-inner">
-        <a href={home} class="wordmark" aria-label="Flora Fosset — home">flora fosset</a>
+    <header class="site-header">
+      <div class="container">
+        <nav class="nav-bar" aria-label="Main">
+          <a href={home} class="wordmark" aria-label="Flora Fosset — home">fosset.co</a>
 
-        <button
-          type="button"
-          class="menu-toggle"
-          aria-expanded="false"
-          aria-controls="site-nav"
-          aria-label="Open menu"
-          data-menu-toggle
-        >
-          <span class="bar"></span>
-          <span class="bar"></span>
-          <span class="bar"></span>
-        </button>
+          <div class="nav-collapse" id="site-nav" data-nav-menu>
+            <ul class="nav-links">
+              <li><a href="#work" data-nav-link>{t.nav.work}</a></li>
+              <li><a href="#about" data-nav-link>{t.nav.about}</a></li>
+              <li><a href="#contact" data-nav-link class="nav-cta">{t.nav.contact}</a></li>
+            </ul>
+            <LanguageSwitcher currentLocale={locale} />
+          </div>
+
+          <button
+            type="button"
+            class="menu-toggle"
+            aria-expanded="false"
+            aria-controls="site-nav"
+            aria-label="Open menu"
+            data-menu-toggle
+          >
+            <span class="bar"></span>
+            <span class="bar"></span>
+            <span class="bar"></span>
+          </button>
+        </nav>
       </div>
-
-      <nav id="site-nav" class="nav-panel" data-nav-panel hidden>
-        <div class="container nav-panel-inner">
-          <ul>
-            <li><a href="#work" data-nav-link>{t.nav.work}</a></li>
-            <li><a href="#about" data-nav-link>{t.nav.about}</a></li>
-            <li><a href="#contact" data-nav-link class="nav-cta">{t.nav.contact}</a></li>
-          </ul>
-          <LanguageSwitcher currentLocale={locale} />
-        </div>
-      </nav>
     </header>
 
     <main>
@@ -62,61 +62,95 @@ const home = locale === 'en' ? base : `${base}${locale}/`;
 
     <script>
       const toggle = document.querySelector('[data-menu-toggle]');
-      const panel = document.querySelector('[data-nav-panel]');
-      if (toggle && panel) {
+      const menu = document.querySelector('[data-nav-menu]');
+      if (toggle && menu) {
         const setOpen = (open) => {
           toggle.setAttribute('aria-expanded', String(open));
           toggle.classList.toggle('is-open', open);
-          if (open) panel.removeAttribute('hidden');
-          else panel.setAttribute('hidden', '');
+          menu.classList.toggle('is-open', open);
         };
         toggle.addEventListener('click', () => {
           setOpen(toggle.getAttribute('aria-expanded') !== 'true');
         });
-        panel.querySelectorAll('[data-nav-link]').forEach((link) => {
+        // Close after picking a destination (nav link or language).
+        menu.querySelectorAll('a').forEach((link) => {
           link.addEventListener('click', () => setOpen(false));
         });
       }
     </script>
 
     <style>
+      /* Fixed, floating just below the top edge. */
       .site-header {
         position: fixed;
         inset: 0 0 auto 0;
         z-index: 20;
-        background: rgba(255, 255, 255, 0.7);
-        -webkit-backdrop-filter: blur(12px);
-        backdrop-filter: blur(12px);
-        border-bottom: 1px solid var(--color-line);
+        padding-top: var(--space-2);
       }
 
-      .header-inner {
+      /* The floating translucent bar (matches the Figma frame). */
+      .nav-bar {
+        position: relative;
         display: flex;
         align-items: center;
         justify-content: space-between;
-        padding-block: var(--space-2);
+        gap: var(--space-3);
+        padding: 16px 24px;
+        font-family: var(--font-display);
+        font-size: 1rem;
+        background: rgba(255, 255, 255, 0.8);
+        -webkit-backdrop-filter: blur(4.5px);
+        backdrop-filter: blur(4.5px);
+        box-shadow: 0 4px 16px 0 rgba(222, 220, 218, 0.15);
+        border-radius: 2px;
       }
 
-      /* "flora fosset" wordmark */
+      /* "fosset.co" wordmark — light weight, primary color. */
       .wordmark {
+        flex-shrink: 0;
         text-decoration: none;
-        font-family: var(--font-display);
-        font-weight: 700;
-        font-size: 1.0625rem;
+        font-weight: 300;
         line-height: 1;
-        letter-spacing: -0.01em;
         color: var(--color-primary);
       }
 
-      /* Hamburger */
+      /* On desktop the collapse is transparent: its children (links + langs)
+         become direct flex items of the bar. */
+      .nav-collapse { display: contents; }
+
+      .nav-links {
+        flex: 1 0 0;
+        display: flex;
+        justify-content: center;
+        gap: 40px;
+        list-style: none;
+        color: var(--color-muted-soft);
+        font-weight: 300;
+      }
+      .nav-links a {
+        text-decoration: none;
+        color: inherit;
+        white-space: nowrap;
+        transition: color 0.2s var(--ease);
+      }
+      .nav-links a:hover { color: var(--color-primary); }
+      /* "let's chat" — the underlined, heavier CTA. */
+      .nav-cta {
+        font-weight: 600;
+        text-decoration: underline;
+        text-underline-position: from-font;
+      }
+
+      /* Hamburger — hidden on desktop. */
       .menu-toggle {
-        width: 32px;
-        height: 28px;
-        display: inline-flex;
+        display: none;
+        width: 28px;
+        height: 24px;
         flex-direction: column;
         justify-content: center;
         gap: 5px;
         padding: 0;
+        color: var(--color-text);
       }
       .menu-toggle .bar {
         display: block;
@@ -130,34 +164,33 @@ const home = locale === 'en' ? base : `${base}${locale}/`;
       .menu-toggle.is-open .bar:nth-child(2) { opacity: 0; }
       .menu-toggle.is-open .bar:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
 
-      /* Slide-down nav panel */
-      .nav-panel {
-        background: var(--color-bg);
-        color: var(--color-ink);
-        border-bottom: 1px solid var(--color-line);
-      }
-      .nav-panel[hidden] { display: none; }
-      .nav-panel-inner {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        gap: var(--space-3);
-        padding-block: var(--space-3);
-      }
-      .nav-panel ul {
-        display: flex;
-        flex-wrap: wrap;
-        gap: var(--space-3);
-        list-style: none;
-        font-size: var(--fs-body);
-        font-weight: 500;
-      }
-      .nav-panel a { text-decoration: none; }
-      .nav-cta {
-        background: var(--color-purple);
-        color: var(--color-ink-on-purple);
-        padding: 0.55rem 1.1rem;
-        border-radius: var(--radius-pill);
+      /* --- Mobile: collapse links + langs into a dropdown --- */
+      @media (max-width: 767px) {
+        .menu-toggle { display: inline-flex; }
+        .nav-collapse {
+          display: none;
+          position: absolute;
+          top: calc(100% + 8px);
+          left: 0;
+          right: 0;
+          flex-direction: column;
+          align-items: flex-start;
+          gap: var(--space-3);
+          padding: var(--space-3);
+          background: rgba(255, 255, 255, 0.96);
+          -webkit-backdrop-filter: blur(4.5px);
+          backdrop-filter: blur(4.5px);
+          box-shadow: 0 4px 16px 0 rgba(222, 220, 218, 0.25);
+          border-radius: 2px;
+        }
+        .nav-collapse.is-open { display: flex; }
+        .nav-links {
+          flex: none;
+          flex-direction: column;
+          align-items: flex-start;
+          gap: var(--space-2);
+          justify-content: flex-start;
+        }
       }
 
       .site-footer {

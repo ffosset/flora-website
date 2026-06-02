@@ -26,9 +26,23 @@
 @font-face {
   font-family: 'Inter';
   font-style: normal;
+  font-weight: 300;
+  font-display: swap;
+  src: url('./fonts/Inter-300.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
   font-weight: 400;
   font-display: swap;
   src: url('./fonts/Inter-400.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url('./fonts/Inter-600.woff2') format('woff2');
 }
 @font-face {
   font-family: 'Inter';
@@ -71,6 +85,7 @@
   --color-ink: var(--color-text);
   --color-ink-on-primary: #ffffff;            /* text on primary */
   --color-muted: #6b564a;                      /* secondary text on light */
+  --color-muted-soft: #b8aea4;                 /* faint warm grey — nav links */
   --color-muted-on-primary: rgba(255, 255, 255, 0.72);
 
   /* Lines */

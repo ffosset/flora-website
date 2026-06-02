@@ -9,9 +9,9 @@ export default {
       'Designer and strategist who turns complicated ideas — products, platforms, stories — into something people instantly understand.',
   },
   nav: {
-    work: 'Work',
-    about: 'About',
-    contact: "Let's talk",
+    work: 'projects',
+    about: 'about me',
+    contact: "let's chat",
   },
   hero: {
     nameWord: 'flora',

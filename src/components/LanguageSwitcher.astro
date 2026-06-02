@@ -1,8 +1,10 @@
 ---
-import { languages, defaultLang } from '../i18n';
+import { defaultLang } from '../i18n';
 
 const { currentLocale } = Astro.props;
 
+// Order shown in the design: en · es · fr.
+const order = ['en', 'es', 'fr'];
 const base = import.meta.env.BASE_URL; // includes a trailing slash, e.g. '/flora-website/'
 
 function localePath(loc) {
@@ -12,21 +14,36 @@ function localePath(loc) {
 
 <div class="lang-switch">
   {
-    Object.entries(languages).map(([code, label]) => (
-      <a
-        href={localePath(code)}
-        class={code === currentLocale ? 'active' : ''}
-        hreflang={code}
-        aria-current={code === currentLocale ? 'true' : undefined}
-      >
-        {code.toUpperCase()}
-      </a>
+    order.map((code, i) => (
+      <>
+        {i > 0 && <span class="sep" aria-hidden="true">·</span>}
+        <a
+          href={localePath(code)}
+          class={code === currentLocale ? 'active' : ''}
+          hreflang={code}
+          aria-current={code === currentLocale ? 'true' : undefined}
+        >
+          {code}
+        </a>
+      </>
     ))
   }
 </div>
 
 <style>
-  .lang-switch { display: flex; gap: 0.4rem; font-size: var(--fs-small); }
-  .lang-switch a { text-decoration: none; color: var(--color-muted); padding: 0.1rem 0.3rem; border-radius: 4px; }
-  .lang-switch a.active { color: var(--color-ink); font-weight: 600; }
+  .lang-switch {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 1rem;
+  }
+  .lang-switch a {
+    text-decoration: none;
+    color: var(--color-muted-soft);
+    font-weight: 300;
+    transition: color 0.2s var(--ease);
+  }
+  .lang-switch a.active { color: var(--color-primary); font-weight: 700; }
+  .lang-switch a:hover { color: var(--color-primary); }
+  .lang-switch .sep { color: var(--color-muted-soft); font-weight: 300; }
 </style>
