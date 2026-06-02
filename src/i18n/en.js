@@ -189,6 +189,6 @@ export default {
   },
   footer: {
     rights: '© Flora Fosset',
-    location: 'Brussels · Madrid',
+    location: 'Freelancer between Brussels and Madrid',
   },
 };

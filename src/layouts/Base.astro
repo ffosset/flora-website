@@ -7,6 +7,7 @@ const locale = getLocaleFromUrl(Astro.url);
 const t = useTranslations(locale);
 const base = import.meta.env.BASE_URL; // includes a trailing slash, e.g. '/flora-website/'
 const home = locale === 'en' ? base : `${base}${locale}/`;
+const year = new Date().getFullYear(); // SSR fallback; a client script keeps it live
 ---
 
 <!doctype html>
@@ -53,9 +54,19 @@ const home = locale === 'en' ? base : `${base}${locale}/`;
       <slot />
     </main>
 
-    <footer class="site-footer">
-      <div class="container footer-inner">
-        <span>{t.footer.rights}</span>
+    <footer id="contact" class="site-footer">
+      <div class="container footer-cta">
+        <h2>{t.contact.sectionTitle}</h2>
+        <p class="footer-sub">{t.contact.subhead}</p>
+        <div class="footer-links">
+          <a href={`mailto:${t.contact.email}`} class="footer-cta-btn">{t.contact.email}</a>
+          <a href={t.contact.linkedin} target="_blank" rel="noopener" class="footer-ghost">
+            {t.contact.linkedinLabel}
+          </a>
+        </div>
+      </div>
+      <div class="container footer-meta">
+        <span>{t.footer.rights} <span data-year>{year}</span></span>
         <span>{t.footer.location}</span>
       </div>
     </footer>
@@ -77,6 +88,10 @@ const home = locale === 'en' ? base : `${base}${locale}/`;
           link.addEventListener('click', () => setOpen(false));
         });
       }
+
+      // Keep the copyright year current without a rebuild.
+      const yearEl = document.querySelector('[data-year]');
+      if (yearEl) yearEl.textContent = String(new Date().getFullYear());
     </script>
 
     <style>
@@ -193,15 +208,80 @@ const home = locale === 'en' ? base : `${base}${locale}/`;
         }
       }
 
-      .site-footer {
-        border-top: 1px solid var(--color-line);
-        padding-block: var(--space-4);
+      /* Content sits on its own opaque layer above the footer, so the orange
+         footer is hidden until the page scrolls up to uncover it. */
+      main {
+        position: relative;
+        z-index: 1;
+        background: var(--color-bg);
       }
-      .footer-inner {
+
+      /* The contact CTA + meta read as one orange footer. */
+      .site-footer {
+        background: var(--color-purple);
+        color: var(--color-ink-on-purple);
+        text-align: center;
+      }
+      /* Scroll reveal: pin the footer to the bottom behind the content; as you
+         scroll down it is swept into view. Desktop + motion-OK only. */
+      @media (min-width: 768px) and (prefers-reduced-motion: no-preference) {
+        .site-footer {
+          position: sticky;
+          bottom: 0;
+          z-index: 0;
+        }
+      }
+
+      .footer-cta {
+        padding-block: clamp(3rem, 8vw, 6rem) var(--space-5);
+      }
+      .footer-cta h2 {
+        font-size: var(--fs-hero);
+        line-height: 1.02;
+        letter-spacing: -0.03em;
+        max-width: 22ch;
+        margin-inline: auto;
+        color: var(--color-ink-on-purple);
+      }
+      .footer-sub {
+        margin: var(--space-3) auto 0;
+        max-width: 52ch;
+        font-size: 1.125rem;
+        line-height: 1.5;
+        color: var(--color-muted-on-purple);
+      }
+      .footer-links {
+        display: flex;
+        gap: var(--space-3);
+        align-items: center;
+        justify-content: center;
+        margin-top: var(--space-4);
+        flex-wrap: wrap;
+      }
+      .footer-cta-btn {
+        background: var(--color-ink-on-purple);
+        color: var(--color-purple);
+        text-decoration: none;
+        padding: 0.8rem 1.6rem;
+        border-radius: var(--radius-pill);
+        font-weight: 600;
+      }
+      .footer-ghost {
+        color: var(--color-ink-on-purple);
+        text-decoration: none;
+        padding: 0.8rem 1.2rem;
+        border-radius: var(--radius-pill);
+        border: 1px solid var(--color-line-on-purple);
+      }
+      .footer-meta {
         display: flex;
         justify-content: space-between;
+        gap: var(--space-2);
+        flex-wrap: wrap;
+        padding-block: var(--space-4);
+        border-top: 1px solid var(--color-line-on-purple);
         font-size: var(--fs-small);
-        color: var(--color-muted);
+        color: var(--color-muted-on-purple);
       }
     </style>
   </body>
