@@ -26,27 +26,27 @@ export default {
     cta: "Let's talk",
   },
   whatIDo: {
-    statement: 'I help companies turn design chaos into clarity',
+    statement: "You know your work. Let's make sure everyone else does too.",
     statementSub:
-      'sharper products, systems that scale, and teams that actually know what "good" looks like.',
+      "I'm a designer who helps small teams explain what they do. Then I build the website, platform, or story that does the explaining.",
     sectionTitle: 'What I do',
     problems: [
       {
-        title: "You can't explain what you do",
-        body: 'I find the clear version and build the site or story that tells it.',
+        title: "You can't explain what you do.",
+        body: 'Most people inside your business get it, but newcomers glaze over. I find the version that clicks, and build the website or story that delivers it.',
       },
       {
-        title: 'Your website or platform confuses people',
-        body: 'I redesign it so it is obvious, and people act.',
+        title: 'Your website is confusing clients.',
+        body: 'Too many menus, too much text, no clear next step. I redesign so the right action is obvious.',
       },
       {
-        title: 'You have data or an idea but it is a mess',
-        body: 'I shape it into something people can actually use and decide with.',
+        title: 'Your idea is buried in a mess of data.',
+        body: 'Spreadsheets, half-built tools, a process only you understand. I turn it into something your team and your customers can actually use.',
       },
     ],
     howIWorkTitle: 'How I work',
     howIWorkBody:
-      'Most teams hire a designer, a writer, and a developer, then try to stitch them together. I see the whole thing at once — the story, the design, and the working product — because my path ran through journalism, data, design, and building companies. One mind, the full picture.',
+      'Most teams hire a designer, a writer, and a developer, then try to stitch them together. I see the whole thing at once: the story, the design, and the working product, because my path ran through journalism, data, design, and building companies.',
   },
   work: {
     sectionTitle: 'projects that left a mark',
@@ -124,7 +124,7 @@ export default {
   about: {
     sectionTitle: 'about me',
     bio:
-      'I make complicated things clear. Over 8+ years I have moved from data journalism to information design to product design and product management — and now co-founding a company. That path is why I can see a project whole: the story, the design, and the working product.',
+      'I started out as a data journalist, turning datasets into gripping stories. That curiosity about how to make complicated things land turned into a career: information design, then product design, then product management. Today I freelance from Brussels and Madrid, and I co-run a startup called Minnow that puts environmental risk into the systems companies use to make real decisions.',
     experienceTitle: 'experience.',
     experience: [
       {
@@ -151,9 +151,11 @@ export default {
       'I choose work that supports a greener, fairer, more inclusive world. If that is the kind of thing you are building, we will get along.',
   },
   contact: {
-    sectionTitle: 'tell me what you are trying to make clear',
+    sectionTitle: 'Tell me about your project',
+    subhead:
+      "Send a few lines about you or your company: what it is, who it's for, what's stuck. I read every message and reply within a few days.",
     emailLabel: 'Email',
-    email: 'hello@fosset.co',
+    email: 'flora@fosset.co',
     linkedinLabel: 'LinkedIn',
     linkedin: 'https://www.linkedin.com/in/florafosset/',
   },

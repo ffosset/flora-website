@@ -26,6 +26,7 @@ const { t } = Astro.props;
 <section id="contact" class="contact">
   <div class="container">
     <h2>{t.contact.sectionTitle}</h2>
+    <p class="contact-sub">{t.contact.subhead}</p>
     <div class="links">
       <a href={`mailto:${t.contact.email}`} class="contact-cta">{t.contact.email}</a>
       <a href={t.contact.linkedin} target="_blank" rel="noopener" class="contact-ghost">
@@ -71,6 +72,13 @@ const { t } = Astro.props;
     letter-spacing: -0.03em;
     max-width: 22ch;
     color: var(--color-ink-on-purple);
+  }
+  .contact-sub {
+    margin-top: var(--space-3);
+    max-width: 52ch;
+    font-size: 1.125rem;
+    line-height: 1.5;
+    color: var(--color-muted-on-purple);
   }
   .links {
     display: flex;
