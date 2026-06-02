@@ -106,7 +106,7 @@
   --font-body: 'Fira Code', ui-monospace, 'SF Mono', 'Cascadia Code', Menlo, monospace;
 
   /* --- Fluid type scale (mobile min → desktop max, ~360px→1280px) --- */
-  --fs-mega:  clamp(2.75rem, 1.28rem + 6.52vw, 6.5rem);  /* hero wordmark */
+  --fs-mega:  clamp(2.75rem, 1.9rem + 4.25vw, 4.5rem);  /* hero wordmark */
   --fs-hero:  clamp(2rem, 1.22rem + 3.48vw, 4rem);       /* big statements */
   --fs-h1:    clamp(2.25rem, 1.76rem + 2.17vw, 3.5rem);  /* 36 → 56px */
   --fs-h2:    clamp(1.625rem, 1.38rem + 1.09vw, 2.25rem);/* 26 → 36px */
