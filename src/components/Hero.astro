@@ -170,31 +170,35 @@ const roles = t.hero.roles?.length ? t.hero.roles : [t.hero.roleWord];
   }
 
   .hero-cursor {
-    --cursor-size: 24px;
+    /* One knob for the glow's size. */
+    --cursor-size: 500px;
     position: absolute;
     top: 0;
     left: 0;
     width: var(--cursor-size);
     height: var(--cursor-size);
-    border-radius: 50%;
-    background: var(--color-cursor, var(--color-ink));
-    /* difference inverts whatever is behind the disc. Against this mostly
-       near-white gradient, `exclusion` collapses toward flat grey (low
-       contrast), whereas `difference` stays punchy over both the white and
-       the peach, and cleanly inverts the dark "flora" wordmark. */
-    mix-blend-mode: difference;
+    /* Soft radial glow that fades to nothing — no hard edge, no flat circle. */
+    background: radial-gradient(circle, var(--color-cursor-glow) 0%, transparent 70%);
+    /* Extra diffusion on top of the gradient so it reads as light, not a shape. */
+    filter: blur(40px);
+    /* multiply keeps the orange truthful: it warmly tints the cream ground
+       instead of inverting it. (difference turned the orange blue; plain
+       opacity with no blend sat flat and grey-ish on top — multiply gives the
+       warmest, most natural glow against this palette.) */
+    mix-blend-mode: multiply;
     pointer-events: none;
     z-index: 2;
     opacity: 0;
-    /* Position lives on `translate` (its own channel); -50% centers the disc
-       on the pointer. Scale is a separate channel so it can transition on
-       hover without affecting the lerped position. top/left are never animated. */
+    /* Position on the `translate` channel (GPU-composited, never top/left).
+       -50% is exactly --cursor-size / 2, so the glow stays centered on the
+       pointer at any size — the larger 500px box is accounted for automatically. */
     translate: calc(var(--cx, 0px) - 50%) calc(var(--cy, 0px) - 50%);
     scale: var(--cursor-scale, 1);
+    /* Promote to its own layer: a 500px blurred element is costly to repaint. */
+    will-change: transform;
     transition: opacity 0.2s var(--ease), scale 0.2s var(--ease);
-    will-change: translate, opacity;
   }
-  .hero-cursor.is-visible { opacity: 1; }
+  .hero-cursor.is-visible { opacity: 0.6; }
   .hero-cursor.is-hover { --cursor-scale: 2; }
 
   /* Touch / no-hover devices: there is no cursor to follow. */

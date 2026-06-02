@@ -64,6 +64,9 @@
   --color-card: #ffffff;           /* lifted surfaces */
   --color-bg-soft: var(--color-secondary); /* tinted section ground */
 
+  /* Hero spotlight cursor glow (radial gradient + blur, multiply blend). */
+  --color-cursor-glow: #ae4905;
+
   /* Ink */
   --color-ink: var(--color-text);
   --color-ink-on-primary: #ffffff;            /* text on primary */
