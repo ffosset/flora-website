@@ -24,29 +24,42 @@ const filters = t.work.filters;
   <div class="track" data-track tabindex="0" aria-label="Selected work">
     <div class="track-pad" aria-hidden="true"></div>
     {
-      t.work.projects.map((p, i) => (
-        <article
-          class="card"
-          data-cats={(p.category || []).join(' ')}
-          data-index={i + 1}
-        >
-          <div class="card-media" aria-hidden="true">
-            {p.image ? (
-              <img src={p.image} alt="" loading="lazy" />
-            ) : (
-              <div class="media-placeholder">
-                <span>{p.slug}</span>
+      t.work.projects.map((p) => {
+        const hasUrl = Boolean(p.url);
+        const isExternal = hasUrl && p.url.startsWith('http');
+        const Tag = hasUrl ? 'a' : 'div';
+        return (
+          <Tag
+            class:list={['card', { 'is-link': hasUrl }]}
+            href={hasUrl ? p.url : undefined}
+            target={isExternal ? '_blank' : undefined}
+            rel={isExternal ? 'noopener noreferrer' : undefined}
+            data-cats={(p.category || []).join(' ')}
+          >
+            <div class="card-media">
+              {p.tag && <span class="card-tag">{p.tag}</span>}
+              <div class="media-placeholder" aria-hidden="true">
+                <span>{p.subtitle || p.slug}</span>
               </div>
-            )}
-          </div>
-          <div class="card-body">
-            <h3><span class="slash">·</span>{p.title}</h3>
-            {p.problem && <p class="problem">{p.problem}</p>}
-            {p.did && <p class="did">{p.did}</p>}
-            {p.outcome && <p class="outcome">{p.outcome}</p>}
-          </div>
-        </article>
-      ))
+              <img src={p.image} alt={p.subtitle} loading="lazy" onerror="this.style.display='none'" />
+              {isExternal && <span class="card-go" aria-hidden="true">↗</span>}
+            </div>
+            <div class="card-body">
+              {p.subtitle && <p class="card-client">{p.subtitle}</p>}
+              <h3 class="card-title">{p.title}</h3>
+              {p.did && <p class="card-did">{p.did}</p>}
+              {p.result && <p class="card-result">{p.result}</p>}
+              {p.awards && p.awards.length > 0 && (
+                <ul class="card-awards">
+                  {p.awards.map((a) => (
+                    <li>{a.name}{a.year ? ` · ${a.year}` : ''}</li>
+                  ))}
+                </ul>
+              )}
+            </div>
+          </Tag>
+        );
+      })
     }
     <div class="track-pad" aria-hidden="true"></div>
   </div>
@@ -142,45 +155,129 @@ const filters = t.work.filters;
     scroll-snap-align: center;
     display: flex;
     flex-direction: column;
-    transition: opacity 0.3s var(--ease);
+    text-decoration: none;
+    color: inherit;
+    transition: opacity 0.3s var(--ease), transform 0.3s var(--ease);
   }
   .card.dimmed { opacity: 0.35; }
+  .card.is-link:hover { transform: translateY(-4px); }
 
   .card-media {
+    position: relative;
     aspect-ratio: 4 / 3;
     background: var(--color-bg-soft);
     border-radius: var(--radius-card);
     overflow: hidden;
-    margin-bottom: var(--space-2);
+    margin-bottom: var(--space-3);
   }
-  .card-media img { width: 100%; height: 100%; object-fit: cover; display: block; }
-  .media-placeholder {
+  .card-media img {
+    position: absolute;
+    inset: 0;
     width: 100%;
     height: 100%;
+    object-fit: cover;
+    display: block;
+    /* Desaturated at rest, full color on hover (echoes the hero treatment). */
+    filter: grayscale(0.9);
+    transition: filter 0.4s var(--ease), transform 0.5s var(--ease);
+  }
+  .card.is-link:hover .card-media img { filter: grayscale(0); transform: scale(1.04); }
+
+  .media-placeholder {
+    position: absolute;
+    inset: 0;
     display: flex;
     align-items: center;
     justify-content: center;
-    color: color-mix(in srgb, var(--color-purple) 60%, transparent);
+    padding: 1rem;
+    text-align: center;
+    color: color-mix(in srgb, var(--color-primary) 55%, transparent);
     font-family: var(--font-display);
     font-size: 0.875rem;
     letter-spacing: 0.04em;
-    text-transform: lowercase;
   }
 
-  .card-body { padding-block: var(--space-1); }
-  .card h3 {
-    font-size: 1.125rem;
-    font-weight: 700;
-    letter-spacing: -0.01em;
-    line-height: 1.25;
-    margin-bottom: var(--space-2);
+  /* Sector tag, top-left over the image. */
+  .card-tag {
+    position: absolute;
+    top: 0.75rem;
+    left: 0.75rem;
+    z-index: 1;
+    font-size: var(--fs-eyebrow);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    font-weight: 500;
+    color: var(--color-primary);
+    background: rgba(255, 255, 255, 0.85);
+    -webkit-backdrop-filter: blur(4px);
+    backdrop-filter: blur(4px);
+    padding: 0.25rem 0.6rem;
+    border-radius: var(--radius-pill);
   }
-  .card .problem { color: var(--color-muted); font-size: 0.9375rem; line-height: 1.45; }
-  .card .did { margin-top: var(--space-1); font-size: 0.9375rem; line-height: 1.45; }
-  .card .outcome {
-    margin-top: var(--space-2);
-    font-weight: 600;
-    color: var(--color-purple);
+  /* External-link affordance, top-right, revealed on hover. */
+  .card-go {
+    position: absolute;
+    top: 0.75rem;
+    right: 0.75rem;
+    z-index: 1;
+    width: 1.75rem;
+    height: 1.75rem;
+    display: grid;
+    place-items: center;
+    border-radius: 50%;
+    color: var(--color-primary);
+    background: rgba(255, 255, 255, 0.85);
+    -webkit-backdrop-filter: blur(4px);
+    backdrop-filter: blur(4px);
+    opacity: 0;
+    transition: opacity 0.3s var(--ease);
+  }
+  .card.is-link:hover .card-go { opacity: 1; }
+
+  .card-body {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-1);
+    padding-block: var(--space-1);
+  }
+  .card-client {
+    font-size: var(--fs-small);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    font-weight: 500;
+    color: var(--color-muted-soft);
+  }
+  .card-title {
+    font-size: 1.25rem;
+    font-weight: 700;
+    line-height: 1.25;
+    letter-spacing: -0.01em;
+    color: var(--color-text);
+  }
+  .card-did {
+    margin-top: var(--space-1);
+    color: var(--color-muted);
     font-size: 0.9375rem;
+    line-height: 1.5;
+  }
+  .card-result {
+    color: var(--color-primary);
+    font-weight: 600;
+    font-size: 0.9375rem;
+    line-height: 1.45;
+  }
+  .card-awards {
+    margin-top: var(--space-1);
+    list-style: none;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+    font-size: var(--fs-small);
+    color: var(--color-muted);
+  }
+  .card-awards li {
+    border: 1px solid var(--color-line);
+    border-radius: var(--radius-pill);
+    padding: 0.15rem 0.6rem;
   }
 </style>
