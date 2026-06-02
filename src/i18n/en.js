@@ -49,9 +49,9 @@ export default {
       'Most teams hire a designer, a writer, and a developer, then try to stitch them together. I see the whole thing at once: the story, the design, and the working product, because my path ran through journalism, data, design, and building companies.',
   },
   work: {
-    sectionTitle: 'projects that left a mark',
+    sectionTitle: 'selected projects',
     intro:
-      'Websites, platforms, data tools, stories — different surfaces, same job: taking something tangled and making it clear.',
+      'Local heritage, seasonal food, sustainable gardening, urban data, property finance, media — I have designed across wildly different sectors. The subject keeps changing; the job stays the same: making tangled things clear.',
     counterSeparator: '/',
     filters: {
       all: 'All',
