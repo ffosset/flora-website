@@ -27,11 +27,14 @@ const filters = t.work.filters;
       t.work.projects.map((p) => {
         const hasUrl = Boolean(p.url);
         const isExternal = hasUrl && p.url.startsWith('http');
+        // Internal links ('/work/...') need the GitHub Pages base prefix.
+        const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+        const href = hasUrl ? (isExternal ? p.url : base + p.url) : undefined;
         const Tag = hasUrl ? 'a' : 'div';
         return (
           <Tag
             class:list={['card', { 'is-link': hasUrl }]}
-            href={hasUrl ? p.url : undefined}
+            href={href}
             target={isExternal ? '_blank' : undefined}
             rel={isExternal ? 'noopener noreferrer' : undefined}
             data-cats={(p.category || []).join(' ')}

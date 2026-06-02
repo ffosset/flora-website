@@ -1,0 +1,249 @@
+---
+import Base from '../../layouts/Base.astro';
+
+const base = import.meta.env.BASE_URL; // trailing slash, e.g. '/flora-website/'
+
+// PLACEHOLDER CONTENT — replace the body paragraphs, story titles, image
+// sources and captions with the real article. The structure, layout and
+// reading typography are final; only the prose/images are stand-ins.
+const fill = [
+  'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.',
+  'Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
+  'Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.',
+];
+
+const stories = [
+  { id: 'i', tab: 'Témoignage I', title: 'Témoignage I — titre à venir', lead: 'Phrase d’introduction du premier récit, à remplacer par le texte réel.', caption: 'Photographie d’archive — légende.' },
+  { id: 'ii', tab: 'Témoignage II', title: 'Témoignage II — titre à venir', lead: 'Phrase d’introduction du deuxième récit, à remplacer par le texte réel.', caption: 'Photographie d’archive — légende.' },
+  { id: 'iii', tab: 'Témoignage III', title: 'Témoignage III — titre à venir', lead: 'Phrase d’introduction du troisième récit, à remplacer par le texte réel.', caption: 'Photographie d’archive — légende.' },
+  { id: 'iv', tab: 'Témoignage IV', title: 'Témoignage IV — titre à venir', lead: 'Phrase d’introduction du quatrième récit, à remplacer par le texte réel.', caption: 'Photographie d’archive — légende.' },
+];
+const quote = 'Une citation marquante extraite du récit, mise en exergue pour rythmer la lecture.';
+---
+
+<Base title="La couleur du péché — Flora Fosset">
+  <article class="article" lang="fr">
+    <div class="wrap">
+      <a class="back" href={`${base}#work`}>← Retour aux projets</a>
+      <p class="eyebrow">24h01 · revue belge · 2016</p>
+      <h1 class="article-title">La couleur du péché</h1>
+      <p class="article-sub">
+        Une enquête au long cours sur les enfants métis de la colonisation belge :
+        arrachés à leurs mères africaines, placés dans des institutions tenues par
+        l’Église, puis déplacés vers la Belgique en 1959.
+      </p>
+    </div>
+
+    <figure class="figure figure--lead">
+      <div class="ph">Image principale</div>
+      <figcaption>Légende de l’image d’ouverture.</figcaption>
+    </figure>
+
+    <div class="wrap">
+      <div class="story-nav" role="tablist" aria-label="Témoignages" data-story-tabs>
+        {stories.map((s, i) => (
+          <button
+            class="story-tab"
+            role="tab"
+            id={`tab-${s.id}`}
+            aria-controls={`panel-${s.id}`}
+            aria-selected={i === 0 ? 'true' : 'false'}
+            tabindex={i === 0 ? 0 : -1}
+          >
+            {s.tab}
+          </button>
+        ))}
+      </div>
+    </div>
+
+    {stories.map((s, i) => (
+      <section
+        class="story"
+        id={`panel-${s.id}`}
+        role="tabpanel"
+        aria-labelledby={`tab-${s.id}`}
+        data-story-panel
+        hidden={i !== 0}
+      >
+        <div class="wrap">
+          <h2 class="story-title">{s.title}</h2>
+          <p class="story-lead">{s.lead}</p>
+          <p>{fill[0]}</p>
+          <p>{fill[1]}</p>
+        </div>
+
+        <figure class="figure">
+          <div class="ph">Photographie</div>
+          <figcaption>{s.caption}</figcaption>
+        </figure>
+
+        <div class="wrap">
+          <blockquote class="pullquote">{quote}</blockquote>
+          <p>{fill[2]}</p>
+          <p>{fill[0]}</p>
+        </div>
+      </section>
+    ))}
+  </article>
+</Base>
+
+<script>
+  const tablist = document.querySelector('[data-story-tabs]');
+  if (tablist) {
+    const tabs = Array.from(tablist.querySelectorAll('[role="tab"]'));
+    const panels = Array.from(document.querySelectorAll('[data-story-panel]'));
+    const select = (i, focus) => {
+      tabs.forEach((tab, j) => {
+        const on = j === i;
+        tab.setAttribute('aria-selected', String(on));
+        tab.tabIndex = on ? 0 : -1;
+        if (panels[j]) panels[j].hidden = !on;
+      });
+      if (focus) tabs[i].focus();
+    };
+    tabs.forEach((tab, i) => {
+      tab.addEventListener('click', () => select(i));
+      tab.addEventListener('keydown', (e) => {
+        if (e.key !== 'ArrowRight' && e.key !== 'ArrowLeft') return;
+        e.preventDefault();
+        const dir = e.key === 'ArrowRight' ? 1 : -1;
+        select((i + dir + tabs.length) % tabs.length, true);
+      });
+    });
+  }
+</script>
+
+<style>
+  /* Inter throughout — far more comfortable than the mono for long reading. */
+  .article {
+    font-family: var(--font-display);
+    color: var(--color-text);
+    padding-block: clamp(6rem, 12vh, 9rem) var(--space-6);
+  }
+
+  /* Reading column: ~40rem keeps line length in the comfortable 60–75ch band. */
+  .wrap {
+    max-width: 40rem;
+    margin-inline: auto;
+    padding-inline: var(--gutter);
+  }
+
+  .back {
+    display: inline-block;
+    margin-bottom: var(--space-4);
+    font-size: var(--fs-small);
+    color: var(--color-muted);
+    text-decoration: none;
+  }
+  .back:hover { color: var(--color-primary); }
+
+  .eyebrow {
+    font-size: var(--fs-small);
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--color-muted-soft);
+    margin-bottom: var(--space-2);
+  }
+  .article-title {
+    font-size: clamp(2.25rem, 1.4rem + 3.4vw, 3.5rem);
+    font-weight: 800;
+    line-height: 1.08;
+    letter-spacing: -0.02em;
+  }
+  .article-sub {
+    margin-top: var(--space-3);
+    font-size: 1.25rem;
+    line-height: 1.5;
+    font-weight: 400;
+    color: var(--color-muted);
+    max-width: 34rem;
+  }
+
+  /* Figures — generous, rounded, with quiet captions. Lead image is wider. */
+  .figure {
+    margin-block: var(--space-5);
+    margin-inline: auto;
+    max-width: 52rem;
+    padding-inline: var(--gutter);
+  }
+  .figure--lead { margin-top: var(--space-5); }
+  .figure .ph {
+    aspect-ratio: 3 / 2;
+    border-radius: var(--radius-card);
+    background: var(--color-bg-soft);
+    display: grid;
+    place-items: center;
+    color: color-mix(in srgb, var(--color-primary) 55%, transparent);
+    font-size: var(--fs-small);
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+  .figure figcaption {
+    margin-top: var(--space-2);
+    font-size: var(--fs-small);
+    color: var(--color-muted);
+    text-align: center;
+  }
+
+  /* Story selector — sticky just under the floating nav so readers can switch
+     between testimonies while scrolling. */
+  .story-nav {
+    position: sticky;
+    top: 4.75rem;
+    z-index: 2;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-block: var(--space-4);
+    padding-block: var(--space-2);
+    background: color-mix(in srgb, var(--color-bg) 88%, transparent);
+    -webkit-backdrop-filter: blur(6px);
+    backdrop-filter: blur(6px);
+  }
+  .story-tab {
+    font-size: var(--fs-small);
+    font-weight: 500;
+    border: 1px solid var(--color-line);
+    border-radius: var(--radius-pill);
+    padding: 0.4rem 1rem;
+    color: var(--color-muted);
+    transition: all 0.2s var(--ease);
+  }
+  .story-tab:hover { border-color: var(--color-primary); color: var(--color-primary); }
+  .story-tab[aria-selected='true'] {
+    background: var(--color-primary);
+    border-color: var(--color-primary);
+    color: var(--color-ink-on-primary);
+  }
+
+  /* Body copy tuned for reading: 19px, line-height 1.75, soft paragraph rhythm. */
+  .story { font-size: 1.1875rem; line-height: 1.75; }
+  .story p { margin-top: var(--space-3); }
+  .story p:first-of-type { margin-top: 0; }
+  .story-title {
+    font-size: clamp(1.625rem, 1.2rem + 1.6vw, 2.25rem);
+    font-weight: 700;
+    line-height: 1.2;
+    letter-spacing: -0.01em;
+    margin-bottom: var(--space-3);
+  }
+  .story-lead {
+    font-size: 1.375rem;
+    line-height: 1.5;
+    color: var(--color-muted);
+    margin-bottom: var(--space-4);
+  }
+  .pullquote {
+    margin-block: var(--space-4);
+    padding-left: var(--space-3);
+    border-left: 3px solid var(--color-primary);
+    font-size: 1.5rem;
+    line-height: 1.4;
+    font-weight: 500;
+    color: var(--color-primary);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .story-tab { transition: none; }
+  }
+</style>
