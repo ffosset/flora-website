@@ -1,0 +1,223 @@
+---
+const { t } = Astro.props;
+const filters = t.work.filters;
+const total = t.work.projects.length;
+---
+
+<section id="work" class="work">
+  <div class="container work-head">
+    <div class="work-title">
+      <h2><span class="slash">/</span>{t.work.sectionTitle}</h2>
+      <p class="intro">{t.work.intro}</p>
+    </div>
+    <div class="counter" aria-live="polite">
+      <span data-counter-current>1</span>
+      <span aria-hidden="true">{t.work.counterSeparator}</span>
+      <span>{total}</span>
+    </div>
+  </div>
+
+  <div class="container">
+    <div class="chips" role="group" aria-label="Filter work by type">
+      <button class="chip active" data-cat="all">{filters.all}</button>
+      <button class="chip" data-cat="websites">{filters.websites}</button>
+      <button class="chip" data-cat="platforms">{filters.platforms}</button>
+      <button class="chip" data-cat="data">{filters.data}</button>
+      <button class="chip" data-cat="storytelling">{filters.storytelling}</button>
+    </div>
+  </div>
+
+  <div class="track" data-track tabindex="0" aria-label="Selected work">
+    <div class="track-pad" aria-hidden="true"></div>
+    {
+      t.work.projects.map((p, i) => (
+        <article
+          class="card"
+          data-cats={(p.category || []).join(' ')}
+          data-index={i + 1}
+        >
+          <div class="card-media" aria-hidden="true">
+            {p.image ? (
+              <img src={p.image} alt="" loading="lazy" />
+            ) : (
+              <div class="media-placeholder">
+                <span>{p.slug}</span>
+              </div>
+            )}
+          </div>
+          <div class="card-body">
+            <h3><span class="slash">/</span>{p.title}</h3>
+            {p.problem && <p class="problem">{p.problem}</p>}
+            {p.did && <p class="did">{p.did}</p>}
+            {p.outcome && <p class="outcome">{p.outcome}</p>}
+          </div>
+        </article>
+      ))
+    }
+    <div class="track-pad" aria-hidden="true"></div>
+  </div>
+</section>
+
+<script>
+  const chips = document.querySelectorAll('.work .chip');
+  const cards = document.querySelectorAll('.work .card');
+  const track = document.querySelector('.work [data-track]');
+  const current = document.querySelector('.work [data-counter-current]');
+
+  // Soft sorting: dim non-matches.
+  chips.forEach((chip) => {
+    chip.addEventListener('click', () => {
+      chips.forEach((c) => c.classList.remove('active'));
+      chip.classList.add('active');
+      const cat = chip.getAttribute('data-cat');
+      cards.forEach((card) => {
+        const cats = (card.getAttribute('data-cats') || '').split(' ');
+        const match = cat === 'all' || cats.includes(cat);
+        card.classList.toggle('dimmed', !match);
+      });
+      if (cat !== 'all') {
+        const firstMatch = Array.from(cards).find(
+          (card) => !card.classList.contains('dimmed')
+        );
+        firstMatch?.scrollIntoView({
+          behavior: 'smooth',
+          inline: 'center',
+          block: 'nearest',
+        });
+      }
+    });
+  });
+
+  // Counter: track which card is centered in the scroller.
+  if (track && current && cards.length) {
+    const io = new IntersectionObserver(
+      (entries) => {
+        let best = null;
+        let bestRatio = 0;
+        entries.forEach((e) => {
+          if (e.intersectionRatio > bestRatio) {
+            bestRatio = e.intersectionRatio;
+            best = e.target;
+          }
+        });
+        if (best) {
+          const idx = best.getAttribute('data-index');
+          if (idx) current.textContent = idx;
+        }
+      },
+      { root: track, threshold: [0.4, 0.6, 0.8] }
+    );
+    cards.forEach((card) => io.observe(card));
+  }
+</script>
+
+<style>
+  .work { padding-block: var(--space-6) var(--space-5); overflow: hidden; }
+
+  .work-head {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: var(--space-3);
+    margin-bottom: var(--space-4);
+  }
+  .work-title h2 {
+    font-size: var(--fs-hero);
+    line-height: 1;
+    letter-spacing: -0.03em;
+    max-width: 14ch;
+  }
+  .intro {
+    color: var(--color-muted);
+    max-width: 50ch;
+    margin-top: var(--space-2);
+  }
+  .counter {
+    font-size: var(--fs-small);
+    color: var(--color-muted);
+    white-space: nowrap;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-bottom: var(--space-4);
+  }
+  .chip {
+    font-size: var(--fs-small);
+    background: transparent;
+    border: 1px solid var(--color-line);
+    border-radius: var(--radius-pill);
+    padding: 0.4rem 1rem;
+    transition: all 0.2s var(--ease);
+  }
+  .chip.active {
+    background: var(--color-ink);
+    color: var(--color-bg);
+    border-color: var(--color-ink);
+  }
+
+  .track {
+    display: flex;
+    gap: var(--space-3);
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    padding-block: var(--space-2) var(--space-4);
+    scrollbar-width: thin;
+    scrollbar-color: var(--color-line) transparent;
+  }
+  .track::-webkit-scrollbar { height: 6px; }
+  .track::-webkit-scrollbar-thumb { background: var(--color-line); border-radius: 999px; }
+  .track-pad {
+    flex: 0 0 var(--gutter);
+  }
+
+  .card {
+    flex: 0 0 min(420px, 78vw);
+    scroll-snap-align: center;
+    display: flex;
+    flex-direction: column;
+    transition: opacity 0.3s var(--ease);
+  }
+  .card.dimmed { opacity: 0.35; }
+
+  .card-media {
+    aspect-ratio: 4 / 3;
+    background: var(--color-bg-soft);
+    border-radius: var(--radius-card);
+    overflow: hidden;
+    margin-bottom: var(--space-2);
+  }
+  .card-media img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .media-placeholder {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: color-mix(in srgb, var(--color-purple) 60%, transparent);
+    font-family: var(--font-display);
+    font-size: 0.875rem;
+    letter-spacing: 0.04em;
+    text-transform: lowercase;
+  }
+
+  .card-body { padding-block: var(--space-1); }
+  .card h3 {
+    font-size: 1.125rem;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    line-height: 1.25;
+    margin-bottom: var(--space-2);
+  }
+  .card .problem { color: var(--color-muted); font-size: 0.9375rem; line-height: 1.45; }
+  .card .did { margin-top: var(--space-1); font-size: 0.9375rem; line-height: 1.45; }
+  .card .outcome {
+    margin-top: var(--space-2);
+    font-weight: 600;
+    color: var(--color-purple);
+    font-size: 0.9375rem;
+  }
+</style>

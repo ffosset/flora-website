@@ -1,0 +1,30 @@
+---
+import { languages, defaultLang } from '../i18n';
+
+const { currentLocale } = Astro.props;
+
+function localePath(loc) {
+  return loc === defaultLang ? '/' : `/${loc}/`;
+}
+---
+
+<div class="lang-switch">
+  {
+    Object.entries(languages).map(([code, label]) => (
+      <a
+        href={localePath(code)}
+        class={code === currentLocale ? 'active' : ''}
+        hreflang={code}
+        aria-current={code === currentLocale ? 'true' : undefined}
+      >
+        {code.toUpperCase()}
+      </a>
+    ))
+  }
+</div>
+
+<style>
+  .lang-switch { display: flex; gap: 0.4rem; font-size: var(--fs-small); }
+  .lang-switch a { text-decoration: none; color: var(--color-muted); padding: 0.1rem 0.3rem; border-radius: 4px; }
+  .lang-switch a.active { color: var(--color-ink); font-weight: 600; }
+</style>

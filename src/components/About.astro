@@ -1,0 +1,120 @@
+---
+const { t } = Astro.props;
+---
+
+<section id="about" class="about">
+  <div class="container about-grid">
+    <div class="about-left">
+      <h2><span class="slash">/</span>{t.about.sectionTitle}</h2>
+    </div>
+    <div class="about-right">
+      <p class="bio">{t.about.bio}</p>
+
+      <div class="experience">
+        <h3><span class="slash">/</span>{t.about.experienceTitle}</h3>
+        <ul>
+          {
+            t.about.experience.map((e) => (
+              <li>
+                <span class="role">
+                  {e.role}
+                  {e.org ? ` · ${e.org}` : ''}
+                </span>
+                <span class="when">{e.when}</span>
+                {e.note && <span class="note">{e.note}</span>}
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+
+      <div class="values">
+        <h3><span class="slash">/</span>{t.about.valuesTitle}</h3>
+        <p>{t.about.values}</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="contact" class="contact" data-header-tint="purple">
+  <div class="container">
+    <h2>{t.contact.sectionTitle}</h2>
+    <div class="links">
+      <a href={`mailto:${t.contact.email}`} class="contact-cta">{t.contact.email}</a>
+      <a href={t.contact.linkedin} target="_blank" rel="noopener" class="contact-ghost">
+        {t.contact.linkedinLabel}
+      </a>
+    </div>
+  </div>
+</section>
+
+<style>
+  .about-grid {
+    display: grid;
+    gap: var(--space-4);
+  }
+  @media (min-width: 900px) {
+    .about-grid { grid-template-columns: 1fr 2fr; gap: var(--space-5); }
+  }
+  .about-left h2 {
+    font-size: var(--fs-hero);
+    line-height: 1;
+    letter-spacing: -0.03em;
+  }
+  .bio { max-width: 60ch; color: var(--color-ink); font-size: 1.125rem; }
+
+  .experience { margin-top: var(--space-5); }
+  .experience h3,
+  .values h3 {
+    font-size: 1.5rem;
+    letter-spacing: -0.01em;
+    margin-bottom: var(--space-2);
+  }
+  .experience ul { list-style: none; }
+  .experience li {
+    display: grid;
+    gap: 0.15rem;
+    padding-block: var(--space-3);
+    border-top: 1px solid var(--color-line);
+  }
+  .experience li:last-child { border-bottom: 1px solid var(--color-line); }
+  .experience .role { font-weight: 600; }
+  .experience .when { font-size: var(--fs-small); color: var(--color-muted); }
+  .experience .note { color: var(--color-muted); margin-top: 0.25rem; }
+  .values { margin-top: var(--space-5); max-width: 60ch; }
+  .values p { color: var(--color-muted); }
+
+  .contact {
+    background: var(--color-purple);
+    color: var(--color-ink-on-purple);
+  }
+  .contact h2 {
+    font-size: var(--fs-hero);
+    line-height: 1.02;
+    letter-spacing: -0.03em;
+    max-width: 22ch;
+    color: var(--color-ink-on-purple);
+  }
+  .links {
+    display: flex;
+    gap: var(--space-3);
+    align-items: center;
+    margin-top: var(--space-4);
+    flex-wrap: wrap;
+  }
+  .contact-cta {
+    background: var(--color-ink-on-purple);
+    color: var(--color-purple);
+    text-decoration: none;
+    padding: 0.8rem 1.6rem;
+    border-radius: var(--radius-pill);
+    font-weight: 600;
+  }
+  .contact-ghost {
+    color: var(--color-ink-on-purple);
+    text-decoration: none;
+    padding: 0.8rem 1.2rem;
+    border-radius: var(--radius-pill);
+    border: 1px solid var(--color-line-on-purple);
+  }
+</style>

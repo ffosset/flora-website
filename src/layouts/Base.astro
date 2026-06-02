@@ -1,0 +1,214 @@
+---
+import '../styles/tokens.css';
+import LanguageSwitcher from '../components/LanguageSwitcher.astro';
+import { useTranslations, getLocaleFromUrl } from '../i18n';
+
+const locale = getLocaleFromUrl(Astro.url);
+const t = useTranslations(locale);
+const home = locale === 'en' ? '/' : `/${locale}/`;
+---
+
+<!doctype html>
+<html lang={locale}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{t.meta.title}</title>
+    <meta name="description" content={t.meta.description} />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  </head>
+  <body>
+    <header class="site-header" data-header>
+      <div class="container header-inner">
+        <a href={home} class="wordmark" aria-label="Flora Fosset — home">
+          <span class="wm-row"><span class="wm-drop">f</span><span>lora</span></span>
+          <span class="wm-row wm-row-2"><span class="wm-drop">f</span><span>osset</span></span>
+        </a>
+
+        <button
+          type="button"
+          class="menu-toggle"
+          aria-expanded="false"
+          aria-controls="site-nav"
+          aria-label="Open menu"
+          data-menu-toggle
+        >
+          <span class="bar"></span>
+          <span class="bar"></span>
+          <span class="bar"></span>
+        </button>
+      </div>
+
+      <nav id="site-nav" class="nav-panel" data-nav-panel hidden>
+        <div class="container nav-panel-inner">
+          <ul>
+            <li><a href="#work" data-nav-link>{t.nav.work}</a></li>
+            <li><a href="#about" data-nav-link>{t.nav.about}</a></li>
+            <li><a href="#contact" data-nav-link class="nav-cta">{t.nav.contact}</a></li>
+          </ul>
+          <LanguageSwitcher currentLocale={locale} />
+        </div>
+      </nav>
+    </header>
+
+    <main>
+      <slot />
+    </main>
+
+    <footer class="site-footer">
+      <div class="container footer-inner">
+        <span>{t.footer.rights}</span>
+        <span>{t.footer.location}</span>
+      </div>
+    </footer>
+
+    <script>
+      const toggle = document.querySelector('[data-menu-toggle]');
+      const panel = document.querySelector('[data-nav-panel]');
+      if (toggle && panel) {
+        const setOpen = (open) => {
+          toggle.setAttribute('aria-expanded', String(open));
+          toggle.classList.toggle('is-open', open);
+          if (open) panel.removeAttribute('hidden');
+          else panel.setAttribute('hidden', '');
+        };
+        toggle.addEventListener('click', () => {
+          setOpen(toggle.getAttribute('aria-expanded') !== 'true');
+        });
+        panel.querySelectorAll('[data-nav-link]').forEach((link) => {
+          link.addEventListener('click', () => setOpen(false));
+        });
+      }
+
+      // Header recolors itself based on the section behind it (white vs purple).
+      // We observe a thin sensor row pinned just below the header. The tint of
+      // the topmost section under that sensor wins.
+      const header = document.querySelector('[data-header]');
+      const tinted = Array.from(document.querySelectorAll('[data-header-tint]'));
+      if (header && tinted.length) {
+        const updateTint = () => {
+          const probeY = header.getBoundingClientRect().bottom + 4;
+          // Find the tinted section currently under the probe line.
+          let active = null;
+          for (const el of tinted) {
+            const r = el.getBoundingClientRect();
+            if (r.top <= probeY && r.bottom > probeY) {
+              active = el;
+              break;
+            }
+          }
+          header.dataset.tint = active
+            ? active.getAttribute('data-header-tint') || ''
+            : '';
+        };
+        updateTint();
+        let ticking = false;
+        const onScroll = () => {
+          if (ticking) return;
+          ticking = true;
+          requestAnimationFrame(() => {
+            updateTint();
+            ticking = false;
+          });
+        };
+        window.addEventListener('scroll', onScroll, { passive: true });
+        window.addEventListener('resize', onScroll);
+      }
+    </script>
+
+    <style>
+      .site-header {
+        position: fixed;
+        inset: 0 0 auto 0;
+        z-index: 20;
+        transition: color 0.25s var(--ease);
+      }
+      .site-header[data-tint='purple'] { color: var(--color-ink-on-purple); }
+
+      .header-inner {
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        padding-block: var(--space-3);
+      }
+
+      /* Stacked "flora / fosset" wordmark */
+      .wordmark {
+        display: inline-flex;
+        flex-direction: column;
+        text-decoration: none;
+        font-family: var(--font-display);
+        font-weight: 500;
+        font-size: 1rem;
+        line-height: 1;
+        letter-spacing: -0.01em;
+      }
+      .wm-row { display: inline-flex; align-items: baseline; }
+      .wm-row-2 { padding-left: 0.55em; margin-top: 0.05em; }
+      .wm-drop { color: var(--color-purple); font-weight: 600; }
+
+      /* Hamburger */
+      .menu-toggle {
+        width: 32px;
+        height: 28px;
+        display: inline-flex;
+        flex-direction: column;
+        justify-content: center;
+        gap: 5px;
+        padding: 0;
+      }
+      .menu-toggle .bar {
+        display: block;
+        height: 2px;
+        width: 100%;
+        background: currentColor;
+        transition: transform 0.25s var(--ease), opacity 0.2s var(--ease);
+        transform-origin: center;
+      }
+      .menu-toggle.is-open .bar:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+      .menu-toggle.is-open .bar:nth-child(2) { opacity: 0; }
+      .menu-toggle.is-open .bar:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+      /* Slide-down nav panel */
+      .nav-panel {
+        background: var(--color-bg);
+        color: var(--color-ink);
+        border-bottom: 1px solid var(--color-line);
+      }
+      .nav-panel[hidden] { display: none; }
+      .nav-panel-inner {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: var(--space-3);
+        padding-block: var(--space-3);
+      }
+      .nav-panel ul {
+        display: flex;
+        flex-wrap: wrap;
+        gap: var(--space-3);
+        list-style: none;
+        font-size: var(--fs-body);
+        font-weight: 500;
+      }
+      .nav-panel a { text-decoration: none; }
+      .nav-cta {
+        background: var(--color-purple);
+        color: var(--color-ink-on-purple);
+        padding: 0.55rem 1.1rem;
+        border-radius: var(--radius-pill);
+      }
+
+      .site-footer {
+        border-top: 1px solid var(--color-line);
+        padding-block: var(--space-4);
+      }
+      .footer-inner {
+        display: flex;
+        justify-content: space-between;
+        font-size: var(--fs-small);
+        color: var(--color-muted);
+      }
+    </style>
+  </body>
+</html>

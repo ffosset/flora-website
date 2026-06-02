@@ -1,0 +1,76 @@
+---
+const { t } = Astro.props;
+---
+<section id="hero" class="hero" data-header-tint="">
+  <div class="container hero-inner">
+    <div class="hero-bottom">
+      <h1 class="hero-line">
+        <span>{t.hero.nameWord}</span>
+        <span class="slash" aria-hidden="true">/</span>
+        <span class="hero-role">{t.hero.roleWord}</span>
+      </h1>
+      <div class="scroll-cue" aria-hidden="true">
+        <span class="cue-rule"></span>
+        <span class="cue-label">{t.hero.scroll}</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .hero {
+    background: var(--color-bg-soft);
+    min-height: 100vh;
+    padding-block: 0;
+    display: flex;
+  }
+  .hero-inner {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding-block: var(--space-5);
+  }
+  .hero-bottom { display: flex; flex-direction: column; gap: var(--space-4); }
+
+  .hero-line {
+    font-family: var(--font-display);
+    font-weight: 900;
+    font-size: var(--fs-mega);
+    line-height: 0.95;
+    letter-spacing: -0.04em;
+    display: flex;
+    align-items: baseline;
+    gap: 0.18em;
+    flex-wrap: wrap;
+  }
+  .hero-line .slash {
+    font-weight: 800;
+    /* Slightly lighter weight for the divider feel. */
+  }
+  .hero-role {
+    color: var(--color-purple);
+    font-weight: 500;
+    font-style: italic;
+  }
+
+  .scroll-cue {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+  }
+  .cue-rule {
+    display: inline-block;
+    width: 28px;
+    height: 1px;
+    background: var(--color-ink);
+    opacity: 0.7;
+  }
+  .cue-label {
+    font-size: var(--fs-eyebrow);
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--color-ink);
+    opacity: 0.7;
+  }
+</style>
