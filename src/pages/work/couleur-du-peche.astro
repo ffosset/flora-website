@@ -3,43 +3,50 @@ import Base from '../../layouts/Base.astro';
 
 const base = import.meta.env.BASE_URL; // trailing slash, e.g. '/flora-website/'
 
-// PLACEHOLDER CONTENT — replace the body paragraphs, story titles, image
-// sources and captions with the real article. The structure, layout and
-// reading typography are final; only the prose/images are stand-ins.
-const fill = [
-  'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.',
-  'Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
-  'Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.',
-];
-
+// Images aren't supplied yet — figures render as placeholders with their real
+// captions. Swap each <div class="ph"> for an <img> when the photos arrive.
 const stories = [
-  { id: 'i', tab: 'Témoignage I', title: 'Témoignage I — titre à venir', lead: 'Phrase d’introduction du premier récit, à remplacer par le texte réel.', caption: 'Photographie d’archive — légende.' },
-  { id: 'ii', tab: 'Témoignage II', title: 'Témoignage II — titre à venir', lead: 'Phrase d’introduction du deuxième récit, à remplacer par le texte réel.', caption: 'Photographie d’archive — légende.' },
-  { id: 'iii', tab: 'Témoignage III', title: 'Témoignage III — titre à venir', lead: 'Phrase d’introduction du troisième récit, à remplacer par le texte réel.', caption: 'Photographie d’archive — légende.' },
-  { id: 'iv', tab: 'Témoignage IV', title: 'Témoignage IV — titre à venir', lead: 'Phrase d’introduction du quatrième récit, à remplacer par le texte réel.', caption: 'Photographie d’archive — légende.' },
+  { id: 'eveline', tab: 'Eveline' },
+  { id: 'luc-charles', tab: 'Luc et Charles' },
+  { id: 'francois', tab: 'François' },
 ];
-const quote = 'Une citation marquante extraite du récit, mise en exergue pour rythmer la lecture.';
 ---
 
-<Base title="La couleur du péché — Flora Fosset">
+<Base title="Métis, la couleur du péché — Flora Fosset">
   <article class="article" lang="fr">
     <div class="wrap">
       <a class="back" href={`${base}#work`}>← Retour aux projets</a>
       <p class="eyebrow">24h01 · revue belge · 2016</p>
-      <h1 class="article-title">La couleur du péché</h1>
+      <h1 class="article-title">Métis, la couleur du péché</h1>
       <p class="article-sub">
-        Une enquête au long cours sur les enfants métis de la colonisation belge :
-        arrachés à leurs mères africaines, placés dans des institutions tenues par
-        l’Église, puis déplacés vers la Belgique en 1959.
+        La colonisation belge en Afrique ? On se figure d’emblée un missionnaire,
+        vêtements et casque blancs, posant aux côtés d’indigènes noirs à moitié
+        nus. Une représentation très répandue qui omet l’existence d’une troisième
+        catégorie dont on ne parle quasi jamais : les métis. Ces enfants nés de
+        relations souvent adultères entre des colons européens et des femmes
+        africaines dérangent les autorités belges : ni Noirs, ni Blancs, ils
+        bousculent l’ordre social de la colonie. Arrachés à leurs mères et reniés
+        par leurs pères, ils sont cachés, isolés, déplacés durant toute leur
+        jeunesse, puis regroupés dans des charters vers la Belgique en 1959, à la
+        veille de l’indépendance du Congo. Aujourd’hui, encore marqués par les
+        stigmates de leur jeunesse et lassés du silence qui entoure leur histoire,
+        les métis belges ont décidé de prendre la parole. Une association
+        rencontrera même les parlementaires bruxellois en octobre prochain<sup>1</sup>
+        pour défendre leur cause. Récit de vie avec Luc, Eveline, Charles et
+        François, porteurs de « la couleur du péché ».
       </p>
     </div>
 
     <figure class="figure figure--lead">
-      <div class="ph">Image principale</div>
+      <div class="ph">Image d’ouverture</div>
       <figcaption>Légende de l’image d’ouverture.</figcaption>
     </figure>
 
     <div class="wrap">
+      <ol class="footnotes footnotes--intro">
+        <li><sup>1</sup> 20 octobre 2016 — Les jeudis de l’hémicycle.</li>
+      </ol>
+
       <div class="story-nav" role="tablist" aria-label="Témoignages" data-story-tabs>
         {stories.map((s, i) => (
           <button
@@ -56,34 +63,137 @@ const quote = 'Une citation marquante extraite du récit, mise en exergue pour r
       </div>
     </div>
 
-    {stories.map((s, i) => (
-      <section
-        class="story"
-        id={`panel-${s.id}`}
-        role="tabpanel"
-        aria-labelledby={`tab-${s.id}`}
-        data-story-panel
-        hidden={i !== 0}
-      >
-        <div class="wrap">
-          <h2 class="story-title">{s.title}</h2>
-          <p class="story-lead">{s.lead}</p>
-          <p>{fill[0]}</p>
-          <p>{fill[1]}</p>
-        </div>
+    <!-- ============================ EVELINE ============================ -->
+    <section class="story" id="panel-eveline" role="tabpanel" aria-labelledby="tab-eveline" data-story-panel>
+      <div class="wrap">
+        <h2 class="story-title">« Il y a les Blancs, les Noirs, puis moi, entre les deux… »</h2>
+        <p class="story-lead">Dès leur petite enfance, on inculque aux métis qu’ils ont plus de valeur que les Africains, mais qu’ils restent inférieurs aux Européens. Discriminés par les deux groupes, ils ont du mal à trouver leur place. Immersion dans le passé d’Eveline Schmit, une métisse qui n’a jamais vraiment trouvé son chemin.</p>
+      </div>
 
-        <figure class="figure">
-          <div class="ph">Photographie</div>
-          <figcaption>{s.caption}</figcaption>
-        </figure>
+      <figure class="figure">
+        <div class="ph">Portrait</div>
+        <figcaption>Eveline Schmit.</figcaption>
+      </figure>
 
-        <div class="wrap">
-          <blockquote class="pullquote">{quote}</blockquote>
-          <p>{fill[2]}</p>
-          <p>{fill[0]}</p>
-        </div>
-      </section>
-    ))}
+      <div class="wrap">
+        <p>« Mon père travaillait pour l’État belge en tant qu’agent territorial dans les colonies. Il a rencontré ma mère pendant une mission au Rwanda puis ils se sont mariés selon la coutume locale. Je suis née en 1952. » Eveline Schmit, comme beaucoup d’enfants nés dans des territoires sous domination coloniale, est le fruit d’une rencontre entre un colonisateur européen et une femme africaine. On dénombre environ 10.000<sup>1</sup> enfants métis nés dans les colonies belges du Congo, du Rwanda et du Burundi (appelé à l’époque Ruanda-Urundi) entre 1908 et 1959. Ces enfants dérangent les autorités belges, qui voient en eux une menace pour l’ordre social de la région. À moitié Blancs, à moitié Noirs, ils brouillent une distinction raciale qui constitue le fondement du fonctionnement de la colonie. Ils soulèvent aussi la question du prestige colonial : du sang européen coulant dans leurs veines, ils ne peuvent pas être considérés comme de « simples indigènes ». Les propos de Pierre Nolf, scientifique belge de la première moitié du XXème siècle, illustrent l’inquiétude provoquée par la Question métis : « Ces unions [entre un Blanc et une Noire, NDLR] ne sont généralement pas heureuses pour ceux qui les contractent. Elles produisent des métis qui, n’étant d’aucune des deux races, forment un élément social instable et mécontent. Elles sont une grave menace pour l’avenir de la race blanche, qui ne restera capable de remplir la mission civilisatrice qu’à la condition de préserver la qualité de son sang ».<sup>2</sup></p>
+
+        <h3>« Mon père m’a emmenée de force »</h3>
+        <p>« À 2 ans et demi, Pierre Schmit, mon père, est venu m’arracher des bras de ma mère, se rappelle Eveline avec amertume. Il attendait que je sois propre pour pouvoir me placer dans un internat spécial pour métis. Il a dû s’y reprendre à plusieurs fois pour me trouver, car ma mère me cachait chaque fois qu’il venait. Il a d’ailleurs fini par m’emmener de force. La plupart des pères blancs ne voulaient pas que leur enfant métis grandisse dans la culture africaine. Ils voulaient qu’on reçoive une éducation occidentale : qu’on s’habille, qu’on mange et qu’on parle comme des Blancs. » L’internat où son père l’emmène en 1955 est à Ndoluma, près de Goma dans la région congolaise du Nord-Kivu — à 200 km de sa terre natale. Pourtant, sa mère vit près d’un internat pour métis à Butare, au Rwanda, mais son père préfère l’éloigner pour s’assurer que sa famille africaine ne vienne pas la chercher. Elle se retrouve dans une mission protestante nord-américaine avec une trentaine d’enfants, tous métis. La plupart ont été amenés par leur père ou par des administrateurs coloniaux qui les ont trouvés dans la campagne. À cette époque, lorsqu’un Blanc voit un petit métis dans un village, la coutume veut qu’il l’enlève pour le déposer dans une mission religieuse, parfois sans prendre la peine de prévenir la maman. Sarah Heynssens, historienne belge, explique la raison de cette politique : « Les représentants officiels des colonies reçoivent pour instruction de suivre une série de règles très strictes au sujet des enfants ayant du “sang” européen. Le Recueil à l’usage des fonctionnaires et des agents du Service territorial, un manuel pratique pour les représentants officiels des colonies, demande aux agents sur le terrain de convaincre les mères africaines d’envoyer leurs enfants métis dans les missions. »<sup>3</sup></p>
+
+        <h3>La vie à l’institut</h3>
+        <p>À l’internat protestant, Eveline apprend l’anglais et oublie ainsi rapidement sa langue maternelle, le kinyarwanda. Les missionnaires n’autorisent pas l’usage d’une langue indigène à l’internat. C’est un problème récurrent chez les métis : quand ils reprennent contact avec leur famille africaine des années plus tard, ils n’arrivent pas à renouer des liens car ils ne se comprennent pas.</p>
+        <blockquote class="pullquote">« La plupart des pères blancs ne voulaient pas que leur enfant grandisse dans la culture africaine. Ils voulaient qu’on s’habille, qu’on mange et qu’on parle comme des Blancs. »</blockquote>
+        <p>« Je préfère l’appeler orphelinat plutôt qu’internat car même si nous n’étions pas des orphelins, c’était comme tel. Nous étions des enfants non désirés. Ni mon père ni ma mère ne m’ont jamais rendu visite. D’ailleurs, aucun parent ne venait voir les enfants, nous étions entièrement abandonnés aux missionnaires. Des années plus tard, j’ai demandé à mon papa pourquoi il n’était jamais venu. Il s’est excusé et m’a répondu que “c’était trop loin”. »</p>
+        <p>Les missions religieuses offrent aux enfants le gîte et le couvert ainsi qu’un enseignement rudimentaire religieux. Ils les habillent avec des vêtements de seconde main en provenance des États-Unis et les obligent à vivre à la mode occidentale. Les enfants doivent, par exemple, porter des chaussures : un calvaire pour ceux qui n’y sont pas habitués. « Les missionnaires nous apprenaient à lire et à écrire. Au final, on les voyait peu, on était tout le temps entre jeunes métis. On jouait, on se consolait les uns les autres : on était comme une grande famille. Je me rappelle qu’on se demandait souvent pourquoi on était loin de nos parents. Qu’avions-nous fait pour être mis à l’écart ? Nous en avons déduit que c’était à cause de notre couleur de peau. Il y avait les Blancs, les Noirs, puis il y avait nous. » Il faut dire que les métis ne viennent pas seuls à cette conclusion : les missionnaires leur rappellent souvent que leur peau porte la « couleur du péché ». Plus tard, la mère d’adoption américaine d’Eveline lui répètera qu’elle doit se repentir et dédier sa vie à se faire pardonner de la faute de ses parents.</p>
+
+        <h3>Changement d’hémisphère</h3>
+        <p>En 1959, l’excitation devient palpable au Congo belge. Des groupes de jeunes dansent dans la rue, l’atmosphère s’enflamme et un seul mot se lit sur les lèvres : indépendance. Les missionnaires, administrateurs coloniaux et autres muzungus (Blancs en kinyarwanda) s’empressent de faire leurs bagages pour rentrer chez eux. Les enfants métis congolais étant considérés comme la « propriété » de la Belgique, ils sont rapatriés vers Bruxelles.</p>
+        <blockquote class="pullquote">« À l’institut, on se demandait souvent pourquoi on était loin de nos parents. Qu’avions-nous fait pour être mis à l’écart ? »</blockquote>
+        <p>Les petits rwandais et burundais sont renvoyés sur leurs terres natales, le Ruanda-Urundi étant toujours la propriété de la Belgique. Un missionnaire américain accompagne Eveline à Bujumbura, au Burundi, pour retrouver son géniteur. « Il voulait que je sois envoyée en Europe avec les autres. J’avais 7 ans. À l’arrivée, on nous a placés dans un pensionnat protestant à Uccle, sous la tutelle d’un pasteur suédois. Aucun de nous n’est passé par les services d’adoption belges. »</p>
+        <p>Le pensionnat souhaite leur trouver des familles d’adoption d’obédience protestante, ce qui ne court pas les rues en Belgique. Au bout d’environ un an, le pasteur trouve une famille à Boston, aux États-Unis, qui souhaite accueillir Eveline. On échange quelques lettres et l’affaire est pliée : elle est envoyée de l’autre côté de l’Atlantique. Tout ça sans l’intervention d’un assistant social ou d’un psychologue, ni aucune recherche sur la famille en question. « Ce troisième tournant de ma vie fut une catastrophe. Ma nouvelle famille américaine était composée d’une jeune infirmière et de sa mère handicapée. Elles appartenaient à une secte sur laquelle elles calquaient toutes leurs activités. Je ne pouvais fréquenter que les écoles et les membres de leur groupe, c’était un cadre de vie malsain. Mais ce qui me brisait davantage le cœur, c’était de penser que jamais ma mère ne pourrait me retrouver après tous ces déplacements. »</p>
+        <blockquote class="pullquote">« Ni mon père ni ma mère ne m’ont jamais rendu visite. Aucun parent ne venait voir les enfants : nous étions entièrement abandonnés aux missionnaires. »</blockquote>
+        <p>La suite lui donnera malheureusement raison. Eveline a pourtant cherché sa maman avec acharnement pendant des années. « J’ai fait énormément de recherches auprès des ambassades, mais ça n’aboutissait jamais à rien. J’ai fini par me dire qu’elle était morte. J’ai découvert par la suite que, lorsque mon père m’a amenée à l’orphelinat de Ndoluma, il a changé mon prénom, ma date de naissance et le nom de ma mère, pour s’assurer qu’elle ne me retrouve pas. Mes recherches étaient complètement vaines. » Ces falsifications de papiers, beaucoup de métis les ont vécues. Dans le cas d’Eveline, son géniteur voulait s’assurer que sa famille africaine ne vienne pas la chercher à l’internat. Dans d’autres cas, le colon avait une famille en Belgique et ne voulait pas que sa femme apprenne l’existence d’un enfant bâtard — à moitié noir, de surcroît. Seul un dixième des 10.000 enfants métis ont été légalement reconnus par leurs pères. Les Blancs craignaient de se faire renvoyer de leur poste s’ils dévoilaient l’existence de leur progéniture. C’était le cas du papa d’Eveline, qui a préféré attendre la pension pour signer un acte de naissance en bonne et due forme.</p>
+
+        <h3>Cicatriser les blessures</h3>
+        <p>Eveline est retournée vivre en Belgique à 29 ans. Son père n’a jamais voulu l’aider à identifier sa mère. Il voulait qu’elle fonde une famille en Europe et qu’elle se défasse complètement de ses racines africaines. « Cela faisait plusieurs années déjà que mon père me demandait de rentrer. En arrivant, je ne parlais plus du tout français donc j’ai eu du mal à trouver du travail. Je me suis lancée dans des études de médecine à l’UCL que j’ai interrompues cinq ans plus tard quand on m’a proposé un poste dans un laboratoire. Je me suis mariée et je n’ai plus pensé à déménager. » Eveline est retournée pour la première fois au Rwanda à l’âge de 60 ans. Elle avait une peur bleue du Pays des Mille Collines : ce qu’elle imaginait de son pays natal n’était que violence, meurtres, enlèvements et corruption. Elle a découvert une société en bonne santé, des gens accueillants et des paysages à couper le souffle. Cependant, elle n’a jamais retrouvé personne de sa famille africaine.</p>
+        <blockquote class="pullquote">« Notre terrible histoire mérite d’être connue. Il est temps de briser le silence. »</blockquote>
+        <p>Il existe autant d’histoires différentes que de métis. Ce qui n’empêche pas Eveline de se sentir unie à tous les enfants au sang-mêlé : « Il y a quelque chose qui nous a tous fait souffrir et qui a forgé notre identité commune. C’est le sentiment de n’appartenir à aucun groupe. De toujours passer pour l’étranger. En Afrique, on me pointait du doigt dans la rue, on se moquait parfois de moi. En Belgique, les parents ne laissaient pas leurs enfants jouer avec moi à cause de ma couleur de peau et ma situation d’orpheline. Aux États-Unis, des gens de la communauté afro-américaine m’ont rejetée en apprenant que mon père était blanc. Partout où j’ai vécu, le même schéma se répétait : il y avait les Noirs, les Blancs, et puis moi, là, entre les deux. » Les traumatismes liés à son enfance et son adolescence ont marqué Eveline pour toujours. Aujourd’hui, elle arrive enfin à mettre des mots sur ses douleurs passées : elle est en train d’écrire un livre qu’elle espère publier un jour. « Notre terrible histoire mérite d’être connue. En lisant mon parcours de vie, d’autres métis auront peut-être le courage de raconter le leur aussi. Écrire mes mésaventures a permis d’atténuer ma colère. Il est temps de briser le silence. »</p>
+
+        <ol class="footnotes">
+          <li><sup>1</sup> Ce chiffre, des archives africaines du Ministère des Affaires étrangères à Bruxelles, est assez approximatif car beaucoup d’enfants métis n’ont pas été déclarés à la naissance.</li>
+          <li><sup>2</sup> Propos datant de 1930, recueillis dans le livre d’Assumani Budagwa, « Noir, Blanc, Métis. La Belgique et la ségrégation des Métis du Congo belge et du Ruanda-Urundi (1908-1960) » (2014), p. 84.</li>
+          <li><sup>3</sup> Propos recueilli dans l’article « Entre deux mondes. Le déplacement des enfants métis du Ruanda-Urundi colonial vers la Belgique » (2012), Sarah Heynssens. À lire dans son intégralité <a href="https://rhei.revues.org/3385" target="_blank" rel="noopener">ici</a>.</li>
+        </ol>
+      </div>
+    </section>
+
+    <!-- ========================= LUC ET CHARLES ========================= -->
+    <section class="story" id="panel-luc-charles" role="tabpanel" aria-labelledby="tab-luc-charles" data-story-panel hidden>
+      <div class="wrap">
+        <h2 class="story-title">« On nous prenait pour des sauvages »</h2>
+        <p class="story-lead">La Question métis fait débat au sein de l’administration du Congo belge. Certains craignent qu’ils deviennent les instigateurs d’une révolte, d’autres pensent qu’ils feront des contremaîtres compétents. Dans l’ensemble, tout le monde s’accorde sur une chose : ils doivent être isolés du reste de la société. Charles Géradin et Luc Van Damme témoignent du pénible quotidien dans un institut pour métis.</p>
+      </div>
+
+      <figure class="figure">
+        <div class="ph">Photographie</div>
+        <figcaption>Charles Géradin et Luc Van Damme.</figcaption>
+      </figure>
+
+      <div class="wrap">
+        <p>Luc Van Damme (à droite sur la photo) entre à l’institut de Save (à prononcer Savé) à 4 ans, en 1958. « Quand j’étais petit, je faisais pipi au lit. Le matin, les enfants qui avaient sali leurs draps étaient battus devant tout le monde. Ça m’a tellement traumatisé que j’ai eu des ennuis nocturnes jusqu’à 14 ans. » L’institut est dirigé par les Sœurs Blanches d’Afrique. Les brimades qu’elles infligent aux enfants leur laissent à tous un souvenir cuisant. Charles Géradin, un autre métis de Save (à gauche sur la photo), est né en 1945 et vit à l’institut depuis 1951. Soixante ans plus tard, sa mémoire est toujours aussi intacte : « La sœur Assumpta faisait cueillir des orties qu’elle laissait reposer dans l’eau toute la nuit. Le matin, elle fouettait les enfants avec les tiges humides. Elle s’en donnait à cœur joie. Je pense qu’elle était à bout, elle avait trop de travail. La violence était son exutoire. » Ce souvenir n’est qu’un exemple des mauvais traitements subis quotidiennement par les enfants mulâtres dans les « colonies scolaires » du Congo belge et du Ruanda-Urundi.</p>
+        <p>En 1909, la mission catholique de Save ouvre ses portes à Butare au Rwanda, près de la frontière burundaise. Orphelinat à ses débuts, la mission dirigée par les Sœurs Blanches d’Afrique se transforme rapidement en institut pour enfants métis. Une centaine de jeunes mulâtres y reçoivent une éducation catholique très stricte. Dérivé du mot « mulet », mulâtre désigne les personnes nées d’un père européen et d’une mère africaine : un terme assez disgracieux, aujourd’hui politiquement incorrect. Une des sœurs de la mission, Elisabeth de la Trinité, évoque dans une lettre ses impressions lors de son arrivée à l’institut : « Au premier coup d’œil, il semble que ces enfants ne soient pas joyeux. Tous sont différents : on voit des fillettes blondes au teint laiteux, des visages presque noirs aux cheveux crépus et toutes les gammes de métissage. Ils portent un uniforme : robe de cotonnade bleue pour les jeunes filles, short et chemisette pour les garçons. Enfants de toutes teintes et de tous âges depuis des petits de deux ans jusqu’aux aînées qui ont vingt-huit ans… »<sup>1</sup> Les métis grandissent à l’écart de la société africaine, presque en autarcie, sous la tutelle des Sœurs qui dirigent l’internat avec une poigne de fer.</p>
+
+        <h3>Du « sang blanc » dans les veines</h3>
+        <p>Si les petits mulâtres sont séparés de leurs parents et regroupés dans des écoles spéciales, c’est (entre autres) parce que des colons haut placés voient en eux une future main-d’œuvre de qualité. Plus intelligents que les autochtones, ils offriraient un meilleur rendement tout en étant bon marché. Les colons parlent de créer une « caste métis » comme l’évoque Lissia Jeurissen, historienne belge et collaboratrice au Centre d’Études Ethnicité et Migrations (CEDEM) : « Une classe sociale intermédiaire qui évoluerait séparément des autres communautés raciales (quartiers de résidence, écoles) pour éviter les frustrations susceptibles d’alimenter un sentiment de vengeance ou de contestation. Les métis bénéficieraient alors d’un statut spécifique, plus élevé que celui des autochtones noirs mais un peu en deçà de celui des Européens. »<sup>2</sup> Les autorités coloniales mettent donc leur éducation dans les mains de missions religieuses, comme celle de Save.</p>
+        <blockquote class="pullquote">« La sœur Assumpta fouettait les enfants avec des tiges d’orties humides. La violence était son exutoire. »<cite>Charles Géradin</cite></blockquote>
+        <p>À l’institut, le contact des enfants avec le monde extérieur est réduit au minimum. Ils reçoivent un enseignement similaire à celui donné au plat pays : « On apprenait à compter avec des dessins de pommes et de poires, alors que ces fruits n’existaient pas en Afrique », se rappelle Luc. Sarah Heynssens, historienne belge spécialiste de l’époque coloniale, évoque les diverses tactiques de l’institution pour dissocier les métis des Noirs : « Les tenues vestimentaires, les chaussures et les coupes de cheveux occidentales mettent en avant les différences physiques. La nourriture est plus variée et plus riche que celle de la majorité des Africains. Grâce à ce traitement de faveur, les enfants paraissent et se sentent “supérieurs”, mais en retour, ils sont de plus en plus en rupture avec la société africaine. »<sup>3</sup></p>
+
+        <h3>Exil belge</h3>
+        <p>En 1959, les rouages de l’indépendance se mettent en place au Congo. Les Blancs sentent qu’ils ne sont plus les bienvenus. Sœur Lutgardis, la directrice de Save, se démène pour envoyer les jeunes mulâtres en Belgique. Selon Luc Van Damme, elle a peur qu’ils se fassent massacrer : « Elle craignait des représailles du peuple congolais auprès des enfants de colons. Du côté rwandais, les tensions entre Hutus et Tutsis s’aggravaient et beaucoup d’entre nous avions des mères d’origine Tutsie. » Une explication démentie par d’autres personnes, dont son ami Charles Géradin : « L’autorité coloniale nous a fait évacuer car elle appréhendait que nous nous retournions contre elle. Elle préférait garder ses futurs ennemis potentiels sous sa coupe. » Toujours est-il que Sœur Lutgardis, soutenue par l’Association Pour la Protection des Mulâtres (APPM), sillonne la région dans l’espoir de trouver les mamans des bambins : leur accord est indispensable afin d’emmener les jeunes en Europe. Le voyage est présenté comme une évacuation nécessaire pour assurer le futur des enfants et leur offrir une éducation de qualité. Beaucoup d’Africaines, analphabètes, signent le document de leur pouce sans savoir ce à quoi elles consentent indirectement : l’adoption de leur enfant en Belgique. Celles qui ne veulent pas signer sont menacées de devoir payer l’entièreté des frais scolaires de l’institut. Après quelques semaines de persuasion, la plupart des mères acceptent le départ de leur progéniture.</p>
+        <blockquote class="pullquote">« On apprenait à compter avec des dessins de pommes et de poires, alors que ces fruits n’existaient pas en Afrique. »<cite>Luc Van Damme</cite></blockquote>
+        <p>Le 4 novembre 1959, les premiers enfants café-au-lait s’envolent vers le sol belge. « Les adultes nous ont fait monter dans des camions sans toit », se rappelle Luc. « Debout dans le véhicule, le vent dans les cheveux, j’étais aux anges ! On ne savait pas où l’on nous emmenait, mais nous étions tous excités de quitter l’institut. Quand nous sommes arrivés à l’aéroport, j’étais enchanté à l’idée de prendre l’avion. Mon père nous a accompagnés pour nous dire au revoir. Il me faisait des signes d’adieu par le hublot, mais je ne le regardais pas parce que j’avais une peur bleue de lui. J’étais plutôt heureux de quitter le Rwanda. » Entre 1959 et 1961, presque 300 enfants métis sont envoyés en Belgique. À leur arrivée, certains sont directement reçus par une famille d’accueil, comme Luc, âgé de 6 ans à l’époque, qui atterrit chez un couple francophone avec deux enfants. Charles, plus âgé, entre à l’institut jésuite de Namur. « Une famille aristocrate anglaise avait pris l’habitude de m’emmener en vacances avec elle. Je m’entendais très bien avec les quatre enfants. Un jour, ils ont proposé que je m’installe chez eux et m’ont accueilli comme un vrai membre de la famille. J’ai eu de la chance. »</p>
+        <p>Charles et Luc trouvent une certaine tranquillité au sein de leur nouvelle famille. Ce n’est pas le cas pour tous les enfants métis. La sœur de Luc est hébergée dans une maison où on l’emploie presque comme servante. Elle n’a que 8 ans. Hélas, Luc ne découvrira l’infortune de sa grande sœur que des années plus tard. « Les associations qui s’étaient occupées de nous trouver des familles d’accueil préféraient qu’on ne communique pas entre membres d’une même famille. Elles ne voulaient pas qu’on puisse comparer nos situations. Je n’ai pas vu mes frères et sœurs pendant dix ans. Quand on s’est retrouvés, on ne parlait plus la même langue car ils avaient grandi en Flandre. Ça a été difficile de recréer des liens fraternels. »</p>
+
+        <h3>Rencontre fortuite</h3>
+        <p>En 1978, Luc retourne à Kigali pour enseigner à l’école belge. « Je n’avais plus de nouvelles de ma maman depuis que j’avais quitté Save. Un jour, en sortant des classes, je tombe sur trois Rwandais, dont une petite femme avec un beau turban coloré et les pieds nus. “C’est vous Monsieur Van Damme ?” demande l’un des deux hommes. À mon acquiescement, il me montre la petite dame et me dit : “J’aimerais vous présenter votre maman”. Après vingt ans d’absence, elle m’a longuement serré dans ses bras. Son fils était enfin revenu. »</p>
+
+        <h3>Noir sur fond blanc</h3>
+        <p>Malgré l’époque coloniale terminée, la mentalité raciste et paternaliste des Belges leur colle à la peau. « En Belgique dans les années 1960, on nous prenait pour des sauvages, critique Luc. Quand j’ai commencé à enseigner, j’ai eu du mal à me faire une place dans l’école. Je sentais que je devais gagner la confiance de mes collègues et des parents d’élèves. » La Belgique se montre encore réticente à offrir une place dans la société à ces individus à moitié Africains.</p>
+        <blockquote class="pullquote">« Enfants du péché », ils portent la faute honteuse de leurs géniteurs sur leurs visages et méritent, dit-on, de se faire corriger pour cet écart.</blockquote>
+        <p>Charles rappelle d’ailleurs que la reconnaissance du père belge ne leur donnait pas la nationalité. « À 18 ans, j’ai été appelé à la commune. On m’a demandé si je souhaitais recevoir la nationalité belge ou rwandaise. Je ne savais même pas que je n’étais pas légalement belge ! » Ceux qui choisissent la nationalité africaine s’en mordront les doigts plus tard : à moins de se marier, ils ne seront jamais Belges sur papier.</p>
+        <p>« Quand je parle du passé, de Save, ça ne m’attriste pas. C’est vrai qu’on a subi des expériences difficiles, mais ça nous a donné une force », relativise Charles. Et Luc d’ajouter : « J’ai de la peine pour les gens de notre âge qui n’ont pas réussi à mettre ça derrière eux. Je pense avoir surmonté mon passé grâce à ma réussite dans la vie affective et professionnelle. » Les deux hommes ont guéri de leurs blessures, épaulés par leurs familles adoptives puis par leur entourage. Luc ajoute que la cicatrisation passe avant tout par un état d’esprit positif : « Métis, ça ne veut pas dire 50/50. Ça veut dire 100 + 100. En pensant comme ça, on se tire vers le haut. Nous sommes 200%. »</p>
+
+        <ol class="footnotes">
+          <li><sup>1</sup> Propos recueillis dans le livre d’Assumani Budagwa, « Noir, Blanc, Métis. La Belgique et la ségrégation des Métis du Congo belge et du Ruanda-Urundi (1908-1960) » (2014), p. 173.</li>
+          <li><sup>2</sup> « La question mulâtre, colonisation et métissage », par Lissia Jeurissen. À lire <a href="http://www.cbai.be/revuearticle/740/print/" target="_blank" rel="noopener">ici</a>.</li>
+          <li><sup>3</sup> « Entre deux mondes. Le déplacement des enfants métis du Ruanda-Urundi colonial vers la Belgique », par Sarah Heynssens. À lire <a href="https://rhei.revues.org/3385" target="_blank" rel="noopener">ici</a>.</li>
+        </ol>
+      </div>
+    </section>
+
+    <!-- ============================ FRANÇOIS ============================ -->
+    <section class="story" id="panel-francois" role="tabpanel" aria-labelledby="tab-francois" data-story-panel hidden>
+      <div class="wrap">
+        <h2 class="story-title">« Ils ne voulaient pas nous mêler aux autres enfants »</h2>
+        <p class="story-lead">Nés de relations adultères, les métis sont mal vus dès la naissance par le Congo belge, catholique et conservateur. Malgré les regards accusateurs, certains couples décident de se marier et d’élever leurs enfants ensemble. François Milliex et ses frères font partie de ces jeunes qui, grâce à leurs parents, ont échappé à un triste destin.</p>
+      </div>
+
+      <figure class="figure">
+        <div class="ph">Portrait</div>
+        <figcaption>François Milliex.</figcaption>
+      </figure>
+
+      <div class="wrap">
+        <p>« Quand les collègues de mon père voyaient ma mère s’installer à table avec nous, ils demandaient avec embarras à mon père : “Ah, tu manges avec ta ménagère ?” » François Milliex se rappelle précisément des mots utilisés par les coloniaux. Et pour cause, la « ménagère », c’est le terme donné à la compagne locale du colon pendant son séjour au Congo belge. Les Blancs ont l’habitude de prendre une maîtresse afin d’échapper à la solitude (appelé alors le coup de bambou, soit un accès de déprime provoqué par le dépaysement). Ils n’imaginent pas que des enfants puissent naître de ces relations et, quand la nature fait son travail, ils préfèrent abandonner leur femme pour en trouver une autre. Lissia Jeurissen, historienne belge, rappelle la mentalité de l’époque concernant ces relations : « Cette cohabitation “à terme”, pourtant officiellement déconseillée par les autorités coloniales, était très fréquente puisque la majorité des agents venaient au Congo sans leur famille belge. Les concubines noires étaient alors dénommées ménagères, et parfois épousées à la mode indigène. Mais ces couples semblaient voués à la rupture. En effet, une fois son contrat colonial terminé, le bwana [colon blanc en swahili, NDLR] repartait bien souvent vers une nouvelle affectation sans se retourner, ne se sentant lié par aucune obligation légale ou morale envers sa compagne tropicale. »<sup>1</sup></p>
+        <p>François et son frère jumeau naissent en 1945 à Bukavu, au Congo. Leur père a une plantation à Jimbi, au Burundi, près de la frontière congolaise. D’origine française, il préfère prendre ses responsabilités par rapport à ses enfants. Peut-être parce que la mentalité coloniale française diverge de la belge : alors que la France s’installe en Afrique avec une idée de peuplement des terres (par exemple en Algérie), le Congo est une colonie d’exploitation, où le pouvoir n’envisage ni immigration massive de familles belges, ni intégration des coloniaux à la société autochtone.</p>
+
+        <h3>Dans la cour des Blancs</h3>
+        <p>« Les autorités coloniales du Ruanda-Urundi ont conseillé à mon père de nous mettre dans un internat pour enfants métis. C’était “ce qu’il y a de mieux à faire”. Ils ne voulaient pas trop mêler les métis aux enfants noirs et blancs. » François et son frère sont envoyés en 1953 à l’institut pour métis de Save (à prononcer Savé), une mission catholique au sud du Rwanda. Ils n’y resteront pas longtemps. « Nous sommes entrés à l’institut à 7 ans. Ce fut une expérience terrible, se rappelle-t-il avec émotion. Les autres enfants nous jalousaient car papa venait nous rechercher pour les vacances. Eux n’avaient jamais aucune visite, ils étaient comme des orphelins. Les Sœurs aussi étaient très dures avec nous. Au bout d’un an, on s’est plaint des mauvais traitements et notre père nous a changés d’école. »</p>
+        <blockquote class="pullquote">« Quand les collègues de mon père voyaient ma mère s’installer à table, ils demandaient avec embarras : “Ah, tu manges avec ta ménagère ?” »</blockquote>
+        <p>Les jumeaux font partie des premiers métis à entrer dans une école de Blancs (leur présence était interdite avant 1948). On leur apprend l’histoire de la Belgique, Jules César et la Grèce antique, mais pas un mot sur l’Afrique. Peu à peu, l’administration coloniale laisse entrer des élèves noirs mais préserve une distinction claire entre les deux groupes. « Même si la Belgique n’instaure pas officiellement une ségrégation légale en tant que telle dans sa colonie, le droit colonial fait tout de même la distinction entre les indigènes (autochtones) et les non indigènes (travailleurs européens) », explique encore l’historienne belge Lissia Jeurissen. « À la cantine, mes frères et moi mangions avec les Blancs. Les Noirs mangeaient de l’autre côté de la salle », se rappelle François. Pendant son enfance en Afrique, il est considéré comme faisant partie du « camp » des Européens. « À force, moi aussi, je me considérais comme un Blanc. J’ai eu un choc en arrivant en Belgique ! Ici, c’était l’inverse, forcément. On ne voyait pas mon mélange : j’étais Noir, c’est tout. » La plupart des enfants métis expérimentent ces stigmatisations, analyse Lissia Jeurissen : « Aux yeux de l’opinion générale, le métis belge est a priori perçu comme un étranger, un Africain, ou renvoyé à ses racines duales, au-delà de sa nationalité légale et de son parcours personnel. »<sup>2</sup></p>
+
+        <h3>« Enfin, l’Europe ! »</h3>
+        <p>« En 1959, sœur Lutgardis, la directrice de l’institut de Save, est venue à la maison pour parler à mon père. Elle lui a expliqué qu’on évacuait les enfants métis et qu’il devait nous envoyer en Belgique pour nous mettre à l’abri d’un massacre de Tutsis. Nous n’étions pas trop tristes de partir car nous étions convaincus que nous allions revenir et reprendre la plantation de papa », se remémore François. Avec ses six frères et sœurs, ils arrivent sur le continent avec des étoiles plein les yeux. « On nourrissait beaucoup d’espoirs sur la vie en Europe. Depuis des années dans le bureau de mon père, on voyait des calendriers de chalets en Suisse, de paysages de neige et de ciel bleu. On en rêvait ! Le jour où l’on a atterri à Bruxelles, il gelait. Nous n’avions jamais eu froid de notre vie, on ne s’attendait vraiment pas à ça. » Les plus grands, François et ses deux frères, sont envoyés dans un home à Rhode-Saint-Genèse. Les quatre petits sont accueillis chez une riche famille flamande. « Je n’ai eu presque aucune nouvelle d’eux pendant des années. L’Association Pour la Protection des Mulâtres rechignait à nous donner leur adresse. Quand on s’est retrouvés, on ne parlait plus la même langue. »</p>
+        <p>Le problème de la non-reconnaissance du père se pose un jour ou l’autre pour tous les mulâtres. « À 18 ans, on pouvait choisir de prendre la nationalité belge ou rwandaise. Je n’avais pas compris l’enjeu de ce choix, j’ai opté pour des papiers rwandais. Quand le pays a pris son indépendance, j’ai été considéré comme irrégulier. Des montagnes de problèmes administratifs ont suivi. Pour signer des contrats de travail par exemple, ça engendre encore des complications. Même au quotidien, ces problèmes me suivent : quand je vais en France, il m’arrive d’être arrêté à la douane et interdit de quitter le territoire belge », grogne François.</p>
+        <blockquote class="pullquote">« À la cantine, mes frères et moi mangions avec les Blancs. Les Noirs mangeaient de l’autre côté de la salle. »</blockquote>
+
+        <h3>Sans rancune ?</h3>
+        <p>François Milliex ne souhaite pas s’appesantir sur son passé. Il sait qu’il fait partie des « mieux lotis » : il a connu ses deux parents et grandi avec ses frères, alors que la majorité des mulâtres ont dû se battre pour retrouver leurs géniteurs et comprendre ce qui leur était arrivé. « J’ai rencontré des métis avec qui je ne me sentais pas du tout en harmonie. Ils étaient tellement tracassés et malheureux… Ils rapprochaient tous leurs problèmes à leur condition de métis. Mais c’est vrai que je n’ai pas eu un passé aussi difficile qu’eux. »</p>
+        <blockquote class="pullquote">« En Belgique, on ne voyait pas mon mélange : j’étais Noir, c’est tout. »</blockquote>
+        <p>Quel que soit le chemin qu’ils aient pris, les métis de la colonisation belge en Afrique ont été marqués par la séparation, la déportation et la discrimination. Aujourd’hui, certains ont trouvé la paix, d’autres portent encore comme un lourd fardeau ce passé qu’ils n’ont jamais réussi à mettre derrière eux. Leur histoire atteste de l’injustice et des méfaits de la colonisation belge, ainsi que d’une mentalité post-colonialiste dont la Belgique a eu longtemps du mal à se défaire. Assumani Budagwa a rassemblé pendant près de vingt ans documents d’archives et témoignages. Il a publié en 2014 « Noir, Blanc, Métis. La Belgique et la ségrégation des Métis du Congo belge et du Ruanda-Urundi (1908-1960) », soit le premier livre à creuser profondément dans l’histoire des métis nés pendant la colonisation belge. Il y rappelle que, si ces recherches ne doivent pas mener à un jugement à charge des anciens colons, « certaines conduites ou mesures administratives ont fait des victimes, il est alors légitime de poser la question de la reconnaissance, du pardon et des réparations. » L’Association Métis de Belgique compte d’ailleurs obtenir des excuses publiques du Gouvernement fédéral concernant la discrimination des métis durant la période coloniale et leur déplacement vers la Belgique en 1959. Elle défendra d’abord sa cause devant le Parlement francophone bruxellois, le 20 octobre prochain. Longtemps enfoui dans les méandres de l’oubli, le voile se lève doucement sur ce pan de notre histoire coloniale.</p>
+
+        <aside class="callout">
+          <h4>L’Association Métis de Belgique</h4>
+          <p>En août 2015, François Milliex et son ami François D’Adesky créent une association pour représenter les métis nés sur des territoires sous domination coloniale belge. L’objectif de l’ASBL est de sensibiliser les citoyens à l’histoire des métis, d’assurer un devoir de mémoire et d’aider les concernés à accéder à leurs archives personnelles — le tout en s’assurant que « ces actions soient menées sans haine, avec sérénité, sans esprit de revanche mais avec ténacité », comme mentionné sur le site de l’association.</p>
+        </aside>
+
+        <ol class="footnotes">
+          <li><sup>1</sup> « La question mulâtre, colonisation et métissage » (2011), par Lissia Jeurissen. À lire <a href="http://www.cbai.be/revuearticle/740/print/" target="_blank" rel="noopener">ici</a>.</li>
+          <li><sup>2</sup> Idem.</li>
+        </ol>
+      </div>
+    </section>
   </article>
 </Base>
 
@@ -100,6 +210,9 @@ const quote = 'Une citation marquante extraite du récit, mise en exergue pour r
         if (panels[j]) panels[j].hidden = !on;
       });
       if (focus) tabs[i].focus();
+      // Start the newly selected story from the top of the selector.
+      const y = tablist.getBoundingClientRect().top + window.scrollY - 96;
+      window.scrollTo({ top: y, behavior: 'auto' });
     };
     tabs.forEach((tab, i) => {
       tab.addEventListener('click', () => select(i));
@@ -153,20 +266,18 @@ const quote = 'Une citation marquante extraite du récit, mise en exergue pour r
   .article-sub {
     margin-top: var(--space-3);
     font-size: 1.25rem;
-    line-height: 1.5;
+    line-height: 1.6;
     font-weight: 400;
     color: var(--color-muted);
-    max-width: 34rem;
   }
 
-  /* Figures — generous, rounded, with quiet captions. Lead image is wider. */
+  /* Figures — generous, rounded, quiet captions. */
   .figure {
     margin-block: var(--space-5);
     margin-inline: auto;
     max-width: 52rem;
     padding-inline: var(--gutter);
   }
-  .figure--lead { margin-top: var(--space-5); }
   .figure .ph {
     aspect-ratio: 3 / 2;
     border-radius: var(--radius-card);
@@ -185,8 +296,7 @@ const quote = 'Une citation marquante extraite du récit, mise en exergue pour r
     text-align: center;
   }
 
-  /* Story selector — sticky just under the floating nav so readers can switch
-     between testimonies while scrolling. */
+  /* Story selector — sticky just under the floating nav. */
   .story-nav {
     position: sticky;
     top: 4.75rem;
@@ -216,10 +326,9 @@ const quote = 'Une citation marquante extraite du récit, mise en exergue pour r
     color: var(--color-ink-on-primary);
   }
 
-  /* Body copy tuned for reading: 19px, line-height 1.75, soft paragraph rhythm. */
+  /* Body copy tuned for reading: 19px, line-height 1.75. */
   .story { font-size: 1.1875rem; line-height: 1.75; }
   .story p { margin-top: var(--space-3); }
-  .story p:first-of-type { margin-top: 0; }
   .story-title {
     font-size: clamp(1.625rem, 1.2rem + 1.6vw, 2.25rem);
     font-weight: 700;
@@ -233,14 +342,76 @@ const quote = 'Une citation marquante extraite du récit, mise en exergue pour r
     color: var(--color-muted);
     margin-bottom: var(--space-4);
   }
+  .story h3 {
+    font-size: 1.375rem;
+    font-weight: 700;
+    line-height: 1.25;
+    letter-spacing: -0.01em;
+    margin-top: var(--space-5);
+    margin-bottom: calc(var(--space-2) * -1 + var(--space-3));
+  }
+  .story sup {
+    color: var(--color-primary);
+    font-weight: 600;
+    font-size: 0.7em;
+    padding-left: 0.1em;
+  }
+
   .pullquote {
     margin-block: var(--space-4);
     padding-left: var(--space-3);
     border-left: 3px solid var(--color-primary);
     font-size: 1.5rem;
-    line-height: 1.4;
+    line-height: 1.35;
     font-weight: 500;
     color: var(--color-primary);
+  }
+  .pullquote cite {
+    display: block;
+    margin-top: var(--space-2);
+    font-size: 0.85rem;
+    font-style: normal;
+    font-weight: 500;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--color-muted-soft);
+  }
+
+  /* Callout box for the association note. */
+  .callout {
+    margin-block: var(--space-5);
+    padding: var(--space-3) var(--space-4);
+    background: var(--color-secondary);
+    border-radius: var(--radius-card);
+    font-size: 1.0625rem;
+    line-height: 1.6;
+  }
+  .callout h4 {
+    font-size: 1.0625rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    margin-bottom: var(--space-2);
+    color: var(--color-primary);
+  }
+
+  /* Footnotes. */
+  .footnotes {
+    margin-top: var(--space-5);
+    padding-top: var(--space-3);
+    border-top: 1px solid var(--color-line);
+    list-style: none;
+    font-size: 0.9375rem;
+    line-height: 1.55;
+    color: var(--color-muted);
+  }
+  .footnotes li { margin-top: var(--space-2); }
+  .footnotes sup { margin-right: 0.35em; }
+  .footnotes a { color: var(--color-primary); }
+  .footnotes--intro {
+    margin-top: 0;
+    border-top: 0;
+    padding-top: 0;
   }
 
   @media (prefers-reduced-motion: reduce) {
