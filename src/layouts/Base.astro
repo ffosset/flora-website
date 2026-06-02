@@ -5,7 +5,8 @@ import { useTranslations, getLocaleFromUrl } from '../i18n';
 
 const locale = getLocaleFromUrl(Astro.url);
 const t = useTranslations(locale);
-const home = locale === 'en' ? '/' : `/${locale}/`;
+const base = import.meta.env.BASE_URL; // includes a trailing slash, e.g. '/flora-website/'
+const home = locale === 'en' ? base : `${base}${locale}/`;
 ---
 
 <!doctype html>
@@ -15,7 +16,7 @@ const home = locale === 'en' ? '/' : `/${locale}/`;
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{t.meta.title}</title>
     <meta name="description" content={t.meta.description} />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" type="image/svg+xml" href={`${base}favicon.svg`} />
   </head>
   <body>
     <header class="site-header" data-header>

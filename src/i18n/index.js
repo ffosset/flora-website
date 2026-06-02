@@ -43,8 +43,14 @@ export function useTranslations(locale) {
 }
 
 // Get the locale from an Astro URL pathname (/fr/... or /es/...).
+// Accounts for a configured base path (e.g. /flora-website/fr/ on GitHub Pages).
 export function getLocaleFromUrl(url) {
-  const [, maybeLocale] = url.pathname.split('/');
+  const base = import.meta.env.BASE_URL; // '/' or e.g. '/flora-website/'
+  let path = url.pathname;
+  if (base !== '/' && path.startsWith(base)) {
+    path = path.slice(base.length - 1); // drop the base, keep the leading slash
+  }
+  const [, maybeLocale] = path.split('/');
   if (maybeLocale in languages) return maybeLocale;
   return defaultLang;
 }

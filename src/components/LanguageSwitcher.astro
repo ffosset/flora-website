@@ -3,8 +3,10 @@ import { languages, defaultLang } from '../i18n';
 
 const { currentLocale } = Astro.props;
 
+const base = import.meta.env.BASE_URL; // includes a trailing slash, e.g. '/flora-website/'
+
 function localePath(loc) {
-  return loc === defaultLang ? '/' : `/${loc}/`;
+  return loc === defaultLang ? base : `${base}${loc}/`;
 }
 ---
 
