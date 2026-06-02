@@ -32,15 +32,15 @@ export default {
     sectionTitle: 'What I do',
     problems: [
       {
-        title: "You can't explain what you do.",
+        title: "You can't explain what you do",
         body: 'I find the clear version and build the site or story that tells it.',
       },
       {
-        title: 'Your website or platform confuses people.',
+        title: 'Your website or platform confuses people',
         body: 'I redesign it so it is obvious, and people act.',
       },
       {
-        title: 'You have data or an idea but it is a mess.',
+        title: 'You have data or an idea but it is a mess',
         body: 'I shape it into something people can actually use and decide with.',
       },
     ],
@@ -49,7 +49,7 @@ export default {
       'Most teams hire a designer, a writer, and a developer, then try to stitch them together. I see the whole thing at once — the story, the design, and the working product — because my path ran through journalism, data, design, and building companies. One mind, the full picture.',
   },
   work: {
-    sectionTitle: 'projects that left a mark.',
+    sectionTitle: 'projects that left a mark',
     intro:
       'Websites, platforms, data tools, stories — different surfaces, same job: taking something tangled and making it clear.',
     counterSeparator: '/',
@@ -122,7 +122,7 @@ export default {
     ],
   },
   about: {
-    sectionTitle: 'about me.',
+    sectionTitle: 'about me',
     bio:
       'I make complicated things clear. Over 8+ years I have moved from data journalism to information design to product design and product management — and now co-founding a company. That path is why I can see a project whole: the story, the design, and the working product.',
     experienceTitle: 'experience.',
@@ -146,12 +146,12 @@ export default {
         when: '2017 — 2021',
       },
     ],
-    valuesTitle: 'how I choose work.',
+    valuesTitle: 'value driven',
     values:
       'I choose work that supports a greener, fairer, more inclusive world. If that is the kind of thing you are building, we will get along.',
   },
   contact: {
-    sectionTitle: 'tell me what you are trying to make clear.',
+    sectionTitle: 'tell me what you are trying to make clear',
     emailLabel: 'Email',
     email: 'hello@fosset.co',
     linkedinLabel: 'LinkedIn',

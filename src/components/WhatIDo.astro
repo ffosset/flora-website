@@ -1,17 +1,12 @@
 ---
 const { t } = Astro.props;
 ---
-<section id="what" class="what-statement" data-header-tint="purple">
+<section id="what" class="what-statement">
   <div class="container">
     <h2 class="statement">{t.whatIDo.statement}</h2>
     <p class="statement-sub">
-      <span class="slash-on-purple">/</span>{t.whatIDo.statementSub}
+      <span class="slash-on-purple">·</span>{t.whatIDo.statementSub}
     </p>
-  </div>
-</section>
-
-<section id="how" class="what-problems">
-  <div class="container">
     <div class="problems">
       {t.whatIDo.problems.map((p) => (
         <div class="problem">
@@ -19,10 +14,6 @@ const { t } = Astro.props;
           <p>{p.body}</p>
         </div>
       ))}
-    </div>
-    <div class="how">
-      <h3><span class="slash">/</span>{t.whatIDo.howIWorkTitle.toLowerCase()}.</h3>
-      <p>{t.whatIDo.howIWorkBody}</p>
     </div>
   </div>
 </section>
@@ -56,24 +47,21 @@ const { t } = Astro.props;
     margin-right: 0.05em;
   }
 
-  .what-problems { background: var(--color-bg); padding-block: var(--space-6); }
-  .problems { display: grid; gap: var(--space-3); }
+  /* Three columns sit under the title/subtitle, on the orange ground. */
+  .problems {
+    margin-top: var(--space-5);
+    display: grid;
+    gap: var(--space-4);
+  }
   @media (min-width: 768px) {
-    .problems { grid-template-columns: repeat(3, 1fr); gap: var(--space-4); }
+    .problems { grid-template-columns: repeat(3, 1fr); }
   }
   .problem h3 {
     font-size: 1.375rem;
     line-height: 1.2;
     margin-bottom: var(--space-2);
     letter-spacing: -0.01em;
+    color: var(--color-ink-on-purple);
   }
-  .problem p { color: var(--color-muted); }
-  .how {
-    margin-top: var(--space-5);
-    max-width: 70ch;
-    border-top: 1px solid var(--color-line);
-    padding-top: var(--space-4);
-  }
-  .how h3 { font-size: 1.5rem; letter-spacing: -0.01em; }
-  .how p { color: var(--color-muted); margin-top: var(--space-2); }
+  .problem p { color: var(--color-muted-on-purple); }
 </style>
