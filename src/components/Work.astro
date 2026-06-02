@@ -1,7 +1,6 @@
 ---
 const { t } = Astro.props;
 const filters = t.work.filters;
-const total = t.work.projects.length;
 ---
 
 <section id="work" class="work">
@@ -9,11 +8,6 @@ const total = t.work.projects.length;
     <div class="work-title">
       <h2><span class="slash">·</span>{t.work.sectionTitle}</h2>
       <p class="intro">{t.work.intro}</p>
-    </div>
-    <div class="counter" aria-live="polite">
-      <span data-counter-current>1</span>
-      <span aria-hidden="true">{t.work.counterSeparator}</span>
-      <span>{total}</span>
     </div>
   </div>
 
@@ -61,8 +55,6 @@ const total = t.work.projects.length;
 <script>
   const chips = document.querySelectorAll('.work .chip');
   const cards = document.querySelectorAll('.work .card');
-  const track = document.querySelector('.work [data-track]');
-  const current = document.querySelector('.work [data-counter-current]');
 
   // Soft sorting: dim non-matches.
   chips.forEach((chip) => {
@@ -87,28 +79,6 @@ const total = t.work.projects.length;
       }
     });
   });
-
-  // Counter: track which card is centered in the scroller.
-  if (track && current && cards.length) {
-    const io = new IntersectionObserver(
-      (entries) => {
-        let best = null;
-        let bestRatio = 0;
-        entries.forEach((e) => {
-          if (e.intersectionRatio > bestRatio) {
-            bestRatio = e.intersectionRatio;
-            best = e.target;
-          }
-        });
-        if (best) {
-          const idx = best.getAttribute('data-index');
-          if (idx) current.textContent = idx;
-        }
-      },
-      { root: track, threshold: [0.4, 0.6, 0.8] }
-    );
-    cards.forEach((card) => io.observe(card));
-  }
 </script>
 
 <style>
@@ -132,13 +102,6 @@ const total = t.work.projects.length;
     max-width: 50ch;
     margin-top: var(--space-2);
   }
-  .counter {
-    font-size: var(--fs-small);
-    color: var(--color-muted);
-    white-space: nowrap;
-    font-variant-numeric: tabular-nums;
-  }
-
   .chips {
     display: flex;
     flex-wrap: wrap;
