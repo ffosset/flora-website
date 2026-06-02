@@ -177,8 +177,14 @@ const roles = t.hero.roles?.length ? t.hero.roles : [t.hero.roleWord];
     left: 0;
     width: var(--cursor-size);
     height: var(--cursor-size);
-    /* Soft radial glow that fades to nothing — no hard edge, no flat circle. */
-    background: radial-gradient(circle, var(--color-cursor-glow) 0%, transparent 70%);
+    /* Soft radial glow that fades to nothing — no hard edge, no flat circle.
+       The inner stop is already softened to 60% so the glow stays a hint of
+       warmth rather than a solid orange core. */
+    background: radial-gradient(
+      circle,
+      color-mix(in srgb, var(--color-cursor-glow) 60%, transparent) 0%,
+      transparent 70%
+    );
     /* Extra diffusion on top of the gradient so it reads as light, not a shape. */
     filter: blur(40px);
     /* multiply keeps the orange truthful: it warmly tints the cream ground
@@ -198,7 +204,7 @@ const roles = t.hero.roles?.length ? t.hero.roles : [t.hero.roleWord];
     will-change: transform;
     transition: opacity 0.2s var(--ease), scale 0.2s var(--ease);
   }
-  .hero-cursor.is-visible { opacity: 0.6; }
+  .hero-cursor.is-visible { opacity: 0.28; }
   .hero-cursor.is-hover { --cursor-scale: 2; }
 
   /* Touch / no-hover devices: there is no cursor to follow. */
