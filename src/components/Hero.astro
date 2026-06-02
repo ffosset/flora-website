@@ -1,13 +1,14 @@
 ---
 const { t } = Astro.props;
+const roles = t.hero.roles?.length ? t.hero.roles : [t.hero.roleWord];
 ---
-<section id="hero" class="hero" data-header-tint="">
+<section id="hero" class="hero">
   <div class="container hero-inner">
     <div class="hero-bottom">
       <h1 class="hero-line">
-        <span>{t.hero.nameWord}</span>
-        <span class="slash" aria-hidden="true">/</span>
-        <span class="hero-role">{t.hero.roleWord}</span>
+        <span class="hero-name">{t.hero.nameWord}</span>
+        <span class="hero-dot" aria-hidden="true">·</span>
+        <span class="hero-role" data-rotator data-words={JSON.stringify(roles)}>{roles[0]}</span>
       </h1>
       <div class="scroll-cue" aria-hidden="true">
         <span class="cue-rule"></span>
@@ -17,9 +18,29 @@ const { t } = Astro.props;
   </div>
 </section>
 
+<script>
+  const el = document.querySelector('[data-rotator]');
+  if (el) {
+    let words = [];
+    try { words = JSON.parse(el.dataset.words || '[]'); } catch {}
+    if (words.length > 1) {
+      let i = 0;
+      setInterval(() => {
+        i = (i + 1) % words.length;
+        el.classList.add('is-out');
+        setTimeout(() => {
+          el.textContent = words[i];
+          el.classList.remove('is-out');
+        }, 320);
+      }, 2200);
+    }
+  }
+</script>
+
 <style>
   .hero {
-    background: var(--color-bg-soft);
+    /* Soft diagonal wash: white in the top-left, warm peach in the bottom-right. */
+    background: linear-gradient(135deg, #ffffff 0%, var(--color-bg) 38%, #fbe2d2 100%);
     min-height: 100vh;
     padding-block: 0;
     display: flex;
@@ -35,23 +56,28 @@ const { t } = Astro.props;
 
   .hero-line {
     font-family: var(--font-display);
-    font-weight: 900;
+    font-weight: 800;
     font-size: var(--fs-mega);
-    line-height: 0.95;
+    line-height: 1;
     letter-spacing: -0.04em;
     display: flex;
     align-items: baseline;
     gap: 0.18em;
     flex-wrap: wrap;
   }
-  .hero-line .slash {
-    font-weight: 800;
-    /* Slightly lighter weight for the divider feel. */
-  }
+  .hero-name { color: var(--color-text); }
+  .hero-dot { color: var(--color-primary); }
   .hero-role {
-    color: var(--color-purple);
+    color: var(--color-primary);
     font-weight: 500;
-    font-style: italic;
+    transition: opacity 0.32s var(--ease), transform 0.32s var(--ease);
+  }
+  /* Word swaps: fade/slide out, change text, fade back in. */
+  .hero-role.is-out { opacity: 0; transform: translateY(0.22em); }
+
+  @media (prefers-reduced-motion: reduce) {
+    .hero-role { transition: none; }
+    .hero-role.is-out { opacity: 1; transform: none; }
   }
 
   .scroll-cue {

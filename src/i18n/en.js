@@ -16,6 +16,8 @@ export default {
   hero: {
     nameWord: 'flora',
     roleWord: 'designer',
+    // Rotating role word: cycles design → investigation → communication → product → …
+    roles: ['design', 'investigation', 'communication', 'product'],
     scroll: 'Scroll',
     // Kept for back-compat with any old references.
     headline: 'Clarity, designed.',

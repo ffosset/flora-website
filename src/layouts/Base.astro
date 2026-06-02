@@ -21,10 +21,7 @@ const home = locale === 'en' ? base : `${base}${locale}/`;
   <body>
     <header class="site-header" data-header>
       <div class="container header-inner">
-        <a href={home} class="wordmark" aria-label="Flora Fosset — home">
-          <span class="wm-row"><span class="wm-drop">f</span><span>lora</span></span>
-          <span class="wm-row wm-row-2"><span class="wm-drop">f</span><span>osset</span></span>
-        </a>
+        <a href={home} class="wordmark" aria-label="Flora Fosset — home">flora fosset</a>
 
         <button
           type="button"
@@ -80,41 +77,6 @@ const home = locale === 'en' ? base : `${base}${locale}/`;
           link.addEventListener('click', () => setOpen(false));
         });
       }
-
-      // Header recolors itself based on the section behind it (white vs purple).
-      // We observe a thin sensor row pinned just below the header. The tint of
-      // the topmost section under that sensor wins.
-      const header = document.querySelector('[data-header]');
-      const tinted = Array.from(document.querySelectorAll('[data-header-tint]'));
-      if (header && tinted.length) {
-        const updateTint = () => {
-          const probeY = header.getBoundingClientRect().bottom + 4;
-          // Find the tinted section currently under the probe line.
-          let active = null;
-          for (const el of tinted) {
-            const r = el.getBoundingClientRect();
-            if (r.top <= probeY && r.bottom > probeY) {
-              active = el;
-              break;
-            }
-          }
-          header.dataset.tint = active
-            ? active.getAttribute('data-header-tint') || ''
-            : '';
-        };
-        updateTint();
-        let ticking = false;
-        const onScroll = () => {
-          if (ticking) return;
-          ticking = true;
-          requestAnimationFrame(() => {
-            updateTint();
-            ticking = false;
-          });
-        };
-        window.addEventListener('scroll', onScroll, { passive: true });
-        window.addEventListener('resize', onScroll);
-      }
     </script>
 
     <style>
@@ -122,31 +84,29 @@ const home = locale === 'en' ? base : `${base}${locale}/`;
         position: fixed;
         inset: 0 0 auto 0;
         z-index: 20;
-        transition: color 0.25s var(--ease);
+        background: rgba(255, 255, 255, 0.7);
+        -webkit-backdrop-filter: blur(12px);
+        backdrop-filter: blur(12px);
+        border-bottom: 1px solid var(--color-line);
       }
-      .site-header[data-tint='purple'] { color: var(--color-ink-on-purple); }
 
       .header-inner {
         display: flex;
-        align-items: flex-start;
+        align-items: center;
         justify-content: space-between;
-        padding-block: var(--space-3);
+        padding-block: var(--space-2);
       }
 
-      /* Stacked "flora / fosset" wordmark */
+      /* "flora fosset" wordmark */
       .wordmark {
-        display: inline-flex;
-        flex-direction: column;
         text-decoration: none;
         font-family: var(--font-display);
-        font-weight: 500;
-        font-size: 1rem;
+        font-weight: 700;
+        font-size: 1.0625rem;
         line-height: 1;
         letter-spacing: -0.01em;
+        color: var(--color-primary);
       }
-      .wm-row { display: inline-flex; align-items: baseline; }
-      .wm-row-2 { padding-left: 0.55em; margin-top: 0.05em; }
-      .wm-drop { color: var(--color-purple); font-weight: 600; }
 
       /* Hamburger */
       .menu-toggle {
