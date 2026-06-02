@@ -240,10 +240,11 @@ const roles = t.hero.roles?.length ? t.hero.roles : [t.hero.roleWord];
     /* Soft primary ring — rgba(174,73,5,0.1) is --color-primary at 10%. */
     border: 20px solid rgba(174, 73, 5, 0.1);
     cursor: pointer;
-    transition: border-color 0.25s ease-out;
+    transition: transform 0.3s var(--ease);
   }
+  /* Grow the whole element (ring + picture) on hover/focus. */
   .hero-photo:hover,
-  .hero-photo:focus-visible { border-color: var(--color-accent); }
+  .hero-photo:focus-visible { transform: scale(1.08); }
   /* Ripple: a ring pulsing outward from the photo edge, only while hovered. */
   .hero-photo::after {
     content: '';
@@ -263,6 +264,9 @@ const roles = t.hero.roles?.length ? t.hero.roles : [t.hero.roleWord];
     to { transform: scale(1.15); opacity: 0; }
   }
   @media (prefers-reduced-motion: reduce) {
+    .hero-photo { transition: none; }
+    .hero-photo:hover,
+    .hero-photo:focus-visible { transform: none; }
     .hero-photo:hover::after,
     .hero-photo:focus-visible::after { animation: none; }
   }
