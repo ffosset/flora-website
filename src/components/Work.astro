@@ -44,7 +44,7 @@ const filters = t.work.filters;
               <div class="media-placeholder" aria-hidden="true">
                 <span>{p.subtitle || p.slug}</span>
               </div>
-              <img src={p.image} alt={p.subtitle} loading="lazy" onerror="this.style.display='none'" />
+              <img src={base + p.image} alt={p.subtitle} loading="lazy" onerror="this.style.display='none'" />
               {isExternal && <span class="card-go" aria-hidden="true">↗</span>}
             </div>
             <div class="card-body">

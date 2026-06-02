@@ -3,8 +3,8 @@ import Base from '../../layouts/Base.astro';
 
 const base = import.meta.env.BASE_URL; // trailing slash, e.g. '/flora-website/'
 
-// Images aren't supplied yet — figures render as placeholders with their real
-// captions. Swap each <div class="ph"> for an <img> when the photos arrive.
+// Photos live under public/images/projects/couleur/ and are referenced with the
+// base path so they resolve under the GitHub Pages subdirectory.
 const stories = [
   { id: 'eveline', tab: 'Eveline' },
   { id: 'luc-charles', tab: 'Luc et Charles' },
@@ -38,8 +38,8 @@ const stories = [
     </div>
 
     <figure class="figure figure--lead">
-      <div class="ph">Image d’ouverture</div>
-      <figcaption>Légende de l’image d’ouverture.</figcaption>
+      <img src={`${base}images/projects/couleur/save.jpg`} alt="Les Sœurs Blanches d’Afrique posant avec des pensionnaires métis de l’institut de Save, au Rwanda." width="930" height="407" loading="eager" />
+      <figcaption>Les Sœurs Blanches d’Afrique avec des pensionnaires métis de l’institut de Save au Rwanda.</figcaption>
     </figure>
 
     <div class="wrap">
@@ -71,7 +71,7 @@ const stories = [
       </div>
 
       <figure class="figure">
-        <div class="ph">Portrait</div>
+        <img src={`${base}images/projects/couleur/eveline.jpg`} alt="Eveline Schmit." width="605" height="403" loading="lazy" />
         <figcaption>Eveline Schmit.</figcaption>
       </figure>
 
@@ -116,7 +116,7 @@ const stories = [
       </div>
 
       <figure class="figure">
-        <div class="ph">Photographie</div>
+        <img src={`${base}images/projects/couleur/luc-charles.jpg`} alt="Charles Géradin et Luc Van Damme." width="605" height="417" loading="lazy" />
         <figcaption>Charles Géradin et Luc Van Damme.</figcaption>
       </figure>
 
@@ -160,7 +160,7 @@ const stories = [
       </div>
 
       <figure class="figure">
-        <div class="ph">Portrait</div>
+        <img src={`${base}images/projects/couleur/francois.jpg`} alt="François Milliex." width="605" height="403" loading="lazy" />
         <figcaption>François Milliex.</figcaption>
       </figure>
 
@@ -234,9 +234,9 @@ const stories = [
     padding-block: clamp(6rem, 12vh, 9rem) var(--space-6);
   }
 
-  /* Reading column: ~40rem keeps line length in the comfortable 60–75ch band. */
+  /* Reading column: ~44rem keeps line length in the comfortable 65–75ch band. */
   .wrap {
-    max-width: 40rem;
+    max-width: 44rem;
     margin-inline: auto;
     padding-inline: var(--gutter);
   }
@@ -277,6 +277,12 @@ const stories = [
     margin-inline: auto;
     max-width: 52rem;
     padding-inline: var(--gutter);
+  }
+  .figure img {
+    width: 100%;
+    height: auto;
+    display: block;
+    border-radius: var(--radius-card);
   }
   .figure .ph {
     aspect-ratio: 3 / 2;
