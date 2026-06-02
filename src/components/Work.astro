@@ -1,9 +1,21 @@
 ---
 const { t } = Astro.props;
 const filters = t.work.filters;
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+
+// Slice the seven projects into pages of three. Position within a page
+// (hero vs small) is derived from the index — no per-project metadata — so
+// reordering the data array just works.
+const PER_PAGE = 3;
+const projects = t.work.projects || [];
+const pages = [];
+for (let i = 0; i < projects.length; i += PER_PAGE) pages.push(projects.slice(i, i + PER_PAGE));
+
+const navPrev = t.work.prev || 'Previous projects';
+const navNext = t.work.next || 'Next projects';
 ---
 
-<section id="work" class="work">
+<section id="work" class="work" data-work>
   <div class="container work-head">
     <div class="work-title">
       <h2><span class="slash">·</span>{t.work.sectionTitle}</h2>
@@ -11,7 +23,7 @@ const filters = t.work.filters;
     </div>
   </div>
 
-  <div class="container">
+  <div class="container work-controls">
     <div class="chips" role="group" aria-label="Filter work by type">
       <button class="chip active" data-cat="all">{filters.all}</button>
       <button class="chip" data-cat="websites">{filters.websites}</button>
@@ -19,94 +31,119 @@ const filters = t.work.filters;
       <button class="chip" data-cat="data">{filters.data}</button>
       <button class="chip" data-cat="storytelling">{filters.storytelling}</button>
     </div>
+
+    <div class="work-nav">
+      <button type="button" class="nav-arrow" data-prev aria-label={navPrev}>
+        <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M15 5l-7 7 7 7" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" /></svg>
+      </button>
+      <span class="work-indicator" data-indicator aria-hidden="true">1 / {pages.length}</span>
+      <button type="button" class="nav-arrow" data-next aria-label={navNext}>
+        <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M9 5l7 7-7 7" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" /></svg>
+      </button>
+    </div>
   </div>
 
-  <div class="track" data-track tabindex="0" aria-label="Selected work">
-    <div class="track-pad" aria-hidden="true"></div>
-    {
-      t.work.projects.map((p) => {
-        const hasUrl = Boolean(p.url);
-        const isExternal = hasUrl && p.url.startsWith('http');
-        // Internal links ('/work/...') need the GitHub Pages base prefix.
-        const base = import.meta.env.BASE_URL.replace(/\/$/, '');
-        const href = hasUrl ? (isExternal ? p.url : base + p.url) : undefined;
-        const Tag = hasUrl ? 'a' : 'div';
-        return (
-          <Tag
-            class:list={['card', { 'is-link': hasUrl }]}
-            href={href}
-            target={isExternal ? '_blank' : undefined}
-            rel={isExternal ? 'noopener noreferrer' : undefined}
-            data-cats={(p.category || []).join(' ')}
-          >
-            <div class="card-media">
-              {p.tag && <span class="card-tag">{p.tag}</span>}
-              <div class="media-placeholder" aria-hidden="true">
-                <span>{p.subtitle || p.slug}</span>
-              </div>
-              <img src={base + p.image} alt={p.subtitle} loading="lazy" onerror="this.style.display='none'" />
-              {isExternal && <span class="card-go" aria-hidden="true">↗</span>}
-            </div>
-            <div class="card-body">
-              {p.subtitle && <p class="card-client">{p.subtitle}</p>}
-              <h3 class="card-title">{p.title}</h3>
-              {p.did && <p class="card-did">{p.did}</p>}
-              {p.result && <p class="card-result">{p.result}</p>}
-              {p.awards && p.awards.length > 0 && (
-                <ul class="card-awards">
-                  {p.awards.map((a) => (
-                    <li>{a.name}{a.year ? ` · ${a.year}` : ''}</li>
-                  ))}
-                </ul>
-              )}
-            </div>
-          </Tag>
-        );
-      })
-    }
-    <div class="track-pad" aria-hidden="true"></div>
+  <div class="container">
+    <div class="work-viewport" data-viewport tabindex="0" aria-label="Selected projects, use arrow keys to change page">
+      <div class="work-track" data-track>
+        {pages.map((page) => (
+          <div class:list={['work-page', { 'work-page--single': page.length === 1 }]}>
+            {page.map((p, j) => {
+              const isHero = j === 0;
+              const hasUrl = Boolean(p.url);
+              const isExternal = hasUrl && p.url.startsWith('http');
+              const href = hasUrl ? (isExternal ? p.url : base + p.url) : undefined;
+              const Tag = hasUrl ? 'a' : 'div';
+              return (
+                <Tag
+                  class:list={['card', isHero ? 'is-hero' : 'is-small', { 'is-link': hasUrl }]}
+                  href={href}
+                  target={isExternal ? '_blank' : undefined}
+                  rel={isExternal ? 'noopener noreferrer' : undefined}
+                  data-cats={(p.category || []).join(' ')}
+                >
+                  <div class="card-visual">
+                    {/* Fallback label shows through when the image is absent/fails. */}
+                    <span class="card-ph" aria-hidden="true">{p.subtitle || p.slug}</span>
+                    <img src={base + p.image} alt={p.subtitle} loading="lazy" onerror="this.style.display='none'" />
+                  </div>
+                  {p.tag && <span class="card-tag">{p.tag}</span>}
+                  {isExternal && <span class="card-go" aria-hidden="true">↗</span>}
+                  <div class="card-overlay">
+                    {p.subtitle && <p class="card-client">{p.subtitle}</p>}
+                    <h3 class="card-title">{p.title}</h3>
+                    {p.result && <p class="card-result">{p.result}</p>}
+                    {p.did && <p class="card-did">{p.did}</p>}
+                  </div>
+                </Tag>
+              );
+            })}
+          </div>
+        ))}
+      </div>
+    </div>
+    <p class="sr-only" data-live aria-live="polite"></p>
   </div>
 </section>
 
 <script>
-  const chips = document.querySelectorAll('.work .chip');
-  const cards = document.querySelectorAll('.work .card');
-
-  // Soft sorting: dim non-matches.
-  chips.forEach((chip) => {
-    chip.addEventListener('click', () => {
-      chips.forEach((c) => c.classList.remove('active'));
-      chip.classList.add('active');
-      const cat = chip.getAttribute('data-cat');
-      cards.forEach((card) => {
-        const cats = (card.getAttribute('data-cats') || '').split(' ');
-        const match = cat === 'all' || cats.includes(cat);
-        card.classList.toggle('dimmed', !match);
-      });
-      if (cat !== 'all') {
-        const firstMatch = Array.from(cards).find(
-          (card) => !card.classList.contains('dimmed')
-        );
-        firstMatch?.scrollIntoView({
-          behavior: 'smooth',
-          inline: 'center',
-          block: 'nearest',
-        });
-      }
+  // --- Pagination + horizontal slide (all pages live in one flex row that we
+  // translate; sliding the row gives the correct in/out direction both ways
+  // for free, and reverses automatically for previous-page navigation). ---
+  const section = document.querySelector('[data-work]');
+  if (section) {
+    const viewport = section.querySelector('[data-viewport]');
+    const track = section.querySelector('[data-track]');
+    const pages = Array.from(track.querySelectorAll('.work-page'));
+    const prevBtn = section.querySelector('[data-prev]');
+    const nextBtn = section.querySelector('[data-next]');
+    const indicator = section.querySelector('[data-indicator]');
+    const live = section.querySelector('[data-live]');
+    const total = section.querySelectorAll('.card').length;
+    let page = 0;
+    const render = () => {
+      track.style.transform = `translateX(${-page * 100}%)`;
+      pages.forEach((pg, i) => { pg.inert = i !== page; }); // off-screen pages can't catch focus/clicks
+      prevBtn.disabled = page === 0;
+      nextBtn.disabled = page === pages.length - 1;
+      indicator.textContent = `${page + 1} / ${pages.length}`;
+      const from = page * 3 + 1;
+      live.textContent = `Showing projects ${from} to ${Math.min(from + 2, total)} of ${total}`;
+      viewport.style.height = pages[page].offsetHeight + 'px';
+      if (document.activeElement === prevBtn && prevBtn.disabled) nextBtn.focus();
+      if (document.activeElement === nextBtn && nextBtn.disabled) prevBtn.focus();
+    };
+    const go = (d) => { const n = page + d; if (n >= 0 && n < pages.length) { page = n; render(); } };
+    prevBtn.addEventListener('click', () => go(-1));
+    nextBtn.addEventListener('click', () => go(1));
+    section.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowLeft') { e.preventDefault(); go(-1); }
+      else if (e.key === 'ArrowRight') { e.preventDefault(); go(1); }
     });
-  });
+    window.addEventListener('resize', () => { viewport.style.height = pages[page].offsetHeight + 'px'; });
+    render();
+
+    // --- Soft-sort chips: dim non-matches across every page, so navigating
+    // shows the active filter already applied on the new page. ---
+    const chips = section.querySelectorAll('.chip');
+    const cards = section.querySelectorAll('.card');
+    chips.forEach((chip) => {
+      chip.addEventListener('click', () => {
+        chips.forEach((c) => c.classList.toggle('active', c === chip));
+        const cat = chip.getAttribute('data-cat');
+        cards.forEach((card) => {
+          const cats = (card.getAttribute('data-cats') || '').split(' ');
+          card.classList.toggle('dimmed', cat !== 'all' && !cats.includes(cat));
+        });
+      });
+    });
+  }
 </script>
 
 <style>
-  .work { padding-block: var(--space-6) var(--space-5); overflow: hidden; }
+  .work { padding-block: var(--space-6) var(--space-5); }
 
-  .work-head {
-    display: flex;
-    align-items: flex-start;
-    justify-content: space-between;
-    gap: var(--space-3);
-    margin-bottom: var(--space-4);
-  }
+  .work-head { margin-bottom: var(--space-4); }
   .work-title h2 {
     font-size: var(--fs-hero);
     line-height: 1;
@@ -118,12 +155,17 @@ const filters = t.work.filters;
     max-width: 50ch;
     margin-top: var(--space-2);
   }
-  .chips {
+
+  /* Chips on the left, page arrows on the right, in one band. */
+  .work-controls {
     display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-3);
     flex-wrap: wrap;
-    gap: 0.5rem;
     margin-bottom: var(--space-4);
   }
+  .chips { display: flex; flex-wrap: wrap; gap: 0.5rem; }
   .chip {
     font-size: var(--fs-small);
     background: transparent;
@@ -138,73 +180,99 @@ const filters = t.work.filters;
     border-color: var(--color-ink);
   }
 
-  .track {
-    display: flex;
-    gap: var(--space-3);
-    overflow-x: auto;
-    scroll-snap-type: x mandatory;
-    padding-block: var(--space-2) var(--space-4);
-    scrollbar-width: thin;
-    scrollbar-color: var(--color-line) transparent;
+  .work-nav { display: flex; align-items: center; gap: 0.5rem; }
+  .nav-arrow {
+    width: 2.25rem;
+    height: 2.25rem;
+    display: grid;
+    place-items: center;
+    border-radius: var(--radius-pill);
+    border: 1px solid var(--color-line);
+    color: var(--color-ink);
+    transition: color 0.2s var(--ease), border-color 0.2s var(--ease), opacity 0.2s var(--ease);
   }
-  .track::-webkit-scrollbar { height: 6px; }
-  .track::-webkit-scrollbar-thumb { background: var(--color-line); border-radius: 999px; }
-  .track-pad {
-    flex: 0 0 var(--gutter);
+  .nav-arrow svg { width: 1.1rem; height: 1.1rem; }
+  .nav-arrow:not(:disabled):hover { color: var(--color-primary); border-color: var(--color-primary); }
+  .nav-arrow:disabled { opacity: 0.3; cursor: default; }
+  .work-indicator {
+    font-size: var(--fs-small);
+    color: var(--color-muted);
+    font-variant-numeric: tabular-nums;
+    min-width: 3ch;
+    text-align: center;
   }
 
-  .card {
-    flex: 0 0 min(420px, 78vw);
-    scroll-snap-align: center;
+  /* Slide viewport + track. */
+  .work-viewport {
+    overflow: hidden;
+    transition: height 0.4s var(--ease);
+  }
+  .work-viewport:focus-visible { outline: 2px solid var(--color-primary); outline-offset: 4px; }
+  .work-track {
     display: flex;
-    flex-direction: column;
+    align-items: flex-start;
+    transition: transform 0.4s var(--ease);
+  }
+  .work-page {
+    flex: 0 0 100%;
+    display: grid;
+    grid-template-columns: 1.6fr 1fr;
+    grid-template-rows: 1fr 1fr;
+    gap: 14px;
+    aspect-ratio: 1.85 / 1;
+  }
+  /* Hero spans both rows on the left; the two small cards fill the right
+     column (each = one 1fr row = 50% of the hero height). */
+  .work-page .is-hero { grid-column: 1; grid-row: 1 / span 2; }
+  /* Underfull final page (one project): full-width hero — chosen over a lone
+     centred card so the journalism piece carries the whole row with no gap. */
+  .work-page--single { grid-template-columns: 1fr; }
+  .work-page--single .is-hero { grid-column: 1 / -1; grid-row: 1 / -1; }
+
+  /* Reduced motion: skip the slide/height animations — a positional swap isn't
+     vestibular motion, but honoring the preference keeps it calm. */
+  @media (prefers-reduced-motion: reduce) {
+    .work-track, .work-viewport { transition: none; }
+  }
+
+  /* Card = a visual tile with an overlaid text scrim. */
+  .card {
+    position: relative;
+    height: 100%;
+    overflow: hidden;
+    border-radius: var(--radius-card);
     text-decoration: none;
     color: inherit;
-    transition: opacity 0.3s var(--ease), transform 0.3s var(--ease);
   }
   .card.dimmed { opacity: 0.35; }
-  .card.is-link:hover { transform: translateY(-4px); }
 
-  .card-media {
-    position: relative;
-    aspect-ratio: 4 / 3;
-    background: var(--color-bg-soft);
-    border-radius: var(--radius-card);
-    overflow: hidden;
-    margin-bottom: var(--space-3);
-  }
-  .card-media img {
+  .card-visual { position: absolute; inset: 0; background: var(--color-bg-soft); }
+  .card-visual img {
     position: absolute;
     inset: 0;
     width: 100%;
     height: 100%;
     object-fit: cover;
     display: block;
-    /* Desaturated at rest, full color on hover (echoes the hero treatment). */
-    filter: grayscale(0.9);
-    transition: filter 0.4s var(--ease), transform 0.5s var(--ease);
   }
-  .card.is-link:hover .card-media img { filter: grayscale(0); transform: scale(1.04); }
-
-  .media-placeholder {
+  /* Placeholder label — fallback inside the same container as the image. */
+  .card-ph {
     position: absolute;
     inset: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    display: grid;
+    place-items: center;
     padding: 1rem;
     text-align: center;
-    color: color-mix(in srgb, var(--color-primary) 55%, transparent);
-    font-family: var(--font-display);
-    font-size: 0.875rem;
+    font-size: 14px;
     letter-spacing: 0.04em;
+    color: var(--color-primary);
+    opacity: 0.4;
   }
 
-  /* Sector tag, top-left over the image. */
   .card-tag {
     position: absolute;
-    bottom: 0.75rem;
-    right: 0.75rem;
+    top: 0.75rem;
+    left: 0.75rem;
     z-index: 1;
     font-size: var(--fs-eyebrow);
     text-transform: uppercase;
@@ -217,7 +285,6 @@ const filters = t.work.filters;
     padding: 0.25rem 0.6rem;
     border-radius: var(--radius-pill);
   }
-  /* External-link affordance, top-right, revealed on hover. */
   .card-go {
     position: absolute;
     top: 0.75rem;
@@ -232,55 +299,82 @@ const filters = t.work.filters;
     background: rgba(255, 255, 255, 0.85);
     -webkit-backdrop-filter: blur(4px);
     backdrop-filter: blur(4px);
-    opacity: 0;
-    transition: opacity 0.3s var(--ease);
   }
-  .card.is-link:hover .card-go { opacity: 1; }
 
-  .card-body {
+  /* Text scrim, anchored to the bottom of the tile. */
+  .card-overlay {
+    position: absolute;
+    inset: 0;
     display: flex;
     flex-direction: column;
-    gap: var(--space-1);
-    padding-block: var(--space-1);
+    justify-content: flex-end;
+    gap: 0.35rem;
+    padding: var(--space-3);
+    background: linear-gradient(transparent 38%, rgba(33, 15, 3, 0.82));
+    color: #fff;
   }
   .card-client {
     font-size: var(--fs-small);
     text-transform: uppercase;
     letter-spacing: 0.08em;
     font-weight: 500;
-    color: var(--color-muted-soft);
+    color: rgba(255, 255, 255, 0.78);
   }
   .card-title {
-    font-size: 1.25rem;
+    font-size: 1.0625rem;
     font-weight: 700;
-    line-height: 1.25;
+    line-height: 1.2;
     letter-spacing: -0.01em;
-    color: var(--color-text);
   }
-  .card-did {
-    margin-top: var(--space-1);
-    color: var(--color-muted);
-    font-size: 0.9375rem;
-    line-height: 1.5;
-  }
+  .is-hero .card-title { font-size: clamp(1.5rem, 1.2rem + 1vw, 1.6875rem); } /* ~1.5x the small cards */
   .card-result {
-    color: var(--color-primary);
+    color: var(--color-secondary);
     font-weight: 600;
     font-size: 0.9375rem;
-    line-height: 1.45;
+    line-height: 1.4;
   }
-  .card-awards {
-    margin-top: var(--space-1);
-    list-style: none;
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.4rem;
-    font-size: var(--fs-small);
-    color: var(--color-muted);
+  /* did is revealed on hover/focus — no fade (instant), per the no-extra-motion rule. */
+  .card-did {
+    display: none;
+    font-size: 0.9375rem;
+    line-height: 1.5;
+    color: rgba(255, 255, 255, 0.92);
   }
-  .card-awards li {
-    border: 1px solid var(--color-line);
-    border-radius: var(--radius-pill);
-    padding: 0.15rem 0.6rem;
+  .card:hover .card-did,
+  .card:focus-within .card-did {
+    display: -webkit-box;
+    -webkit-line-clamp: 4;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  /* Screen-reader-only live region (standard sr-only pattern). */
+  .sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    white-space: nowrap;
+    border: 0;
+  }
+
+  /* Mobile: single column, all cards the same size; slide stays horizontal. */
+  @media (max-width: 767px) {
+    .work-page,
+    .work-page--single {
+      grid-template-columns: 1fr;
+      grid-template-rows: none;
+      aspect-ratio: auto;
+    }
+    .work-page .is-hero,
+    .work-page--single .is-hero {
+      grid-column: auto;
+      grid-row: auto;
+    }
+    .card { height: auto; aspect-ratio: 4 / 3; }
+    .is-hero .card-title { font-size: 1.0625rem; } /* unify with small cards */
   }
 </style>

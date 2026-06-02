@@ -60,6 +60,8 @@ export default {
       data: 'Data tools',
       storytelling: 'Storytelling',
     },
+    prev: 'Previous projects',
+    next: 'Next projects',
     projects: [
       {
         slug: 'cercle-histoire-forest',
