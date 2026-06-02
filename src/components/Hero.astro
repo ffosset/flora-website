@@ -140,21 +140,8 @@ const roles = t.hero.roles?.length ? t.hero.roles : [t.hero.roleWord];
     hero.addEventListener('mouseleave', () => {
       // Fade out and stop the loop to save cycles; it restarts on next enter.
       visible = false;
-      cursor.classList.remove('is-visible', 'is-hover');
+      cursor.classList.remove('is-visible');
       stop();
-    });
-
-    // Grow over interactive elements. Delegated on the hero — no per-frame
-    // queries. mouseover/mouseout bubble; closest() scopes to clickables.
-    hero.addEventListener('mouseover', (e) => {
-      if (e.target instanceof Element && e.target.closest('a, button, .cta')) {
-        cursor.classList.add('is-hover');
-      }
-    });
-    hero.addEventListener('mouseout', (e) => {
-      if (e.target instanceof Element && e.target.closest('a, button, .cta')) {
-        cursor.classList.remove('is-hover');
-      }
     });
 
     // The hero's top shifts as the page scrolls; its size changes on resize.
@@ -208,13 +195,11 @@ const roles = t.hero.roles?.length ? t.hero.roles : [t.hero.roleWord];
        -50% is exactly --cursor-size / 2, so the glow stays centered on the
        pointer at any size — the larger 500px box is accounted for automatically. */
     translate: calc(var(--cx, 0px) - 50%) calc(var(--cy, 0px) - 50%);
-    scale: var(--cursor-scale, 1);
     /* Promote to its own layer: a 500px blurred element is costly to repaint. */
     will-change: transform;
-    transition: opacity 0.2s var(--ease), scale 0.2s var(--ease);
+    transition: opacity 0.2s var(--ease);
   }
   .hero-cursor.is-visible { opacity: 0.28; }
-  .hero-cursor.is-hover { --cursor-scale: 2; }
 
   /* Touch / no-hover devices: there is no cursor to follow. */
   @media (hover: none) and (pointer: coarse) {
