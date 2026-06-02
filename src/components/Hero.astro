@@ -233,17 +233,43 @@ const roles = t.hero.roles?.length ? t.hero.roles : [t.hero.roleWord];
   }
   .hero-photo {
     display: block;
+    position: relative;
     width: 156px;
     height: 156px;
     border-radius: 50%;
     /* Soft primary ring — rgba(174,73,5,0.1) is --color-primary at 10%. */
     border: 20px solid rgba(174, 73, 5, 0.1);
-    overflow: hidden;
     cursor: pointer;
+    transition: border-color 0.25s ease-out;
+  }
+  .hero-photo:hover,
+  .hero-photo:focus-visible { border-color: var(--color-accent); }
+  /* Ripple: a ring pulsing outward from the photo edge, only while hovered. */
+  .hero-photo::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    border: 2px solid var(--color-accent);
+    opacity: 0;
+    pointer-events: none;
+  }
+  .hero-photo:hover::after,
+  .hero-photo:focus-visible::after {
+    animation: photo-ripple 1.6s ease-out infinite;
+  }
+  @keyframes photo-ripple {
+    from { transform: scale(1); opacity: 0.6; }
+    to { transform: scale(1.15); opacity: 0; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .hero-photo:hover::after,
+    .hero-photo:focus-visible::after { animation: none; }
   }
   .hero-photo img {
     width: 100%;
     height: 100%;
+    border-radius: 50%;
     object-fit: cover;
     object-position: center;
     display: block;
@@ -295,24 +321,18 @@ const roles = t.hero.roles?.length ? t.hero.roles : [t.hero.roleWord];
     right: var(--gutter);
     bottom: var(--space-5);
     z-index: 3;
-    width: clamp(52px, 5vw, 64px);
-    height: clamp(52px, 5vw, 64px);
-    border-radius: 50%;
-    border: 1px solid var(--color-ink);
-    color: var(--color-ink);
+    padding: 0;
+    border: 0;
     background: transparent;
+    color: var(--color-ink);
     display: grid;
     place-items: center;
-    transition: background 0.25s var(--ease), color 0.25s var(--ease),
-      border-color 0.25s var(--ease);
+    transition: transform 0.25s var(--ease);
   }
-  .scroll-btn svg { width: 40%; height: 40%; display: block; }
+  .scroll-btn svg { width: 28px; height: 28px; display: block; }
+  /* Idle is just the arrow — no border, no pill. Subtle shift on hover/focus. */
   .scroll-btn:hover,
-  .scroll-btn:focus-visible {
-    background: var(--color-primary);
-    border-color: var(--color-primary);
-    color: var(--color-ink-on-primary);
-  }
+  .scroll-btn:focus-visible { transform: translateY(2px); }
   /* Gentle nudge on the arrow to hint "scroll down". */
   .scroll-btn svg { animation: scroll-nudge 1.8s var(--ease) infinite; }
   @keyframes scroll-nudge {
