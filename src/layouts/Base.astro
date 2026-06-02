@@ -60,14 +60,16 @@ const year = new Date().getFullYear(); // SSR fallback; a client script keeps it
         <p class="footer-sub">{t.contact.subhead}</p>
         <div class="footer-links">
           <a href={`mailto:${t.contact.email}`} class="footer-cta-btn">{t.contact.email}</a>
-          <a href={t.contact.linkedin} target="_blank" rel="noopener" class="footer-ghost">
-            {t.contact.linkedinLabel}
-          </a>
         </div>
       </div>
       <div class="container footer-meta">
         <span>{t.footer.rights} <span data-year>{year}</span></span>
-        <span>{t.footer.location}</span>
+        <span class="footer-meta-end">
+          <a href={t.contact.linkedin} target="_blank" rel="noopener" class="footer-linkedin">
+            {t.contact.linkedinLabel}
+          </a>
+          <span>{t.footer.location}</span>
+        </span>
       </div>
     </footer>
 
@@ -113,11 +115,11 @@ const year = new Date().getFullYear(); // SSR fallback; a client script keeps it
         padding: 16px 24px;
         font-family: var(--font-display);
         font-size: 1rem;
-        background: rgba(255, 255, 255, 0.8);
+        background: rgba(255, 255, 255, 0.7);
         -webkit-backdrop-filter: blur(4.5px);
         backdrop-filter: blur(4.5px);
         box-shadow: 0 4px 16px 0 rgba(222, 220, 218, 0.15);
-        border-radius: 2px;
+        border-radius: var(--radius-pill);
       }
 
       /* "fosset.co" wordmark — light weight, primary color. */
@@ -280,23 +282,30 @@ const year = new Date().getFullYear(); // SSR fallback; a client script keeps it
         border-radius: var(--radius-pill);
         font-weight: 600;
       }
-      .footer-ghost {
-        color: var(--color-ink-on-purple);
-        text-decoration: none;
-        padding: 0.8rem 1.2rem;
-        border-radius: var(--radius-pill);
-        border: 1px solid var(--color-line-on-purple);
-      }
       .footer-meta {
         display: flex;
         justify-content: space-between;
-        gap: var(--space-2);
+        align-items: center;
+        gap: var(--space-2) var(--space-3);
         flex-wrap: wrap;
         padding-block: var(--space-4);
         border-top: 1px solid var(--color-line-on-purple);
         font-size: var(--fs-small);
         color: var(--color-muted-on-purple);
       }
+      .footer-meta-end {
+        display: flex;
+        align-items: center;
+        gap: var(--space-3);
+        flex-wrap: wrap;
+      }
+      .footer-linkedin {
+        color: var(--color-muted-on-purple);
+        text-decoration: underline;
+        text-underline-position: from-font;
+        transition: color 0.2s var(--ease);
+      }
+      .footer-linkedin:hover { color: var(--color-ink-on-purple); }
     </style>
   </body>
 </html>
