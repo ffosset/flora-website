@@ -5,9 +5,9 @@ const roles = t.hero.roles?.length ? t.hero.roles : [t.hero.roleWord];
 ---
 <section id="hero" class="hero" data-hero>
   <aside class="hero-aside">
-    <div class="hero-photo">
+    <a class="hero-photo" href="#contact" aria-label="Get in touch">
       <img src={portrait.src} alt="Flora Fosset" width="156" height="156" loading="eager" />
-    </div>
+    </a>
     <p class="hero-subtitle">{t.hero.subhead}</p>
   </aside>
 
@@ -247,12 +247,14 @@ const roles = t.hero.roles?.length ? t.hero.roles : [t.hero.roleWord];
     text-align: center;
   }
   .hero-photo {
+    display: block;
     width: 156px;
     height: 156px;
     border-radius: 50%;
     /* Soft primary ring — rgba(174,73,5,0.1) is --color-primary at 10%. */
     border: 20px solid rgba(174, 73, 5, 0.1);
     overflow: hidden;
+    cursor: pointer;
   }
   .hero-photo img {
     width: 100%;

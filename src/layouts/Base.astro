@@ -208,27 +208,41 @@ const year = new Date().getFullYear(); // SSR fallback; a client script keeps it
         }
       }
 
-      /* Content sits on its own opaque layer above the footer, so the orange
-         footer is hidden until the page scrolls up to uncover it. */
+      /* Content layer sits below the footer so the footer can ride over it. */
       main {
         position: relative;
         z-index: 1;
-        background: var(--color-bg);
       }
 
       /* The contact CTA + meta read as one orange footer. */
       .site-footer {
+        position: relative;
+        z-index: 5; /* rides OVER the content */
         background: var(--color-purple);
         color: var(--color-ink-on-purple);
         text-align: center;
       }
-      /* Scroll reveal: pin the footer to the bottom behind the content; as you
-         scroll down it is swept into view. Desktop + motion-OK only. */
-      @media (min-width: 768px) and (prefers-reduced-motion: no-preference) {
-        .site-footer {
-          position: sticky;
-          bottom: 0;
-          z-index: 0;
+
+      /* Scroll overlay: the footer slides UP and over the bottom of the page as
+         it scrolls into view. The content gets a matching bottom "runway" so the
+         footer rides over empty space — no content is hidden behind it.
+         Scroll-driven (Chrome/Safari); browsers without scroll-timeline support
+         fall back to a normal footer. Desktop + motion-OK only. */
+      @supports (animation-timeline: view()) {
+        @media (min-width: 768px) and (prefers-reduced-motion: no-preference) {
+          main { padding-bottom: 30vh; }
+          .site-footer {
+            margin-top: -30vh; /* rides up over the runway (cancels the padding) */
+            will-change: transform;
+            animation: footer-overlay linear both;
+            animation-timeline: view();
+            animation-range: entry 0% entry 100%;
+          }
+          @keyframes footer-overlay {
+            /* start at the page bottom, then slide up over the runway */
+            from { transform: translateY(30vh); }
+            to { transform: translateY(0); }
+          }
         }
       }
 
