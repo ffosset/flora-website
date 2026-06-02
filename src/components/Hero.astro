@@ -10,12 +10,16 @@ const roles = t.hero.roles?.length ? t.hero.roles : [t.hero.roleWord];
         <span class="hero-dot" aria-hidden="true">·</span>
         <span class="hero-role" data-rotator data-words={JSON.stringify(roles)}>{roles[0]}</span>
       </h1>
-      <div class="scroll-cue" aria-hidden="true">
-        <span class="cue-rule"></span>
-        <span class="cue-label">{t.hero.scroll}</span>
-      </div>
     </div>
   </div>
+
+  <button type="button" class="scroll-btn" data-scroll-next aria-label={t.hero.scroll}>
+    <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+      <path d="M12 4v15M5 13l7 7 7-7" stroke="currentColor" stroke-width="1.6"
+        stroke-linecap="round" stroke-linejoin="round" />
+    </svg>
+  </button>
+
   <!-- Spotlight cursor follower — additive, scoped to the hero. -->
   <div class="hero-cursor" data-hero-cursor aria-hidden="true"></div>
 </section>
@@ -36,6 +40,24 @@ const roles = t.hero.roles?.length ? t.hero.roles : [t.hero.roleWord];
         }, 320);
       }, 2200);
     }
+  }
+</script>
+
+<script>
+  // Scroll button: jump to the section after the hero. Wired up regardless of
+  // pointer/motion settings (it must work on touch too); only the easing of
+  // the scroll respects prefers-reduced-motion.
+  const scrollBtn = document.querySelector('[data-scroll-next]');
+  if (scrollBtn) {
+    scrollBtn.addEventListener('click', () => {
+      const heroSection = scrollBtn.closest('section');
+      const next = heroSection && heroSection.nextElementSibling;
+      const target = next || document.getElementById('what');
+      if (target) {
+        const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        target.scrollIntoView({ behavior: reduce ? 'auto' : 'smooth', block: 'start' });
+      }
+    });
   }
 </script>
 
@@ -218,23 +240,38 @@ const roles = t.hero.roles?.length ? t.hero.roles : [t.hero.roleWord];
     .hero-role.is-out { opacity: 1; transform: none; }
   }
 
-  .scroll-cue {
-    display: flex;
-    align-items: center;
-    gap: 0.75rem;
-  }
-  .cue-rule {
-    display: inline-block;
-    width: 28px;
-    height: 1px;
-    background: var(--color-ink);
-    opacity: 0.7;
-  }
-  .cue-label {
-    font-size: var(--fs-eyebrow);
-    letter-spacing: 0.22em;
-    text-transform: uppercase;
+  /* Real scroll button, pinned to the hero's bottom-right (aligned to the
+     content gutter). z-index 3 keeps it above the cursor follower. */
+  .scroll-btn {
+    position: absolute;
+    right: var(--gutter);
+    bottom: var(--space-5);
+    z-index: 3;
+    width: clamp(52px, 5vw, 64px);
+    height: clamp(52px, 5vw, 64px);
+    border-radius: 50%;
+    border: 1px solid var(--color-ink);
     color: var(--color-ink);
-    opacity: 0.7;
+    background: transparent;
+    display: grid;
+    place-items: center;
+    transition: background 0.25s var(--ease), color 0.25s var(--ease),
+      border-color 0.25s var(--ease);
+  }
+  .scroll-btn svg { width: 40%; height: 40%; display: block; }
+  .scroll-btn:hover,
+  .scroll-btn:focus-visible {
+    background: var(--color-primary);
+    border-color: var(--color-primary);
+    color: var(--color-ink-on-primary);
+  }
+  /* Gentle nudge on the arrow to hint "scroll down". */
+  .scroll-btn svg { animation: scroll-nudge 1.8s var(--ease) infinite; }
+  @keyframes scroll-nudge {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(3px); }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .scroll-btn svg { animation: none; }
   }
 </style>
