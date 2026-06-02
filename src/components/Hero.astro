@@ -1,12 +1,12 @@
 ---
-import portrait from '../assets/portrait.jpg';
+import portrait from '../assets/foto-flora.png';
 const { t } = Astro.props;
 const roles = t.hero.roles?.length ? t.hero.roles : [t.hero.roleWord];
 ---
 <section id="hero" class="hero" data-hero>
   <aside class="hero-aside">
     <div class="hero-photo">
-      <img src={portrait.src} alt="Flora Fosset" width="111" height="109" loading="eager" />
+      <img src={portrait.src} alt="Flora Fosset" width="156" height="156" loading="eager" />
     </div>
     <p class="hero-subtitle">{t.hero.subhead}</p>
   </aside>
@@ -239,32 +239,32 @@ const roles = t.hero.roles?.length ? t.hero.roles : [t.hero.roleWord];
     top: clamp(7rem, 24vh, 13rem);
     right: var(--gutter);
     z-index: 1;
-    width: 12rem;
+    width: 13rem;
     display: flex;
     flex-direction: column;
-    align-items: flex-end;
+    align-items: center;
     gap: var(--space-3);
-    text-align: right;
+    text-align: center;
   }
   .hero-photo {
-    width: 111px;
-    height: 109px;
-    border-radius: 2px;
+    width: 156px;
+    height: 156px;
+    border-radius: 50%;
+    /* Soft primary ring — rgba(174,73,5,0.1) is --color-primary at 10%. */
+    border: 20px solid rgba(174, 73, 5, 0.1);
     overflow: hidden;
   }
   .hero-photo img {
     width: 100%;
     height: 100%;
     object-fit: cover;
-    /* Bias the crop upward: a centered square crop clipped the top of the
-       hair. ~22% frames the full head (hair to chin) inside the square. */
-    object-position: center 22%;
+    object-position: center;
     display: block;
     /* luminosity lets the warm background tint the portrait (matches Figma). */
     mix-blend-mode: luminosity;
   }
   .hero-subtitle {
-    font-weight: 500; /* Inter Medium */
+    font-weight: 300; /* Inter Light */
     font-size: 1rem;
     line-height: 1.35;
     color: var(--color-primary);
