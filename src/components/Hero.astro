@@ -1,8 +1,16 @@
 ---
+import portrait from '../assets/portrait.jpg';
 const { t } = Astro.props;
 const roles = t.hero.roles?.length ? t.hero.roles : [t.hero.roleWord];
 ---
 <section id="hero" class="hero" data-hero>
+  <aside class="hero-aside">
+    <div class="hero-photo">
+      <img src={portrait.src} alt="Flora Fosset" width="111" height="109" loading="eager" />
+    </div>
+    <p class="hero-subtitle">{t.hero.subhead}</p>
+  </aside>
+
   <div class="container hero-inner">
     <div class="hero-bottom">
       <h1 class="hero-line">
@@ -157,8 +165,9 @@ const roles = t.hero.roles?.length ? t.hero.roles : [t.hero.roleWord];
 
 <style>
   .hero {
-    /* Soft diagonal wash: white in the top-left, warm peach in the bottom-right. */
-    background: linear-gradient(135deg, #ffffff 0%, var(--color-bg) 38%, #fbe2d2 100%);
+    /* Diagonal wash per Figma: white at the top-left, secondary peach at the
+       bottom-right (stop runs past 100% so the peach stays soft). */
+    background: linear-gradient(124deg, #ffffff 4%, var(--color-secondary) 163%);
     min-height: 100vh;
     padding-block: 0;
     display: flex;
@@ -224,19 +233,58 @@ const roles = t.hero.roles?.length ? t.hero.roles : [t.hero.roleWord];
   }
   .hero-bottom { display: flex; flex-direction: column; gap: var(--space-4); }
 
+  /* Portrait + subtitle cluster, upper-right (per Figma). */
+  .hero-aside {
+    position: absolute;
+    top: clamp(7rem, 24vh, 13rem);
+    right: var(--gutter);
+    z-index: 1;
+    width: 12rem;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: var(--space-3);
+    text-align: right;
+  }
+  .hero-photo {
+    width: 111px;
+    height: 109px;
+    border-radius: 2px;
+    overflow: hidden;
+  }
+  .hero-photo img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    /* luminosity lets the warm background tint the portrait (matches Figma). */
+    mix-blend-mode: luminosity;
+  }
+  .hero-subtitle {
+    font-weight: 500; /* Inter Medium */
+    font-size: 1rem;
+    line-height: 1.35;
+    color: var(--color-primary);
+  }
+
+  @media (max-width: 600px) {
+    /* Keep the portrait clear of the title on small screens. */
+    .hero-aside { width: 10rem; top: clamp(6rem, 18vh, 9rem); }
+  }
+
   .hero-line {
     font-family: var(--font-display);
     font-weight: 800;
     font-size: var(--fs-mega);
     line-height: 1;
-    letter-spacing: -0.04em;
+    letter-spacing: -0.01em;
     display: flex;
     align-items: baseline;
-    gap: 0.18em;
+    gap: 0.12em;
     flex-wrap: wrap;
   }
-  .hero-name { color: var(--color-text); }
-  .hero-dot { color: var(--color-primary); }
+  .hero-name { color: var(--color-text); font-weight: 800; } /* Extra Bold */
+  .hero-dot { color: var(--color-primary); font-weight: 300; }
   .hero-role {
     color: var(--color-primary);
     font-weight: 300;

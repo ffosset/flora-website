@@ -19,10 +19,10 @@ export default {
     // Rotating role word: cycles product design → user experience → research → storytelling → …
     roles: ['product design', 'user experience', 'research', 'storytelling'],
     scroll: 'Scroll',
+    // Right-aligned subtitle beside the portrait.
+    subhead: 'designer and strategist for work that deserves to be understood.',
     // Kept for back-compat with any old references.
     headline: 'Clarity, designed.',
-    subhead:
-      "I turn complicated ideas — a product, a platform, a story you can't quite explain — into something people instantly get. Then I build it.",
     cta: "Let's talk",
   },
   whatIDo: {
