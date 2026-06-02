@@ -2,7 +2,7 @@
 const { t } = Astro.props;
 const roles = t.hero.roles?.length ? t.hero.roles : [t.hero.roleWord];
 ---
-<section id="hero" class="hero">
+<section id="hero" class="hero" data-hero>
   <div class="container hero-inner">
     <div class="hero-bottom">
       <h1 class="hero-line">
@@ -16,6 +16,8 @@ const roles = t.hero.roles?.length ? t.hero.roles : [t.hero.roleWord];
       </div>
     </div>
   </div>
+  <!-- Spotlight cursor follower — additive, scoped to the hero. -->
+  <div class="hero-cursor" data-hero-cursor aria-hidden="true"></div>
 </section>
 
 <script>
@@ -37,6 +39,100 @@ const roles = t.hero.roles?.length ? t.hero.roles : [t.hero.roleWord];
   }
 </script>
 
+<script>
+  // Spotlight cursor follower, scoped to the hero. This is ADDITIVE — the
+  // native cursor stays visible; the follower is a decorative blend-mode disc.
+  // SSR-safe: Astro only runs this on the client, but guard matchMedia anyway.
+  const supportsMM = typeof window !== 'undefined' && 'matchMedia' in window;
+  const reduceMotion =
+    supportsMM && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const coarsePointer =
+    supportsMM && window.matchMedia('(hover: none) and (pointer: coarse)').matches;
+
+  const hero = document.querySelector('[data-hero]');
+  const cursor = hero && hero.querySelector('[data-hero-cursor]');
+
+  // Reduced motion: HIDE rather than snap. A high-contrast inverting disc that
+  // teleports to the pointer is more distracting than no effect at all, so the
+  // least-jarring honoring of the preference is to remove it (CSS also hides
+  // it; here we simply never wire up the loop). Same for coarse/touch pointers.
+  if (hero && cursor && !reduceMotion && !coarsePointer) {
+    // Cache the element + its rect; never query the DOM inside the rAF loop.
+    let rect = hero.getBoundingClientRect();
+    let targetX = rect.width / 2;
+    let targetY = rect.height / 2;
+    let posX = targetX; // eased position
+    let posY = targetY;
+    let rafId = null;
+    let visible = false;
+
+    const refreshRect = () => { rect = hero.getBoundingClientRect(); };
+
+    // Reveal + start the loop, snapping the eased position to (x, y) so the
+    // disc appears under the pointer instead of sliding in from a stale spot.
+    const reveal = (x, y) => {
+      targetX = posX = x;
+      targetY = posY = y;
+      if (!visible) {
+        visible = true;
+        cursor.classList.add('is-visible');
+      }
+      start();
+    };
+
+    // Single rAF loop. Lerp the eased position toward the target for slight,
+    // organic lag. Position is written via the `translate` property (its own
+    // channel, so the hover `scale` can transition independently and we never
+    // animate top/left).
+    const render = () => {
+      posX += (targetX - posX) * 0.18;
+      posY += (targetY - posY) * 0.18;
+      cursor.style.setProperty('--cx', posX + 'px');
+      cursor.style.setProperty('--cy', posY + 'px');
+      rafId = requestAnimationFrame(render);
+    };
+    const start = () => { if (rafId === null) rafId = requestAnimationFrame(render); };
+    const stop = () => { if (rafId !== null) { cancelAnimationFrame(rafId); rafId = null; } };
+
+    hero.addEventListener('mousemove', (e) => {
+      const x = e.clientX - rect.left;
+      const y = e.clientY - rect.top;
+      // Already visible: just steer the target (lerp does the smoothing).
+      // Not yet visible (e.g. pointer was already inside on load): reveal here.
+      if (visible) { targetX = x; targetY = y; } else { reveal(x, y); }
+    });
+
+    // Clean entry across the boundary: snap + fade in before the first move.
+    hero.addEventListener('mouseenter', (e) => {
+      reveal(e.clientX - rect.left, e.clientY - rect.top);
+    });
+
+    hero.addEventListener('mouseleave', () => {
+      // Fade out and stop the loop to save cycles; it restarts on next enter.
+      visible = false;
+      cursor.classList.remove('is-visible', 'is-hover');
+      stop();
+    });
+
+    // Grow over interactive elements. Delegated on the hero — no per-frame
+    // queries. mouseover/mouseout bubble; closest() scopes to clickables.
+    hero.addEventListener('mouseover', (e) => {
+      if (e.target instanceof Element && e.target.closest('a, button, .cta')) {
+        cursor.classList.add('is-hover');
+      }
+    });
+    hero.addEventListener('mouseout', (e) => {
+      if (e.target instanceof Element && e.target.closest('a, button, .cta')) {
+        cursor.classList.remove('is-hover');
+      }
+    });
+
+    // The hero's top shifts as the page scrolls; its size changes on resize.
+    window.addEventListener('scroll', refreshRect, { passive: true });
+    window.addEventListener('resize', refreshRect);
+  }
+</script>
+
 <style>
   .hero {
     /* Soft diagonal wash: white in the top-left, warm peach in the bottom-right. */
@@ -44,6 +140,48 @@ const roles = t.hero.roles?.length ? t.hero.roles : [t.hero.roleWord];
     min-height: 100vh;
     padding-block: 0;
     display: flex;
+    /* Contain the follower: relative for absolute positioning, overflow so it
+       can't escape, isolate so its blend mode only mixes with hero content. */
+    position: relative;
+    overflow: hidden;
+    isolation: isolate;
+  }
+
+  .hero-cursor {
+    --cursor-size: 24px;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: var(--cursor-size);
+    height: var(--cursor-size);
+    border-radius: 50%;
+    background: var(--color-cursor, var(--color-ink));
+    /* difference inverts whatever is behind the disc. Against this mostly
+       near-white gradient, `exclusion` collapses toward flat grey (low
+       contrast), whereas `difference` stays punchy over both the white and
+       the peach, and cleanly inverts the dark "flora" wordmark. */
+    mix-blend-mode: difference;
+    pointer-events: none;
+    z-index: 2;
+    opacity: 0;
+    /* Position lives on `translate` (its own channel); -50% centers the disc
+       on the pointer. Scale is a separate channel so it can transition on
+       hover without affecting the lerped position. top/left are never animated. */
+    translate: calc(var(--cx, 0px) - 50%) calc(var(--cy, 0px) - 50%);
+    scale: var(--cursor-scale, 1);
+    transition: opacity 0.2s var(--ease), scale 0.2s var(--ease);
+    will-change: translate, opacity;
+  }
+  .hero-cursor.is-visible { opacity: 1; }
+  .hero-cursor.is-hover { --cursor-scale: 2; }
+
+  /* Touch / no-hover devices: there is no cursor to follow. */
+  @media (hover: none) and (pointer: coarse) {
+    .hero-cursor { display: none; }
+  }
+  /* Reduced motion: hide entirely (see script comment for the rationale). */
+  @media (prefers-reduced-motion: reduce) {
+    .hero-cursor { display: none; }
   }
   .hero-inner {
     flex: 1;
