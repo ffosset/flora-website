@@ -23,6 +23,7 @@ const { t } = Astro.props;
     background: var(--color-purple);
     color: var(--color-ink-on-purple);
     padding-block: clamp(6rem, 14vw, 11rem);
+    text-align: center;
   }
   .statement {
     font-size: var(--fs-hero);
@@ -30,10 +31,12 @@ const { t } = Astro.props;
     font-weight: 800;
     letter-spacing: -0.03em;
     max-width: 20ch;
+    margin-inline: auto;
     color: var(--color-ink-on-purple);
   }
   .statement-sub {
     margin-top: var(--space-3);
+    margin-inline: auto;
     font-size: clamp(1.5rem, 3vw, 2.25rem);
     line-height: 1.2;
     font-weight: 500;

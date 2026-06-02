@@ -65,16 +65,19 @@ const { t } = Astro.props;
   .contact {
     background: var(--color-purple);
     color: var(--color-ink-on-purple);
+    text-align: center;
   }
   .contact h2 {
     font-size: var(--fs-hero);
     line-height: 1.02;
     letter-spacing: -0.03em;
     max-width: 22ch;
+    margin-inline: auto;
     color: var(--color-ink-on-purple);
   }
   .contact-sub {
     margin-top: var(--space-3);
+    margin-inline: auto;
     max-width: 52ch;
     font-size: 1.125rem;
     line-height: 1.5;
@@ -84,6 +87,7 @@ const { t } = Astro.props;
     display: flex;
     gap: var(--space-3);
     align-items: center;
+    justify-content: center;
     margin-top: var(--space-4);
     flex-wrap: wrap;
   }
