@@ -54,7 +54,7 @@ const year = new Date().getFullYear(); // SSR fallback; a client script keeps it
       <slot />
     </main>
 
-    <footer id="contact" class="site-footer">
+    <footer id="contact" class="site-footer footer-reveal">
       <div class="container footer-cta">
         <h2>{t.contact.sectionTitle}</h2>
         <p class="footer-sub">{t.contact.subhead}</p>
@@ -210,45 +210,39 @@ const year = new Date().getFullYear(); // SSR fallback; a client script keeps it
         }
       }
 
-      /* Content layer sits below the footer so the footer can ride over it. */
+      /* Fixed-footer reveal. The page content rides ABOVE the footer on its own
+         opaque layer (z-index 1 + solid bg), so the footer stays hidden while
+         scrolling. main's bottom margin equals the footer height, opening the
+         scroll room that uncovers the footer like a drawer at the end. No JS. */
       main {
         position: relative;
         z-index: 1;
+        background: var(--color-bg);
+        margin-bottom: 100vh;
       }
 
-      /* The contact CTA + meta read as one orange footer. */
-      .site-footer {
-        position: relative;
-        z-index: 5; /* rides OVER the content */
+      /* The merged Contact CTA + footer, pinned behind the page (z-index -1).
+         Orange = the existing brand accent, so the drawer matches the other
+         orange sections; light text + an inverted (light) pill read well on it. */
+      .footer-reveal {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        z-index: -1;
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
         background: var(--color-purple);
         color: var(--color-ink-on-purple);
         text-align: center;
       }
 
-      /* Scroll overlay: the footer slides UP and over the bottom of the page as
-         it scrolls into view. The content gets a matching bottom "runway" so the
-         footer rides over empty space — no content is hidden behind it.
-         Scroll-driven (Chrome/Safari); browsers without scroll-timeline support
-         fall back to a normal footer. Desktop + motion-OK only. */
-      @supports (animation-timeline: view()) {
-        @media (min-width: 768px) and (prefers-reduced-motion: no-preference) {
-          main { padding-bottom: 30vh; }
-          .site-footer {
-            margin-top: -30vh; /* rides up over the runway (cancels the padding) */
-            will-change: transform;
-            animation: footer-overlay linear both;
-            animation-timeline: view();
-            animation-range: entry 0% entry 100%;
-          }
-          @keyframes footer-overlay {
-            /* start at the page bottom, then slide up over the runway */
-            from { transform: translateY(30vh); }
-            to { transform: translateY(0); }
-          }
-        }
-      }
-
       .footer-cta {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
         padding-block: clamp(3rem, 8vw, 6rem) var(--space-5);
       }
       .footer-cta h2 {
