@@ -29,8 +29,8 @@ export default {
     statement: "You know your work. Let's make sure everyone else does too.",
     statementSub:
       "I'm a designer who helps small teams explain what they do. Then I build the website, platform, or story that does the explaining.",
-    // Deliverables that fan out from the statement on hand-drawn arrows.
-    deliverables: ['Landing page', 'Branding', 'Slide decks', 'UX audit', 'Data viz', 'Naming'],
+    // Deliverables that light up one after another around the statement.
+    deliverables: ['Landing page', 'Slide deck', 'Data viz', 'UX audit', 'Roadmap', 'Prototype', 'Rebranding'],
     sectionTitle: 'What I do',
     problems: [
       {

@@ -1,74 +1,33 @@
 ---
 const { t } = Astro.props;
 
-// Hand-drawn arrows fan out from the central statement to each deliverable.
-// Geometry is computed in a fixed viewBox so the SVG <text> labels share the
-// arrows' coordinate system and always line up (no HTML/SVG overlay drift).
-const cx = 600;
-const cy = 380;
-const startR = 90; // arrows begin this far from centre (clear of the subtitle)
-
-const slots = [
-  { ex: 255, ey: 180, lx: 250, ly: 138, anchor: 'middle' },
-  { ex: 945, ey: 180, lx: 950, ly: 138, anchor: 'middle' },
-  { ex: 185, ey: 400, lx: 170, ly: 394, anchor: 'end' },
-  { ex: 1015, ey: 400, lx: 1030, ly: 394, anchor: 'start' },
-  { ex: 320, ey: 590, lx: 316, ly: 632, anchor: 'middle' },
-  { ex: 880, ey: 590, lx: 884, ly: 632, anchor: 'middle' },
+// Scatter positions around the central statement (desktop). The i-th
+// deliverable lights up at i * 0.5s, in array order.
+const positions = [
+  { top: '16%', left: '30%' },
+  { top: '14%', left: '68%' },
+  { top: '36%', left: '14%' },
+  { top: '34%', left: '86%' },
+  { top: '64%', left: '22%' },
+  { top: '62%', left: '78%' },
+  { top: '78%', left: '48%' },
 ];
-
-const deliverables = (t.whatIDo.deliverables || []).slice(0, slots.length);
-const f = (n) => n.toFixed(1);
-
-const arrows = deliverables.map((label, i) => {
-  const s = slots[i];
-  const dx = s.ex - cx;
-  const dy = s.ey - cy;
-  const len = Math.hypot(dx, dy) || 1;
-  const ux = dx / len;
-  const uy = dy / len;
-  const sx = cx + ux * startR;
-  const sy = cy + uy * startR;
-  const nx = -uy;
-  const ny = ux;
-  const bow = (i % 2 === 0 ? 1 : -1) * 60; // alternate the S-curve direction
-  const c1x = sx + (s.ex - sx) * 0.35 + nx * bow;
-  const c1y = sy + (s.ey - sy) * 0.35 + ny * bow;
-  const c2x = sx + (s.ex - sx) * 0.7 - nx * bow * 0.7;
-  const c2y = sy + (s.ey - sy) * 0.7 - ny * bow * 0.7;
-  const ang = Math.atan2(s.ey - c2y, s.ex - c2x);
-  const ah = 17;
-  const a1x = s.ex - ah * Math.cos(ang - 0.5);
-  const a1y = s.ey - ah * Math.sin(ang - 0.5);
-  const a2x = s.ex - ah * Math.cos(ang + 0.5);
-  const a2y = s.ey - ah * Math.sin(ang + 0.5);
-  const d =
-    `M ${f(sx)} ${f(sy)} C ${f(c1x)} ${f(c1y)}, ${f(c2x)} ${f(c2y)}, ${f(s.ex)} ${f(s.ey)}` +
-    ` M ${f(a1x)} ${f(a1y)} L ${f(s.ex)} ${f(s.ey)} L ${f(a2x)} ${f(a2y)}`;
-  return { d, label, lx: s.lx, ly: s.ly, anchor: s.anchor };
-});
+const deliverables = (t.whatIDo.deliverables || []).slice(0, positions.length);
 ---
 
 <section id="what" class="what-statement" data-deliverables>
-  <svg
-    class="deliverables"
-    viewBox="0 0 1200 760"
-    preserveAspectRatio="xMidYMid meet"
-    fill="none"
-    aria-hidden="true"
-  >
-    {arrows.map((a) => <path class="del-arrow" pathLength="1" d={a.d} />)}
-    {arrows.map((a) => (
-      <text class="del-label" x={a.lx} y={a.ly} text-anchor={a.anchor}>{a.label}</text>
+  <ul class="deliverables" aria-label="What I deliver">
+    {deliverables.map((label, i) => (
+      <li
+        class="del"
+        style={`--top:${positions[i].top}; --left:${positions[i].left}; --d:${(i * 0.5).toFixed(1)}s`}
+      >
+        {label}
+      </li>
     ))}
-  </svg>
+  </ul>
 
   <p class="statement-sub">{t.whatIDo.statementSub}</p>
-
-  <!-- Accessible + mobile fallback for the deliverables (sr-only on desktop). -->
-  <ul class="deliverables-list">
-    {deliverables.map((l) => <li>{l}</li>)}
-  </ul>
 
   <button type="button" class="scroll-btn" data-scroll-next aria-label={t.hero.scroll}>
     <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
@@ -79,7 +38,7 @@ const arrows = deliverables.map((label, i) => {
 </section>
 
 <script>
-  // Start drawing the arrows as soon as the section comes into view (once).
+  // Begin the sequence once the section scrolls into view (once).
   const sect = document.querySelector('[data-deliverables]');
   if (sect) {
     if ('IntersectionObserver' in window) {
@@ -125,39 +84,38 @@ const arrows = deliverables.map((label, i) => {
     padding: var(--space-5) var(--gutter);
   }
 
-  /* Arrows + labels layer, behind the statement. */
+  /* Deliverables scattered around the statement. */
   .deliverables {
     position: absolute;
     inset: 0;
-    width: 100%;
-    height: 100%;
     z-index: 1;
+    margin: 0;
+    padding: 0;
+    list-style: none;
     pointer-events: none;
   }
-  .del-arrow {
-    stroke: rgba(255, 255, 255, 0.85);
-    stroke-width: 2.2;
-    stroke-linecap: round;
-    stroke-linejoin: round;
-    stroke-dasharray: 1;
-    stroke-dashoffset: 1; /* hidden until drawn */
-  }
-  .del-label {
-    fill: #ffffff;
-    font-family: var(--font-display);
-    font-size: 27px;
-    font-weight: 600;
-    letter-spacing: -0.01em;
+  .del {
+    position: absolute;
+    top: var(--top);
+    left: var(--left);
+    transform: translate(-50%, -50%) scale(0.96);
+    font-family: var(--font-display); /* Inter */
+    font-weight: 400; /* regular */
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    /* a little smaller than the subtitle */
+    font-size: clamp(0.9rem, 0.7rem + 0.6vw, 1.25rem);
+    white-space: nowrap;
+    color: #ffffff;
+    /* soft white aura, lots of transparency */
+    text-shadow: 0 0 22px rgba(255, 255, 255, 0.4), 0 0 60px rgba(255, 255, 255, 0.18);
     opacity: 0;
+    transition: opacity 0.6s ease var(--d), transform 0.6s var(--ease) var(--d);
   }
-  /* All arrows draw together on enter; each label appears as its arrow finishes. */
-  .is-drawing .del-arrow {
-    transition: stroke-dashoffset 1.1s var(--ease);
-    stroke-dashoffset: 0;
-  }
-  .is-drawing .del-label {
-    transition: opacity 0.45s ease 1s;
+  /* Light up one after another (delay carried per element via --d). */
+  .is-drawing .del {
     opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
   }
 
   .statement-sub {
@@ -170,21 +128,7 @@ const arrows = deliverables.map((label, i) => {
     color: var(--color-ink-on-purple);
   }
 
-  /* Deliverables list: sr-only on desktop (SVG carries the visual), shown on mobile. */
-  .deliverables-list {
-    position: absolute;
-    width: 1px;
-    height: 1px;
-    margin: -1px;
-    padding: 0;
-    overflow: hidden;
-    clip: rect(0 0 0 0);
-    white-space: nowrap;
-    border: 0;
-    list-style: none;
-  }
-
-  /* White scroll arrow (same style as the hero, centred at the bottom). */
+  /* White scroll arrow (hero style), centred at the bottom. */
   .scroll-btn {
     position: absolute;
     left: 50%;
@@ -213,34 +157,30 @@ const arrows = deliverables.map((label, i) => {
   }
 
   @media (prefers-reduced-motion: reduce) {
-    .del-arrow { stroke-dashoffset: 0; transition: none; }
-    .del-label { opacity: 1; transition: none; }
+    .del { opacity: 1; transform: translate(-50%, -50%); transition: none; }
     .scroll-btn svg { animation: none; }
   }
 
-  /* Mobile: drop the arrow choreography; show the deliverables as a tidy list. */
+  /* Mobile: stack the deliverables in a tidy wrapped list under the subtitle;
+     they still light up in sequence. */
   @media (max-width: 767px) {
-    .deliverables { display: none; }
-    .deliverables-list {
+    .deliverables {
       position: static;
-      width: auto;
-      height: auto;
-      margin: var(--space-4) 0 0;
-      clip: auto;
-      white-space: normal;
+      inset: auto;
       display: flex;
       flex-wrap: wrap;
       justify-content: center;
-      gap: 0.5rem;
+      gap: 0.5rem 1rem;
+      margin-top: var(--space-4);
       z-index: 2;
     }
-    .deliverables-list li {
-      font-size: var(--fs-small);
-      font-weight: 500;
-      padding: 0.35rem 0.9rem;
-      border-radius: var(--radius-pill);
-      border: 1px solid var(--color-line-on-purple);
-      color: var(--color-ink-on-purple);
+    .del {
+      position: static;
+      transform: scale(0.96);
+    }
+    .is-drawing .del { transform: scale(1); }
+    @media (prefers-reduced-motion: reduce) {
+      .del { transform: none; }
     }
   }
 </style>
