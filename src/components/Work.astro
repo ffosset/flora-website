@@ -1,119 +1,76 @@
 ---
 const { t } = Astro.props;
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
-const filterLabels = t.work.filters || {};
+const bySlug = Object.fromEntries((t.work.projects || []).map((p) => [p.slug, p]));
 
-// Layout + colour variety are derived from the index (no per-project metadata).
-// Category info stays on each card as data-cats metadata even though the
-// filtering UI is gone.
-const LAYOUTS = ['top', 'none', 'bottom'];
-const COLORS = ['cream', 'orange', 'peach', 'ink', 'clay', 'olive'];
-// Pin a media layout for cards that have a real image but land on 'none'.
-const LAYOUT_OVERRIDE = { 'minnow-collective': 'top' };
-
-const cards = (t.work.projects || []).map((p, i) => ({
-  ...p,
-  layout: LAYOUT_OVERRIDE[p.slug] || LAYOUTS[i % LAYOUTS.length],
-  color: COLORS[i % COLORS.length],
-  cats: (p.category || []).map((k) => filterLabels[k] || k),
-}));
-
-// Two rows: group consecutive cards into columns of two.
-const columns = [];
-for (let i = 0; i < cards.length; i += 2) columns.push(cards.slice(i, i + 2));
+// Per-card visual treatment (colours/layout/blend), keyed by slug to match the
+// Figma. Only the slugs listed in `columns` are rendered.
+const DESIGN = {
+  'cercle-histoire-forest': { bg: '#efe9e3', fg: '#210f03', layout: 'media-top' },
+  'minnow-collective':      { bg: '#124b4b', fg: '#ffffff', layout: 'text-top', media: 'full', round: true },
+  'soy-de-temporada':       { bg: '#fcf4be', fg: '#210f03', layout: 'text-top', media: 'sm', blend: 'darken', center: true },
+  'rosa-ebilling':          { bg: '#916cb1', fg: '#ffffff', layout: 'text-top', media: 'md', blend: 'lighten', center: true },
+  'neighborhood-map':       { bg: '#d1d5ef', fg: '#210f03', layout: 'media-top' },
+  'couleur-du-peche':       { bg: '#fce4be', fg: '#210f03', layout: 'media-pad', round: true },
+};
+const columns = [
+  ['cercle-histoire-forest', 'minnow-collective'],
+  ['soy-de-temporada', 'rosa-ebilling'],
+  ['neighborhood-map', 'couleur-du-peche'],
+];
 ---
 
 <section id="work" class="work">
   <div class="container work-head">
-    <div class="work-title">
-      <h2><span class="slash">·</span>{t.work.sectionTitle}</h2>
-      <p class="intro">{t.work.intro}</p>
-    </div>
+    <h2 class="work-h2"><span class="slash">·</span>{t.work.sectionTitle}</h2>
+    <p class="intro">{t.work.intro}</p>
   </div>
 
-  <div
-    class="work-scroller"
-    tabindex="0"
-    role="region"
-    aria-label="Selected projects — scroll sideways to browse"
-  >
+  <div class="container">
     <div class="work-grid">
-      {columns.map((col) => (
+      {columns.map((colSlugs) => (
         <div class="work-col">
-          {col.map((c) => {
+          {colSlugs.map((slug) => {
+            const c = bySlug[slug];
+            if (!c) return null;
+            const d = DESIGN[slug];
             const hasUrl = Boolean(c.url);
             const isExternal = hasUrl && c.url.startsWith('http');
             const href = hasUrl ? (isExternal ? c.url : base + c.url) : undefined;
-            const showMedia = c.layout !== 'none';
-            const isBrowser = c.slug === 'cercle-histoire-forest';
-            const Visual = isBrowser ? (
-              <div class="card-visual card-visual--browser">
-                <div class="browser">
-                  <div class="browser-bar" aria-hidden="true">
-                    <span class="browser-dot"></span>
-                    <span class="browser-dot"></span>
-                    <span class="browser-dot"></span>
-                  </div>
-                  <div class="browser-screen">
-                    <img src={base + c.image} alt={c.subtitle} loading="lazy" />
-                  </div>
-                </div>
+            const Tag = hasUrl ? 'a' : 'article';
+            const textTop = d.layout === 'text-top';
+            const Media = (
+              <div class="card-media">
+                <img src={base + c.image} alt={c.subtitle} loading="lazy" />
               </div>
-            ) : (
-              <div class="card-visual">
-                <span class="card-ph" aria-hidden="true">{c.subtitle || c.slug}</span>
-                <img src={base + c.image} alt={c.subtitle} loading="lazy" onerror="this.style.display='none'" />
+            );
+            const Text = (
+              <div class="card-body">
+                {textTop && <span class="card-tag">{c.tag}</span>}
+                <div class="card-text">
+                  <h3 class="card-title">{c.title}</h3>
+                  <p class="card-client">{c.subtitle}</p>
+                </div>
+                {!textTop && <span class="card-tag">{c.tag}</span>}
               </div>
             );
             return (
-              <article
-                class:list={['card', `card--${c.color}`, `card--${c.layout}`, { 'is-link': hasUrl }]}
+              <Tag
+                class:list={[
+                  'card',
+                  `card--${d.layout}`,
+                  d.blend && `card--blend-${d.blend}`,
+                  d.media && `card--media-${d.media}`,
+                  { 'card--center': d.center, 'card--round': d.round, 'is-link': hasUrl },
+                ]}
+                style={`--bg:${d.bg}; --fg:${d.fg}`}
+                href={href}
+                target={isExternal ? '_blank' : undefined}
+                rel={isExternal ? 'noopener noreferrer' : undefined}
                 data-cats={(c.category || []).join(' ')}
-                role={!hasUrl ? 'button' : undefined}
-                tabindex={!hasUrl ? '0' : undefined}
-                aria-expanded={!hasUrl ? 'false' : undefined}
-                aria-controls={!hasUrl ? `detail-${c.slug}` : undefined}
               >
-                {showMedia && c.layout === 'top' && Visual}
-                <div class="card-front">
-                  {c.subtitle && <p class="card-client">{c.subtitle}</p>}
-                  <h3 class="card-title">{c.title}</h3>
-                </div>
-                {showMedia && c.layout === 'bottom' && Visual}
-
-                <div class="card-detail" id={`detail-${c.slug}`}>
-                  {(c.cats.length > 0 || c.tag) && (
-                    <div class="card-tags">
-                      {c.cats.map((label) => <span class="card-tag">{label}</span>)}
-                      {c.tag && <span class="card-tag">{c.tag}</span>}
-                    </div>
-                  )}
-                  {c.did && (
-                    <div class="detail-block">
-                      <span class="detail-label">What I did</span>
-                      <p>{c.did}</p>
-                    </div>
-                  )}
-                  {c.result && (
-                    <div class="detail-block">
-                      <span class="detail-label">Result</span>
-                      <p>{c.result}</p>
-                    </div>
-                  )}
-                  {hasUrl && (
-                    <a
-                      class="card-visit"
-                      href={href}
-                      target={isExternal ? '_blank' : undefined}
-                      rel={isExternal ? 'noopener noreferrer' : undefined}
-                    >
-                      {t.work.visit}
-                      {isExternal && <span aria-hidden="true"> ↗</span>}
-                      {isExternal && <span class="sr-only"> (opens in new tab)</span>}
-                    </a>
-                  )}
-                </div>
-              </article>
+                {textTop ? <>{Text}{Media}</> : <>{Media}{Text}</>}
+              </Tag>
             );
           })}
         </div>
@@ -122,39 +79,14 @@ for (let i = 0; i < cards.length; i += 2) columns.push(cards.slice(i, i + 2));
   </div>
 </section>
 
-<script>
-  const mq = window.matchMedia('(max-width: 767px)');
-  document.querySelectorAll('.work .card').forEach((card) => {
-    const isButton = card.getAttribute('role') === 'button';
-    const setOpen = (open) => {
-      card.classList.toggle('is-open', open);
-      if (isButton) card.setAttribute('aria-expanded', String(open));
-    };
-    card.addEventListener('click', (e) => {
-      if (e.target.closest('.card-visit')) return; // let the link navigate
-      if (isButton) return setOpen(!card.classList.contains('is-open'));
-      if (mq.matches) setOpen(!card.classList.contains('is-open')); // link card: mobile only
-    });
-    if (isButton) {
-      card.addEventListener('keydown', (e) => {
-        if (e.key === 'Enter' || e.key === ' ') {
-          e.preventDefault();
-          setOpen(!card.classList.contains('is-open'));
-        }
-      });
-    }
-  });
-</script>
-
 <style>
   .work { padding-block: var(--space-6) var(--space-5); }
 
-  .work-head { margin-bottom: var(--space-4); }
-  .work-title h2 {
+  .work-head { margin-bottom: var(--space-5); }
+  .work-h2 {
     font-size: var(--fs-hero);
     line-height: 1;
     letter-spacing: -0.03em;
-    max-width: 14ch;
   }
   .intro {
     color: var(--color-muted);
@@ -162,240 +94,99 @@ for (let i = 0; i < cards.length; i += 2) columns.push(cards.slice(i, i + 2));
     margin-top: var(--space-2);
   }
 
-  /* Full-bleed horizontal scroller. overflow-y hidden keeps the wheel scrolling
-     the page; sideways via trackpad / shift-wheel / drag / scrollbar / arrows. */
-  .work-scroller {
-    overflow-x: auto;
-    overflow-y: hidden;
-    overscroll-behavior-x: contain;
-    padding-block: var(--space-3) var(--space-4);
-    scrollbar-width: thin;
-    scrollbar-color: var(--color-line) transparent;
-  }
-  .work-scroller:focus-visible { outline: 2px solid var(--color-primary); outline-offset: 4px; }
-  .work-scroller::-webkit-scrollbar { height: 6px; }
-  .work-scroller::-webkit-scrollbar-thumb { background: var(--color-line); border-radius: 999px; }
-
+  /* Three-column masonry; the middle column rides a little higher. */
   .work-grid {
     display: flex;
-    gap: var(--space-3);
     align-items: flex-start;
-    width: max-content;
-    padding-inline: var(--gutter);
+    gap: 2rem;
   }
-  /* Wider cards — about 2.5 columns visible on a desktop screen. */
   .work-col {
+    flex: 1;
     display: flex;
     flex-direction: column;
-    gap: var(--space-3);
-    flex: 0 0 clamp(18rem, 40vw, 40rem);
+    gap: 2rem;
+    min-width: 0;
   }
-  /* Editorial stagger: each column sits at a different vertical level. */
-  .work-col:nth-child(4n + 2) { margin-top: var(--space-5); }
-  .work-col:nth-child(4n + 3) { margin-top: var(--space-3); }
-  .work-col:nth-child(4n + 4) { margin-top: calc(var(--space-5) + var(--space-3)); }
+  .work-col:nth-child(1),
+  .work-col:nth-child(3) { margin-top: 4.5rem; }
 
   /* --- Card --- */
   .card {
-    position: relative;
     display: flex;
     flex-direction: column;
-    border-radius: var(--radius-card);
+    border-radius: 12px;
     overflow: hidden;
+    background: var(--bg);
+    color: var(--fg);
     text-decoration: none;
-    background: var(--card-bg);
-    color: var(--card-fg);
-    box-shadow: 0 6px 20px rgba(33, 15, 3, 0.07);
+    box-shadow: 0 4px 10px rgba(196, 196, 196, 0.12);
+    transition: box-shadow 0.25s var(--ease);
   }
+  .card.is-link:hover { box-shadow: 0 10px 26px rgba(33, 15, 3, 0.16); }
 
-  /* Background palette + a darker shade for the reveal overlay. */
-  .card--cream  { --card-bg: #ffffff;                --card-fg: var(--color-text); --card-overlay: #ddd2c6; }
-  .card--peach  { --card-bg: var(--color-secondary); --card-fg: var(--color-text); --card-overlay: #eebb96; }
-  .card--clay   { --card-bg: #e7a981;                --card-fg: #2a1505;           --card-overlay: #cf7f4f; }
-  .card--orange { --card-bg: var(--color-primary);   --card-fg: #ffffff;           --card-overlay: #7e3304; }
-  .card--ink    { --card-bg: var(--color-text);      --card-fg: #ffffff;           --card-overlay: #3a2418; }
-  .card--olive  { --card-bg: #75784e;                --card-fg: #ffffff;           --card-overlay: #565939; }
-
-  .card-visual {
-    position: relative;
-    aspect-ratio: 4 / 3;
-    overflow: hidden;
-    background: color-mix(in srgb, var(--card-fg) 8%, transparent);
-  }
-  .card-visual img {
-    position: absolute;
-    inset: 0;
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
+  .card-media img {
     display: block;
-  }
-  .card-ph {
-    position: absolute;
-    inset: 0;
-    display: grid;
-    place-items: center;
-    padding: 1rem;
-    text-align: center;
-    font-size: 14px;
-    letter-spacing: 0.04em;
-    color: var(--card-fg);
-    opacity: 0.4;
-  }
-
-  /* Browser mock (Cercle card): the screenshot in a small browser frame,
-     inset within the card with padding so the card colour frames it. */
-  .card-visual--browser {
-    aspect-ratio: auto;
-    overflow: visible;
-    background: transparent;
-    padding: var(--space-3);
-  }
-  .browser {
-    border-radius: 10px;
-    overflow: hidden;
-    background: #fff;
-    border: 1px solid var(--color-line);
-    box-shadow: 0 8px 20px rgba(33, 15, 3, 0.12);
-  }
-  .browser-bar {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    padding: 8px 10px;
-    background: #efe9e4;
-    border-bottom: 1px solid var(--color-line);
-  }
-  .browser-dot { width: 9px; height: 9px; border-radius: 50%; background: #cdc2b6; }
-  .card-visual--browser .browser-screen img {
-    position: static;
     width: 100%;
     height: auto;
-    object-fit: initial;
-    display: block;
   }
 
-  .card-front {
+  .card-body {
     display: flex;
     flex-direction: column;
-    gap: 0.4rem;
-    padding: var(--space-3);
+    gap: 1.25rem;
   }
-  .card-client {
-    font-size: var(--fs-small);
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
-    font-weight: 500;
-    color: color-mix(in srgb, var(--card-fg) 60%, transparent);
-  }
+  .card-text { display: flex; flex-direction: column; gap: 0.75rem; }
   .card-title {
-    font-size: clamp(1.125rem, 1rem + 0.4vw, 1.375rem);
-    font-weight: 700;
-    line-height: 1.2;
+    font-family: var(--font-display);
+    font-weight: 800;
+    font-size: clamp(1.5rem, 1.1rem + 1.1vw, 2rem);
+    line-height: 1.12;
     letter-spacing: -0.01em;
   }
-
-  /* Detail (What I did / Result + tags) — hidden by default. In Inter. */
-  .card-detail {
-    font-family: var(--font-display);
-    /* Mostly opaque so text reads, with a touch of transparency to keep a
-       hint of the card/image underneath. */
-    background: color-mix(in srgb, var(--card-overlay) 90%, transparent);
-    -webkit-backdrop-filter: blur(2px);
-    backdrop-filter: blur(2px);
-    color: var(--card-fg);
-    display: flex;
-    flex-direction: column;
-    gap: var(--space-2);
-    padding: var(--space-3);
+  .card-client {
+    font-family: var(--font-body); /* Fira Code, like the design */
+    font-weight: 400;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    font-size: clamp(0.95rem, 0.85rem + 0.35vw, 1.25rem);
   }
-  .card-tags { display: flex; flex-wrap: wrap; gap: 0.4rem; }
   .card-tag {
-    font-size: var(--fs-eyebrow);
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
-    font-weight: 500;
-    padding: 0.2rem 0.6rem;
-    border-radius: var(--radius-pill);
-    border: 1px solid color-mix(in srgb, var(--card-fg) 32%, transparent);
-    color: var(--card-fg);
-  }
-  .detail-block { display: flex; flex-direction: column; gap: 0.25rem; }
-  .detail-label {
-    font-size: var(--fs-eyebrow);
-    text-transform: uppercase;
-    letter-spacing: 0.12em;
-    font-weight: 600;
-    opacity: 0.65;
-  }
-  .detail-block p { font-size: 0.9375rem; line-height: 1.5; }
-
-  /* The only interactive element inside a URL card's detail. */
-  .card-visit {
     align-self: flex-start;
-    margin-top: var(--space-2);
-    padding: 0.5rem 1rem;
-    border-radius: var(--radius-pill);
-    background: var(--card-fg);
-    color: var(--card-bg);
+    background: color-mix(in srgb, var(--fg) 13%, transparent);
+    color: var(--fg);
+    padding: 0.35rem 0.8rem;
+    border-radius: 50px;
     font-family: var(--font-display);
-    font-weight: 600;
-    font-size: var(--fs-small);
-    text-decoration: none;
+    font-weight: 500;
+    font-size: 1rem;
   }
 
-  .sr-only {
-    position: absolute;
-    width: 1px;
-    height: 1px;
-    padding: 0;
-    margin: -1px;
-    overflow: hidden;
-    clip: rect(0 0 0 0);
-    white-space: nowrap;
-    border: 0;
-  }
-  .card:focus-visible,
-  .card-visit:focus-visible {
-    outline: 2px solid var(--color-primary);
-    outline-offset: 2px;
-  }
-  .card[role='button'] { cursor: pointer; }
+  /* media-top: full-bleed image, padded text below. */
+  .card--media-top { gap: 2.5rem; }
+  .card--media-top .card-body { padding: 0 2.5rem 2rem; }
 
-  /* Desktop: the detail is an overlay that slides DOWN over the card on hover. */
-  @media (min-width: 768px) {
-    .card-detail {
-      position: absolute;
-      inset: 0;
-      z-index: 2;
-      overflow: auto;
-      transform: translateY(-100%);
-      transition: transform 0.35s var(--ease);
-    }
-    .card:hover .card-detail,
-    .card:focus-within .card-detail,
-    .card.is-open .card-detail { transform: translateY(0); }
-  }
+  /* media-pad: padded, rounded image then text. */
+  .card--media-pad { gap: 2.5rem; padding: 2rem 2.5rem; }
 
-  @media (prefers-reduced-motion: reduce) {
-    .card, .card-detail { transition: none; }
-  }
+  /* text-top: padded text then image below. */
+  .card--text-top { gap: 2.5rem; padding: 2rem 2.5rem; }
 
-  /* Mobile: single-column grid; tapping a card opens the detail downward. */
-  @media (max-width: 767px) {
-    .work-scroller { overflow: visible; }
-    .work-grid { flex-direction: column; width: auto; }
-    .work-grid .work-col { flex: none; width: 100%; margin-top: 0; }
+  .card--round .card-media { border-radius: 11px; overflow: hidden; }
+  .card--center .card-body { align-items: center; text-align: center; }
+  .card--center .card-tag { align-self: center; }
 
-    .card-detail {
-      max-height: 0;
-      padding-block: 0;
-      overflow: hidden;
-      transition: max-height 0.35s var(--ease), padding 0.35s var(--ease);
-    }
-    .card.is-open .card-detail {
-      max-height: 40rem;
-      padding-block: var(--space-3);
-    }
+  /* image sizing for text-top cards */
+  .card--media-sm .card-media { width: 60%; margin-inline: auto; }
+  .card--media-md .card-media { width: 86%; margin-inline: auto; }
+  .card--blend-darken .card-media img { mix-blend-mode: darken; }
+  .card--blend-lighten .card-media img { mix-blend-mode: lighten; }
+
+  /* Collapse to a single column below desktop. */
+  @media (max-width: 980px) {
+    .work-grid { flex-direction: column; }
+    .work-col { margin-top: 0; }
+    .work-col:nth-child(1),
+    .work-col:nth-child(3) { margin-top: 0; }
+    .card { max-width: 34rem; }
   }
 </style>

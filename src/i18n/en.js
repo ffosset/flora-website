@@ -71,9 +71,9 @@ export default {
         image: '/images/projects/cercle.jpg',
         url: 'https://www.histoiredeforest.be/',
         category: ['websites', 'storytelling'],
-        tag: 'cultural',
+        tag: 'Culture & Heritage',
         subtitle: "Cercle d'Histoire de Forest",
-        title: 'An association without a digital home.',
+        title: 'A local association invisible online',
         did: 'Built a full Webflow platform — landing page, events listings, a publications archive, and a member program around their tri-annual Forestum revue. Revamped their Facebook, wrote a short communication guide, and moved their files to a shared cloud workspace.',
         result:
           'A scattered analog association is now a real digital presence — found on Google every day, and publishing entirely on their own.',
@@ -84,9 +84,9 @@ export default {
         image: '/images/projects/minnow.jpg',
         url: 'https://www.minnowcollective.com/',
         category: ['websites', 'platforms', 'data'],
-        tag: 'sustainability',
+        tag: 'Nature Tech',
         subtitle: 'Minnow Collective',
-        title: 'Bring nature risk into how big companies actually decide.',
+        title: 'Big companies are blind to their nature exposure',
         did: 'Co-founded the company. Lead product strategy and design — turning ecological data into tools that fit how procurement and sourcing teams really work, mapping value chains to ecosystem context, and translating outputs into TNFD, SBTN, CSRD, and SFDR reporting.',
         result: '', // pending — Flora to confirm
         awards: [],
@@ -96,9 +96,9 @@ export default {
         image: '/images/projects/soy-de-temporada.jpg',
         url: 'https://soydetemporada.es/',
         category: ['platforms', 'data', 'storytelling'],
-        tag: 'sustainability',
+        tag: 'Food & Sustainability',
         subtitle: 'Soy de temporada',
-        title: "No simple way to know what's in season.",
+        title: 'What fruits and vegetables are in season right now?',
         did: 'Designed and launched a platform that shows which fruits and vegetables are in season, wherever you are. A personal project that turned into an everyday tool.',
         result: 'Used by hundreds of people every day, years after launch.',
         awards: [], // pending — Flora to fill with 2 Spanish + 2 international award names + years
@@ -108,9 +108,9 @@ export default {
         image: '/images/projects/rosa.jpg',
         url: 'https://pro.rosa.be/en/solutions/rosa-ebilling',
         category: ['platforms', 'data'],
-        tag: 'health',
-        subtitle: 'Rosa',
-        title: 'Belgian specialists need a faster, simpler way to bill.',
+        tag: 'Healthtech',
+        subtitle: 'Rosa ASBL',
+        title: 'Medical billing in Belgium is a compliance maze',
         did: 'Led design on Rosa eBilling — a platform that handles electronic care attestations (eAttest) and invoicing (eFact), integrates with the Belgian mutuality system, and is distributed through three partner softwares. Turned a compliance maze into a flow doctors can run in a couple of minutes per consultation.',
         result: '', // pending — Flora to confirm
         awards: [],
@@ -132,9 +132,9 @@ export default {
         image: '/images/projects/neighborhood-map.jpg',
         url: '', // no public URL — card should render unlinked
         category: ['data', 'platforms'],
-        tag: 'data',
+        tag: 'Fintech',
         subtitle: 'urbanData Analytics',
-        title: 'Dense neighborhood data, no easy way to compare.',
+        title: 'Will this property pay off?',
         did: 'Led research and design on an interactive map — geolocated demographic and financial insights, browsable rather than buried in spreadsheets.',
         result: '', // pending — Flora to confirm
         awards: [],
@@ -144,9 +144,9 @@ export default {
         image: '/images/projects/couleur-du-peche.jpg',
         url: '/work/couleur-du-peche', // INTERNAL link — opens dedicated page on this site
         category: ['storytelling'],
-        tag: 'journalism',
-        subtitle: '24h01 — revue belge (2016)',
-        title: "Une histoire enfouie qui méritait d'être vue.",
+        tag: 'Slow journalism',
+        subtitle: '24h01 · revue belge',
+        title: 'Métis, la couleur du péché',
         did: 'Wrote and designed a long-form investigation on the métis children of Belgian colonization — forced removal from their African mothers, life inside the church-run institutions, the 1959 displacement to Belgium. Four interwoven testimonies, an interactive map of the colonial timeline, and archival photographs.',
         result:
           "The most-read piece on 24h01 by a wide margin, until the magazine closed. Published three years before Belgium's formal apology for this chapter of its history.",
