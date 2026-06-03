@@ -64,6 +64,7 @@ export default {
     },
     prev: 'Previous projects',
     next: 'Next projects',
+    visit: 'Visit page',
     projects: [
       {
         slug: 'cercle-histoire-forest',

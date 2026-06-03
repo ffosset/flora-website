@@ -44,7 +44,6 @@ for (let i = 0; i < cards.length; i += 2) columns.push(cards.slice(i, i + 2));
             const hasUrl = Boolean(c.url);
             const isExternal = hasUrl && c.url.startsWith('http');
             const href = hasUrl ? (isExternal ? c.url : base + c.url) : undefined;
-            const Tag = hasUrl ? 'a' : 'div';
             const showMedia = c.layout !== 'none';
             const isBrowser = c.slug === 'cercle-histoire-forest';
             const Visual = isBrowser ? (
@@ -67,13 +66,13 @@ for (let i = 0; i < cards.length; i += 2) columns.push(cards.slice(i, i + 2));
               </div>
             );
             return (
-              <Tag
+              <article
                 class:list={['card', `card--${c.color}`, `card--${c.layout}`, { 'is-link': hasUrl }]}
-                href={href}
-                target={isExternal ? '_blank' : undefined}
-                rel={isExternal ? 'noopener noreferrer' : undefined}
                 data-cats={(c.category || []).join(' ')}
-                aria-expanded="false"
+                role={!hasUrl ? 'button' : undefined}
+                tabindex={!hasUrl ? '0' : undefined}
+                aria-expanded={!hasUrl ? 'false' : undefined}
+                aria-controls={!hasUrl ? `detail-${c.slug}` : undefined}
               >
                 {showMedia && c.layout === 'top' && Visual}
                 <div class="card-front">
@@ -82,7 +81,7 @@ for (let i = 0; i < cards.length; i += 2) columns.push(cards.slice(i, i + 2));
                 </div>
                 {showMedia && c.layout === 'bottom' && Visual}
 
-                <div class="card-detail">
+                <div class="card-detail" id={`detail-${c.slug}`}>
                   {(c.cats.length > 0 || c.tag) && (
                     <div class="card-tags">
                       {c.cats.map((label) => <span class="card-tag">{label}</span>)}
@@ -101,8 +100,20 @@ for (let i = 0; i < cards.length; i += 2) columns.push(cards.slice(i, i + 2));
                       <p>{c.result}</p>
                     </div>
                   )}
+                  {hasUrl && (
+                    <a
+                      class="card-visit"
+                      href={href}
+                      target={isExternal ? '_blank' : undefined}
+                      rel={isExternal ? 'noopener noreferrer' : undefined}
+                    >
+                      {t.work.visit}
+                      {isExternal && <span aria-hidden="true"> ↗</span>}
+                      {isExternal && <span class="sr-only"> (opens in new tab)</span>}
+                    </a>
+                  )}
                 </div>
-              </Tag>
+              </article>
             );
           })}
         </div>
@@ -112,16 +123,26 @@ for (let i = 0; i < cards.length; i += 2) columns.push(cards.slice(i, i + 2));
 </section>
 
 <script>
-  // Mobile only: a tap expands the card (accordion) instead of navigating.
-  // On desktop the detail is a hover overlay and links navigate normally.
   const mq = window.matchMedia('(max-width: 767px)');
   document.querySelectorAll('.work .card').forEach((card) => {
+    const isButton = card.getAttribute('role') === 'button';
+    const setOpen = (open) => {
+      card.classList.toggle('is-open', open);
+      if (isButton) card.setAttribute('aria-expanded', String(open));
+    };
     card.addEventListener('click', (e) => {
-      if (!mq.matches) return;
-      e.preventDefault();
-      const open = card.classList.toggle('is-open');
-      card.setAttribute('aria-expanded', String(open));
+      if (e.target.closest('.card-visit')) return; // let the link navigate
+      if (isButton) return setOpen(!card.classList.contains('is-open'));
+      if (mq.matches) setOpen(!card.classList.contains('is-open')); // link card: mobile only
     });
+    if (isButton) {
+      card.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          setOpen(!card.classList.contains('is-open'));
+        }
+      });
+    }
   });
 </script>
 
@@ -309,6 +330,38 @@ for (let i = 0; i < cards.length; i += 2) columns.push(cards.slice(i, i + 2));
   }
   .detail-block p { font-size: 0.9375rem; line-height: 1.5; }
 
+  /* The only interactive element inside a URL card's detail. */
+  .card-visit {
+    align-self: flex-start;
+    margin-top: var(--space-2);
+    padding: 0.5rem 1rem;
+    border-radius: var(--radius-pill);
+    background: var(--card-fg);
+    color: var(--card-bg);
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: var(--fs-small);
+    text-decoration: none;
+  }
+
+  .sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    white-space: nowrap;
+    border: 0;
+  }
+  .card:focus-visible,
+  .card-visit:focus-visible {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 2px;
+  }
+  .card[role='button'] { cursor: pointer; }
+
   /* Desktop: the detail is an overlay that slides DOWN over the card on hover. */
   @media (min-width: 768px) {
     .card-detail {
@@ -320,7 +373,8 @@ for (let i = 0; i < cards.length; i += 2) columns.push(cards.slice(i, i + 2));
       transition: transform 0.35s var(--ease);
     }
     .card:hover .card-detail,
-    .card:focus-within .card-detail { transform: translateY(0); }
+    .card:focus-within .card-detail,
+    .card.is-open .card-detail { transform: translateY(0); }
   }
 
   @media (prefers-reduced-motion: reduce) {

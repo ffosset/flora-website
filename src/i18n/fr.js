@@ -30,6 +30,7 @@ export default {
   work: {
     sectionTitle: '',
     intro: '',
+    visit: 'Voir le site',
     filters: {
       all: '',
       websites: '',

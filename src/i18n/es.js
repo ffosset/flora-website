@@ -29,6 +29,7 @@ export default {
   work: {
     sectionTitle: '',
     intro: '',
+    visit: 'Ver el sitio',
     filters: {
       all: '',
       websites: '',
