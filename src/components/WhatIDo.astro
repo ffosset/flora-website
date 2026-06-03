@@ -21,7 +21,6 @@ const deliverables = t.whatIDo.deliverables || [];
 <script>
   const sect = document.querySelector('[data-deliverables]');
   if (sect) {
-    // White scroll arrow → next section (Projects).
     const btn = sect.querySelector('[data-scroll-next]');
     if (btn) {
       btn.addEventListener('click', () => {
@@ -33,88 +32,72 @@ const deliverables = t.whatIDo.deliverables || [];
       });
     }
 
-    // Floating glass elements: drift, bounce off the edges, repel on collision.
-    // Skipped on mobile / reduced-motion (CSS shows a static list there instead).
+    // Glass circles drift horizontally in a loop; the mouse adds a little
+    // depth-based parallax. Skipped on mobile / reduced-motion (static list).
     const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     const mobile = window.matchMedia('(max-width: 767px)').matches;
     const els = Array.from(sect.querySelectorAll('.del'));
     if (!reduce && !mobile && els.length) {
-      let W = 0, H = 0, raf = 0;
-      const items = els.map((el) => ({ el, w: 0, h: 0, x: 0, y: 0, vx: 0, vy: 0, r: 0 }));
+      // Per-gap factors (×diameter): <1 overlaps the previous, >1 leaves a gap.
+      const factors = [1.5, 0.85, 1.5, 1.5, 0.85, 1.5, 1.5];
+      const items = els.map((el, i) => ({ el, d: 0, base: 0, y: 0, depth: 0.55 + (i % 3) * 0.3 }));
+      let W = 0, H = 0, total = 0, offset = 0, drift = 0, raf = 0;
+      let tpx = 0, tpy = 0, cpx = 0, cpy = 0;
+
       const measure = () => {
         const b = sect.getBoundingClientRect();
         W = b.width; H = b.height;
-        items.forEach((it) => {
-          const r = it.el.getBoundingClientRect();
-          it.w = r.width; it.h = r.height;
-          it.r = (Math.max(r.width, r.height) / 2) * 0.85; // collision radius
+        let x = 0;
+        items.forEach((it, i) => {
+          it.d = it.el.getBoundingClientRect().width;
+          it.base = x;
+          x += it.d * factors[i % factors.length];
         });
-      };
-      const start = () => {
-        measure();
-        items.forEach((it) => {
-          it.x = Math.random() * Math.max(1, W - it.w);
-          it.y = Math.random() * Math.max(1, H - it.h);
-          const a = Math.random() * Math.PI * 2;
-          const sp = 0.25 + Math.random() * 0.35;
-          it.vx = Math.cos(a) * sp; it.vy = Math.sin(a) * sp;
-        });
-        sect.classList.add('is-floating');
-        raf = requestAnimationFrame(step);
+        total = x;
+        offset = items[0].d + 60;
+        const bandY = H * 0.66;
+        items.forEach((it) => { it.y = bandY - it.d / 2; });
       };
       const step = () => {
+        drift -= 0.4;
+        cpx += (tpx - cpx) * 0.06;
+        cpy += (tpy - cpy) * 0.06;
         items.forEach((it) => {
-          it.x += it.vx; it.y += it.vy;
-          if (it.x < 0) { it.x = 0; it.vx = Math.abs(it.vx); }
-          if (it.x + it.w > W) { it.x = W - it.w; it.vx = -Math.abs(it.vx); }
-          if (it.y < 0) { it.y = 0; it.vy = Math.abs(it.vy); }
-          if (it.y + it.h > H) { it.y = H - it.h; it.vy = -Math.abs(it.vy); }
-        });
-        for (let i = 0; i < items.length; i++) {
-          for (let j = i + 1; j < items.length; j++) {
-            const a = items[i], b = items[j];
-            const dx = b.x + b.w / 2 - (a.x + a.w / 2);
-            const dy = b.y + b.h / 2 - (a.y + a.h / 2);
-            const d = Math.hypot(dx, dy);
-            const min = a.r + b.r;
-            if (d > 0 && d < min) {
-              const nx = dx / d, ny = dy / d, push = (min - d) / 2;
-              a.x -= nx * push; a.y -= ny * push;
-              b.x += nx * push; b.y += ny * push;
-              const aDot = a.vx * nx + a.vy * ny;
-              const bDot = b.vx * nx + b.vy * ny;
-              a.vx += (bDot - aDot) * nx; a.vy += (bDot - aDot) * ny;
-              b.vx += (aDot - bDot) * nx; b.vy += (aDot - bDot) * ny;
-            }
-          }
-        }
-        items.forEach((it) => {
-          const sp = Math.hypot(it.vx, it.vy);
-          if (sp > 0.8) { it.vx *= 0.8 / sp; it.vy *= 0.8 / sp; }
-          it.el.style.transform = `translate(${it.x.toFixed(1)}px, ${it.y.toFixed(1)}px)`;
+          const x = (((it.base + drift) % total) + total) % total - offset;
+          const px = cpx * it.depth * 36;
+          const py = cpy * it.depth * 22;
+          it.el.style.transform = `translate(${(x + px).toFixed(1)}px, ${(it.y + py).toFixed(1)}px)`;
         });
         raf = requestAnimationFrame(step);
       };
 
+      const onMove = (e) => {
+        const b = sect.getBoundingClientRect();
+        tpx = (e.clientX - b.left) / W - 0.5;
+        tpy = (e.clientY - b.top) / H - 0.5;
+      };
+      const onLeave = () => { tpx = 0; tpy = 0; };
+
       let begun = false;
-      const begin = () => { if (!begun) { begun = true; start(); } };
+      const begin = () => {
+        if (begun) return;
+        begun = true;
+        measure();
+        sect.classList.add('is-floating');
+        sect.addEventListener('mousemove', onMove);
+        sect.addEventListener('mouseleave', onLeave);
+        raf = requestAnimationFrame(step);
+      };
       if ('IntersectionObserver' in window) {
         const io = new IntersectionObserver(
           (entries) => entries.forEach((e) => { if (e.isIntersecting) { begin(); io.disconnect(); } }),
-          { threshold: 0.3 }
+          { threshold: 0.25 }
         );
         io.observe(sect);
       } else {
         begin();
       }
-      window.addEventListener('resize', () => {
-        if (!begun) return;
-        measure();
-        items.forEach((it) => {
-          it.x = Math.min(Math.max(0, it.x), Math.max(0, W - it.w));
-          it.y = Math.min(Math.max(0, it.y), Math.max(0, H - it.h));
-        });
-      });
+      window.addEventListener('resize', () => { if (begun) measure(); });
     }
   }
 </script>
@@ -134,7 +117,7 @@ const deliverables = t.whatIDo.deliverables || [];
     padding: var(--space-5) var(--gutter);
   }
 
-  /* Floating glass elements — above the text so they can drift over it. */
+  /* Glass circles drifting across a horizontal band, over the text. */
   .deliverables {
     position: absolute;
     inset: 0;
@@ -148,23 +131,26 @@ const deliverables = t.whatIDo.deliverables || [];
     position: absolute;
     left: 0;
     top: 0;
-    padding: 0.6rem 1.15rem;
-    border-radius: var(--radius-pill);
-    /* glassmorphism */
-    background: rgba(255, 255, 255, 0.13);
-    -webkit-backdrop-filter: blur(10px);
-    backdrop-filter: blur(10px);
-    border: 1px solid rgba(255, 255, 255, 0.32);
-    box-shadow: 0 8px 24px rgba(33, 15, 3, 0.14), inset 0 1px 0 rgba(255, 255, 255, 0.3);
+    width: clamp(140px, 16vw, 230px);
+    height: clamp(140px, 16vw, 230px);
+    border-radius: 50%;
+    display: grid;
+    place-items: center;
+    text-align: center;
+    padding: 1rem;
+    /* subtle glass */
+    background: rgba(255, 255, 255, 0.07);
+    -webkit-backdrop-filter: blur(3px);
+    backdrop-filter: blur(3px);
+    border: 1px solid rgba(255, 255, 255, 0.22);
     color: #ffffff;
-    font-family: var(--font-display);
+    font-family: var(--font-display); /* Inter for the labels */
     font-weight: 500;
     text-transform: uppercase;
     letter-spacing: 0.08em;
-    font-size: clamp(0.85rem, 0.7rem + 0.5vw, 1.1rem);
-    white-space: nowrap;
+    font-size: clamp(0.8rem, 0.7rem + 0.4vw, 1rem);
     opacity: 0;
-    transition: opacity 0.7s ease;
+    transition: opacity 0.8s ease;
     will-change: transform;
   }
   .is-floating .del { opacity: 1; }
@@ -209,8 +195,7 @@ const deliverables = t.whatIDo.deliverables || [];
     .scroll-btn svg { animation: none; }
   }
 
-  /* Mobile or reduced-motion: no physics — show the glass pills as a static,
-     centred wrapped list under the subtitle. */
+  /* Mobile or reduced-motion: no drift — show the labels as a static list. */
   @media (max-width: 767px), (prefers-reduced-motion: reduce) {
     .deliverables {
       position: static;
@@ -220,12 +205,16 @@ const deliverables = t.whatIDo.deliverables || [];
       justify-content: center;
       gap: 0.6rem;
       margin-top: var(--space-4);
-      z-index: 2;
     }
     .del {
       position: static;
       transform: none;
       opacity: 1;
+      width: auto;
+      height: auto;
+      padding: 0.55rem 1.15rem;
+      border-radius: var(--radius-pill);
+      display: inline-flex;
     }
   }
 </style>
