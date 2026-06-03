@@ -1,21 +1,25 @@
 ---
 const { t } = Astro.props;
-const filters = t.work.filters;
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 
-// Slice the seven projects into pages of three. Position within a page
-// (hero vs small) is derived from the index — no per-project metadata — so
-// reordering the data array just works.
-const PER_PAGE = 3;
-const projects = t.work.projects || [];
-const pages = [];
-for (let i = 0; i < projects.length; i += PER_PAGE) pages.push(projects.slice(i, i + PER_PAGE));
+// Layout + colour variety are derived from the index (no per-project metadata),
+// so reordering the data array just reshuffles the rhythm. Category info stays
+// on each card as data-cats metadata even though filtering is gone.
+const LAYOUTS = ['top', 'none', 'bottom'];
+const COLORS = ['cream', 'orange', 'peach', 'ink', 'clay', 'olive'];
 
-const navPrev = t.work.prev || 'Previous projects';
-const navNext = t.work.next || 'Next projects';
+const cards = (t.work.projects || []).map((p, i) => ({
+  ...p,
+  layout: LAYOUTS[i % LAYOUTS.length],
+  color: COLORS[i % COLORS.length],
+}));
+
+// Two rows: group consecutive cards into columns of two.
+const columns = [];
+for (let i = 0; i < cards.length; i += 2) columns.push(cards.slice(i, i + 2));
 ---
 
-<section id="work" class="work" data-work>
+<section id="work" class="work">
   <div class="container work-head">
     <div class="work-title">
       <h2><span class="slash">·</span>{t.work.sectionTitle}</h2>
@@ -23,122 +27,51 @@ const navNext = t.work.next || 'Next projects';
     </div>
   </div>
 
-  <div class="container work-controls">
-    <div class="chips" role="group" aria-label="Filter work by type">
-      <button class="chip active" data-cat="all">{filters.all}</button>
-      <button class="chip" data-cat="websites">{filters.websites}</button>
-      <button class="chip" data-cat="platforms">{filters.platforms}</button>
-      <button class="chip" data-cat="data">{filters.data}</button>
-      <button class="chip" data-cat="storytelling">{filters.storytelling}</button>
+  <div
+    class="work-scroller"
+    tabindex="0"
+    role="region"
+    aria-label="Selected projects — scroll sideways to browse"
+  >
+    <div class="work-grid">
+      {columns.map((col) => (
+        <div class="work-col">
+          {col.map((c) => {
+            const hasUrl = Boolean(c.url);
+            const isExternal = hasUrl && c.url.startsWith('http');
+            const href = hasUrl ? (isExternal ? c.url : base + c.url) : undefined;
+            const Tag = hasUrl ? 'a' : 'div';
+            const showMedia = c.layout !== 'none';
+            const Visual = (
+              <div class="card-visual">
+                <span class="card-ph" aria-hidden="true">{c.subtitle || c.slug}</span>
+                <img src={base + c.image} alt={c.subtitle} loading="lazy" onerror="this.style.display='none'" />
+              </div>
+            );
+            return (
+              <Tag
+                class:list={['card', `card--${c.color}`, `card--${c.layout}`, { 'is-link': hasUrl }]}
+                href={href}
+                target={isExternal ? '_blank' : undefined}
+                rel={isExternal ? 'noopener noreferrer' : undefined}
+                data-cats={(c.category || []).join(' ')}
+              >
+                {showMedia && c.layout === 'top' && Visual}
+                <div class="card-body">
+                  {c.tag && <span class="card-tag">{c.tag}</span>}
+                  {c.subtitle && <p class="card-client">{c.subtitle}</p>}
+                  <h3 class="card-title">{c.title}</h3>
+                  {c.result && <p class="card-result">{c.result}</p>}
+                </div>
+                {showMedia && c.layout === 'bottom' && Visual}
+              </Tag>
+            );
+          })}
+        </div>
+      ))}
     </div>
-
-    <div class="work-nav">
-      <button type="button" class="nav-arrow" data-prev aria-label={navPrev}>
-        <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M15 5l-7 7 7 7" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" /></svg>
-      </button>
-      <span class="work-indicator" data-indicator aria-hidden="true">1 / {pages.length}</span>
-      <button type="button" class="nav-arrow" data-next aria-label={navNext}>
-        <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M9 5l7 7-7 7" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" /></svg>
-      </button>
-    </div>
-  </div>
-
-  <div class="container">
-    <div class="work-viewport" data-viewport tabindex="0" aria-label="Selected projects, use arrow keys to change page">
-      <div class="work-track" data-track>
-        {pages.map((page) => (
-          <div class:list={['work-page', { 'work-page--single': page.length === 1 }]}>
-            {page.map((p, j) => {
-              const isHero = j === 0;
-              const hasUrl = Boolean(p.url);
-              const isExternal = hasUrl && p.url.startsWith('http');
-              const href = hasUrl ? (isExternal ? p.url : base + p.url) : undefined;
-              const Tag = hasUrl ? 'a' : 'div';
-              return (
-                <Tag
-                  class:list={['card', isHero ? 'is-hero' : 'is-small', { 'is-link': hasUrl }]}
-                  href={href}
-                  target={isExternal ? '_blank' : undefined}
-                  rel={isExternal ? 'noopener noreferrer' : undefined}
-                  data-cats={(p.category || []).join(' ')}
-                >
-                  <div class="card-visual">
-                    {/* Fallback label shows through when the image is absent/fails. */}
-                    <span class="card-ph" aria-hidden="true">{p.subtitle || p.slug}</span>
-                    <img src={base + p.image} alt={p.subtitle} loading="lazy" onerror="this.style.display='none'" />
-                  </div>
-                  {p.tag && <span class="card-tag">{p.tag}</span>}
-                  {isExternal && <span class="card-go" aria-hidden="true">↗</span>}
-                  <div class="card-overlay">
-                    {p.subtitle && <p class="card-client">{p.subtitle}</p>}
-                    <h3 class="card-title">{p.title}</h3>
-                    {p.result && <p class="card-result">{p.result}</p>}
-                    {p.did && <p class="card-did">{p.did}</p>}
-                  </div>
-                </Tag>
-              );
-            })}
-          </div>
-        ))}
-      </div>
-    </div>
-    <p class="sr-only" data-live aria-live="polite"></p>
   </div>
 </section>
-
-<script>
-  // --- Pagination + horizontal slide (all pages live in one flex row that we
-  // translate; sliding the row gives the correct in/out direction both ways
-  // for free, and reverses automatically for previous-page navigation). ---
-  const section = document.querySelector('[data-work]');
-  if (section) {
-    const viewport = section.querySelector('[data-viewport]');
-    const track = section.querySelector('[data-track]');
-    const pages = Array.from(track.querySelectorAll('.work-page'));
-    const prevBtn = section.querySelector('[data-prev]');
-    const nextBtn = section.querySelector('[data-next]');
-    const indicator = section.querySelector('[data-indicator]');
-    const live = section.querySelector('[data-live]');
-    const total = section.querySelectorAll('.card').length;
-    let page = 0;
-    const render = () => {
-      track.style.transform = `translateX(${-page * 100}%)`;
-      pages.forEach((pg, i) => { pg.inert = i !== page; }); // off-screen pages can't catch focus/clicks
-      prevBtn.disabled = page === 0;
-      nextBtn.disabled = page === pages.length - 1;
-      indicator.textContent = `${page + 1} / ${pages.length}`;
-      const from = page * 3 + 1;
-      live.textContent = `Showing projects ${from} to ${Math.min(from + 2, total)} of ${total}`;
-      viewport.style.height = pages[page].offsetHeight + 'px';
-      if (document.activeElement === prevBtn && prevBtn.disabled) nextBtn.focus();
-      if (document.activeElement === nextBtn && nextBtn.disabled) prevBtn.focus();
-    };
-    const go = (d) => { const n = page + d; if (n >= 0 && n < pages.length) { page = n; render(); } };
-    prevBtn.addEventListener('click', () => go(-1));
-    nextBtn.addEventListener('click', () => go(1));
-    section.addEventListener('keydown', (e) => {
-      if (e.key === 'ArrowLeft') { e.preventDefault(); go(-1); }
-      else if (e.key === 'ArrowRight') { e.preventDefault(); go(1); }
-    });
-    window.addEventListener('resize', () => { viewport.style.height = pages[page].offsetHeight + 'px'; });
-    render();
-
-    // --- Soft-sort chips: dim non-matches across every page, so navigating
-    // shows the active filter already applied on the new page. ---
-    const chips = section.querySelectorAll('.chip');
-    const cards = section.querySelectorAll('.card');
-    chips.forEach((chip) => {
-      chip.addEventListener('click', () => {
-        chips.forEach((c) => c.classList.toggle('active', c === chip));
-        const cat = chip.getAttribute('data-cat');
-        cards.forEach((card) => {
-          const cats = (card.getAttribute('data-cats') || '').split(' ');
-          card.classList.toggle('dimmed', cat !== 'all' && !cats.includes(cat));
-        });
-      });
-    });
-  }
-</script>
 
 <style>
   .work { padding-block: var(--space-6) var(--space-5); }
@@ -156,97 +89,66 @@ const navNext = t.work.next || 'Next projects';
     margin-top: var(--space-2);
   }
 
-  /* Chips on the left, page arrows on the right, in one band. */
-  .work-controls {
+  /* Full-bleed horizontal scroller. overflow-y is hidden so the wheel keeps
+     scrolling the page vertically; sideways scroll is trackpad / shift-wheel /
+     drag / the thin scrollbar / arrow keys when focused. */
+  .work-scroller {
+    overflow-x: auto;
+    overflow-y: hidden;
+    padding-block: var(--space-3) var(--space-4);
+    scrollbar-width: thin;
+    scrollbar-color: var(--color-line) transparent;
+  }
+  .work-scroller:focus-visible { outline: 2px solid var(--color-primary); outline-offset: 4px; }
+  .work-scroller::-webkit-scrollbar { height: 6px; }
+  .work-scroller::-webkit-scrollbar-thumb { background: var(--color-line); border-radius: 999px; }
+
+  .work-grid {
     display: flex;
-    align-items: center;
-    justify-content: space-between;
     gap: var(--space-3);
-    flex-wrap: wrap;
-    margin-bottom: var(--space-4);
-  }
-  .chips { display: flex; flex-wrap: wrap; gap: 0.5rem; }
-  .chip {
-    font-size: var(--fs-small);
-    background: transparent;
-    border: 1px solid var(--color-line);
-    border-radius: var(--radius-pill);
-    padding: 0.4rem 1rem;
-    transition: all 0.2s var(--ease);
-  }
-  .chip.active {
-    background: var(--color-ink);
-    color: var(--color-bg);
-    border-color: var(--color-ink);
-  }
-
-  .work-nav { display: flex; align-items: center; gap: 0.5rem; }
-  .nav-arrow {
-    width: 2.25rem;
-    height: 2.25rem;
-    display: grid;
-    place-items: center;
-    border-radius: var(--radius-pill);
-    border: 1px solid var(--color-line);
-    color: var(--color-ink);
-    transition: color 0.2s var(--ease), border-color 0.2s var(--ease), opacity 0.2s var(--ease);
-  }
-  .nav-arrow svg { width: 1.1rem; height: 1.1rem; }
-  .nav-arrow:not(:disabled):hover { color: var(--color-primary); border-color: var(--color-primary); }
-  .nav-arrow:disabled { opacity: 0.3; cursor: default; }
-  .work-indicator {
-    font-size: var(--fs-small);
-    color: var(--color-muted);
-    font-variant-numeric: tabular-nums;
-    min-width: 3ch;
-    text-align: center;
-  }
-
-  /* Slide viewport + track. */
-  .work-viewport {
-    overflow: hidden;
-    transition: height 0.4s var(--ease);
-  }
-  .work-viewport:focus-visible { outline: 2px solid var(--color-primary); outline-offset: 4px; }
-  .work-track {
-    display: flex;
     align-items: flex-start;
-    transition: transform 0.4s var(--ease);
+    width: max-content;
+    padding-inline: var(--gutter);
   }
-  .work-page {
-    flex: 0 0 100%;
-    display: grid;
-    grid-template-columns: 1.6fr 1fr;
-    grid-template-rows: 1fr 1fr;
-    gap: 14px;
-    aspect-ratio: 1.85 / 1;
+  .work-col {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+    flex: 0 0 clamp(15rem, 24vw, 20rem);
   }
-  /* Hero spans both rows on the left; the two small cards fill the right
-     column (each = one 1fr row = 50% of the hero height). */
-  .work-page .is-hero { grid-column: 1; grid-row: 1 / span 2; }
-  /* Underfull final page (one project): full-width hero — chosen over a lone
-     centred card so the journalism piece carries the whole row with no gap. */
-  .work-page--single { grid-template-columns: 1fr; }
-  .work-page--single .is-hero { grid-column: 1 / -1; grid-row: 1 / -1; }
+  /* Editorial stagger: each column sits at a different vertical level. */
+  .work-col:nth-child(4n + 2) { margin-top: var(--space-5); }
+  .work-col:nth-child(4n + 3) { margin-top: var(--space-3); }
+  .work-col:nth-child(4n + 4) { margin-top: calc(var(--space-5) + var(--space-3)); }
 
-  /* Reduced motion: skip the slide/height animations — a positional swap isn't
-     vestibular motion, but honoring the preference keeps it calm. */
-  @media (prefers-reduced-motion: reduce) {
-    .work-track, .work-viewport { transition: none; }
-  }
-
-  /* Card = a visual tile with an overlaid text scrim. */
+  /* --- Card --- */
   .card {
-    position: relative;
-    height: 100%;
-    overflow: hidden;
+    display: flex;
+    flex-direction: column;
     border-radius: var(--radius-card);
+    overflow: hidden;
     text-decoration: none;
-    color: inherit;
+    background: var(--card-bg);
+    color: var(--card-fg);
+    box-shadow: 0 6px 20px rgba(33, 15, 3, 0.07);
+    transition: transform 0.25s var(--ease);
   }
-  .card.dimmed { opacity: 0.35; }
+  .card.is-link:hover { transform: translateY(-5px); }
 
-  .card-visual { position: absolute; inset: 0; background: var(--color-bg-soft); }
+  /* Background palette (text colour auto-set per card). */
+  .card--cream  { --card-bg: #ffffff;                --card-fg: var(--color-text); }
+  .card--peach  { --card-bg: var(--color-secondary); --card-fg: var(--color-text); }
+  .card--clay   { --card-bg: #e7a981;                --card-fg: #2a1505; }
+  .card--orange { --card-bg: var(--color-primary);   --card-fg: #ffffff; }
+  .card--ink    { --card-bg: var(--color-text);      --card-fg: #ffffff; }
+  .card--olive  { --card-bg: #75784e;                --card-fg: #ffffff; }
+
+  .card-visual {
+    position: relative;
+    aspect-ratio: 4 / 3;
+    overflow: hidden;
+    background: color-mix(in srgb, var(--card-fg) 8%, transparent);
+  }
   .card-visual img {
     position: absolute;
     inset: 0;
@@ -265,116 +167,53 @@ const navNext = t.work.next || 'Next projects';
     text-align: center;
     font-size: 14px;
     letter-spacing: 0.04em;
-    color: var(--color-primary);
+    color: var(--card-fg);
     opacity: 0.4;
   }
 
+  .card-body {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    padding: var(--space-3);
+  }
   .card-tag {
-    position: absolute;
-    top: 0.75rem;
-    left: 0.75rem;
-    z-index: 1;
+    align-self: flex-start;
     font-size: var(--fs-eyebrow);
     text-transform: uppercase;
     letter-spacing: 0.1em;
     font-weight: 500;
-    color: var(--color-primary);
-    background: rgba(255, 255, 255, 0.85);
-    -webkit-backdrop-filter: blur(4px);
-    backdrop-filter: blur(4px);
-    padding: 0.25rem 0.6rem;
+    padding: 0.2rem 0.55rem;
     border-radius: var(--radius-pill);
-  }
-  .card-go {
-    position: absolute;
-    top: 0.75rem;
-    right: 0.75rem;
-    z-index: 1;
-    width: 1.75rem;
-    height: 1.75rem;
-    display: grid;
-    place-items: center;
-    border-radius: 50%;
-    color: var(--color-primary);
-    background: rgba(255, 255, 255, 0.85);
-    -webkit-backdrop-filter: blur(4px);
-    backdrop-filter: blur(4px);
-  }
-
-  /* Text scrim, anchored to the bottom of the tile. */
-  .card-overlay {
-    position: absolute;
-    inset: 0;
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-end;
-    gap: 0.35rem;
-    padding: var(--space-3);
-    background: linear-gradient(transparent 38%, rgba(33, 15, 3, 0.82));
-    color: #fff;
+    background: color-mix(in srgb, var(--card-fg) 12%, transparent);
+    color: var(--card-fg);
   }
   .card-client {
     font-size: var(--fs-small);
     text-transform: uppercase;
     letter-spacing: 0.08em;
     font-weight: 500;
-    color: rgba(255, 255, 255, 0.78);
+    color: color-mix(in srgb, var(--card-fg) 60%, transparent);
   }
   .card-title {
-    font-size: 1.0625rem;
+    font-size: clamp(1.125rem, 1rem + 0.4vw, 1.375rem);
     font-weight: 700;
     line-height: 1.2;
     letter-spacing: -0.01em;
   }
-  .is-hero .card-title { font-size: clamp(1.5rem, 1.2rem + 1vw, 1.6875rem); } /* ~1.5x the small cards */
   .card-result {
-    color: var(--color-secondary);
-    font-weight: 600;
     font-size: 0.9375rem;
     line-height: 1.4;
-  }
-  /* did is revealed on hover/focus — no fade (instant), per the no-extra-motion rule. */
-  .card-did {
-    display: none;
-    font-size: 0.9375rem;
-    line-height: 1.5;
-    color: rgba(255, 255, 255, 0.92);
-  }
-  .card:hover .card-did,
-  .card:focus-within .card-did {
-    display: -webkit-box;
-    -webkit-line-clamp: 4;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
+    color: color-mix(in srgb, var(--card-fg) 82%, transparent);
   }
 
-  /* Screen-reader-only live region (standard sr-only pattern). */
-  .sr-only {
-    position: absolute;
-    width: 1px;
-    height: 1px;
-    padding: 0;
-    margin: -1px;
-    overflow: hidden;
-    clip: rect(0 0 0 0);
-    white-space: nowrap;
-    border: 0;
+  @media (prefers-reduced-motion: reduce) {
+    .card { transition: none; }
   }
 
-  /* Mobile: single column, all cards the same size; slide stays horizontal. */
+  /* Mobile: still a horizontal scroller, wider cards, no stagger. */
   @media (max-width: 767px) {
-    .work-page,
-    .work-page--single {
-      grid-template-columns: 1fr;
-      grid-template-rows: none;
-      aspect-ratio: auto;
-    }
-    .work-page .is-hero,
-    .work-page--single .is-hero {
-      grid-column: auto;
-      grid-row: auto;
-    }
-    .card { height: auto; aspect-ratio: 4 / 3; }
-    .is-hero .card-title { font-size: 1.0625rem; } /* unify with small cards */
+    .work-col { flex: 0 0 78vw; }
+    .work-col[class] { margin-top: 0; }
   }
 </style>
