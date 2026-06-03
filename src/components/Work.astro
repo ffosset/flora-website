@@ -8,10 +8,12 @@ const filterLabels = t.work.filters || {};
 // filtering UI is gone.
 const LAYOUTS = ['top', 'none', 'bottom'];
 const COLORS = ['cream', 'orange', 'peach', 'ink', 'clay', 'olive'];
+// Pin a media layout for cards that have a real image but land on 'none'.
+const LAYOUT_OVERRIDE = { 'minnow-collective': 'top' };
 
 const cards = (t.work.projects || []).map((p, i) => ({
   ...p,
-  layout: LAYOUTS[i % LAYOUTS.length],
+  layout: LAYOUT_OVERRIDE[p.slug] || LAYOUTS[i % LAYOUTS.length],
   color: COLORS[i % COLORS.length],
   cats: (p.category || []).map((k) => filterLabels[k] || k),
 }));
@@ -183,10 +185,6 @@ for (let i = 0; i < cards.length; i += 2) columns.push(cards.slice(i, i + 2));
     background: var(--card-bg);
     color: var(--card-fg);
     box-shadow: 0 6px 20px rgba(33, 15, 3, 0.07);
-    transition: transform 0.25s var(--ease);
-  }
-  @media (min-width: 768px) {
-    .card.is-link:hover { transform: translateY(-5px); }
   }
 
   /* Background palette + a darker shade for the reveal overlay. */
@@ -279,7 +277,11 @@ for (let i = 0; i < cards.length; i += 2) columns.push(cards.slice(i, i + 2));
   /* Detail (What I did / Result + tags) — hidden by default. In Inter. */
   .card-detail {
     font-family: var(--font-display);
-    background: var(--card-overlay);
+    /* Mostly opaque so text reads, with a touch of transparency to keep a
+       hint of the card/image underneath. */
+    background: color-mix(in srgb, var(--card-overlay) 90%, transparent);
+    -webkit-backdrop-filter: blur(2px);
+    backdrop-filter: blur(2px);
     color: var(--card-fg);
     display: flex;
     flex-direction: column;
