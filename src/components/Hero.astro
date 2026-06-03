@@ -154,7 +154,7 @@ const roles = t.hero.roles?.length ? t.hero.roles : [t.hero.roleWord];
   .hero {
     /* Diagonal wash per Figma: white at the top-left, secondary peach at the
        bottom-right (stop runs past 100% so the peach stays soft). */
-    background: linear-gradient(124deg, #ffffff 4%, var(--color-secondary) 163%);
+    background: linear-gradient(124deg, #ffffff 0%, var(--color-secondary) 50%, #f4c49d 118%);
     min-height: 100vh;
     padding-block: 0;
     display: flex;
@@ -231,6 +231,10 @@ const roles = t.hero.roles?.length ? t.hero.roles : [t.hero.roleWord];
     gap: var(--space-3);
     text-align: center;
   }
+  @media (min-width: 768px) {
+    /* Keep the photo/subtitle clear of the right screen edge on desktop. */
+    .hero-aside { right: calc(var(--gutter) + 3rem); }
+  }
   .hero-photo {
     display: block;
     position: relative;
@@ -239,36 +243,16 @@ const roles = t.hero.roles?.length ? t.hero.roles : [t.hero.roleWord];
     border-radius: 50%;
     /* Soft primary ring — rgba(174,73,5,0.1) is --color-primary at 10%. */
     border: 20px solid rgba(174, 73, 5, 0.1);
+    overflow: hidden; /* clip the picture's zoom to the circle; the ring stays put */
     cursor: pointer;
-    transition: transform 0.3s var(--ease);
   }
-  /* Grow the whole element (ring + picture) on hover/focus. */
-  .hero-photo:hover,
-  .hero-photo:focus-visible { transform: scale(1.08); }
-  /* Ripple: a ring pulsing outward from the photo edge, only while hovered. */
-  .hero-photo::after {
-    content: '';
-    position: absolute;
-    inset: 0;
-    border-radius: 50%;
-    border: 2px solid var(--color-accent);
-    opacity: 0;
-    pointer-events: none;
-  }
-  .hero-photo:hover::after,
-  .hero-photo:focus-visible::after {
-    animation: photo-ripple 1.6s ease-out infinite;
-  }
-  @keyframes photo-ripple {
-    from { transform: scale(1); opacity: 0.6; }
-    to { transform: scale(1.15); opacity: 0; }
-  }
+  /* Zoom only the picture inside the fixed ring on hover/focus. */
+  .hero-photo:hover img,
+  .hero-photo:focus-visible img { transform: scale(1.08); }
   @media (prefers-reduced-motion: reduce) {
-    .hero-photo { transition: none; }
-    .hero-photo:hover,
-    .hero-photo:focus-visible { transform: none; }
-    .hero-photo:hover::after,
-    .hero-photo:focus-visible::after { animation: none; }
+    .hero-photo img { transition: none; }
+    .hero-photo:hover img,
+    .hero-photo:focus-visible img { transform: none; }
   }
   .hero-photo img {
     width: 100%;
@@ -277,6 +261,7 @@ const roles = t.hero.roles?.length ? t.hero.roles : [t.hero.roleWord];
     object-fit: cover;
     object-position: center;
     display: block;
+    transition: transform 0.4s var(--ease);
     /* luminosity lets the warm background tint the portrait (matches Figma). */
     mix-blend-mode: luminosity;
   }
