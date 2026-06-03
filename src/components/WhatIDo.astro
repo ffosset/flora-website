@@ -1,44 +1,246 @@
 ---
 const { t } = Astro.props;
+
+// Hand-drawn arrows fan out from the central statement to each deliverable.
+// Geometry is computed in a fixed viewBox so the SVG <text> labels share the
+// arrows' coordinate system and always line up (no HTML/SVG overlay drift).
+const cx = 600;
+const cy = 380;
+const startR = 90; // arrows begin this far from centre (clear of the subtitle)
+
+const slots = [
+  { ex: 255, ey: 180, lx: 250, ly: 138, anchor: 'middle' },
+  { ex: 945, ey: 180, lx: 950, ly: 138, anchor: 'middle' },
+  { ex: 185, ey: 400, lx: 170, ly: 394, anchor: 'end' },
+  { ex: 1015, ey: 400, lx: 1030, ly: 394, anchor: 'start' },
+  { ex: 320, ey: 590, lx: 316, ly: 632, anchor: 'middle' },
+  { ex: 880, ey: 590, lx: 884, ly: 632, anchor: 'middle' },
+];
+
+const deliverables = (t.whatIDo.deliverables || []).slice(0, slots.length);
+const f = (n) => n.toFixed(1);
+
+const arrows = deliverables.map((label, i) => {
+  const s = slots[i];
+  const dx = s.ex - cx;
+  const dy = s.ey - cy;
+  const len = Math.hypot(dx, dy) || 1;
+  const ux = dx / len;
+  const uy = dy / len;
+  const sx = cx + ux * startR;
+  const sy = cy + uy * startR;
+  const nx = -uy;
+  const ny = ux;
+  const bow = (i % 2 === 0 ? 1 : -1) * 60; // alternate the S-curve direction
+  const c1x = sx + (s.ex - sx) * 0.35 + nx * bow;
+  const c1y = sy + (s.ey - sy) * 0.35 + ny * bow;
+  const c2x = sx + (s.ex - sx) * 0.7 - nx * bow * 0.7;
+  const c2y = sy + (s.ey - sy) * 0.7 - ny * bow * 0.7;
+  const ang = Math.atan2(s.ey - c2y, s.ex - c2x);
+  const ah = 17;
+  const a1x = s.ex - ah * Math.cos(ang - 0.5);
+  const a1y = s.ey - ah * Math.sin(ang - 0.5);
+  const a2x = s.ex - ah * Math.cos(ang + 0.5);
+  const a2y = s.ey - ah * Math.sin(ang + 0.5);
+  const d =
+    `M ${f(sx)} ${f(sy)} C ${f(c1x)} ${f(c1y)}, ${f(c2x)} ${f(c2y)}, ${f(s.ex)} ${f(s.ey)}` +
+    ` M ${f(a1x)} ${f(a1y)} L ${f(s.ex)} ${f(s.ey)} L ${f(a2x)} ${f(a2y)}`;
+  return { d, label, lx: s.lx, ly: s.ly, anchor: s.anchor };
+});
 ---
-<section id="what" class="what-statement">
-  <div class="container">
-    <h2 class="statement">{t.whatIDo.statement}</h2>
-    <p class="statement-sub">
-      <span class="slash-on-purple">·</span>{t.whatIDo.statementSub}
-    </p>
-  </div>
+
+<section id="what" class="what-statement" data-deliverables>
+  <svg
+    class="deliverables"
+    viewBox="0 0 1200 760"
+    preserveAspectRatio="xMidYMid meet"
+    fill="none"
+    aria-hidden="true"
+  >
+    {arrows.map((a) => <path class="del-arrow" pathLength="1" d={a.d} />)}
+    {arrows.map((a) => (
+      <text class="del-label" x={a.lx} y={a.ly} text-anchor={a.anchor}>{a.label}</text>
+    ))}
+  </svg>
+
+  <p class="statement-sub">{t.whatIDo.statementSub}</p>
+
+  <!-- Accessible + mobile fallback for the deliverables (sr-only on desktop). -->
+  <ul class="deliverables-list">
+    {deliverables.map((l) => <li>{l}</li>)}
+  </ul>
+
+  <button type="button" class="scroll-btn" data-scroll-next aria-label={t.hero.scroll}>
+    <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+      <path d="M12 4v15M5 13l7 7 7-7" stroke="currentColor" stroke-width="1.6"
+        stroke-linecap="round" stroke-linejoin="round" />
+    </svg>
+  </button>
 </section>
+
+<script>
+  // Start drawing the arrows as soon as the section comes into view (once).
+  const sect = document.querySelector('[data-deliverables]');
+  if (sect) {
+    if ('IntersectionObserver' in window) {
+      const io = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((e) => {
+            if (e.isIntersecting) { sect.classList.add('is-drawing'); io.disconnect(); }
+          });
+        },
+        { threshold: 0.35 }
+      );
+      io.observe(sect);
+    } else {
+      sect.classList.add('is-drawing');
+    }
+
+    // White scroll arrow → next section (Projects).
+    const btn = sect.querySelector('[data-scroll-next]');
+    if (btn) {
+      btn.addEventListener('click', () => {
+        const next = sect.nextElementSibling;
+        if (next) {
+          const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+          next.scrollIntoView({ behavior: reduce ? 'auto' : 'smooth', block: 'start' });
+        }
+      });
+    }
+  }
+</script>
 
 <style>
   .what-statement {
+    position: relative;
+    overflow: hidden;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
     background: var(--color-purple);
     color: var(--color-ink-on-purple);
-    padding-block: clamp(6rem, 14vw, 11rem);
-    text-align: center;
+    padding: var(--space-5) var(--gutter);
   }
-  .statement {
-    font-size: var(--fs-h2);
-    line-height: 1.2;
-    font-weight: 800;
-    letter-spacing: -0.03em;
-    max-width: 20ch;
-    margin-inline: auto;
+
+  /* Arrows + labels layer, behind the statement. */
+  .deliverables {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+    pointer-events: none;
+  }
+  .del-arrow {
+    stroke: rgba(255, 255, 255, 0.85);
+    stroke-width: 2.2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    stroke-dasharray: 1;
+    stroke-dashoffset: 1; /* hidden until drawn */
+  }
+  .del-label {
+    fill: #ffffff;
+    font-family: var(--font-display);
+    font-size: 27px;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+    opacity: 0;
+  }
+  /* All arrows draw together on enter; each label appears as its arrow finishes. */
+  .is-drawing .del-arrow {
+    transition: stroke-dashoffset 1.1s var(--ease);
+    stroke-dashoffset: 0;
+  }
+  .is-drawing .del-label {
+    transition: opacity 0.45s ease 1s;
+    opacity: 1;
+  }
+
+  .statement-sub {
+    position: relative;
+    z-index: 2;
+    max-width: 22ch;
+    font-size: clamp(1.375rem, 1rem + 1.5vw, 2rem);
+    line-height: 1.3;
+    font-weight: 500;
     color: var(--color-ink-on-purple);
   }
-  .statement-sub {
-    margin-top: var(--space-3);
-    margin-inline: auto;
-    font-size: clamp(1.125rem, 1.5vw, 1.375rem);
-    line-height: 1.4;
-    font-weight: 500;
-    letter-spacing: -0.01em;
-    color: var(--color-muted-on-purple);
-    max-width: 44ch;
+
+  /* Deliverables list: sr-only on desktop (SVG carries the visual), shown on mobile. */
+  .deliverables-list {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    margin: -1px;
+    padding: 0;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    white-space: nowrap;
+    border: 0;
+    list-style: none;
   }
-  .slash-on-purple {
-    color: rgba(255, 255, 255, 0.75);
-    font-weight: 700;
-    margin-right: 0.05em;
+
+  /* White scroll arrow (same style as the hero, centred at the bottom). */
+  .scroll-btn {
+    position: absolute;
+    left: 50%;
+    bottom: var(--space-5);
+    transform: translateX(-50%);
+    z-index: 3;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    color: #ffffff;
+    display: grid;
+    place-items: center;
+    transition: transform 0.25s var(--ease);
+  }
+  .scroll-btn svg {
+    width: 28px;
+    height: 28px;
+    display: block;
+    animation: scroll-nudge 1.8s var(--ease) infinite;
+  }
+  .scroll-btn:hover,
+  .scroll-btn:focus-visible { transform: translateX(-50%) translateY(3px); }
+  @keyframes scroll-nudge {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(3px); }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .del-arrow { stroke-dashoffset: 0; transition: none; }
+    .del-label { opacity: 1; transition: none; }
+    .scroll-btn svg { animation: none; }
+  }
+
+  /* Mobile: drop the arrow choreography; show the deliverables as a tidy list. */
+  @media (max-width: 767px) {
+    .deliverables { display: none; }
+    .deliverables-list {
+      position: static;
+      width: auto;
+      height: auto;
+      margin: var(--space-4) 0 0;
+      clip: auto;
+      white-space: normal;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 0.5rem;
+      z-index: 2;
+    }
+    .deliverables-list li {
+      font-size: var(--fs-small);
+      font-weight: 500;
+      padding: 0.35rem 0.9rem;
+      border-radius: var(--radius-pill);
+      border: 1px solid var(--color-line-on-purple);
+      color: var(--color-ink-on-purple);
+    }
   }
 </style>
