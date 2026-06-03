@@ -1,29 +1,31 @@
 ---
 const { t } = Astro.props;
 
-// Scatter positions around the central statement (desktop). The i-th
-// deliverable lights up at i * 0.5s, in array order.
-const positions = [
-  { top: '16%', left: '30%' },
-  { top: '14%', left: '68%' },
-  { top: '36%', left: '14%' },
-  { top: '34%', left: '86%' },
-  { top: '64%', left: '22%' },
-  { top: '62%', left: '78%' },
-  { top: '78%', left: '48%' },
-];
-const deliverables = (t.whatIDo.deliverables || []).slice(0, positions.length);
+const deliverables = t.whatIDo.deliverables || [];
+const N = deliverables.length || 1;
+
+// Place the deliverables evenly on an ellipse around the statement, starting
+// at the top and going clockwise — a calm, intentional ring rather than a
+// random scatter. They light up in this same order.
+const cxp = 50;
+const cyp = 47;
+const rx = 37;
+const ry = 31;
+const items = deliverables.map((label, i) => {
+  const a = (-90 + (i * 360) / N) * (Math.PI / 180);
+  return {
+    label,
+    left: (cxp + rx * Math.cos(a)).toFixed(1) + '%',
+    top: (cyp + ry * Math.sin(a)).toFixed(1) + '%',
+    delay: (i * 0.5).toFixed(2) + 's',
+  };
+});
 ---
 
 <section id="what" class="what-statement" data-deliverables>
   <ul class="deliverables" aria-label="What I deliver">
-    {deliverables.map((label, i) => (
-      <li
-        class="del"
-        style={`--top:${positions[i].top}; --left:${positions[i].left}; --d:${(i * 0.5).toFixed(1)}s`}
-      >
-        {label}
-      </li>
+    {items.map((it) => (
+      <li class="del" style={`--top:${it.top}; --left:${it.left}; --d:${it.delay}`}>{it.label}</li>
     ))}
   </ul>
 
@@ -38,7 +40,6 @@ const deliverables = (t.whatIDo.deliverables || []).slice(0, positions.length);
 </section>
 
 <script>
-  // Begin the sequence once the section scrolls into view (once).
   const sect = document.querySelector('[data-deliverables]');
   if (sect) {
     if ('IntersectionObserver' in window) {
@@ -55,7 +56,6 @@ const deliverables = (t.whatIDo.deliverables || []).slice(0, positions.length);
       sect.classList.add('is-drawing');
     }
 
-    // White scroll arrow → next section (Projects).
     const btn = sect.querySelector('[data-scroll-next]');
     if (btn) {
       btn.addEventListener('click', () => {
@@ -84,7 +84,6 @@ const deliverables = (t.whatIDo.deliverables || []).slice(0, positions.length);
     padding: var(--space-5) var(--gutter);
   }
 
-  /* Deliverables scattered around the statement. */
   .deliverables {
     position: absolute;
     inset: 0;
@@ -98,24 +97,37 @@ const deliverables = (t.whatIDo.deliverables || []).slice(0, positions.length);
     position: absolute;
     top: var(--top);
     left: var(--left);
-    transform: translate(-50%, -50%) scale(0.96);
+    translate: -50% -50%; /* centring kept off `transform` so the bloom can use scale */
     font-family: var(--font-display); /* Inter */
     font-weight: 400; /* regular */
     text-transform: uppercase;
-    letter-spacing: 0.08em;
-    /* a little smaller than the subtitle */
-    font-size: clamp(0.9rem, 0.7rem + 0.6vw, 1.25rem);
+    letter-spacing: 0.1em;
+    font-size: clamp(0.85rem, 0.7rem + 0.55vw, 1.2rem); /* smaller than the subtitle */
     white-space: nowrap;
     color: #ffffff;
-    /* soft white aura, lots of transparency */
-    text-shadow: 0 0 22px rgba(255, 255, 255, 0.4), 0 0 60px rgba(255, 255, 255, 0.18);
     opacity: 0;
-    transition: opacity 0.6s ease var(--d), transform 0.6s var(--ease) var(--d);
   }
-  /* Light up one after another (delay carried per element via --d). */
+  /* Each lights up in turn: blur-in, a glow that flares then settles to a soft aura. */
   .is-drawing .del {
-    opacity: 1;
-    transform: translate(-50%, -50%) scale(1);
+    animation: del-bloom 1s var(--ease) var(--d) both;
+  }
+  @keyframes del-bloom {
+    0% {
+      opacity: 0;
+      scale: 0.9;
+      filter: blur(5px);
+      text-shadow: 0 0 0 rgba(255, 255, 255, 0);
+    }
+    55% {
+      opacity: 1;
+      text-shadow: 0 0 34px rgba(255, 255, 255, 0.7), 0 0 8px rgba(255, 255, 255, 0.5);
+    }
+    100% {
+      opacity: 1;
+      scale: 1;
+      filter: blur(0);
+      text-shadow: 0 0 22px rgba(255, 255, 255, 0.3), 0 0 60px rgba(255, 255, 255, 0.14);
+    }
   }
 
   .statement-sub {
@@ -128,12 +140,11 @@ const deliverables = (t.whatIDo.deliverables || []).slice(0, positions.length);
     color: var(--color-ink-on-purple);
   }
 
-  /* White scroll arrow (hero style), centred at the bottom. */
+  /* White scroll arrow — bottom-right, matching the hero. */
   .scroll-btn {
     position: absolute;
-    left: 50%;
+    right: var(--gutter);
     bottom: var(--space-5);
-    transform: translateX(-50%);
     z-index: 3;
     padding: 0;
     border: 0;
@@ -150,19 +161,23 @@ const deliverables = (t.whatIDo.deliverables || []).slice(0, positions.length);
     animation: scroll-nudge 1.8s var(--ease) infinite;
   }
   .scroll-btn:hover,
-  .scroll-btn:focus-visible { transform: translateX(-50%) translateY(3px); }
+  .scroll-btn:focus-visible { transform: translateY(3px); }
   @keyframes scroll-nudge {
     0%, 100% { transform: translateY(0); }
     50% { transform: translateY(3px); }
   }
 
   @media (prefers-reduced-motion: reduce) {
-    .del { opacity: 1; transform: translate(-50%, -50%); transition: none; }
+    .is-drawing .del {
+      animation: none;
+      opacity: 1;
+      filter: none;
+      text-shadow: 0 0 22px rgba(255, 255, 255, 0.3);
+    }
     .scroll-btn svg { animation: none; }
   }
 
-  /* Mobile: stack the deliverables in a tidy wrapped list under the subtitle;
-     they still light up in sequence. */
+  /* Mobile: a tidy wrapped list under the subtitle; still lights up in turn. */
   @media (max-width: 767px) {
     .deliverables {
       position: static;
@@ -170,17 +185,13 @@ const deliverables = (t.whatIDo.deliverables || []).slice(0, positions.length);
       display: flex;
       flex-wrap: wrap;
       justify-content: center;
-      gap: 0.5rem 1rem;
+      gap: 0.5rem 1.25rem;
       margin-top: var(--space-4);
       z-index: 2;
     }
     .del {
       position: static;
-      transform: scale(0.96);
-    }
-    .is-drawing .del { transform: scale(1); }
-    @media (prefers-reduced-motion: reduce) {
-      .del { transform: none; }
+      translate: none;
     }
   }
 </style>
