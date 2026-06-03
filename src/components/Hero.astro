@@ -238,21 +238,23 @@ const roles = t.hero.roles?.length ? t.hero.roles : [t.hero.roleWord];
   .hero-photo {
     display: block;
     position: relative;
+    box-sizing: border-box; /* total stays 156px; the border eats into it */
     width: 156px;
     height: 156px;
     border-radius: 50%;
     /* Soft primary ring — rgba(174,73,5,0.1) is --color-primary at 10%. */
     border: 20px solid rgba(174, 73, 5, 0.1);
-    overflow: hidden; /* clip the picture's zoom to the circle; the ring stays put */
+    overflow: hidden;
     cursor: pointer;
+    /* Hover: the ring thins so the picture grows to fill it — total unchanged. */
+    transition: border-width 0.45s var(--ease);
   }
-  /* Zoom only the picture inside the fixed ring on hover/focus. */
-  .hero-photo:hover img,
-  .hero-photo:focus-visible img { transform: scale(1.08); }
+  .hero-photo:hover,
+  .hero-photo:focus-visible { border-width: 5px; }
   @media (prefers-reduced-motion: reduce) {
-    .hero-photo img { transition: none; }
-    .hero-photo:hover img,
-    .hero-photo:focus-visible img { transform: none; }
+    .hero-photo { transition: none; }
+    .hero-photo:hover,
+    .hero-photo:focus-visible { border-width: 20px; }
   }
   .hero-photo img {
     width: 100%;
@@ -261,7 +263,6 @@ const roles = t.hero.roles?.length ? t.hero.roles : [t.hero.roleWord];
     object-fit: cover;
     object-position: center;
     display: block;
-    transition: transform 0.4s var(--ease);
     /* luminosity lets the warm background tint the portrait (matches Figma). */
     mix-blend-mode: luminosity;
   }
