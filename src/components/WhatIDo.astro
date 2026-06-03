@@ -1,32 +1,11 @@
 ---
 const { t } = Astro.props;
-
 const deliverables = t.whatIDo.deliverables || [];
-const N = deliverables.length || 1;
-
-// Place the deliverables evenly on an ellipse around the statement, starting
-// at the top and going clockwise — a calm, intentional ring rather than a
-// random scatter. They light up in this same order.
-const cxp = 50;
-const cyp = 47;
-const rx = 37;
-const ry = 31;
-const items = deliverables.map((label, i) => {
-  const a = (-90 + (i * 360) / N) * (Math.PI / 180);
-  return {
-    label,
-    left: (cxp + rx * Math.cos(a)).toFixed(1) + '%',
-    top: (cyp + ry * Math.sin(a)).toFixed(1) + '%',
-    delay: (i * 0.5).toFixed(2) + 's',
-  };
-});
 ---
 
 <section id="what" class="what-statement" data-deliverables>
   <ul class="deliverables" aria-label="What I deliver">
-    {items.map((it) => (
-      <li class="del" style={`--top:${it.top}; --left:${it.left}; --d:${it.delay}`}>{it.label}</li>
-    ))}
+    {deliverables.map((label) => <li class="del">{label}</li>)}
   </ul>
 
   <p class="statement-sub">{t.whatIDo.statementSub}</p>
@@ -42,20 +21,7 @@ const items = deliverables.map((label, i) => {
 <script>
   const sect = document.querySelector('[data-deliverables]');
   if (sect) {
-    if ('IntersectionObserver' in window) {
-      const io = new IntersectionObserver(
-        (entries) => {
-          entries.forEach((e) => {
-            if (e.isIntersecting) { sect.classList.add('is-drawing'); io.disconnect(); }
-          });
-        },
-        { threshold: 0.35 }
-      );
-      io.observe(sect);
-    } else {
-      sect.classList.add('is-drawing');
-    }
-
+    // White scroll arrow → next section (Projects).
     const btn = sect.querySelector('[data-scroll-next]');
     if (btn) {
       btn.addEventListener('click', () => {
@@ -64,6 +30,90 @@ const items = deliverables.map((label, i) => {
           const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
           next.scrollIntoView({ behavior: reduce ? 'auto' : 'smooth', block: 'start' });
         }
+      });
+    }
+
+    // Floating glass elements: drift, bounce off the edges, repel on collision.
+    // Skipped on mobile / reduced-motion (CSS shows a static list there instead).
+    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const mobile = window.matchMedia('(max-width: 767px)').matches;
+    const els = Array.from(sect.querySelectorAll('.del'));
+    if (!reduce && !mobile && els.length) {
+      let W = 0, H = 0, raf = 0;
+      const items = els.map((el) => ({ el, w: 0, h: 0, x: 0, y: 0, vx: 0, vy: 0, r: 0 }));
+      const measure = () => {
+        const b = sect.getBoundingClientRect();
+        W = b.width; H = b.height;
+        items.forEach((it) => {
+          const r = it.el.getBoundingClientRect();
+          it.w = r.width; it.h = r.height;
+          it.r = (Math.max(r.width, r.height) / 2) * 0.85; // collision radius
+        });
+      };
+      const start = () => {
+        measure();
+        items.forEach((it) => {
+          it.x = Math.random() * Math.max(1, W - it.w);
+          it.y = Math.random() * Math.max(1, H - it.h);
+          const a = Math.random() * Math.PI * 2;
+          const sp = 0.25 + Math.random() * 0.35;
+          it.vx = Math.cos(a) * sp; it.vy = Math.sin(a) * sp;
+        });
+        sect.classList.add('is-floating');
+        raf = requestAnimationFrame(step);
+      };
+      const step = () => {
+        items.forEach((it) => {
+          it.x += it.vx; it.y += it.vy;
+          if (it.x < 0) { it.x = 0; it.vx = Math.abs(it.vx); }
+          if (it.x + it.w > W) { it.x = W - it.w; it.vx = -Math.abs(it.vx); }
+          if (it.y < 0) { it.y = 0; it.vy = Math.abs(it.vy); }
+          if (it.y + it.h > H) { it.y = H - it.h; it.vy = -Math.abs(it.vy); }
+        });
+        for (let i = 0; i < items.length; i++) {
+          for (let j = i + 1; j < items.length; j++) {
+            const a = items[i], b = items[j];
+            const dx = b.x + b.w / 2 - (a.x + a.w / 2);
+            const dy = b.y + b.h / 2 - (a.y + a.h / 2);
+            const d = Math.hypot(dx, dy);
+            const min = a.r + b.r;
+            if (d > 0 && d < min) {
+              const nx = dx / d, ny = dy / d, push = (min - d) / 2;
+              a.x -= nx * push; a.y -= ny * push;
+              b.x += nx * push; b.y += ny * push;
+              const aDot = a.vx * nx + a.vy * ny;
+              const bDot = b.vx * nx + b.vy * ny;
+              a.vx += (bDot - aDot) * nx; a.vy += (bDot - aDot) * ny;
+              b.vx += (aDot - bDot) * nx; b.vy += (aDot - bDot) * ny;
+            }
+          }
+        }
+        items.forEach((it) => {
+          const sp = Math.hypot(it.vx, it.vy);
+          if (sp > 0.8) { it.vx *= 0.8 / sp; it.vy *= 0.8 / sp; }
+          it.el.style.transform = `translate(${it.x.toFixed(1)}px, ${it.y.toFixed(1)}px)`;
+        });
+        raf = requestAnimationFrame(step);
+      };
+
+      let begun = false;
+      const begin = () => { if (!begun) { begun = true; start(); } };
+      if ('IntersectionObserver' in window) {
+        const io = new IntersectionObserver(
+          (entries) => entries.forEach((e) => { if (e.isIntersecting) { begin(); io.disconnect(); } }),
+          { threshold: 0.3 }
+        );
+        io.observe(sect);
+      } else {
+        begin();
+      }
+      window.addEventListener('resize', () => {
+        if (!begun) return;
+        measure();
+        items.forEach((it) => {
+          it.x = Math.min(Math.max(0, it.x), Math.max(0, W - it.w));
+          it.y = Math.min(Math.max(0, it.y), Math.max(0, H - it.h));
+        });
       });
     }
   }
@@ -84,10 +134,11 @@ const items = deliverables.map((label, i) => {
     padding: var(--space-5) var(--gutter);
   }
 
+  /* Floating glass elements — above the text so they can drift over it. */
   .deliverables {
     position: absolute;
     inset: 0;
-    z-index: 1;
+    z-index: 2;
     margin: 0;
     padding: 0;
     list-style: none;
@@ -95,46 +146,34 @@ const items = deliverables.map((label, i) => {
   }
   .del {
     position: absolute;
-    top: var(--top);
-    left: var(--left);
-    translate: -50% -50%; /* centring kept off `transform` so the bloom can use scale */
-    font-family: var(--font-display); /* Inter */
-    font-weight: 400; /* regular */
-    text-transform: uppercase;
-    letter-spacing: 0.1em;
-    font-size: clamp(0.85rem, 0.7rem + 0.55vw, 1.2rem); /* smaller than the subtitle */
-    white-space: nowrap;
+    left: 0;
+    top: 0;
+    padding: 0.6rem 1.15rem;
+    border-radius: var(--radius-pill);
+    /* glassmorphism */
+    background: rgba(255, 255, 255, 0.13);
+    -webkit-backdrop-filter: blur(10px);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.32);
+    box-shadow: 0 8px 24px rgba(33, 15, 3, 0.14), inset 0 1px 0 rgba(255, 255, 255, 0.3);
     color: #ffffff;
+    font-family: var(--font-display);
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    font-size: clamp(0.85rem, 0.7rem + 0.5vw, 1.1rem);
+    white-space: nowrap;
     opacity: 0;
+    transition: opacity 0.7s ease;
+    will-change: transform;
   }
-  /* Each lights up in turn: blur-in, a glow that flares then settles to a soft aura. */
-  .is-drawing .del {
-    animation: del-bloom 1s var(--ease) var(--d) both;
-  }
-  @keyframes del-bloom {
-    0% {
-      opacity: 0;
-      scale: 0.9;
-      filter: blur(5px);
-      text-shadow: 0 0 0 rgba(255, 255, 255, 0);
-    }
-    55% {
-      opacity: 1;
-      text-shadow: 0 0 34px rgba(255, 255, 255, 0.7), 0 0 8px rgba(255, 255, 255, 0.5);
-    }
-    100% {
-      opacity: 1;
-      scale: 1;
-      filter: blur(0);
-      text-shadow: 0 0 22px rgba(255, 255, 255, 0.3), 0 0 60px rgba(255, 255, 255, 0.14);
-    }
-  }
+  .is-floating .del { opacity: 1; }
 
   .statement-sub {
     position: relative;
-    z-index: 2;
-    max-width: 22ch;
-    font-size: clamp(1.375rem, 1rem + 1.5vw, 2rem);
+    z-index: 1;
+    max-width: 42ch; /* wider text block */
+    font-size: clamp(1.5rem, 1.1rem + 1.8vw, 2.25rem);
     line-height: 1.3;
     font-weight: 500;
     color: var(--color-ink-on-purple);
@@ -166,32 +205,27 @@ const items = deliverables.map((label, i) => {
     0%, 100% { transform: translateY(0); }
     50% { transform: translateY(3px); }
   }
-
   @media (prefers-reduced-motion: reduce) {
-    .is-drawing .del {
-      animation: none;
-      opacity: 1;
-      filter: none;
-      text-shadow: 0 0 22px rgba(255, 255, 255, 0.3);
-    }
     .scroll-btn svg { animation: none; }
   }
 
-  /* Mobile: a tidy wrapped list under the subtitle; still lights up in turn. */
-  @media (max-width: 767px) {
+  /* Mobile or reduced-motion: no physics — show the glass pills as a static,
+     centred wrapped list under the subtitle. */
+  @media (max-width: 767px), (prefers-reduced-motion: reduce) {
     .deliverables {
       position: static;
       inset: auto;
       display: flex;
       flex-wrap: wrap;
       justify-content: center;
-      gap: 0.5rem 1.25rem;
+      gap: 0.6rem;
       margin-top: var(--space-4);
       z-index: 2;
     }
     .del {
       position: static;
-      translate: none;
+      transform: none;
+      opacity: 1;
     }
   }
 </style>
