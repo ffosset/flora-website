@@ -74,9 +74,9 @@ export default {
         tag: 'Culture & Heritage',
         subtitle: "Cercle d'Histoire de Forest",
         title: 'A local association invisible online',
-        did: 'Built a full Webflow platform — landing page, events listings, a publications archive, and a member program around their tri-annual Forestum revue. Revamped their Facebook, wrote a short communication guide, and moved their files to a shared cloud workspace.',
-        result:
-          'A scattered analog association is now a real digital presence — found on Google every day, and publishing entirely on their own.',
+        year: '2025–2026',
+        did: 'Built a full Webflow platform with landing page, databases, and a member program around their magazine. Revamped their Facebook page and moved their files to a shared cloud workspace.',
+        result: 'They are searched and found online +40 times per month.',
         awards: [],
       },
       {
@@ -87,8 +87,9 @@ export default {
         tag: 'Nature Tech',
         subtitle: 'Minnow Collective',
         title: 'Big companies are blind to their nature exposure',
-        did: 'Co-founded the company. Lead product strategy and design — turning ecological data into tools that fit how procurement and sourcing teams really work, mapping value chains to ecosystem context, and translating outputs into TNFD, SBTN, CSRD, and SFDR reporting.',
-        result: '', // pending — Flora to confirm
+        year: '2024–present',
+        did: 'Co-founded the company and currently leading product strategy and design. We’re turning ecological data into tools that fit how procurement and sourcing teams really work.',
+        result: 'Launching a new framework to help procurement teams map supply chains based on ecological context.',
         awards: [],
       },
       {
@@ -99,8 +100,9 @@ export default {
         tag: 'Food & Sustainability',
         subtitle: 'Soy de temporada',
         title: 'What fruits and vegetables are in season right now?',
-        did: 'Designed and launched a platform that shows which fruits and vegetables are in season, wherever you are. A personal project that turned into an everyday tool.',
-        result: 'Used by hundreds of people every day, years after launch.',
+        year: '2016–2018',
+        did: 'Designed and launched a platform that shows which fruits and vegetables are in season. A personal project that became an everyday tool for many people.',
+        result: '+500 daily users, six years after the platform launch.',
         awards: [], // pending — Flora to fill with 2 Spanish + 2 international award names + years
       },
       {
@@ -111,8 +113,9 @@ export default {
         tag: 'Healthtech',
         subtitle: 'Rosa ASBL',
         title: 'Medical billing in Belgium is a compliance maze',
-        did: 'Led design on Rosa eBilling — a platform that handles electronic care attestations (eAttest) and invoicing (eFact), integrates with the Belgian mutuality system, and is distributed through three partner softwares. Turned a compliance maze into a flow doctors can run in a couple of minutes per consultation.',
-        result: '', // pending — Flora to confirm
+        year: '2022–2024',
+        did: 'Design lead on Rosa eBilling (eAttest & eFact software) integrated with the Belgian mutuality system INAMI. Turned a compliance maze into a flow doctors run in a couple of minutes per consultation.',
+        result: 'Used daily by 3 partner softwares for ophtalmologists.',
         awards: [],
       },
       {
@@ -135,8 +138,9 @@ export default {
         tag: 'Fintech',
         subtitle: 'urbanData Analytics',
         title: 'Will this property pay off?',
-        did: 'Led research and design on an interactive map — geolocated demographic and financial insights, browsable rather than buried in spreadsheets.',
-        result: '', // pending — Flora to confirm
+        year: '2018–2019',
+        did: 'Ran user research then designed a simulator that turns purchase price, rent and mortgage into a clear read on a deal. Led the sprints, functional acceptance, and the rollout to users.',
+        result: 'Used by +10 Real Estate corporations like Liberbank, ReMax, Centry 21…',
         awards: [],
       },
       {
@@ -147,9 +151,10 @@ export default {
         tag: 'Slow journalism',
         subtitle: '24h01 · revue belge',
         title: 'Métis, la couleur du péché',
-        did: 'Wrote and designed a long-form investigation on the métis children of Belgian colonization — forced removal from their African mothers, life inside the church-run institutions, the 1959 displacement to Belgium. Four interwoven testimonies, an interactive map of the colonial timeline, and archival photographs.',
+        year: '2016',
+        did: 'Wrote and designed a long-form investigation on the métis children of Belgian colonization. Four interwoven testimonies, an interactive colonial-timeline map, and archival photographs.',
         result:
-          "The most-read piece on 24h01 by a wide margin, until the magazine closed. Published three years before Belgium's formal apology for this chapter of its history.",
+          "The most-read piece on 24h01 website by a wide margin, until the magazine closed. Published three years before Belgium's formal apology for this chapter of its history.",
         awards: [],
       },
     ],

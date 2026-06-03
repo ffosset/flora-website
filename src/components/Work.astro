@@ -6,12 +6,12 @@ const bySlug = Object.fromEntries((t.work.projects || []).map((p) => [p.slug, p]
 // Per-card visual treatment (colours/layout/blend), keyed by slug to match the
 // Figma. Only the slugs listed in `columns` are rendered.
 const DESIGN = {
-  'cercle-histoire-forest': { bg: '#efe9e3', fg: '#210f03', layout: 'media-top' },
-  'minnow-collective':      { bg: '#124b4b', fg: '#ffffff', layout: 'text-top', media: 'full', round: true },
-  'soy-de-temporada':       { bg: '#fcf4be', fg: '#210f03', layout: 'text-top', media: 'sm', blend: 'darken', center: true },
-  'rosa-ebilling':          { bg: '#916cb1', fg: '#ffffff', layout: 'text-top', media: 'md', blend: 'lighten', center: true },
-  'neighborhood-map':       { bg: '#d1d5ef', fg: '#210f03', layout: 'media-top' },
-  'couleur-du-peche':       { bg: '#fce4be', fg: '#210f03', layout: 'media-pad', round: true },
+  'cercle-histoire-forest': { bg: '#efe9e3', fg: '#210f03', layout: 'media-top', hover: '#c7a98a', pill: '#d7c5b3', cta: 'Visit website' },
+  'minnow-collective':      { bg: '#124b4b', fg: '#ffffff', layout: 'text-top', media: 'full', round: true, hover: '#4e9d9d', pill: '#349494', cta: 'Visit website' },
+  'soy-de-temporada':       { bg: '#fcf4be', fg: '#210f03', layout: 'text-top', media: 'sm', blend: 'darken', center: true, hover: '#f6e35c', pill: '#f6e35c', cta: 'Visit platform' },
+  'rosa-ebilling':          { bg: '#916cb1', fg: '#ffffff', layout: 'text-top', media: 'md', blend: 'lighten', center: true, hover: '#bf8aed', pill: '#bf8aed', cta: 'Visit website' },
+  'neighborhood-map':       { bg: '#d1d5ef', fg: '#210f03', layout: 'media-top', hover: '#7a88ed', pill: '#7a88ed', cta: 'Visit website' },
+  'couleur-du-peche':       { bg: '#fce4be', fg: '#210f03', layout: 'media-pad', round: true, hover: '#f1c173', pill: '#f1c173', cta: 'Read' },
 };
 const columns = [
   ['cercle-histoire-forest', 'minnow-collective'],
@@ -37,7 +37,6 @@ const columns = [
             const hasUrl = Boolean(c.url);
             const isExternal = hasUrl && c.url.startsWith('http');
             const href = hasUrl ? (isExternal ? c.url : base + c.url) : undefined;
-            const Tag = hasUrl ? 'a' : 'article';
             const textTop = d.layout === 'text-top';
             const Media = (
               <div class="card-media">
@@ -55,22 +54,52 @@ const columns = [
               </div>
             );
             return (
-              <Tag
+              <article
                 class:list={[
                   'card',
                   `card--${d.layout}`,
                   d.blend && `card--blend-${d.blend}`,
                   d.media && `card--media-${d.media}`,
-                  { 'card--center': d.center, 'card--round': d.round, 'is-link': hasUrl },
+                  { 'card--center': d.center, 'card--round': d.round },
                 ]}
-                style={`--bg:${d.bg}; --fg:${d.fg}`}
-                href={href}
-                target={isExternal ? '_blank' : undefined}
-                rel={isExternal ? 'noopener noreferrer' : undefined}
+                style={`--bg:${d.bg}; --fg:${d.fg}; --hover:${d.hover}; --pill:${d.pill}`}
                 data-cats={(c.category || []).join(' ')}
+                role={!hasUrl ? 'button' : undefined}
+                tabindex={!hasUrl ? '0' : undefined}
+                aria-expanded={!hasUrl ? 'false' : undefined}
+                aria-controls={!hasUrl ? `hover-${slug}` : undefined}
               >
                 {textTop ? <>{Text}{Media}</> : <>{Media}{Text}</>}
-              </Tag>
+
+                <div class="card-hover" id={`hover-${slug}`}>
+                  <div class="hover-main">
+                    {c.year && <p class="hover-year">{c.year}</p>}
+                    {c.did && (
+                      <div class="hover-block">
+                        <p class="hover-label">My role</p>
+                        <p class="hover-role">{c.did}</p>
+                      </div>
+                    )}
+                    {c.result && (
+                      <div class="hover-block">
+                        <p class="hover-label">Result</p>
+                        <p class="hover-result">{c.result}</p>
+                      </div>
+                    )}
+                  </div>
+                  {hasUrl && (
+                    <a
+                      class="hover-cta"
+                      href={href}
+                      target={isExternal ? '_blank' : undefined}
+                      rel={isExternal ? 'noopener noreferrer' : undefined}
+                    >
+                      {d.cta}
+                      {isExternal && <span class="sr-only"> (opens in new tab)</span>}
+                    </a>
+                  )}
+                </div>
+              </article>
             );
           })}
         </div>
@@ -78,6 +107,32 @@ const columns = [
     </div>
   </div>
 </section>
+
+<script>
+  // Desktop: the overlay reveals on hover/focus (CSS). Mobile (and no-url
+  // button cards): a click/Enter/Space opens it at the bottom of the card.
+  const mq = window.matchMedia('(max-width: 980px)');
+  document.querySelectorAll('.work .card').forEach((card) => {
+    const isButton = card.getAttribute('role') === 'button';
+    const setOpen = (open) => {
+      card.classList.toggle('is-open', open);
+      if (isButton) card.setAttribute('aria-expanded', String(open));
+    };
+    card.addEventListener('click', (e) => {
+      if (e.target.closest('.hover-cta')) return; // let the CTA link navigate
+      if (isButton) return setOpen(!card.classList.contains('is-open'));
+      if (mq.matches) setOpen(!card.classList.contains('is-open'));
+    });
+    if (isButton) {
+      card.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          setOpen(!card.classList.contains('is-open'));
+        }
+      });
+    }
+  });
+</script>
 
 <style>
   .work { padding-block: var(--space-6) var(--space-5); }
@@ -112,6 +167,7 @@ const columns = [
 
   /* --- Card --- */
   .card {
+    position: relative;
     display: flex;
     flex-direction: column;
     border-radius: 12px;
@@ -120,9 +176,56 @@ const columns = [
     color: var(--fg);
     text-decoration: none;
     box-shadow: 0 4px 10px rgba(196, 196, 196, 0.12);
-    transition: box-shadow 0.25s var(--ease);
   }
-  .card.is-link:hover { box-shadow: 0 10px 26px rgba(33, 15, 3, 0.16); }
+  .card[role='button'] { cursor: pointer; }
+  .card[role='button']:focus-visible,
+  .hover-cta:focus-visible {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 2px;
+  }
+
+  /* Hover / expanded detail. */
+  .card-hover {
+    font-family: var(--font-display);
+    background: var(--hover);
+    color: #210f03;
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    padding: 2rem 2.5rem;
+  }
+  .hover-main { display: flex; flex-direction: column; gap: 2rem; }
+  .hover-year {
+    text-align: right;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    font-size: 1rem;
+  }
+  .hover-block { display: flex; flex-direction: column; gap: 0.5rem; }
+  .hover-label { text-transform: uppercase; letter-spacing: 0.06em; font-size: 1rem; }
+  .hover-role { font-size: 1.25rem; line-height: 1.4; }
+  .hover-result { font-size: 1.25rem; line-height: 1.4; font-weight: 700; }
+  .hover-cta {
+    align-self: flex-start;
+    background: #210f03;
+    color: var(--pill);
+    padding: 0.6rem 1rem;
+    border-radius: 50px;
+    font-weight: 500;
+    font-size: 1rem;
+    text-decoration: none;
+  }
+  .sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    white-space: nowrap;
+    border: 0;
+  }
 
   .card-media img {
     display: block;
@@ -182,12 +285,45 @@ const columns = [
   .card--blend-darken .card-media img { mix-blend-mode: darken; }
   .card--blend-lighten .card-media img { mix-blend-mode: lighten; }
 
-  /* Collapse to a single column below desktop. */
+  /* Desktop: the detail is an overlay that slides DOWN over the card on
+     hover / focus (or when a no-url button card is toggled open). */
+  @media (min-width: 981px) {
+    .card-hover {
+      position: absolute;
+      inset: 0;
+      z-index: 2;
+      overflow: auto;
+      justify-content: space-between;
+      transform: translateY(-100%);
+      transition: transform 0.4s var(--ease);
+    }
+    .card:hover .card-hover,
+    .card:focus-within .card-hover,
+    .card.is-open .card-hover { transform: translateY(0); }
+  }
+
+  /* Mobile: single column; tapping a card opens the detail at the bottom. */
   @media (max-width: 980px) {
     .work-grid { flex-direction: column; }
     .work-col { margin-top: 0; }
     .work-col:nth-child(1),
     .work-col:nth-child(3) { margin-top: 0; }
     .card { max-width: 34rem; }
+
+    .card-hover {
+      max-height: 0;
+      padding-block: 0;
+      overflow: hidden;
+      transition: max-height 0.4s var(--ease), padding 0.4s var(--ease);
+    }
+    .card.is-open .card-hover,
+    .card:focus-within .card-hover {
+      max-height: 60rem;
+      padding-block: 2rem;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .card-hover { transition: none; }
   }
 </style>
