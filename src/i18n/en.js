@@ -133,7 +133,7 @@ export default {
       {
         slug: 'neighborhood-map',
         image: '/images/projects/neighborhood-map.jpg',
-        url: '', // no public URL — card should render unlinked
+        url: 'https://www.urbandataanalytics.com/pulse',
         category: ['data', 'platforms'],
         tag: 'Fintech',
         subtitle: 'urbanData Analytics',

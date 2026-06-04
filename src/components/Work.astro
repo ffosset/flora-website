@@ -13,24 +13,22 @@ const DESIGN = {
   'neighborhood-map':       { bg: '#d1d5ef', fg: '#210f03', layout: 'media-top', hover: '#7a88ed', pill: '#7a88ed', cta: 'Visit website' },
   'couleur-du-peche':       { bg: '#fce4be', fg: '#210f03', layout: 'media-pad', round: true, hover: '#f1c173', pill: '#f1c173', cta: 'Read' },
 };
-const columns = [
-  ['cercle-histoire-forest', 'minnow-collective'],
-  ['soy-de-temporada', 'rosa-ebilling'],
-  ['neighborhood-map', 'couleur-du-peche'],
+// Column-major order so the multi-column masonry fills as in the design.
+const order = [
+  'cercle-histoire-forest', 'minnow-collective',
+  'soy-de-temporada', 'rosa-ebilling',
+  'neighborhood-map', 'couleur-du-peche',
 ];
 ---
 
 <section id="work" class="work">
   <div class="container work-head">
     <h2 class="work-h2"><span class="slash">·</span>{t.work.sectionTitle}</h2>
-    <p class="intro">{t.work.intro}</p>
   </div>
 
   <div class="container">
     <div class="work-grid">
-      {columns.map((colSlugs) => (
-        <div class="work-col">
-          {colSlugs.map((slug) => {
+      {order.map((slug) => {
             const c = bySlug[slug];
             if (!c) return null;
             const d = DESIGN[slug];
@@ -102,8 +100,6 @@ const columns = [
               </article>
             );
           })}
-        </div>
-      ))}
     </div>
   </div>
 </section>
@@ -111,7 +107,7 @@ const columns = [
 <script>
   // Desktop: the overlay reveals on hover/focus (CSS). Mobile (and no-url
   // button cards): a click/Enter/Space opens it at the bottom of the card.
-  const mq = window.matchMedia('(max-width: 980px)');
+  const mq = window.matchMedia('(max-width: 720px)');
   document.querySelectorAll('.work .card').forEach((card) => {
     const isButton = card.getAttribute('role') === 'button';
     const setOpen = (open) => {
@@ -137,33 +133,22 @@ const columns = [
 <style>
   .work { padding-block: var(--space-6) var(--space-5); }
 
-  .work-head { margin-bottom: var(--space-5); }
+  .work-head { margin-bottom: var(--space-4); }
   .work-h2 {
     font-size: var(--fs-hero);
     line-height: 1;
     letter-spacing: -0.03em;
   }
-  .intro {
-    color: var(--color-muted);
-    max-width: 50ch;
-    margin-top: var(--space-2);
-  }
 
-  /* Three-column masonry; the middle column rides a little higher. */
+  /* Masonry via CSS multi-column: 3 → 2 → 1 as the screen narrows. */
   .work-grid {
-    display: flex;
-    align-items: flex-start;
-    gap: 2rem;
+    column-count: 3;
+    column-gap: 2rem;
   }
-  .work-col {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    gap: 2rem;
-    min-width: 0;
+  .work-grid > .card {
+    break-inside: avoid;
+    margin-bottom: 2rem;
   }
-  .work-col:nth-child(1),
-  .work-col:nth-child(3) { margin-top: 4.5rem; }
 
   /* --- Card --- */
   .card {
@@ -285,9 +270,14 @@ const columns = [
   .card--blend-darken .card-media img { mix-blend-mode: darken; }
   .card--blend-lighten .card-media img { mix-blend-mode: lighten; }
 
-  /* Desktop: the detail is an overlay that slides DOWN over the card on
-     hover / focus (or when a no-url button card is toggled open). */
-  @media (min-width: 981px) {
+  /* Two columns on mid widths. */
+  @media (max-width: 1100px) {
+    .work-grid { column-count: 2; }
+  }
+
+  /* Pointer screens: the detail is an overlay that slides DOWN over the card
+     on hover / focus (or when a no-url button card is toggled open). */
+  @media (min-width: 721px) {
     .card-hover {
       position: absolute;
       inset: 0;
@@ -302,13 +292,10 @@ const columns = [
     .card.is-open .card-hover { transform: translateY(0); }
   }
 
-  /* Mobile: single column; tapping a card opens the detail at the bottom. */
-  @media (max-width: 980px) {
-    .work-grid { flex-direction: column; }
-    .work-col { margin-top: 0; }
-    .work-col:nth-child(1),
-    .work-col:nth-child(3) { margin-top: 0; }
-    .card { max-width: 34rem; }
+  /* Phones: one column; tapping a card opens the detail at the bottom. */
+  @media (max-width: 720px) {
+    .work-grid { column-count: 1; }
+    .work-grid > .card { max-width: 34rem; margin-inline: auto; }
 
     .card-hover {
       max-height: 0;
