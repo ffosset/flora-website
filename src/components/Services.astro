@@ -17,11 +17,11 @@ const FILTERS = ['landing', 'product', 'storytelling'];
           tabindex="0"
           data-filter={FILTERS[i]}
           style={`--cat: var(--cat-${FILTERS[i]})`}
-          aria-label={`Show ${s.name} projects`}
+          aria-label={t.a11y.showProjects.replace('{name}', s.name)}
         >
           <div class="service-text">
             <h3 class="service-name">{s.name}</h3>
-            <span class="service-go" aria-hidden="true">View projects →</span>
+            <span class="service-go" aria-hidden="true">{t.services.viewProjects} →</span>
           </div>
           {i === 0 && (
             <svg class="service-icon" viewBox="0 0 120 120" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="square" stroke-linejoin="miter" aria-hidden="true">

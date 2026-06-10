@@ -5,16 +5,20 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 const projects = t.work.projects || [];
 
 // Per-card visual treatment (colours / layout / blend), keyed by slug.
+// `cta` is a key into t.work.ctas so the label is translated per locale.
 const DESIGN = {
-  'cercle-histoire-forest': { bg: '#efe9e3', fg: '#210f03', layout: 'media-top', hover: '#c7a98a', pill: '#d7c5b3', cta: 'Visit website' },
-  'minnow-collective':      { bg: '#124b4b', fg: '#ffffff', layout: 'text-top', centered: true, hover: '#4e9d9d', pill: '#349494', cta: 'Visit website' },
-  'soy-de-temporada':       { bg: '#fcf4be', fg: '#210f03', layout: 'text-top', media: 'sm', blend: 'darken', center: true, hover: '#f6e35c', pill: '#f6e35c', cta: 'Visit platform' },
-  'rosa-ebilling':          { bg: '#916cb1', fg: '#ffffff', layout: 'text-top', centered: true, hover: '#bf8aed', pill: '#bf8aed', cta: 'Visit website' },
-  'neighborhood-map':       { bg: '#d1d5ef', fg: '#210f03', layout: 'media-top', hover: '#7a88ed', pill: '#7a88ed', cta: 'Visit website' },
-  'couleur-du-peche':       { bg: '#fce4be', fg: '#210f03', layout: 'media-pad', padded: true, hover: '#f1c173', pill: '#f1c173', cta: 'Read' },
-  'oyas-belgique':          { bg: '#dfe7d8', fg: '#210f03', layout: 'media-top', padded: true, hover: '#a8c08f', pill: '#a8c08f', cta: 'Visit website' },
-  'rosen':                  { bg: '#ece6e1', fg: '#210f03', layout: 'media-top', hover: '#cdbfb1', pill: '#cdbfb1', cta: 'Read' },
+  'cercle-histoire-forest': { bg: '#efe9e3', fg: '#210f03', layout: 'media-top', hover: '#c7a98a', pill: '#d7c5b3', cta: 'website' },
+  'minnow-collective':      { bg: '#124b4b', fg: '#ffffff', layout: 'text-top', centered: true, hover: '#4e9d9d', pill: '#349494', cta: 'website' },
+  'soy-de-temporada':       { bg: '#fcf4be', fg: '#210f03', layout: 'text-top', media: 'sm', blend: 'darken', center: true, hover: '#f6e35c', pill: '#f6e35c', cta: 'platform' },
+  'rosa-ebilling':          { bg: '#916cb1', fg: '#ffffff', layout: 'text-top', centered: true, hover: '#bf8aed', pill: '#bf8aed', cta: 'website' },
+  'neighborhood-map':       { bg: '#d1d5ef', fg: '#210f03', layout: 'media-top', hover: '#7a88ed', pill: '#7a88ed', cta: 'website' },
+  'couleur-du-peche':       { bg: '#fce4be', fg: '#210f03', layout: 'media-pad', padded: true, hover: '#f1c173', pill: '#f1c173', cta: 'read' },
+  'oyas-belgique':          { bg: '#dfe7d8', fg: '#210f03', layout: 'media-top', padded: true, hover: '#a8c08f', pill: '#a8c08f', cta: 'website' },
+  'rosen':                  { bg: '#ece6e1', fg: '#210f03', layout: 'media-top', hover: '#cdbfb1', pill: '#cdbfb1', cta: 'read' },
 };
+
+// Labels ProjectCard needs (it doesn't receive the whole dictionary).
+const cardLabels = { readMore: t.work.readMore, newTab: t.a11y.newTab };
 
 // Category order (also the filter order; Landing is the default view). Each
 // category shows equal-width columns. SHOW lists exactly which projects to
@@ -37,7 +41,7 @@ const byCat = CATS.map((cat) => {
 <section id="work" class="work">
   <div class="container work-head">
     <h2 class="work-h2"><span class="slash">·</span>{t.work.sectionTitle}</h2>
-    <div class="work-filters" role="group" aria-label="Filter projects">
+    <div class="work-filters" role="group" aria-label={t.a11y.filterProjects}>
       {CATS.map((k, i) => (
         <button type="button" class="filter" data-filter={k} aria-pressed={i === 0 ? 'true' : 'false'}>
           {t.work.filters[k]}
@@ -49,12 +53,19 @@ const byCat = CATS.map((cat) => {
   <div class="container">
     {byCat.map(({ cat, items }, i) => (
       <div class:list={['work-cat', { 'is-shown': i === 0 }]} data-cat={cat}>
-        {items.map((p) => <ProjectCard c={p} d={DESIGN[p.slug]} base={base} />)}
+        {items.map((p) => (
+          <ProjectCard
+            c={p}
+            d={{ ...DESIGN[p.slug], cta: t.work.ctas[DESIGN[p.slug].cta] }}
+            base={base}
+            labels={cardLabels}
+          />
+        ))}
       </div>
     ))}
 
     <button type="button" class="work-back" data-work-back>
-      <span aria-hidden="true">↑</span> Other categories
+      <span aria-hidden="true">↑</span> {t.work.otherCategories}
     </button>
   </div>
 </section>

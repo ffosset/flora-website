@@ -28,6 +28,7 @@ export default {
   },
   services: {
     sectionTitle: 'my services',
+    viewProjects: 'View projects',
     items: [
       { name: 'Landing pages', desc: 'for organisations and people who need a presence online' },
       { name: 'Product design', desc: 'for product teams that need senior design and UX expertise' },
@@ -72,6 +73,14 @@ export default {
     prev: 'Previous projects',
     next: 'Next projects',
     visit: 'Visit page',
+    readMore: 'Read more',
+    otherCategories: 'Other categories',
+    // Per-card CTA labels; Work.astro's DESIGN map picks one by key.
+    ctas: {
+      website: 'Visit website',
+      platform: 'Visit platform',
+      read: 'Read',
+    },
     projects: [
       {
         slug: 'cercle-histoire-forest',
@@ -221,5 +230,15 @@ export default {
   footer: {
     rights: '© Flora Fosset',
     location: 'Belgian freelancer',
+  },
+  // Screen-reader-only labels (aria-label / sr-only text).
+  a11y: {
+    mainNav: 'Main',
+    homeLink: 'Flora Fosset — home',
+    openMenu: 'Open menu',
+    getInTouch: 'Get in touch',
+    filterProjects: 'Filter projects',
+    showProjects: 'Show {name} projects',
+    newTab: 'opens in new tab',
   },
 };

@@ -1,7 +1,10 @@
 ---
 // A single project card: image on top with the hover detail laid over it,
 // and the title + company name + sector tag always visible below.
-const { c, d, base } = Astro.props;
+// `labels` carries the translated UI strings (with English fallbacks).
+const { c, d, base, labels = {} } = Astro.props;
+const readMore = labels.readMore ?? 'Read more';
+const newTab = labels.newTab ?? 'opens in new tab';
 const hasUrl = Boolean(c.url);
 const isExternal = hasUrl && c.url.startsWith('http');
 const href = hasUrl ? (isExternal ? c.url : base + c.url) : undefined;
@@ -38,7 +41,7 @@ const href = hasUrl ? (isExternal ? c.url : base + c.url) : undefined;
       aria-expanded="false"
       aria-controls={`hover-${c.slug}`}
     >
-      Read more
+      {readMore}
     </button>
   </div>
 
@@ -55,7 +58,7 @@ const href = hasUrl ? (isExternal ? c.url : base + c.url) : undefined;
         rel={isExternal ? 'noopener noreferrer' : undefined}
       >
         {d.cta}
-        {isExternal && <span class="sr-only"> (opens in new tab)</span>}
+        {isExternal && <span class="sr-only"> ({newTab})</span>}
       </a>
     )}
   </div>

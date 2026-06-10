@@ -1,14 +1,37 @@
 ---
 import '../styles/tokens.css';
 import LanguageSwitcher from '../components/LanguageSwitcher.astro';
-import { useTranslations, getLocaleFromUrl } from '../i18n';
+import { useTranslations, getLocaleFromUrl, languages } from '../i18n';
 
 const locale = getLocaleFromUrl(Astro.url);
 const t = useTranslations(locale);
-const base = import.meta.env.BASE_URL; // includes a trailing slash, e.g. '/flora-website/'
-const home = locale === 'en' ? base : `${base}${locale}/`;
+// Strip any trailing slash so `${base}/path` is correct regardless (config
+// base is '/flora-website', without a trailing slash).
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+const home = locale === 'en' ? `${base}/` : `${base}/${locale}/`;
 const year = new Date().getFullYear(); // SSR fallback; a client script keeps it live
 const { title } = Astro.props; // optional per-page <title> override
+
+// SEO: canonical + hreflang alternates, built from Astro.site.
+// pagePath is the current path with base and locale prefix stripped ('' = home).
+let pagePath = Astro.url.pathname;
+if (base !== '/' && pagePath.startsWith(base)) pagePath = pagePath.slice(base.length);
+pagePath = pagePath.replace(/^\//, '');
+const [maybeLocale, ...restPath] = pagePath.split('/');
+if (maybeLocale in languages) pagePath = restPath.join('/');
+if (pagePath && !pagePath.endsWith('/')) pagePath += '/';
+const abs = (p) => (Astro.site ? new URL(`${base}/${p}`, Astro.site).href : `${base}/${p}`);
+const canonical = abs((locale === 'en' ? '' : `${locale}/`) + pagePath);
+// Only pages that exist in every locale get alternates — today just the home page.
+const alternates =
+  pagePath === ''
+    ? [
+        { hreflang: 'en', href: abs('') },
+        { hreflang: 'fr', href: abs('fr/') },
+        { hreflang: 'es', href: abs('es/') },
+        { hreflang: 'x-default', href: abs('') },
+      ]
+    : [];
 ---
 
 <!doctype html>
@@ -18,13 +41,17 @@ const { title } = Astro.props; // optional per-page <title> override
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{title ?? t.meta.title}</title>
     <meta name="description" content={t.meta.description} />
-    <link rel="icon" type="image/svg+xml" href={`${base}favicon.svg`} />
+    <link rel="canonical" href={canonical} />
+    {alternates.map((a) => (
+      <link rel="alternate" hreflang={a.hreflang} href={a.href} />
+    ))}
+    <link rel="icon" type="image/svg+xml" href={`${base}/favicon.svg`} />
   </head>
   <body>
     <header class="site-header">
       <div class="container">
-        <nav class="nav-bar" aria-label="Main">
-          <a href={home} class="wordmark" aria-label="Flora Fosset — home">fosset.co</a>
+        <nav class="nav-bar" aria-label={t.a11y.mainNav}>
+          <a href={home} class="wordmark" aria-label={t.a11y.homeLink}>fosset.co</a>
 
           <div class="nav-collapse" id="site-nav" data-nav-menu>
             <ul class="nav-links">
@@ -40,7 +67,7 @@ const { title } = Astro.props; // optional per-page <title> override
             class="menu-toggle"
             aria-expanded="false"
             aria-controls="site-nav"
-            aria-label="Open menu"
+            aria-label={t.a11y.openMenu}
             data-menu-toggle
           >
             <span class="bar"></span>
