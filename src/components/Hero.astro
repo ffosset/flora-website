@@ -154,7 +154,11 @@ const roles = t.hero.roles?.length ? t.hero.roles : [t.hero.roleWord];
     /* Diagonal wash per Figma: white at the top-left, secondary peach at the
        bottom-right (stop runs past 100% so the peach stays soft). */
     background: linear-gradient(135deg, #ffffff 0%, var(--color-secondary) 50%, #f4c49d 118%);
+    /* svh is the *stable* (address-bar-shown) viewport height, so the hero
+       doesn't grow as the mobile bar hides on scroll. 100vh = the larger,
+       bar-hidden height, which is what caused the hero to expand on scroll. */
     min-height: 100vh;
+    min-height: 100svh;
     padding-block: 0;
     display: flex;
     /* Contain the follower: relative for absolute positioning, overflow so it

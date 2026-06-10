@@ -262,11 +262,14 @@ const FILTERS = ['landing', 'product', 'storytelling'];
      hard shadow and the hint show by default to read as tappable. */
   @media (max-width: 860px) {
     .services-list { grid-template-columns: 1fr; gap: var(--space-4); }
-    .service { box-shadow: 10px 10px 0 0 var(--cat); }
+    /* Tighter padding + smaller icon so the card (and its shadow) stay within
+       the gutters on narrow screens. */
+    .service { padding: var(--space-4); box-shadow: 8px 8px 0 0 var(--cat); }
+    .service-text { min-width: 0; }
     .service:hover,
-    .service:focus-visible { transform: none; box-shadow: 10px 10px 0 0 var(--cat); }
+    .service:focus-visible { transform: none; box-shadow: 8px 8px 0 0 var(--cat); }
     .service-go { opacity: 1; transform: none; }
-    .service-icon { width: 110px; height: 110px; }
+    .service-icon { width: 100px; height: 100px; }
   }
 
   @media (prefers-reduced-motion: reduce) {

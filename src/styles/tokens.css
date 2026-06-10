@@ -165,6 +165,9 @@ body {
   line-height: var(--lh-body);
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
+  /* Never scroll sideways — clips any stray overflow (card shadows, etc.)
+     without creating a scroll container. */
+  overflow-x: clip;
 }
 
 h1, h2, h3, h4 {

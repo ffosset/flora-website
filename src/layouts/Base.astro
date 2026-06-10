@@ -349,6 +349,18 @@ const { title } = Astro.props; // optional per-page <title> override
         text-align: center;
       }
 
+      /* Mobile: drop the fixed "drawer" reveal — it scrolls janky on touch.
+         The footer just flows normally after the page content. */
+      @media (max-width: 768px) {
+        main { margin-bottom: 0; }
+        .footer-reveal {
+          position: static;
+          z-index: auto;
+          min-height: auto;
+        }
+        .footer-cta { flex: none; }
+      }
+
       .footer-cta {
         flex: 1;
         display: flex;
