@@ -104,10 +104,11 @@ const tagTop = textTop && !highlight;
     outline-offset: 2px;
   }
 
-  /* Hover / expanded detail: the full category colour. */
+  /* Hover / expanded detail: the category colour, kept slightly translucent
+     so the project content stays faintly visible behind it. */
   .card-hover {
     font-family: var(--font-display);
-    background: var(--cat);
+    background: color-mix(in srgb, var(--cat) 88%, transparent);
     color: #210f03;
     display: flex;
     flex-direction: column;
@@ -238,12 +239,13 @@ const tagTop = textTop && !highlight;
       z-index: 2;
       overflow: auto;
       justify-content: space-between;
-      transform: translateY(-100%);
-      transition: transform 0.4s var(--ease);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.35s var(--ease);
     }
     .card:hover .card-hover,
     .card:focus-within .card-hover,
-    .card.is-open .card-hover { transform: translateY(0); }
+    .card.is-open .card-hover { opacity: 1; pointer-events: auto; }
   }
 
   /* Phones: tapping a card opens the detail at the bottom. */
