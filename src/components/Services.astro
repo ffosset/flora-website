@@ -19,6 +19,7 @@ const FILTERS = ['landing', 'product', 'storytelling'];
           style={`--cat: var(--cat-${FILTERS[i]})`}
           aria-label={`Show ${s.name} projects`}
         >
+          <h3 class="service-name">{s.name}</h3>
           {i === 0 && (
             <svg class="service-icon" viewBox="0 0 120 120" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="square" stroke-linejoin="miter" aria-hidden="true">
               <rect class="s-draw" pathLength="1" x="14" y="24" width="92" height="72" />
@@ -79,10 +80,7 @@ const FILTERS = ['landing', 'product', 'storytelling'];
               <line class="s-draw" pathLength="1" x1="38" y1="82" x2="64" y2="82" />
             </svg>
           )}
-          <div class="service-body">
-            <h3 class="service-name">{s.name}</h3>
-            <span class="service-go" aria-hidden="true">View projects →</span>
-          </div>
+          <span class="service-go" aria-hidden="true">View projects →</span>
         </div>
       ))}
     </div>
@@ -160,8 +158,8 @@ const FILTERS = ['landing', 'product', 'storytelling'];
     gap: var(--space-4);
     min-height: 22rem;
     padding: var(--space-4);
-    border-radius: 0;
-    background: #feebde; /* peach */
+    border-radius: 18px;
+    background: #faf0ea; /* soft peach */
     cursor: pointer;
     text-align: center;
     transition: transform 0.3s var(--ease), box-shadow 0.3s var(--ease);
@@ -237,6 +235,13 @@ const FILTERS = ['landing', 'product', 'storytelling'];
     line-height: 1.1;
     letter-spacing: -0.01em;
     color: var(--color-text);
+    transition: color 0.3s var(--ease);
+  }
+  /* Hover: the title takes the category colour and goes bold. */
+  .service:hover .service-name,
+  .service:focus-visible .service-name {
+    color: var(--cat);
+    font-weight: 700;
   }
   .service-desc {
     color: var(--color-muted);
