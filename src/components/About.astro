@@ -27,21 +27,9 @@ const path = t.about.path || [];
 
         <ul class="about-facts">
           {facts.map((f) => (
-            <li>
-              <span class="slash" aria-hidden="true">·</span>
-              <strong>{f.strong}</strong> <span class="fact-rest">{f.rest}</span>
-            </li>
+            <li><span class="slash" aria-hidden="true">·</span>{f}</li>
           ))}
         </ul>
-
-        <div class="about-block">
-          <h3><span class="slash">·</span>{t.about.howIWorkTitle}</h3>
-          <p>{t.about.howIWorkBody}</p>
-        </div>
-        <div class="about-block">
-          <h3><span class="slash">·</span>{t.about.valuesTitle}</h3>
-          <p>{t.about.values}</p>
-        </div>
       </div>
     </div>
 
@@ -56,6 +44,17 @@ const path = t.about.path || [];
           </li>
         ))}
       </ol>
+    </div>
+
+    <div class="about-blocks">
+      <div class="about-block">
+        <h3><span class="slash">·</span>{t.about.howIWorkTitle}</h3>
+        <p>{t.about.howIWorkBody}</p>
+      </div>
+      <div class="about-block">
+        <h3><span class="slash">·</span>{t.about.valuesTitle}</h3>
+        <p>{t.about.values}</p>
+      </div>
     </div>
   </div>
 </section>
@@ -103,10 +102,15 @@ const path = t.about.path || [];
     max-width: 26rem;
     height: auto;
   }
+  /* Mobile: centre the portrait above the text. */
+  @media (max-width: 899px) {
+    .about-media { display: flex; justify-content: center; }
+    .about-portrait { max-width: 20rem; }
+  }
 
   .about-headline {
     font-family: var(--font-display);
-    font-weight: 400;
+    font-weight: 600;
     font-size: clamp(1.5rem, 1.05rem + 1.6vw, 2.1rem);
     line-height: 1.25;
     letter-spacing: -0.01em;
@@ -114,7 +118,7 @@ const path = t.about.path || [];
     max-width: 26ch;
   }
 
-  /* Quick facts: orange dot, bold lead-in, primary-coloured remainder. */
+  /* Quick facts: a small orange dot before each line. */
   .about-facts {
     list-style: none;
     display: flex;
@@ -126,12 +130,25 @@ const path = t.about.path || [];
     font-family: var(--font-display);
     font-size: clamp(1.05rem, 0.95rem + 0.5vw, 1.3rem);
     line-height: 1.3;
+    color: var(--color-text);
   }
-  .about-facts .slash { color: var(--color-primary); margin-right: 0.4em; font-weight: 700; }
-  .about-facts strong { font-weight: 700; color: var(--color-text); }
-  .about-facts .fact-rest { color: var(--color-primary); }
+  .about-facts .slash { color: var(--color-primary); margin-right: 0.5em; font-weight: 700; }
 
-  .about-block { margin-top: var(--space-5); max-width: 60ch; }
+  /* "how I work" / "value driven" — two cards below the timeline. */
+  .about-blocks {
+    display: grid;
+    gap: var(--space-4);
+    margin-top: var(--space-6);
+  }
+  @media (min-width: 760px) {
+    .about-blocks { grid-template-columns: 1fr 1fr; }
+  }
+  .about-block {
+    background: #faf0ea;
+    border-radius: 18px;
+    padding: var(--space-4) var(--space-5);
+    text-align: center;
+  }
   .about-block h3 {
     font-size: 1.375rem;
     letter-spacing: -0.01em;

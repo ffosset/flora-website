@@ -182,11 +182,10 @@ export default {
   about: {
     sectionTitle: 'about me',
     headline: 'Product leader and expert in bridging design, technology, and business strategy.',
-    // Each fact: a bold lead-in + a primary-coloured remainder.
     facts: [
-      { strong: '+9 years experience', rest: 'as a designer' },
-      { strong: 'English, French, Spanish', rest: 'perfect fluency' },
-      { strong: 'Brussels & Madrid', rest: 'based in both cities' },
+      '+9 years experience as a designer',
+      'Perfectly fluent in English, French, and Spanish',
+      'Based between Brussels & Madrid',
     ],
     howIWorkTitle: 'how I work',
     howIWorkBody:
