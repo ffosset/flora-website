@@ -97,8 +97,8 @@ export default {
         title: 'Allow companies to visualize their nature exposure',
         year: '2024–present',
         did: 'Co-founded the company and currently leading product strategy and design. We’re turning ecological data into tools that fit how procurement and sourcing teams really work.',
-        result: 'Launching a new framework to help procurement teams map supply chains based on ecological context.',
-        keywords: ['Product strategy', 'Ecological data', 'Co-founder'],
+        result: 'Cofounded a platform to help procurement teams map supply chains based on ecological context.',
+        keywords: ['Product strategy', 'Advanced B2B users', 'Complex data'],
         awards: [],
       },
       {
@@ -166,7 +166,7 @@ export default {
         year: '2016',
         did: 'Wrote and designed a long-form investigation on the métis children of Belgian colonization. Four interwoven testimonies, an interactive colonial-timeline map, and archival photographs.',
         result:
-          "The most-read piece on 24h01 website by a wide margin, until the magazine closed. Published three years before Belgium's formal apology for this chapter of its history.",
+          'The most-read piece on 24h01 website by a wide margin, until the magazine closed.',
         keywords: ['Long-form writing', 'Interactive map', 'Archival design'],
         awards: [],
       },
