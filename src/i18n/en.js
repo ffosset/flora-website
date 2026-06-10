@@ -21,7 +21,7 @@ export default {
     roles: ['product design', 'user experience', 'user research', 'storytelling', 'graphic design'],
     scroll: 'Scroll',
     // Right-aligned subtitle beside the portrait.
-    subhead: 'your work deserves to be understood.',
+    subhead: "let's chat",
     // Kept for back-compat with any old references.
     headline: 'Clarity, designed.',
     cta: "Let's talk",
@@ -65,7 +65,6 @@ export default {
       'I have designed across wildly different sectors. The subject keeps changing; the job stays the same: making tangled things clear.',
     counterSeparator: '/',
     filters: {
-      all: 'All',
       landing: 'Landing pages',
       product: 'Product design',
       storytelling: 'Storytelling',

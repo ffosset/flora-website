@@ -1,40 +1,45 @@
 ---
+import ProjectCard from './ProjectCard.astro';
 const { t } = Astro.props;
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
-const bySlug = Object.fromEntries((t.work.projects || []).map((p) => [p.slug, p]));
+const projects = t.work.projects || [];
 
-// Per-card visual treatment (colours/layout/blend), keyed by slug to match the
-// Figma. Only the slugs listed in `columns` are rendered.
+// Per-card visual treatment (colours / layout / blend), keyed by slug.
 const DESIGN = {
-  'cercle-histoire-forest': { bg: '#efe9e3', fg: '#210f03', layout: 'media-top', feature: true, hover: '#c7a98a', pill: '#d7c5b3', cta: 'Visit website' },
+  'cercle-histoire-forest': { bg: '#efe9e3', fg: '#210f03', layout: 'media-top', hover: '#c7a98a', pill: '#d7c5b3', cta: 'Visit website' },
   'minnow-collective':      { bg: '#124b4b', fg: '#ffffff', layout: 'text-top', media: 'full', round: true, hover: '#4e9d9d', pill: '#349494', cta: 'Visit website' },
-  'soy-de-temporada':       { bg: '#fcf4be', fg: '#210f03', layout: 'text-top', media: 'sm', blend: 'darken', center: true, feature: true, hover: '#f6e35c', pill: '#f6e35c', cta: 'Visit platform' },
+  'soy-de-temporada':       { bg: '#fcf4be', fg: '#210f03', layout: 'text-top', media: 'sm', blend: 'darken', center: true, hover: '#f6e35c', pill: '#f6e35c', cta: 'Visit platform' },
   'rosa-ebilling':          { bg: '#916cb1', fg: '#ffffff', layout: 'text-top', media: 'md', blend: 'lighten', center: true, hover: '#bf8aed', pill: '#bf8aed', cta: 'Visit website' },
   'neighborhood-map':       { bg: '#d1d5ef', fg: '#210f03', layout: 'media-top', hover: '#7a88ed', pill: '#7a88ed', cta: 'Visit website' },
   'couleur-du-peche':       { bg: '#fce4be', fg: '#210f03', layout: 'media-pad', round: true, hover: '#f1c173', pill: '#f1c173', cta: 'Read' },
   'oyas-belgique':          { bg: '#dfe7d8', fg: '#210f03', layout: 'media-top', hover: '#a8c08f', pill: '#a8c08f', cta: 'Visit website' },
   'rosen':                  { bg: '#ece6e1', fg: '#210f03', layout: 'media-top', hover: '#cdbfb1', pill: '#cdbfb1', cta: 'Read' },
 };
-// Feature + grid hybrid: the two marquee projects (Cercle, Soy de Temporada)
-// render as full-width banners; the others pair up in the two-column grid.
-// Order so the rhythm is feature → pair → feature → pair.
-const order = [
-  'cercle-histoire-forest',
-  'minnow-collective', 'rosa-ebilling',
-  'soy-de-temporada',
-  'neighborhood-map', 'couleur-du-peche',
-  'oyas-belgique', 'rosen',
-];
-// Filter categories (single category per project). Labels come from i18n.
-const filterKeys = ['all', 'landing', 'product', 'storytelling'];
+
+// Category order (also the filter order; Landing is the default view) and the
+// one highlighted (large, left) project per category. The rest stack on the
+// right. We expect at most three projects per category.
+const CATS = ['landing', 'product', 'storytelling'];
+const HIGHLIGHT = {
+  landing: 'cercle-histoire-forest',
+  product: 'minnow-collective',
+  storytelling: 'couleur-du-peche',
+};
+
+const byCat = CATS.map((cat) => {
+  const list = projects.filter((p) => p.category === cat && DESIGN[p.slug]);
+  const highlight = list.find((p) => p.slug === HIGHLIGHT[cat]) || list[0];
+  const rest = list.filter((p) => p !== highlight);
+  return { cat, highlight, rest };
+});
 ---
 
 <section id="work" class="work">
   <div class="container work-head">
     <h2 class="work-h2"><span class="slash">·</span>{t.work.sectionTitle}</h2>
     <div class="work-filters" role="group" aria-label="Filter projects">
-      {filterKeys.map((k) => (
-        <button type="button" class="filter" data-filter={k} aria-pressed={k === 'all' ? 'true' : 'false'}>
+      {CATS.map((k, i) => (
+        <button type="button" class="filter" data-filter={k} aria-pressed={i === 0 ? 'true' : 'false'}>
           {t.work.filters[k]}
         </button>
       ))}
@@ -42,80 +47,14 @@ const filterKeys = ['all', 'landing', 'product', 'storytelling'];
   </div>
 
   <div class="container">
-    <div class="work-grid">
-      {order.map((slug) => {
-            const c = bySlug[slug];
-            if (!c) return null;
-            const d = DESIGN[slug];
-            const hasUrl = Boolean(c.url);
-            const isExternal = hasUrl && c.url.startsWith('http');
-            const href = hasUrl ? (isExternal ? c.url : base + c.url) : undefined;
-            const textTop = d.layout === 'text-top';
-            const Media = (
-              <div class="card-media">
-                <img src={base + c.image} alt={c.subtitle} loading="lazy" />
-              </div>
-            );
-            const Text = (
-              <div class="card-body">
-                {textTop && <span class="card-tag">{c.tag}</span>}
-                <div class="card-text">
-                  <h3 class="card-title">{c.title}</h3>
-                  <p class="card-client">{c.subtitle}</p>
-                </div>
-                {!textTop && <span class="card-tag">{c.tag}</span>}
-              </div>
-            );
-            return (
-              <article
-                class:list={[
-                  'card',
-                  `card--${d.layout}`,
-                  d.blend && `card--blend-${d.blend}`,
-                  d.media && `card--media-${d.media}`,
-                  { 'card--center': d.center, 'card--round': d.round, 'card--feature': d.feature },
-                ]}
-                style={`--bg:${d.bg}; --fg:${d.fg}; --hover:${d.hover}; --pill:${d.pill}`}
-                data-cat={c.category}
-                role={!hasUrl ? 'button' : undefined}
-                tabindex={!hasUrl ? '0' : undefined}
-                aria-expanded={!hasUrl ? 'false' : undefined}
-                aria-controls={!hasUrl ? `hover-${slug}` : undefined}
-              >
-                {textTop ? <>{Text}{Media}</> : <>{Media}{Text}</>}
-
-                <div class="card-hover" id={`hover-${slug}`}>
-                  <div class="hover-main">
-                    {c.year && <p class="hover-year">{c.year}</p>}
-                    {c.did && (
-                      <div class="hover-block">
-                        <p class="hover-label">My role</p>
-                        <p class="hover-role">{c.did}</p>
-                      </div>
-                    )}
-                    {c.result && (
-                      <div class="hover-block">
-                        <p class="hover-label">Result</p>
-                        <p class="hover-result">{c.result}</p>
-                      </div>
-                    )}
-                  </div>
-                  {hasUrl && (
-                    <a
-                      class="hover-cta"
-                      href={href}
-                      target={isExternal ? '_blank' : undefined}
-                      rel={isExternal ? 'noopener noreferrer' : undefined}
-                    >
-                      {d.cta}
-                      {isExternal && <span class="sr-only"> (opens in new tab)</span>}
-                    </a>
-                  )}
-                </div>
-              </article>
-            );
-          })}
-    </div>
+    {byCat.map(({ cat, highlight, rest }, i) => (
+      <div class:list={['work-cat', { 'is-shown': i === 0 }]} data-cat={cat}>
+        {highlight && <ProjectCard c={highlight} d={DESIGN[highlight.slug]} base={base} highlight={true} />}
+        <div class="work-stack">
+          {rest.map((p) => <ProjectCard c={p} d={DESIGN[p.slug]} base={base} />)}
+        </div>
+      </div>
+    ))}
   </div>
 </section>
 
@@ -146,17 +85,16 @@ const filterKeys = ['all', 'landing', 'product', 'storytelling'];
 </script>
 
 <script>
-  // Project filtering. Driven by the filter buttons here and by the Services
-  // cards (which dispatch a 'work:filter' event before scrolling to #work).
+  // Category filtering. One category is shown at a time (Landing by default).
+  // Driven by the filter buttons and by the Services cards (which dispatch a
+  // 'work:filter' event before scrolling to #work).
   const fbtns = Array.from(document.querySelectorAll('.work-filters .filter'));
-  const fcards = Array.from(document.querySelectorAll('.work-grid > .card'));
-  if (fbtns.length && fcards.length) {
+  const cats = Array.from(document.querySelectorAll('.work-cat'));
+  if (fbtns.length && cats.length) {
     const apply = (cat) => {
+      if (!cats.some((c) => c.dataset.cat === cat)) return;
       fbtns.forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.filter === cat)));
-      fcards.forEach((card) => {
-        const show = cat === 'all' || card.dataset.cat === cat;
-        card.classList.toggle('is-hidden', !show);
-      });
+      cats.forEach((c) => c.classList.toggle('is-shown', c.dataset.cat === cat));
     };
     fbtns.forEach((b) => b.addEventListener('click', () => apply(b.dataset.filter)));
     document.addEventListener('work:filter', (e) => apply(e.detail));
@@ -170,12 +108,12 @@ const filterKeys = ['all', 'landing', 'product', 'storytelling'];
     padding-block: var(--space-6) var(--space-5);
   }
 
+  /* Title with the filters sitting right beside it. */
   .work-head {
     display: flex;
     flex-wrap: wrap;
-    align-items: flex-end;
-    justify-content: space-between;
-    gap: var(--space-3);
+    align-items: center;
+    gap: var(--space-3) var(--space-4);
     margin-bottom: var(--space-4);
   }
   .work-h2 {
@@ -208,227 +146,26 @@ const filterKeys = ['all', 'landing', 'product', 'storytelling'];
     color: var(--color-ink-on-primary);
   }
 
-  /* Feature + grid hybrid: a two-column grid where the marquee cards span the
-     full width as horizontal banners, and the rest pair up in the columns. */
-  .work-grid {
+  /* One category at a time: highlight on the left, up to two stacked on the
+     right. Only the active category is displayed. */
+  .work-cat { display: none; }
+  .work-cat.is-shown {
     display: grid;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: 1.1fr 0.9fr;
     gap: 2rem;
     align-items: stretch;
   }
-  .work-grid > .card { min-width: 0; }
-  /* Filtered-out cards are removed from the grid flow entirely. */
-  .work-grid > .card.is-hidden { display: none; }
-
-  /* --- Card --- */
-  .card {
-    position: relative;
+  .work-stack {
     display: flex;
     flex-direction: column;
-    border-radius: 12px;
-    overflow: hidden;
-    background: var(--bg);
-    color: var(--fg);
-    text-decoration: none;
-    box-shadow: 0 4px 10px rgba(196, 196, 196, 0.12);
-  }
-  .card[role='button'] { cursor: pointer; }
-  .card[role='button']:focus-visible,
-  .hover-cta:focus-visible {
-    outline: 2px solid var(--color-primary);
-    outline-offset: 2px;
-  }
-
-  /* Hover / expanded detail. */
-  .card-hover {
-    font-family: var(--font-display);
-    background: var(--hover);
-    color: #210f03;
-    display: flex;
-    flex-direction: column;
+    justify-content: space-between;
     gap: 2rem;
-    padding: 2rem 2.5rem;
-  }
-  .hover-main { display: flex; flex-direction: column; gap: 2rem; }
-  .hover-year {
-    text-align: right;
-    text-transform: uppercase;
-    letter-spacing: 0.06em;
-    font-size: 1rem;
-  }
-  .hover-block { display: flex; flex-direction: column; gap: 0.5rem; }
-  .hover-label { text-transform: uppercase; letter-spacing: 0.06em; font-size: 1rem; }
-  .hover-role { font-size: 1.25rem; line-height: 1.4; }
-  .hover-result { font-size: 1.25rem; line-height: 1.4; font-weight: 700; }
-  .hover-cta {
-    align-self: flex-start;
-    background: #210f03;
-    color: var(--pill);
-    padding: 0.6rem 1rem;
-    border-radius: 50px;
-    font-weight: 500;
-    font-size: 1rem;
-    text-decoration: none;
-  }
-  .sr-only {
-    position: absolute;
-    width: 1px;
-    height: 1px;
-    padding: 0;
-    margin: -1px;
-    overflow: hidden;
-    clip: rect(0 0 0 0);
-    white-space: nowrap;
-    border: 0;
+    min-width: 0;
   }
 
-  .card-media img {
-    display: block;
-    width: 100%;
-    height: auto;
-  }
-
-  .card-body {
-    display: flex;
-    flex-direction: column;
-    gap: 1.25rem;
-  }
-  .card-text { display: flex; flex-direction: column; gap: 0.75rem; }
-  .card-title {
-    font-family: var(--font-display);
-    font-weight: 800;
-    font-size: clamp(1.5rem, 1.1rem + 1.1vw, 2rem);
-    line-height: 1.12;
-    letter-spacing: -0.01em;
-    color: var(--fg); /* override the global h3 colour so dark cards read white */
-  }
-  .card-client {
-    font-family: var(--font-body); /* Fira Code, like the design */
-    font-weight: 400;
-    text-transform: uppercase;
-    letter-spacing: 0.06em;
-    font-size: clamp(0.95rem, 0.85rem + 0.35vw, 1.25rem);
-  }
-  .card-tag {
-    align-self: flex-start;
-    background: color-mix(in srgb, var(--fg) 13%, transparent);
-    color: var(--fg);
-    padding: 0.35rem 0.8rem;
-    border-radius: 50px;
-    font-family: var(--font-display);
-    font-weight: 500;
-    font-size: 1rem;
-  }
-
-  /* media-top: full-bleed image, padded text below. */
-  .card--media-top { gap: 2.5rem; }
-  .card--media-top .card-body { padding: 0 2.5rem 2rem; }
-
-  /* media-pad: padded, rounded image then text. */
-  .card--media-pad { gap: 2.5rem; padding: 2rem 2.5rem; }
-
-  /* text-top: padded text then image below. */
-  .card--text-top { gap: 2.5rem; padding: 2rem 2.5rem; }
-
-  .card--round .card-media { border-radius: 11px; overflow: hidden; }
-  .card--center .card-body { align-items: center; text-align: center; }
-  .card--center .card-tag { align-self: center; }
-
-  /* image sizing for text-top cards */
-  .card--media-sm .card-media { width: 60%; margin-inline: auto; }
-  .card--media-md .card-media { width: 86%; margin-inline: auto; }
-  .card--blend-darken .card-media img { mix-blend-mode: darken; }
-  .card--blend-lighten .card-media img { mix-blend-mode: lighten; }
-
-  /* Feature cards: full-width horizontal banners that highlight the two
-     marquee projects. The existing DOM order (media→text for Cercle,
-     text→media for Soy) makes the image side alternate for free. */
-  @media (min-width: 721px) {
-    .card--feature {
-      grid-column: 1 / -1;
-      flex-direction: row;
-      align-items: stretch;
-      gap: 0;
-      padding: 0;
-    }
-    .card--feature .card-body {
-      flex: 1 1 42%;
-      justify-content: center;
-      align-items: flex-start;
-      text-align: left;
-      gap: 1.5rem;
-      padding: clamp(2rem, 3.5vw, 3.5rem);
-    }
-    .card--feature .card-tag { align-self: flex-start; }
-    .card--feature .card-title {
-      font-size: clamp(1.9rem, 1.3rem + 1.8vw, 2.75rem);
-    }
-    .card--feature .card-media {
-      flex: 1 1 58%;
-      width: auto;
-      margin: 0;
-      align-self: stretch;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-    /* Photo feature (Cercle): the image fills its half edge to edge. */
-    .card--feature:not(.card--blend-darken):not(.card--blend-lighten) .card-media img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-    }
-    /* Blended feature (Soy): keep the contained, blended treatment — larger. */
-    .card--feature.card--blend-darken .card-media,
-    .card--feature.card--blend-lighten .card-media {
-      padding: clamp(2rem, 4vw, 4rem);
-    }
-    .card--feature.card--blend-darken .card-media img,
-    .card--feature.card--blend-lighten .card-media img {
-      width: 100%;
-      height: auto;
-      max-height: 22rem;
-      object-fit: contain;
-    }
-  }
-
-  /* Pointer screens: the detail is an overlay that slides DOWN over the card
-     on hover / focus (or when a no-url button card is toggled open). */
-  @media (min-width: 721px) {
-    .card-hover {
-      position: absolute;
-      inset: 0;
-      z-index: 2;
-      overflow: auto;
-      justify-content: space-between;
-      transform: translateY(-100%);
-      transition: transform 0.4s var(--ease);
-    }
-    .card:hover .card-hover,
-    .card:focus-within .card-hover,
-    .card.is-open .card-hover { transform: translateY(0); }
-  }
-
-  /* Phones: one column; tapping a card opens the detail at the bottom. Feature
-     cards fall back to the normal vertical card layout here. */
+  /* Phones: stack everything into one centred column. */
   @media (max-width: 720px) {
-    .work-grid { grid-template-columns: 1fr; }
-    .work-grid > .card { max-width: 34rem; margin-inline: auto; }
-
-    .card-hover {
-      max-height: 0;
-      padding-block: 0;
-      overflow: hidden;
-      transition: max-height 0.4s var(--ease), padding 0.4s var(--ease);
-    }
-    .card.is-open .card-hover,
-    .card:focus-within .card-hover {
-      max-height: 60rem;
-      padding-block: 2rem;
-    }
-  }
-
-  @media (prefers-reduced-motion: reduce) {
-    .card-hover { transition: none; }
+    .work-cat { max-width: 34rem; margin-inline: auto; }
+    .work-cat.is-shown { grid-template-columns: 1fr; }
   }
 </style>
