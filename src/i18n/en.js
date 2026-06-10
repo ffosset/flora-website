@@ -205,9 +205,9 @@ export default {
     ],
   },
   contact: {
-    sectionTitle: 'Tell me about your project',
-    subhead:
-      "Send a few lines about you or your company: what it is, who it's for, what's stuck. I read every message and reply within a few days.",
+    sectionTitle: "Let's chat",
+    subhead: 'Send me a few lines about you or your company',
+    note: 'I read every message and reply within a few days.',
     emailLabel: 'Email',
     email: 'flora@fosset.co',
     linkedinLabel: 'LinkedIn',
@@ -215,6 +215,6 @@ export default {
   },
   footer: {
     rights: '© Flora Fosset',
-    location: 'Freelancer between Brussels and Madrid',
+    location: 'Belgian freelancer',
   },
 };

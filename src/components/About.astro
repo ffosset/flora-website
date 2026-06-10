@@ -184,6 +184,7 @@ const path = t.about.path || [];
   @keyframes step-in { to { opacity: 1; transform: translateY(0); } }
 
   .path-dot {
+    position: relative;
     width: 12px;
     height: 12px;
     border-radius: 50%;
@@ -191,6 +192,20 @@ const path = t.about.path || [];
   }
   .path-step.is-current .path-dot {
     box-shadow: 0 0 0 5px color-mix(in srgb, var(--color-primary) 22%, transparent);
+  }
+  /* The latest step pulses with an expanding ring. */
+  .path-step.is-current .path-dot::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    background: var(--color-primary);
+    z-index: -1;
+    animation: dot-pulse 2s ease-out infinite;
+  }
+  @keyframes dot-pulse {
+    0% { transform: scale(1); opacity: 0.55; }
+    100% { transform: scale(2.8); opacity: 0; }
   }
   .path-label {
     width: 100%;
@@ -210,6 +225,7 @@ const path = t.about.path || [];
   @media (prefers-reduced-motion: reduce) {
     .path::before { transform: scaleX(1); animation: none; }
     .path-step { opacity: 1; transform: none; animation: none; }
+    .path-step.is-current .path-dot::after { animation: none; opacity: 0; }
   }
 </style>
 
