@@ -1,6 +1,7 @@
 // French — first draft, mirrors en.js keys exactly.
-// Register: vous. Kept-English terms (UX/UI, Landing pages, Product design,
-// Storytelling) stay verbatim. Empty strings fall back to English via t().
+// Register: vous. Kept-English terms (UX/UI, Storytelling) stay verbatim.
+// FR-specific: Landing pages → Sites web, Product design → Plateformes.
+// Empty strings fall back to English via t().
 
 export default {
   meta: {
@@ -17,7 +18,7 @@ export default {
   hero: {
     nameWord: 'flora',
     roleWord: 'designer',
-    roles: ['product design', 'expérience UX', 'recherche UX', 'storytelling', 'design graphique'],
+    roles: ['plateformes', 'expérience UX', 'recherche UX', 'storytelling', 'design graphique'],
     scroll: 'Défiler',
     subhead: 'on discute ?',
     headline: 'La clarté, dessinée.',
@@ -27,8 +28,8 @@ export default {
     sectionTitle: 'mes services',
     viewProjects: 'Voir les projets',
     items: [
-      { name: 'Landing pages', desc: 'pour les organisations et les personnes qui ont besoin d’une présence en ligne' },
-      { name: 'Product design', desc: 'pour les équipes produit qui ont besoin d’une expertise senior en design et en UX' },
+      { name: 'Sites web', desc: 'pour les organisations et les personnes qui ont besoin d’une présence en ligne' },
+      { name: 'Plateformes', desc: 'pour les équipes produit qui ont besoin d’une expertise senior en design et en UX' },
       { name: 'Storytelling', desc: 'pour les entreprises qui ont besoin de créer du contenu visuel' },
     ],
   },
@@ -57,13 +58,13 @@ export default {
       'La plupart des équipes engagent un designer, un rédacteur et un développeur, puis essaient de recoudre le tout. Je vois l’ensemble d’un seul regard — le récit, le design et le produit qui marche — parce que mon parcours est passé par le journalisme, la data, le design et la création d’entreprises.',
   },
   work: {
-    sectionTitle: 'quelques projets',
+    sectionTitle: 'sélection de projets',
     intro:
       'J’ai conçu pour des secteurs radicalement différents. Le sujet change sans cesse ; le travail reste le même : rendre clair ce qui est emmêlé.',
     counterSeparator: '/',
     filters: {
-      landing: 'Landing pages',
-      product: 'Product design',
+      landing: 'Sites web',
+      product: 'Plateformes',
       storytelling: 'Storytelling',
     },
     prev: 'Projets précédents',
