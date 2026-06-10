@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" width="120" height="120" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="square" stroke-linejoin="miter" style="color:#F4ECE3">
+  <g id="websites">
+    <rect id="frame" x="14" y="24" width="92" height="72"/>
+    <line id="bar" x1="14" y1="42" x2="106" y2="42"/>
+    <g id="browser-dots" fill="currentColor" stroke="none">
+      <circle cx="22" cy="33" r="2.5"/>
+      <circle cx="30" cy="33" r="2.5"/>
+      <circle cx="38" cy="33" r="2.5"/>
+    </g>
+    <rect id="hero" x="24" y="50" width="72" height="22"/>
+    <line id="text" x1="24" y1="80" x2="84" y2="80"/>
+    <rect id="button" x="24" y="86" width="28" height="9"/>
+  </g>
+</svg>

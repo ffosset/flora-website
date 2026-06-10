@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" width="120" height="120" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="square" stroke-linejoin="miter" style="color:#F4ECE3">
+  <g id="storytelling">
+    <g id="crop-marks">
+      <path id="crop-tl" d="M40 26 L24 26 L24 40"/>
+      <path id="crop-tr" d="M80 26 L96 26 L96 40"/>
+      <path id="crop-bl" d="M24 80 L24 94 L40 94"/>
+      <path id="crop-br" d="M96 80 L96 94 L80 94"/>
+    </g>
+    <path id="eye" d="M40 52 L60 42 L80 52 L60 62 Z"/>
+    <circle id="pupil" cx="60" cy="52" r="4" fill="currentColor" stroke="none"/>
+    <line id="text-1" x1="38" y1="74" x2="82" y2="74"/>
+    <line id="text-2" x1="38" y1="82" x2="64" y2="82"/>
+  </g>
+</svg>
