@@ -16,11 +16,11 @@ export default {
   hero: {
     nameWord: 'flora',
     roleWord: 'designer',
-    // Rotating role word: cycles product design → user experience → research → storytelling → …
-    roles: ['product design', 'user experience', 'research', 'storytelling'],
+    // Rotating role word: cycles product design → user experience → user research → storytelling → graphic design → …
+    roles: ['product design', 'user experience', 'user research', 'storytelling', 'graphic design'],
     scroll: 'Scroll',
     // Right-aligned subtitle beside the portrait.
-    subhead: 'designer and strategist for work that deserves to be understood.',
+    subhead: 'your work deserves to be understood.',
     // Kept for back-compat with any old references.
     headline: 'Clarity, designed.',
     cta: "Let's talk",

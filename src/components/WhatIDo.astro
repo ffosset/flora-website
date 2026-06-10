@@ -4,11 +4,13 @@ const deliverables = t.whatIDo.deliverables || [];
 ---
 
 <section id="what" class="what-statement" data-deliverables>
+  <div class="statement-text">
+    <p class="statement-sub">{t.whatIDo.statementSub}</p>
+  </div>
+
   <ul class="deliverables" aria-label="What I deliver">
     {deliverables.map((label) => <li class="del">{label}</li>)}
   </ul>
-
-  <p class="statement-sub">{t.whatIDo.statementSub}</p>
 
   <button type="button" class="scroll-btn" data-scroll-next aria-label={t.hero.scroll}>
     <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
@@ -40,13 +42,16 @@ const deliverables = t.whatIDo.deliverables || [];
     if (!reduce && !mobile && els.length) {
       // Per-gap factors (×diameter): <1 overlaps the previous, >1 leaves a gap.
       const factors = [1.5, 0.85, 1.5, 1.5, 0.85, 1.5, 1.5];
-      const items = els.map((el, i) => ({ el, d: 0, base: 0, y: 0, depth: 0.55 + (i % 3) * 0.3 }));
-      let W = 0, H = 0, total = 0, offset = 0, drift = 0, raf = 0;
+      const items = els.map((el, i) => ({ el, d: 0, base: 0, y: 0, depth: 0.55 + (i % 3) * 0.3, hf: 0 }));
+      const list = sect.querySelector('.deliverables');
+      let H = 0, total = 0, offset = 0, drift = 0, raf = 0;
       let tpx = 0, tpy = 0, cpx = 0, cpy = 0;
+      let hovered = null; // the single bubble currently under the pointer
 
       const measure = () => {
-        const b = sect.getBoundingClientRect();
-        W = b.width; H = b.height;
+        // Band is measured within the bubble region (not the whole section),
+        // so the circles stay in their bottom half and never reach the text.
+        H = list.getBoundingClientRect().height;
         let x = 0;
         items.forEach((it, i) => {
           it.d = it.el.getBoundingClientRect().width;
@@ -55,7 +60,7 @@ const deliverables = t.whatIDo.deliverables || [];
         });
         total = x;
         offset = items[0].d + 60;
-        const bandY = H * 0.66;
+        const bandY = H * 0.5;
         items.forEach((it) => { it.y = bandY - it.d / 2; });
       };
       const step = () => {
@@ -64,8 +69,12 @@ const deliverables = t.whatIDo.deliverables || [];
         cpy += (tpy - cpy) * 0.06;
         items.forEach((it) => {
           const x = (((it.base + drift) % total) + total) % total - offset;
-          const px = cpx * it.depth * 36;
-          const py = cpy * it.depth * 22;
+          // Parallax only on the hovered bubble; `hf` eases it in/out so the
+          // lift is smooth rather than a jump when the pointer enters/leaves.
+          const target = it === hovered ? 1 : 0;
+          it.hf += (target - it.hf) * 0.12;
+          const px = cpx * it.depth * 44 * it.hf;
+          const py = cpy * it.depth * 28 * it.hf;
           it.el.style.transform = `translate(${(x + px).toFixed(1)}px, ${(it.y + py).toFixed(1)}px)`;
         });
         raf = requestAnimationFrame(step);
@@ -73,10 +82,10 @@ const deliverables = t.whatIDo.deliverables || [];
 
       const onMove = (e) => {
         const b = sect.getBoundingClientRect();
-        tpx = (e.clientX - b.left) / W - 0.5;
-        tpy = (e.clientY - b.top) / H - 0.5;
+        tpx = (e.clientX - b.left) / b.width - 0.5;
+        tpy = (e.clientY - b.top) / b.height - 0.5;
       };
-      const onLeave = () => { tpx = 0; tpy = 0; };
+      const onLeave = () => { tpx = 0; tpy = 0; hovered = null; };
 
       let begun = false;
       const begin = () => {
@@ -86,6 +95,11 @@ const deliverables = t.whatIDo.deliverables || [];
         sect.classList.add('is-floating');
         sect.addEventListener('mousemove', onMove);
         sect.addEventListener('mouseleave', onLeave);
+        // Track which single bubble the pointer is over.
+        items.forEach((it) => {
+          it.el.addEventListener('mouseenter', () => { hovered = it; });
+          it.el.addEventListener('mouseleave', () => { if (hovered === it) hovered = null; });
+        });
         raf = requestAnimationFrame(step);
       };
       if ('IntersectionObserver' in window) {
@@ -110,17 +124,31 @@ const deliverables = t.whatIDo.deliverables || [];
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
+    justify-content: flex-start;
     text-align: center;
     background: var(--color-purple);
     color: var(--color-ink-on-purple);
     padding: var(--space-5) var(--gutter);
   }
 
-  /* Glass circles drifting across a horizontal band, over the text. */
+  /* Top half: the statement, centred in its own band so it never collides
+     with the bubbles below. */
+  .statement-text {
+    flex: 0 0 50%;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  /* Bottom half: glass circles drifting across a horizontal band — their own
+     region, no longer overlapping the text. */
   .deliverables {
     position: absolute;
-    inset: 0;
+    top: 50%;
+    left: 0;
+    right: 0;
+    bottom: 0;
     z-index: 2;
     margin: 0;
     padding: 0;
@@ -150,10 +178,16 @@ const deliverables = t.whatIDo.deliverables || [];
     letter-spacing: 0.08em;
     font-size: clamp(0.8rem, 0.7rem + 0.4vw, 1rem);
     opacity: 0;
-    transition: opacity 0.8s ease;
+    transition: opacity 0.8s ease, background 0.3s ease, border-color 0.3s ease;
     will-change: transform;
   }
   .is-floating .del { opacity: 1; }
+  /* Each bubble is individually hoverable so only it gets the parallax lift. */
+  .is-floating .del { pointer-events: auto; cursor: default; }
+  .is-floating .del:hover {
+    background: rgba(255, 255, 255, 0.14);
+    border-color: rgba(255, 255, 255, 0.4);
+  }
 
   .statement-sub {
     position: relative;
@@ -197,8 +231,12 @@ const deliverables = t.whatIDo.deliverables || [];
 
   /* Mobile or reduced-motion: no drift — show the labels as a static list. */
   @media (max-width: 767px), (prefers-reduced-motion: reduce) {
+    .what-statement { justify-content: center; }
+    /* Drop the wrapper from layout so the text flows normally above the list. */
+    .statement-text { display: contents; }
     .deliverables {
       position: static;
+      top: auto;
       inset: auto;
       display: flex;
       flex-wrap: wrap;

@@ -92,6 +92,39 @@ const { title } = Astro.props; // optional per-page <title> override
         });
       }
 
+      // Hide the nav on scroll down, reveal it on scroll up (swipe in/out).
+      const header = document.querySelector('.site-header');
+      if (header) {
+        let lastY = window.scrollY;
+        let ticking = false;
+        const update = () => {
+          const y = window.scrollY;
+          const delta = y - lastY;
+          // Ignore tiny jitters and the rubber-band overscroll at the very top.
+          if (Math.abs(delta) > 6) {
+            // Keep it shown while the mobile menu is open, and near the top.
+            const menuOpen = menu && menu.classList.contains('is-open');
+            if (delta > 0 && y > 80 && !menuOpen) {
+              header.classList.add('is-hidden');
+            } else if (delta < 0) {
+              header.classList.remove('is-hidden');
+            }
+            lastY = y;
+          }
+          ticking = false;
+        };
+        window.addEventListener(
+          'scroll',
+          () => {
+            if (!ticking) {
+              window.requestAnimationFrame(update);
+              ticking = true;
+            }
+          },
+          { passive: true }
+        );
+      }
+
       // Keep the copyright year current without a rebuild.
       const yearEl = document.querySelector('[data-year]');
       if (yearEl) yearEl.textContent = String(new Date().getFullYear());
@@ -141,12 +174,22 @@ const { title } = Astro.props; // optional per-page <title> override
     </script>
 
     <style>
-      /* Fixed, floating just below the top edge. */
+      /* Fixed, floating just below the top edge. Slides out of view on scroll
+         down and swipes back in on scroll up (see the scroll-direction script). */
       .site-header {
         position: fixed;
         inset: 0 0 auto 0;
         z-index: 20;
         padding-top: var(--space-2);
+        transition: transform 0.35s var(--ease);
+        will-change: transform;
+      }
+      /* Hidden: lift the whole bar (plus its top padding) above the viewport. */
+      .site-header.is-hidden {
+        transform: translateY(calc(-100% - var(--space-2)));
+      }
+      @media (prefers-reduced-motion: reduce) {
+        .site-header { transition: none; }
       }
 
       /* The floating translucent bar (matches the Figma frame). */
