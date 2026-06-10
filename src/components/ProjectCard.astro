@@ -124,6 +124,9 @@ const href = hasUrl ? (isExternal ? c.url : base + c.url) : undefined;
   }
   .card--centered .card-body { align-items: center; text-align: center; }
   .card--centered .card-meta { justify-content: center; }
+  /* Centred cards also centre the hover detail. */
+  .card--centered .card-hover { align-items: center; justify-content: center; text-align: center; }
+  .card--centered .hover-cta { align-self: center; margin-top: 0; }
   /* Padded (storytelling): the photo keeps a margin of card colour around it. */
   .card--padded .card-media { padding: 1.25rem; }
   .card--blend-darken .card-media img { mix-blend-mode: darken; }

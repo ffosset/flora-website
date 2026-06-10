@@ -106,7 +106,7 @@ export default {
         title: 'Allow companies to visualize their nature exposure',
         year: '2024–present',
         did: 'Co-founded the company and currently leading product strategy and design. We’re turning ecological data into tools that fit how procurement and sourcing teams really work.',
-        result: 'Cofounded a platform to help procurement teams map supply chains based on ecological context.',
+        result: 'Cofounded a platform to help companies map supply chains based on ecological context.',
         keywords: ['Product strategy', 'Advanced B2B users', 'Complex data'],
         awards: [],
       },
