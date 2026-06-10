@@ -80,7 +80,7 @@ const FILTERS = ['landing', 'product', 'storytelling'];
               <line class="s-draw" pathLength="1" x1="38" y1="82" x2="64" y2="82" />
             </svg>
           )}
-          <span class="service-go" aria-hidden="true">View projects →</span>
+          <span class="service-go" aria-hidden="true">view projects →</span>
         </div>
       ))}
     </div>
@@ -254,10 +254,33 @@ const FILTERS = ['landing', 'product', 'storytelling'];
     line-height: 1.5;
   }
 
-  /* Stack on narrow screens. */
+  /* Mobile: a single column of horizontal cards — title (+ "view projects")
+     on the left, icon on the right. Since there's no hover on touch, the hard
+     shadow and the hint show by default so the cards read as tappable. */
   @media (max-width: 860px) {
-    .services-list { grid-template-columns: 1fr; gap: var(--space-3); }
-    .service { min-height: 0; gap: var(--space-4); }
+    .services-list { grid-template-columns: 1fr; gap: var(--space-4); }
+    .service {
+      min-height: 0;
+      display: grid;
+      grid-template-columns: 1fr auto;
+      grid-template-areas:
+        'title icon'
+        'go icon';
+      align-items: center;
+      column-gap: var(--space-3);
+      row-gap: 0.35rem;
+      text-align: left;
+      box-shadow: 10px 10px 0 0 var(--cat);
+    }
+    /* No tap-jump: keep the shadow steady (it's already shown). */
+    .service:hover,
+    .service:focus-visible {
+      transform: none;
+      box-shadow: 10px 10px 0 0 var(--cat);
+    }
+    .service-name { grid-area: title; }
+    .service-icon { grid-area: icon; width: 110px; height: 110px; }
+    .service-go { grid-area: go; opacity: 1; transform: none; }
   }
 
   @media (prefers-reduced-motion: reduce) {
