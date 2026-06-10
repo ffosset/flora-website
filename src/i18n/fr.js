@@ -8,6 +8,7 @@ export default {
     description: '',
   },
   nav: {
+    services: '',
     work: '',
     about: '',
     contact: '',

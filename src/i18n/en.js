@@ -9,6 +9,7 @@ export default {
       'Designer and strategist who turns complicated ideas — products, platforms, stories — into something people instantly understand.',
   },
   nav: {
+    services: 'services',
     work: 'projects',
     about: 'about me',
     contact: "let's chat",
@@ -24,6 +25,14 @@ export default {
     // Kept for back-compat with any old references.
     headline: 'Clarity, designed.',
     cta: "Let's talk",
+  },
+  services: {
+    sectionTitle: 'my services',
+    items: [
+      { name: 'Landing pages', desc: 'for organisations and people who need a presence online' },
+      { name: 'Product design', desc: 'for product teams that need senior design and UX expertise' },
+      { name: 'Storytelling', desc: 'for companies who need to create visual content' },
+    ],
   },
   whatIDo: {
     statement: "You know your work. Let's make sure everyone else does too.",

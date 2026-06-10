@@ -60,7 +60,7 @@ const roles = t.hero.roles?.length ? t.hero.roles : [t.hero.roleWord];
     scrollBtn.addEventListener('click', () => {
       const heroSection = scrollBtn.closest('section');
       const next = heroSection && heroSection.nextElementSibling;
-      const target = next || document.getElementById('what');
+      const target = next || document.getElementById('services');
       if (target) {
         const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
         target.scrollIntoView({ behavior: reduce ? 'auto' : 'smooth', block: 'start' });
