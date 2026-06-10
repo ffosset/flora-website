@@ -6,17 +6,20 @@ const bySlug = Object.fromEntries((t.work.projects || []).map((p) => [p.slug, p]
 // Per-card visual treatment (colours/layout/blend), keyed by slug to match the
 // Figma. Only the slugs listed in `columns` are rendered.
 const DESIGN = {
-  'cercle-histoire-forest': { bg: '#efe9e3', fg: '#210f03', layout: 'media-top', hover: '#c7a98a', pill: '#d7c5b3', cta: 'Visit website' },
+  'cercle-histoire-forest': { bg: '#efe9e3', fg: '#210f03', layout: 'media-top', feature: true, hover: '#c7a98a', pill: '#d7c5b3', cta: 'Visit website' },
   'minnow-collective':      { bg: '#124b4b', fg: '#ffffff', layout: 'text-top', media: 'full', round: true, hover: '#4e9d9d', pill: '#349494', cta: 'Visit website' },
-  'soy-de-temporada':       { bg: '#fcf4be', fg: '#210f03', layout: 'text-top', media: 'sm', blend: 'darken', center: true, hover: '#f6e35c', pill: '#f6e35c', cta: 'Visit platform' },
+  'soy-de-temporada':       { bg: '#fcf4be', fg: '#210f03', layout: 'text-top', media: 'sm', blend: 'darken', center: true, feature: true, hover: '#f6e35c', pill: '#f6e35c', cta: 'Visit platform' },
   'rosa-ebilling':          { bg: '#916cb1', fg: '#ffffff', layout: 'text-top', media: 'md', blend: 'lighten', center: true, hover: '#bf8aed', pill: '#bf8aed', cta: 'Visit website' },
   'neighborhood-map':       { bg: '#d1d5ef', fg: '#210f03', layout: 'media-top', hover: '#7a88ed', pill: '#7a88ed', cta: 'Visit website' },
   'couleur-du-peche':       { bg: '#fce4be', fg: '#210f03', layout: 'media-pad', round: true, hover: '#f1c173', pill: '#f1c173', cta: 'Read' },
 };
-// Column-major order so the multi-column masonry fills as in the design.
+// Feature + grid hybrid: the two marquee projects (Cercle, Soy de Temporada)
+// render as full-width banners; the others pair up in the two-column grid.
+// Order so the rhythm is feature → pair → feature → pair.
 const order = [
-  'cercle-histoire-forest', 'minnow-collective',
-  'soy-de-temporada', 'rosa-ebilling',
+  'cercle-histoire-forest',
+  'minnow-collective', 'rosa-ebilling',
+  'soy-de-temporada',
   'neighborhood-map', 'couleur-du-peche',
 ];
 ---
@@ -58,7 +61,7 @@ const order = [
                   `card--${d.layout}`,
                   d.blend && `card--blend-${d.blend}`,
                   d.media && `card--media-${d.media}`,
-                  { 'card--center': d.center, 'card--round': d.round },
+                  { 'card--center': d.center, 'card--round': d.round, 'card--feature': d.feature },
                 ]}
                 style={`--bg:${d.bg}; --fg:${d.fg}; --hover:${d.hover}; --pill:${d.pill}`}
                 data-cats={(c.category || []).join(' ')}
@@ -140,15 +143,15 @@ const order = [
     letter-spacing: -0.03em;
   }
 
-  /* Masonry via CSS multi-column: 3 → 2 → 1 as the screen narrows. */
+  /* Feature + grid hybrid: a two-column grid where the marquee cards span the
+     full width as horizontal banners, and the rest pair up in the columns. */
   .work-grid {
-    column-count: 3;
-    column-gap: 2rem;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+    align-items: stretch;
   }
-  .work-grid > .card {
-    break-inside: avoid;
-    margin-bottom: 2rem;
-  }
+  .work-grid > .card { min-width: 0; }
 
   /* --- Card --- */
   .card {
@@ -270,9 +273,56 @@ const order = [
   .card--blend-darken .card-media img { mix-blend-mode: darken; }
   .card--blend-lighten .card-media img { mix-blend-mode: lighten; }
 
-  /* Two columns on mid widths. */
-  @media (max-width: 1100px) {
-    .work-grid { column-count: 2; }
+  /* Feature cards: full-width horizontal banners that highlight the two
+     marquee projects. The existing DOM order (media→text for Cercle,
+     text→media for Soy) makes the image side alternate for free. */
+  @media (min-width: 721px) {
+    .card--feature {
+      grid-column: 1 / -1;
+      flex-direction: row;
+      align-items: stretch;
+      gap: 0;
+      padding: 0;
+    }
+    .card--feature .card-body {
+      flex: 1 1 42%;
+      justify-content: center;
+      align-items: flex-start;
+      text-align: left;
+      gap: 1.5rem;
+      padding: clamp(2rem, 3.5vw, 3.5rem);
+    }
+    .card--feature .card-tag { align-self: flex-start; }
+    .card--feature .card-title {
+      font-size: clamp(1.9rem, 1.3rem + 1.8vw, 2.75rem);
+    }
+    .card--feature .card-media {
+      flex: 1 1 58%;
+      width: auto;
+      margin: 0;
+      align-self: stretch;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    /* Photo feature (Cercle): the image fills its half edge to edge. */
+    .card--feature:not(.card--blend-darken):not(.card--blend-lighten) .card-media img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    /* Blended feature (Soy): keep the contained, blended treatment — larger. */
+    .card--feature.card--blend-darken .card-media,
+    .card--feature.card--blend-lighten .card-media {
+      padding: clamp(2rem, 4vw, 4rem);
+    }
+    .card--feature.card--blend-darken .card-media img,
+    .card--feature.card--blend-lighten .card-media img {
+      width: 100%;
+      height: auto;
+      max-height: 22rem;
+      object-fit: contain;
+    }
   }
 
   /* Pointer screens: the detail is an overlay that slides DOWN over the card
@@ -292,9 +342,10 @@ const order = [
     .card.is-open .card-hover { transform: translateY(0); }
   }
 
-  /* Phones: one column; tapping a card opens the detail at the bottom. */
+  /* Phones: one column; tapping a card opens the detail at the bottom. Feature
+     cards fall back to the normal vertical card layout here. */
   @media (max-width: 720px) {
-    .work-grid { column-count: 1; }
+    .work-grid { grid-template-columns: 1fr; }
     .work-grid > .card { max-width: 34rem; margin-inline: auto; }
 
     .card-hover {

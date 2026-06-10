@@ -4,7 +4,7 @@
 
 export default {
   meta: {
-    title: 'Flora Fosset — Designer',
+    title: 'Flora Fosset · Designer',
     description:
       'Designer and strategist who turns complicated ideas — products, platforms, stories — into something people instantly understand.',
   },
@@ -51,7 +51,7 @@ export default {
       'Most teams hire a designer, a writer, and a developer, then try to stitch them together. I see the whole thing at once: the story, the design, and the working product, because my path ran through journalism, data, design, and building companies.',
   },
   work: {
-    sectionTitle: 'selected projects',
+    sectionTitle: 'Explore my work',
     intro:
       'I have designed across wildly different sectors. The subject keeps changing; the job stays the same: making tangled things clear.',
     counterSeparator: '/',
