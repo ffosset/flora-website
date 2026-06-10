@@ -93,7 +93,9 @@ const path = t.about.path || [];
     margin-top: var(--space-4);
   }
   @media (min-width: 900px) {
-    .about-grid { grid-template-columns: 1fr 1.6fr; gap: var(--space-5); align-items: start; }
+    /* align-items: center vertically centres the headline + facts against the
+       (taller) portrait. */
+    .about-grid { grid-template-columns: 1fr 1.6fr; gap: var(--space-5); align-items: center; }
   }
 
   .about-portrait {
