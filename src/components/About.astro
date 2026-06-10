@@ -1,4 +1,6 @@
 ---
+import { Image } from 'astro:assets';
+import portrait from '../assets/flora-about.png';
 const { t } = Astro.props;
 ---
 
@@ -6,6 +8,14 @@ const { t } = Astro.props;
   <div class="container about-grid">
     <div class="about-left">
       <h2><span class="slash">·</span>{t.about.sectionTitle}</h2>
+      <Image
+        class="about-portrait"
+        src={portrait}
+        alt="Flora Fosset"
+        width={640}
+        format="webp"
+        loading="lazy"
+      />
     </div>
     <div class="about-right">
       <p class="bio">{t.about.bio}</p>
@@ -36,6 +46,14 @@ const { t } = Astro.props;
     font-weight: 600;
     line-height: 1.05;
     letter-spacing: -0.02em;
+  }
+  /* Portrait under the title, left of the bio. */
+  .about-portrait {
+    display: block;
+    margin-top: var(--space-4);
+    width: 100%;
+    max-width: 20rem;
+    height: auto;
   }
   .bio { max-width: 60ch; color: var(--color-ink); font-size: 1.125rem; }
 

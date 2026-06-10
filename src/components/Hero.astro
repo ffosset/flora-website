@@ -6,9 +6,8 @@ const roles = t.hero.roles?.length ? t.hero.roles : [t.hero.roleWord];
 <section id="hero" class="hero" data-hero>
   <aside class="hero-aside">
     <a class="hero-photo" href="#contact" aria-label="Get in touch">
-      <img src={portrait.src} alt="Flora Fosset" width="156" height="156" loading="eager" />
+      <img src={portrait.src} alt="Flora Fosset" width="203" height="203" loading="eager" />
     </a>
-    <p class="hero-subtitle">{t.hero.subhead}</p>
   </aside>
 
   <div class="container hero-inner">
@@ -232,29 +231,31 @@ const roles = t.hero.roles?.length ? t.hero.roles : [t.hero.roleWord];
     text-align: center;
   }
   @media (min-width: 768px) {
-    /* Keep the photo/subtitle clear of the right screen edge on desktop. */
-    .hero-aside { right: calc(var(--gutter) + 3rem); }
+    /* Pulled in from the right edge so it sits a bit more toward the centre. */
+    .hero-aside { right: clamp(4rem, 13vw, 15rem); }
   }
   .hero-photo {
+    --d: 203px;   /* 30% larger than before */
+    --ring: 26px;
     display: block;
     position: relative;
-    box-sizing: border-box; /* total stays 156px; the border eats into it */
-    width: 156px;
-    height: 156px;
+    box-sizing: border-box; /* total stays --d; the border eats into it */
+    width: var(--d);
+    height: var(--d);
     border-radius: 50%;
     /* Soft primary ring — rgba(174,73,5,0.1) is --color-primary at 10%. */
-    border: 20px solid rgba(174, 73, 5, 0.1);
+    border: var(--ring) solid rgba(174, 73, 5, 0.1);
     overflow: hidden;
     cursor: pointer;
     /* Hover: the ring thins so the picture grows to fill it — total unchanged. */
     transition: border-width 0.45s var(--ease);
   }
   .hero-photo:hover,
-  .hero-photo:focus-visible { border-width: 5px; }
+  .hero-photo:focus-visible { border-width: 6px; }
   @media (prefers-reduced-motion: reduce) {
     .hero-photo { transition: none; }
     .hero-photo:hover,
-    .hero-photo:focus-visible { border-width: 20px; }
+    .hero-photo:focus-visible { border-width: var(--ring); }
   }
   .hero-photo img {
     width: 100%;
@@ -275,7 +276,8 @@ const roles = t.hero.roles?.length ? t.hero.roles : [t.hero.roleWord];
 
   @media (max-width: 600px) {
     /* Keep the portrait clear of the title on small screens. */
-    .hero-aside { width: 10rem; top: clamp(6rem, 18vh, 9rem); }
+    .hero-aside { width: 11rem; top: clamp(6rem, 18vh, 9rem); }
+    .hero-photo { --d: 156px; --ring: 20px; }
   }
 
   .hero-line {
