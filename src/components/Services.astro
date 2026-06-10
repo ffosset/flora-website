@@ -81,7 +81,6 @@ const FILTERS = ['landing', 'product', 'storytelling'];
           )}
           <div class="service-body">
             <h3 class="service-name">{s.name}</h3>
-            <p class="service-desc">{s.desc}</p>
             <span class="service-go" aria-hidden="true">View projects →</span>
           </div>
         </div>
@@ -221,10 +220,10 @@ const FILTERS = ['landing', 'product', 'storytelling'];
   .service-icon circle.s-pop { fill: var(--cat); }
   .service-icon line.s-pop { stroke: var(--cat); }
   .services.is-drawn .service-icon .s-draw {
-    animation: icon-draw 2.6s linear forwards;
+    animation: icon-draw 1.8s linear forwards;
   }
   .services.is-drawn .service-icon .s-pop {
-    animation: icon-pop 0.5s var(--ease) 2.4s forwards;
+    animation: icon-pop 0.4s var(--ease) 1.6s forwards;
   }
   @keyframes icon-draw { to { stroke-dashoffset: 0; } }
   @keyframes icon-pop { to { opacity: 1; transform: scale(1); } }
@@ -232,7 +231,8 @@ const FILTERS = ['landing', 'product', 'storytelling'];
   .service-body { display: flex; flex-direction: column; align-items: center; gap: var(--space-2); }
   .service-name {
     font-family: var(--font-display);
-    font-weight: 700;
+    font-weight: 300;
+    text-transform: lowercase;
     font-size: clamp(1.4rem, 1.1rem + 1vw, 1.9rem);
     line-height: 1.1;
     letter-spacing: -0.01em;
