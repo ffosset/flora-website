@@ -12,6 +12,7 @@ const href = hasUrl ? (isExternal ? c.url : base + c.url) : undefined;
     'card',
     d.blend && `card--blend-${d.blend}`,
     d.media && `card--media-${d.media}`,
+    { 'card--centered': d.centered },
   ]}
   style={`--cat: var(--cat-${c.category})`}
   data-cat={c.category}
@@ -100,8 +101,8 @@ const href = hasUrl ? (isExternal ? c.url : base + c.url) : undefined;
     overflow: hidden;
   }
   .card-media img { display: block; }
-  /* Photos cover the media area; blended illustrations stay contained. */
-  .card:not(.card--blend-darken):not(.card--blend-lighten) .card-media img {
+  /* Photos cover the media area; blended/centered illustrations stay contained. */
+  .card:not(.card--blend-darken):not(.card--blend-lighten):not(.card--centered) .card-media img {
     width: 100%;
     height: 100%;
     object-fit: cover;
@@ -114,6 +115,16 @@ const href = hasUrl ? (isExternal ? c.url : base + c.url) : undefined;
     height: auto;
   }
   .card--media-sm .card-media img { max-width: 64%; }
+  /* Centered (Minnow / Rosa): contained screenshot, centred text. */
+  .card--centered .card-media img {
+    max-width: 90%;
+    max-height: 86%;
+    width: auto;
+    height: auto;
+    object-fit: contain;
+  }
+  .card--centered .card-body { align-items: center; text-align: center; }
+  .card--centered .card-meta { justify-content: center; }
   .card--blend-darken .card-media img { mix-blend-mode: darken; }
   .card--blend-lighten .card-media img { mix-blend-mode: lighten; }
 

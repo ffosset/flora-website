@@ -88,7 +88,7 @@ export default {
       },
       {
         slug: 'minnow-collective',
-        image: '/images/projects/minnow.jpg',
+        image: '/images/projects/minnow-browser.png',
         url: 'https://www.minnowcollective.com/',
         category: 'product',
         tag: 'Nature Tech',
@@ -114,7 +114,7 @@ export default {
       },
       {
         slug: 'rosa-ebilling',
-        image: '/images/projects/rosa.jpg',
+        image: '/images/projects/rosa-browser.gif',
         url: 'https://pro.rosa.be/en/solutions/rosa-ebilling',
         category: 'product',
         tag: 'Healthtech',
