@@ -12,7 +12,7 @@ const href = hasUrl ? (isExternal ? c.url : base + c.url) : undefined;
     'card',
     d.blend && `card--blend-${d.blend}`,
     d.media && `card--media-${d.media}`,
-    { 'card--centered': d.centered },
+    { 'card--centered': d.centered, 'card--padded': d.padded },
   ]}
   style={`--cat: var(--cat-${c.category})`}
   data-cat={c.category}
@@ -125,6 +125,8 @@ const href = hasUrl ? (isExternal ? c.url : base + c.url) : undefined;
   }
   .card--centered .card-body { align-items: center; text-align: center; }
   .card--centered .card-meta { justify-content: center; }
+  /* Padded (storytelling): the photo keeps a margin of card colour around it. */
+  .card--padded .card-media { padding: 1.25rem; }
   .card--blend-darken .card-media img { mix-blend-mode: darken; }
   .card--blend-lighten .card-media img { mix-blend-mode: lighten; }
 

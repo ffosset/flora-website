@@ -11,8 +11,8 @@ const DESIGN = {
   'soy-de-temporada':       { bg: '#fcf4be', fg: '#210f03', layout: 'text-top', media: 'sm', blend: 'darken', center: true, hover: '#f6e35c', pill: '#f6e35c', cta: 'Visit platform' },
   'rosa-ebilling':          { bg: '#916cb1', fg: '#ffffff', layout: 'text-top', centered: true, hover: '#bf8aed', pill: '#bf8aed', cta: 'Visit website' },
   'neighborhood-map':       { bg: '#d1d5ef', fg: '#210f03', layout: 'media-top', hover: '#7a88ed', pill: '#7a88ed', cta: 'Visit website' },
-  'couleur-du-peche':       { bg: '#fce4be', fg: '#210f03', layout: 'media-pad', round: true, hover: '#f1c173', pill: '#f1c173', cta: 'Read' },
-  'oyas-belgique':          { bg: '#dfe7d8', fg: '#210f03', layout: 'media-top', hover: '#a8c08f', pill: '#a8c08f', cta: 'Visit website' },
+  'couleur-du-peche':       { bg: '#fce4be', fg: '#210f03', layout: 'media-pad', padded: true, hover: '#f1c173', pill: '#f1c173', cta: 'Read' },
+  'oyas-belgique':          { bg: '#dfe7d8', fg: '#210f03', layout: 'media-top', padded: true, hover: '#a8c08f', pill: '#a8c08f', cta: 'Visit website' },
   'rosen':                  { bg: '#ece6e1', fg: '#210f03', layout: 'media-top', hover: '#cdbfb1', pill: '#cdbfb1', cta: 'Read' },
 };
 
@@ -145,30 +145,27 @@ const byCat = CATS.map((cat) => {
   /* One category shown at a time. Phones: a single centred column. */
   .work-cat { display: none; }
   .work-cat.is-shown {
-    display: flex;
-    flex-direction: column;
+    display: grid;
+    grid-template-columns: 1fr;
     gap: 2rem;
   }
   @media (max-width: 720px) {
     .work-cat { max-width: 34rem; margin-inline: auto; }
   }
 
-  /* Desktop: equal-width columns. Hovering one card expands it; the others
-     narrow and fade back. */
+  /* Desktop: two equal columns. minmax(0, 1fr) forces them equal regardless of
+     the image inside. Hovering a card widens it (grid transition) and dims the
+     other. */
   @media (min-width: 721px) {
     .work-cat.is-shown {
-      flex-direction: row;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
       align-items: stretch;
+      transition: grid-template-columns 0.45s var(--ease);
     }
-    .work-cat > .card {
-      flex: 1 1 0;
-      min-width: 0;
-      transition: flex-grow 0.45s var(--ease), opacity 0.45s var(--ease);
-    }
+    .work-cat > .card { min-width: 0; transition: opacity 0.45s var(--ease); }
+    .work-cat.is-shown:has(> .card:first-child:hover) { grid-template-columns: 1.4fr 1fr; }
+    .work-cat.is-shown:has(> .card:last-child:hover) { grid-template-columns: 1fr 1.4fr; }
     .work-cat:hover > .card { opacity: 0.35; }
-    .work-cat > .card:hover {
-      flex-grow: 1.5;
-      opacity: 1;
-    }
+    .work-cat > .card:hover { opacity: 1; }
   }
 </style>
