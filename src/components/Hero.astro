@@ -32,6 +32,22 @@ const roles = t.hero.roles?.length ? t.hero.roles : [t.hero.roleWord];
 </section>
 
 <script>
+  // Lock the hero to the viewport height measured ON LOAD (mobile address bar
+  // shown) and DON'T change it when the bar collapses on scroll — that height-
+  // only resize is exactly what made the hero grow / the title drift on the
+  // first scroll. We only re-measure when the width changes (orientation).
+  const heroEl = document.querySelector('[data-hero]');
+  if (heroEl) {
+    const setHeroH = () => heroEl.style.setProperty('--hero-h', window.innerHeight + 'px');
+    setHeroH();
+    let lastW = window.innerWidth;
+    window.addEventListener('resize', () => {
+      if (window.innerWidth !== lastW) { lastW = window.innerWidth; setHeroH(); }
+    });
+  }
+</script>
+
+<script>
   const el = document.querySelector('[data-rotator]');
   if (el) {
     let words = [];
@@ -154,11 +170,13 @@ const roles = t.hero.roles?.length ? t.hero.roles : [t.hero.roleWord];
     /* Diagonal wash per Figma: white at the top-left, secondary peach at the
        bottom-right (stop runs past 100% so the peach stays soft). */
     background: linear-gradient(135deg, #ffffff 0%, var(--color-secondary) 50%, #f4c49d 118%);
-    /* svh is the *stable* (address-bar-shown) viewport height, so the hero
-       doesn't grow as the mobile bar hides on scroll. 100vh = the larger,
-       bar-hidden height, which is what caused the hero to expand on scroll. */
+    /* Keep the hero from growing as the mobile address bar collapses on the
+       first scroll. svh is the stable (bar-shown) viewport for modern browsers;
+       --hero-h is a JS-measured pixel height (taken on load, never updated on
+       scroll) that locks it down everywhere else. */
     min-height: 100vh;
     min-height: 100svh;
+    min-height: var(--hero-h, 100svh);
     padding-block: 0;
     display: flex;
     /* Contain the follower: relative for absolute positioning, overflow so it
