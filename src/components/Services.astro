@@ -160,25 +160,28 @@ const FILTERS = ['landing', 'product', 'storytelling'];
   .service {
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
-    gap: var(--space-5);
-    min-height: 17rem;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-4);
+    min-height: 22rem;
     padding: var(--space-4);
     border-radius: var(--radius-card);
-    background: rgba(255, 255, 255, 0.08);
-    border: 1px solid rgba(255, 255, 255, 0.22);
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.45);
     -webkit-backdrop-filter: blur(3px);
     backdrop-filter: blur(3px);
     cursor: pointer;
-    text-align: left;
-    transition: transform 0.35s var(--ease), background 0.35s var(--ease),
-      border-color 0.35s var(--ease);
+    text-align: center;
+    transition: transform 0.3s var(--ease), box-shadow 0.3s var(--ease),
+      border-color 0.3s var(--ease);
   }
+  /* Hover: the card lifts toward the top-left and casts a hard offset shadow
+     in its category colour. */
   .service:hover,
   .service:focus-visible {
-    transform: translateY(-6px);
-    background: rgba(255, 255, 255, 0.14);
-    border-color: rgba(255, 255, 255, 0.4);
+    transform: translate(-5px, -5px);
+    border-color: #ffffff;
+    box-shadow: 14px 14px 0 0 var(--cat);
   }
   .service:focus-visible { outline: 2px solid #ffffff; outline-offset: 3px; }
 
@@ -205,8 +208,8 @@ const FILTERS = ['landing', 'product', 'storytelling'];
 
   /* Line-art icon, pinned where the number used to be. */
   .service-icon {
-    width: 128px;
-    height: 128px;
+    width: 180px;
+    height: 180px;
     display: block;
     color: var(--color-secondary); /* cream, matches the source art */
     overflow: visible;
@@ -235,7 +238,7 @@ const FILTERS = ['landing', 'product', 'storytelling'];
   @keyframes icon-draw { to { stroke-dashoffset: 0; } }
   @keyframes icon-pop { to { opacity: 1; transform: scale(1); } }
 
-  .service-body { display: flex; flex-direction: column; gap: var(--space-2); }
+  .service-body { display: flex; flex-direction: column; align-items: center; gap: var(--space-2); }
   .service-name {
     font-family: var(--font-display);
     font-weight: 700;
