@@ -243,6 +243,11 @@ const FILTERS = ['landing', 'product', 'storytelling'];
     color: var(--cat);
     font-weight: 700;
   }
+  /* Landing's bright yellow is illegible as text, so use a deeper amber. */
+  .service[data-filter='landing']:hover .service-name,
+  .service[data-filter='landing']:focus-visible .service-name {
+    color: #c2890c;
+  }
   .service-desc {
     color: var(--color-muted);
     font-size: 1.0625rem;
