@@ -147,7 +147,9 @@ const FILTERS = ['landing', 'product', 'storytelling'];
   .services-list {
     list-style: none;
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    /* minmax(0,…) lets the columns shrink below the cards' content so the row
+       never overflows the viewport at mid widths. */
+    grid-template-columns: repeat(3, minmax(0, 1fr));
     gap: var(--space-4);
   }
 
@@ -157,8 +159,9 @@ const FILTERS = ['landing', 'product', 'storytelling'];
     align-items: center;
     justify-content: space-between;
     gap: var(--space-3);
+    min-width: 0;
     min-height: 11rem;
-    padding: var(--space-4) var(--space-5);
+    padding: var(--space-4);
     border-radius: 18px;
     background: #faf0ea; /* soft peach */
     cursor: pointer;
@@ -166,7 +169,7 @@ const FILTERS = ['landing', 'product', 'storytelling'];
     transition: transform 0.3s var(--ease), box-shadow 0.3s var(--ease);
   }
   /* Title (+ "View projects" on hover) on the left, icon on the right. */
-  .service-text { display: flex; flex-direction: column; gap: 0.4rem; }
+  .service-text { display: flex; flex-direction: column; gap: 0.4rem; min-width: 0; }
   /* Hover: the card lifts toward the top-left and casts a hard offset shadow
      in its category colour. */
   .service:hover,
@@ -200,8 +203,8 @@ const FILTERS = ['landing', 'product', 'storytelling'];
   /* Line-art icon, pinned where the number used to be. */
   .service-icon {
     flex: 0 0 auto;
-    width: 120px;
-    height: 120px;
+    width: 100px;
+    height: 100px;
     display: block;
     color: var(--color-muted); /* dark grey line-art */
     overflow: visible;
@@ -238,6 +241,7 @@ const FILTERS = ['landing', 'product', 'storytelling'];
     font-size: clamp(1.2rem, 1.05rem + 0.6vw, 1.6rem);
     line-height: 1.1;
     letter-spacing: -0.01em;
+    overflow-wrap: anywhere;
     color: var(--color-text);
     transition: color 0.3s var(--ease);
   }
@@ -260,16 +264,23 @@ const FILTERS = ['landing', 'product', 'storytelling'];
 
   /* Mobile: same horizontal card, single column. No hover on touch, so the
      hard shadow and the hint show by default to read as tappable. */
-  @media (max-width: 860px) {
-    .services-list { grid-template-columns: 1fr; gap: var(--space-4); }
-    /* Tighter padding + smaller icon so the card (and its shadow) stay within
-       the gutters on narrow screens. */
-    .service { padding: var(--space-4); box-shadow: 8px 8px 0 0 var(--cat); }
-    .service-text { min-width: 0; }
+  /* Below ~1150px the three horizontal cards no longer fit side by side —
+     stack them into one centred column. */
+  @media (max-width: 1150px) {
+    .services-list {
+      grid-template-columns: 1fr;
+      max-width: 38rem;
+      margin-inline: auto;
+    }
+  }
+
+  /* Touch devices (no hover): show the shadow + hint by default so the cards
+     read as tappable. */
+  @media (hover: none) {
+    .service { box-shadow: 8px 8px 0 0 var(--cat); }
     .service:hover,
     .service:focus-visible { transform: none; box-shadow: 8px 8px 0 0 var(--cat); }
     .service-go { opacity: 1; transform: none; }
-    .service-icon { width: 100px; height: 100px; }
   }
 
   @media (prefers-reduced-motion: reduce) {
