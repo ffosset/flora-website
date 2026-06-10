@@ -43,25 +43,21 @@ const href = hasUrl ? (isExternal ? c.url : base + c.url) : undefined;
   </div>
 
   <div class="card-hover" id={`hover-${c.slug}`}>
-    <div class="hover-col">
-      <p class="hover-label">My role</p>
-      <p class="hover-role">{c.did}</p>
-    </div>
-    <div class="hover-col">
-      <p class="hover-label">Result</p>
-      <p class="hover-result">{c.result}</p>
-      {hasUrl && (
-        <a
-          class="hover-cta"
-          href={href}
-          target={isExternal ? '_blank' : undefined}
-          rel={isExternal ? 'noopener noreferrer' : undefined}
-        >
-          {d.cta}
-          {isExternal && <span class="sr-only"> (opens in new tab)</span>}
-        </a>
-      )}
-    </div>
+    <p class="hover-result">{c.result}</p>
+    {c.keywords && c.keywords.length > 0 && (
+      <p class="hover-keywords">{c.keywords.join(' · ')}</p>
+    )}
+    {hasUrl && (
+      <a
+        class="hover-cta"
+        href={href}
+        target={isExternal ? '_blank' : undefined}
+        rel={isExternal ? 'noopener noreferrer' : undefined}
+      >
+        {d.cta}
+        {isExternal && <span class="sr-only"> (opens in new tab)</span>}
+      </a>
+    )}
   </div>
 </article>
 
@@ -185,7 +181,7 @@ const href = hasUrl ? (isExternal ? c.url : base + c.url) : undefined;
     white-space: nowrap;
   }
 
-  /* --- Hover detail, over the media only. */
+  /* --- Hover detail, over the media: the result big, then a keyword recap. */
   .card-hover {
     position: absolute;
     top: 0;
@@ -194,12 +190,13 @@ const href = hasUrl ? (isExternal ? c.url : base + c.url) : undefined;
     height: 16rem; /* covers the image area on pointer devices */
     z-index: 2;
     display: flex;
-    gap: var(--space-4);
-    padding: var(--space-4) 2rem;
+    flex-direction: column;
+    justify-content: flex-start;
+    gap: 1.1rem;
+    padding: var(--space-4) 2.5rem;
     overflow: auto;
     background: color-mix(in srgb, var(--cat) 93%, transparent);
     color: #210f03;
-    font-family: var(--font-display);
     opacity: 0;
     pointer-events: none;
     transition: opacity 0.35s var(--ease);
@@ -208,20 +205,25 @@ const href = hasUrl ? (isExternal ? c.url : base + c.url) : undefined;
   .card:focus-within .card-hover,
   .card.is-open .card-hover { opacity: 1; pointer-events: auto; }
 
-  .hover-col { flex: 1 1 0; min-width: 0; }
-  .hover-col + .hover-col {
-    border-left: 1.5px solid color-mix(in srgb, #210f03 28%, transparent);
-    padding-left: var(--space-4);
+  .hover-result {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: clamp(1.35rem, 1.05rem + 1.1vw, 1.9rem);
+    line-height: 1.18;
+    letter-spacing: -0.01em;
   }
-  .hover-label {
+  .hover-keywords {
+    font-family: var(--font-body); /* Fira Code, like the company name */
     text-transform: uppercase;
     letter-spacing: 0.06em;
-    font-size: 0.9rem;
-    margin-bottom: 0.6rem;
+    font-size: clamp(0.78rem, 0.72rem + 0.25vw, 0.95rem);
+    line-height: 1.6;
+    color: color-mix(in srgb, #210f03 78%, transparent);
   }
-  .hover-role { font-size: 1.05rem; line-height: 1.4; }
-  .hover-result { font-size: 1.05rem; line-height: 1.4; font-weight: 700; margin-bottom: 1.1rem; }
   .hover-cta {
+    align-self: flex-start;
+    margin-top: auto;
+    font-family: var(--font-display);
     font-weight: 700;
     color: #210f03;
     text-decoration: underline;
@@ -263,12 +265,7 @@ const href = hasUrl ? (isExternal ? c.url : base + c.url) : undefined;
       padding-top: var(--space-4);
       padding-bottom: var(--space-4);
     }
-    .hover-col + .hover-col {
-      border-left: 0;
-      border-top: 1.5px solid color-mix(in srgb, #210f03 28%, transparent);
-      padding-left: 0;
-      padding-top: var(--space-3);
-    }
+    .hover-cta { margin-top: 0; }
   }
   @media (prefers-reduced-motion: reduce) {
     .card-hover { transition: none; }
