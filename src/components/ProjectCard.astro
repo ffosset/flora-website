@@ -10,22 +10,6 @@ const textTop = d.layout === 'text-top';
 // Highlight cards always lead with the image; tag sits under the text.
 const mediaFirst = highlight || !textTop;
 const tagTop = textTop && !highlight;
-
-const Media = (
-  <div class="card-media">
-    <img src={base + c.image} alt={c.subtitle} loading="lazy" />
-  </div>
-);
-const Text = (
-  <div class="card-body">
-    {tagTop && <span class="card-tag">{c.tag}</span>}
-    <div class="card-text">
-      <h3 class="card-title">{c.title}</h3>
-      <p class="card-client">{c.subtitle}</p>
-    </div>
-    {!tagTop && <span class="card-tag">{c.tag}</span>}
-  </div>
-);
 ---
 
 <article
@@ -43,7 +27,26 @@ const Text = (
   aria-expanded={!hasUrl ? 'false' : undefined}
   aria-controls={!hasUrl ? `hover-${c.slug}` : undefined}
 >
-  {mediaFirst ? <>{Media}{Text}</> : <>{Text}{Media}</>}
+  {mediaFirst && (
+    <div class="card-media">
+      <img src={base + c.image} alt={c.subtitle} loading="lazy" />
+    </div>
+  )}
+
+  <div class="card-body">
+    {tagTop && <span class="card-tag">{c.tag}</span>}
+    <div class="card-text">
+      <h3 class="card-title">{c.title}</h3>
+      <p class="card-client">{c.subtitle}</p>
+    </div>
+    {!tagTop && <span class="card-tag">{c.tag}</span>}
+  </div>
+
+  {!mediaFirst && (
+    <div class="card-media">
+      <img src={base + c.image} alt={c.subtitle} loading="lazy" />
+    </div>
+  )}
 
   <div class="card-hover" id={`hover-${c.slug}`}>
     <div class="hover-main">
