@@ -1,25 +1,57 @@
 ---
 const { t } = Astro.props;
 const items = t.services.items || [];
+// Each service maps to a projects-grid filter, in card order.
+const FILTERS = ['landing', 'product', 'storytelling'];
 ---
 
 <section id="services" class="services">
   <div class="container">
     <h2 class="services-title"><span class="slash">·</span>{t.services.sectionTitle}</h2>
 
-    <ul class="services-list">
+    <div class="services-list">
       {items.map((s, i) => (
-        <li class="service">
+        <div
+          class="service"
+          role="button"
+          tabindex="0"
+          data-filter={FILTERS[i]}
+          aria-label={`Show ${s.name} projects`}
+        >
           <span class="service-num">{String(i + 1).padStart(2, '0')}</span>
           <div class="service-body">
             <h3 class="service-name">{s.name}</h3>
             <p class="service-desc">{s.desc}</p>
+            <span class="service-go" aria-hidden="true">View projects →</span>
           </div>
-        </li>
+        </div>
       ))}
-    </ul>
+    </div>
   </div>
 </section>
+
+<script>
+  // Clicking a service filters the projects grid and scrolls to it.
+  document.querySelectorAll('.services .service[data-filter]').forEach((card) => {
+    const go = () => {
+      document.dispatchEvent(
+        new CustomEvent('work:filter', { detail: card.dataset.filter })
+      );
+      const work = document.getElementById('work');
+      if (work) {
+        const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        work.scrollIntoView({ behavior: reduce ? 'auto' : 'smooth', block: 'start' });
+      }
+    };
+    card.addEventListener('click', go);
+    card.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        go();
+      }
+    });
+  });
+</script>
 
 <style>
   /* A bold primary block that punctuates the light hero / work sections. */
@@ -29,9 +61,10 @@ const items = t.services.items || [];
   }
 
   .services-title {
-    font-size: var(--fs-hero);
-    line-height: 1;
-    letter-spacing: -0.03em;
+    font-size: var(--fs-section);
+    font-weight: 600;
+    line-height: 1.05;
+    letter-spacing: -0.02em;
     color: #ffffff;
     margin-bottom: var(--space-5);
   }
@@ -46,7 +79,8 @@ const items = t.services.items || [];
     gap: var(--space-4);
   }
 
-  /* Glass card: number pinned to the top, name + copy anchored to the bottom. */
+  /* Glass card (acts as a filter button): number pinned to the top,
+     name + copy anchored to the bottom. */
   .service {
     display: flex;
     flex-direction: column;
@@ -59,13 +93,38 @@ const items = t.services.items || [];
     border: 1px solid rgba(255, 255, 255, 0.22);
     -webkit-backdrop-filter: blur(3px);
     backdrop-filter: blur(3px);
+    cursor: pointer;
+    text-align: left;
     transition: transform 0.35s var(--ease), background 0.35s var(--ease),
       border-color 0.35s var(--ease);
   }
-  .service:hover {
+  .service:hover,
+  .service:focus-visible {
     transform: translateY(-6px);
     background: rgba(255, 255, 255, 0.14);
     border-color: rgba(255, 255, 255, 0.4);
+  }
+  .service:focus-visible { outline: 2px solid #ffffff; outline-offset: 3px; }
+
+  /* "View projects →" hint — appears/strengthens on hover. */
+  .service-go {
+    margin-top: var(--space-1);
+    font-family: var(--font-body);
+    font-size: var(--fs-small);
+    letter-spacing: 0.04em;
+    color: rgba(255, 255, 255, 0.7);
+    opacity: 0;
+    transform: translateX(-4px);
+    transition: opacity 0.3s var(--ease), transform 0.3s var(--ease), color 0.3s var(--ease);
+  }
+  .service:hover .service-go,
+  .service:focus-visible .service-go {
+    opacity: 1;
+    transform: translateX(0);
+    color: #ffffff;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .service-go { opacity: 1; transform: none; }
   }
 
   .service-num {

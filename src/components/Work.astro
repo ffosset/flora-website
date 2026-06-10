@@ -12,6 +12,8 @@ const DESIGN = {
   'rosa-ebilling':          { bg: '#916cb1', fg: '#ffffff', layout: 'text-top', media: 'md', blend: 'lighten', center: true, hover: '#bf8aed', pill: '#bf8aed', cta: 'Visit website' },
   'neighborhood-map':       { bg: '#d1d5ef', fg: '#210f03', layout: 'media-top', hover: '#7a88ed', pill: '#7a88ed', cta: 'Visit website' },
   'couleur-du-peche':       { bg: '#fce4be', fg: '#210f03', layout: 'media-pad', round: true, hover: '#f1c173', pill: '#f1c173', cta: 'Read' },
+  'oyas-belgique':          { bg: '#dfe7d8', fg: '#210f03', layout: 'media-top', hover: '#a8c08f', pill: '#a8c08f', cta: 'Visit website' },
+  'rosen':                  { bg: '#ece6e1', fg: '#210f03', layout: 'media-top', hover: '#cdbfb1', pill: '#cdbfb1', cta: 'Read' },
 };
 // Feature + grid hybrid: the two marquee projects (Cercle, Soy de Temporada)
 // render as full-width banners; the others pair up in the two-column grid.
@@ -21,12 +23,22 @@ const order = [
   'minnow-collective', 'rosa-ebilling',
   'soy-de-temporada',
   'neighborhood-map', 'couleur-du-peche',
+  'oyas-belgique', 'rosen',
 ];
+// Filter categories (single category per project). Labels come from i18n.
+const filterKeys = ['all', 'landing', 'product', 'storytelling'];
 ---
 
 <section id="work" class="work">
   <div class="container work-head">
     <h2 class="work-h2"><span class="slash">·</span>{t.work.sectionTitle}</h2>
+    <div class="work-filters" role="group" aria-label="Filter projects">
+      {filterKeys.map((k) => (
+        <button type="button" class="filter" data-filter={k} aria-pressed={k === 'all' ? 'true' : 'false'}>
+          {t.work.filters[k]}
+        </button>
+      ))}
+    </div>
   </div>
 
   <div class="container">
@@ -64,7 +76,7 @@ const order = [
                   { 'card--center': d.center, 'card--round': d.round, 'card--feature': d.feature },
                 ]}
                 style={`--bg:${d.bg}; --fg:${d.fg}; --hover:${d.hover}; --pill:${d.pill}`}
-                data-cats={(c.category || []).join(' ')}
+                data-cat={c.category}
                 role={!hasUrl ? 'button' : undefined}
                 tabindex={!hasUrl ? '0' : undefined}
                 aria-expanded={!hasUrl ? 'false' : undefined}
@@ -133,14 +145,67 @@ const order = [
   });
 </script>
 
-<style>
-  .work { padding-block: var(--space-6) var(--space-5); }
+<script>
+  // Project filtering. Driven by the filter buttons here and by the Services
+  // cards (which dispatch a 'work:filter' event before scrolling to #work).
+  const fbtns = Array.from(document.querySelectorAll('.work-filters .filter'));
+  const fcards = Array.from(document.querySelectorAll('.work-grid > .card'));
+  if (fbtns.length && fcards.length) {
+    const apply = (cat) => {
+      fbtns.forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.filter === cat)));
+      fcards.forEach((card) => {
+        const show = cat === 'all' || card.dataset.cat === cat;
+        card.classList.toggle('is-hidden', !show);
+      });
+    };
+    fbtns.forEach((b) => b.addEventListener('click', () => apply(b.dataset.filter)));
+    document.addEventListener('work:filter', (e) => apply(e.detail));
+  }
+</script>
 
-  .work-head { margin-bottom: var(--space-4); }
+<style>
+  /* White ground (the About section below keeps the light-grey page bg). */
+  .work {
+    background: var(--color-card);
+    padding-block: var(--space-6) var(--space-5);
+  }
+
+  .work-head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: var(--space-3);
+    margin-bottom: var(--space-4);
+  }
   .work-h2 {
-    font-size: var(--fs-hero);
-    line-height: 1;
-    letter-spacing: -0.03em;
+    font-size: var(--fs-section);
+    font-weight: 600;
+    line-height: 1.05;
+    letter-spacing: -0.02em;
+  }
+
+  /* Filter pills. */
+  .work-filters { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+  .filter {
+    font-family: var(--font-display);
+    font-size: 0.95rem;
+    font-weight: 500;
+    padding: 0.5rem 1.1rem;
+    border-radius: var(--radius-pill);
+    border: 1px solid var(--color-line);
+    background: transparent;
+    color: var(--color-muted);
+    cursor: pointer;
+    transition: color 0.25s var(--ease), background 0.25s var(--ease),
+      border-color 0.25s var(--ease);
+  }
+  .filter:hover { color: var(--color-text); border-color: var(--color-muted); }
+  .filter:focus-visible { outline: 2px solid var(--color-primary); outline-offset: 2px; }
+  .filter[aria-pressed='true'] {
+    background: var(--color-primary);
+    border-color: var(--color-primary);
+    color: var(--color-ink-on-primary);
   }
 
   /* Feature + grid hybrid: a two-column grid where the marquee cards span the
@@ -152,6 +217,8 @@ const order = [
     align-items: stretch;
   }
   .work-grid > .card { min-width: 0; }
+  /* Filtered-out cards are removed from the grid flow entirely. */
+  .work-grid > .card.is-hidden { display: none; }
 
   /* --- Card --- */
   .card {

@@ -108,6 +108,7 @@
   /* --- Fluid type scale (mobile min → desktop max, ~360px→1280px) --- */
   --fs-mega:  clamp(2.25rem, 1.62rem + 2.8vw, 3.125rem);  /* hero title — 50px max per Figma */
   --fs-hero:  clamp(2rem, 1.22rem + 3.48vw, 4rem);       /* big statements */
+  --fs-section: clamp(1.75rem, 1.3rem + 2vw, 2.75rem);   /* section titles (services / work / about) */
   --fs-h1:    clamp(2.25rem, 1.76rem + 2.17vw, 3.5rem);  /* 36 → 56px */
   --fs-h2:    clamp(1.625rem, 1.38rem + 1.09vw, 2.25rem);/* 26 → 36px */
   --fs-h3:    clamp(1.25rem, 1.15rem + 0.43vw, 1.5rem);  /* 20 → 24px */

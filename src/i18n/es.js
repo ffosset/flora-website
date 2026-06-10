@@ -43,7 +43,7 @@ export default {
       { slug: 'minnow-collective', image: '/images/projects/minnow.jpg', url: 'https://www.minnowcollective.com/', category: ['websites', 'platforms', 'data'], tag: 'sustainability', subtitle: '', title: '', did: '', result: '', awards: [] },
       { slug: 'soy-de-temporada', image: '/images/projects/soy-de-temporada.jpg', url: 'https://soydetemporada.es/', category: ['platforms', 'data', 'storytelling'], tag: 'sustainability', subtitle: '', title: '', did: '', result: '', awards: [] },
       { slug: 'rosa-ebilling', image: '/images/projects/rosa.jpg', url: 'https://pro.rosa.be/en/solutions/rosa-ebilling', category: ['platforms', 'data'], tag: 'health', subtitle: '', title: '', did: '', result: '', awards: [] },
-      { slug: 'oyas-belgique', image: '/images/projects/oyas.jpg', url: 'https://www.oyas-belgique.be/', category: ['storytelling'], tag: 'sustainability', subtitle: '', title: '', did: '', result: '', awards: [] },
+      { slug: 'oyas-belgique', image: '/images/projects/placeholder.svg', url: 'https://www.oyas-belgique.be/', category: 'storytelling', tag: 'sustainability', subtitle: '', title: '', did: '', result: '', awards: [] },
       { slug: 'neighborhood-map', image: '/images/projects/neighborhood-map.jpg', url: '', category: ['data', 'platforms'], tag: 'data', subtitle: '', title: '', did: '', result: '', awards: [] },
       { slug: 'couleur-du-peche', image: '/images/projects/couleur-du-peche.jpg', url: '/work/couleur-du-peche', category: ['storytelling'], tag: 'journalism', subtitle: '', title: '', did: '', result: '', awards: [] },
     ],
