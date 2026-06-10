@@ -78,14 +78,12 @@
   --color-card: #ffffff;           /* lifted surfaces */
   --color-bg-soft: var(--color-secondary); /* tinted section ground */
 
-  /* --- Work project accent ---
+  /* --- Work category accents (one per category) ---
      Used by the filter chips (when selected), the project cards (soft tint
-     at rest, full colour on hover) and the service-icon accents.
-     Currently a single colour shared by every category. */
-  --cat-project: #ffec3c;       /* vivid yellow */
-  --cat-landing: var(--cat-project);
-  --cat-product: var(--cat-project);
-  --cat-storytelling: var(--cat-project);
+     at rest, full colour on hover) and the service-icon accents. */
+  --cat-landing: #ffec3c;       /* yellow */
+  --cat-product: #10a08c;       /* teal */
+  --cat-storytelling: #d23e84;  /* raspberry */
 
   /* Hero spotlight cursor glow (radial gradient + blur, multiply blend). */
   --color-cursor-glow: #ae4905;
