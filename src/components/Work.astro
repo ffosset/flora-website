@@ -160,11 +160,11 @@ const byCat = CATS.map((cat) => {
     .work-cat.is-shown {
       grid-template-columns: repeat(2, minmax(0, 1fr));
       align-items: stretch;
-      transition: grid-template-columns 0.45s var(--ease);
     }
+    /* Equal-width cards (no size change on hover). Hovering one fades the
+       other back so the eye goes to the hovered card; its detail overlay
+       reveals separately (see ProjectCard). */
     .work-cat > .card { min-width: 0; transition: opacity 0.45s var(--ease); }
-    .work-cat.is-shown:has(> .card:first-child:hover) { grid-template-columns: 1.4fr 1fr; }
-    .work-cat.is-shown:has(> .card:last-child:hover) { grid-template-columns: 1fr 1.4fr; }
     .work-cat:hover > .card { opacity: 0.35; }
     .work-cat > .card:hover { opacity: 1; }
   }
