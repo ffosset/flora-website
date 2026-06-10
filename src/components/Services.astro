@@ -204,8 +204,8 @@ const FILTERS = ['landing', 'product', 'storytelling'];
 
   /* Line-art icon, pinned where the number used to be. */
   .service-icon {
-    width: 64px;
-    height: 64px;
+    width: 128px;
+    height: 128px;
     display: block;
     color: var(--color-secondary); /* cream, matches the source art */
     overflow: visible;
@@ -223,10 +223,10 @@ const FILTERS = ['landing', 'product', 'storytelling'];
     transform-origin: center;
   }
   .services.is-drawn .service-icon .s-draw {
-    animation: icon-draw 1.2s var(--ease) forwards;
+    animation: icon-draw 2.6s linear forwards;
   }
   .services.is-drawn .service-icon .s-pop {
-    animation: icon-pop 0.4s var(--ease) 0.9s forwards;
+    animation: icon-pop 0.5s var(--ease) 2.4s forwards;
   }
   @keyframes icon-draw { to { stroke-dashoffset: 0; } }
   @keyframes icon-pop { to { opacity: 1; transform: scale(1); } }
