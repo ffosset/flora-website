@@ -1,24 +1,17 @@
 ---
-// A single project card. `highlight` makes it the large, image-filled card
-// used on the left of each category; otherwise it's a compact stacked card
-// that keeps its per-image treatment (blend / contained / etc.).
-const { c, d, base, highlight = false } = Astro.props;
+// A single project card: image on top with the hover detail laid over it,
+// and the title + company name + sector tag always visible below.
+const { c, d, base } = Astro.props;
 const hasUrl = Boolean(c.url);
 const isExternal = hasUrl && c.url.startsWith('http');
 const href = hasUrl ? (isExternal ? c.url : base + c.url) : undefined;
-const textTop = d.layout === 'text-top';
-// Highlight cards always lead with the image; tag sits under the text.
-const mediaFirst = highlight || !textTop;
-const tagTop = textTop && !highlight;
 ---
 
 <article
   class:list={[
     'card',
-    `card--${d.layout}`,
     d.blend && `card--blend-${d.blend}`,
     d.media && `card--media-${d.media}`,
-    { 'card--center': d.center, 'card--round': d.round, 'card--highlight': highlight, 'card--compact': !highlight },
   ]}
   style={`--cat: var(--cat-${c.category})`}
   data-cat={c.category}
@@ -27,59 +20,42 @@ const tagTop = textTop && !highlight;
   aria-expanded={!hasUrl ? 'false' : undefined}
   aria-controls={!hasUrl ? `hover-${c.slug}` : undefined}
 >
-  {mediaFirst && (
-    <div class="card-media">
-      <img src={base + c.image} alt={c.subtitle} loading="lazy" />
-    </div>
-  )}
+  <div class="card-media">
+    <img src={base + c.image} alt={c.subtitle} loading="lazy" />
 
-  <div class="card-body">
-    {tagTop && <span class="card-tag">{c.tag}</span>}
-    <div class="card-text">
-      <h3 class="card-title">{c.title}</h3>
-      <p class="card-client">{c.subtitle}</p>
+    <div class="card-hover" id={`hover-${c.slug}`}>
+      <div class="hover-col">
+        <p class="hover-label">My role</p>
+        <p class="hover-role">{c.did}</p>
+      </div>
+      <div class="hover-col">
+        <p class="hover-label">Result</p>
+        <p class="hover-result">{c.result}</p>
+        {hasUrl && (
+          <a
+            class="hover-cta"
+            href={href}
+            target={isExternal ? '_blank' : undefined}
+            rel={isExternal ? 'noopener noreferrer' : undefined}
+          >
+            {d.cta}
+            {isExternal && <span class="sr-only"> (opens in new tab)</span>}
+          </a>
+        )}
+      </div>
     </div>
-    {!tagTop && <span class="card-tag">{c.tag}</span>}
   </div>
 
-  {!mediaFirst && (
-    <div class="card-media">
-      <img src={base + c.image} alt={c.subtitle} loading="lazy" />
-    </div>
-  )}
-
-  <div class="card-hover" id={`hover-${c.slug}`}>
-    <div class="hover-main">
-      {c.year && <p class="hover-year">{c.year}</p>}
-      {c.did && (
-        <div class="hover-block">
-          <p class="hover-label">My role</p>
-          <p class="hover-role">{c.did}</p>
-        </div>
-      )}
-      {c.result && (
-        <div class="hover-block">
-          <p class="hover-label">Result</p>
-          <p class="hover-result">{c.result}</p>
-        </div>
-      )}
-    </div>
-    {hasUrl && (
-      <a
-        class="hover-cta"
-        href={href}
-        target={isExternal ? '_blank' : undefined}
-        rel={isExternal ? 'noopener noreferrer' : undefined}
-      >
-        {d.cta}
-        {isExternal && <span class="sr-only"> (opens in new tab)</span>}
-      </a>
-    )}
+  <div class="card-body">
+    <h3 class="card-title">{c.title}</h3>
+    <p class="card-meta">
+      <span class="card-client">{c.subtitle}</span>
+      {c.tag && <span class="card-tag">{c.tag}</span>}
+    </p>
   </div>
 </article>
 
 <style>
-  /* --- Card --- */
   .card {
     position: relative;
     display: flex;
@@ -87,7 +63,7 @@ const tagTop = textTop && !highlight;
     min-width: 0;
     border-radius: 0;
     overflow: hidden;
-    /* Default: a soft tint of the category colour. */
+    /* Soft tint of the category colour. */
     background: linear-gradient(
       160deg,
       color-mix(in srgb, var(--cat) 13%, #ffffff),
@@ -104,37 +80,109 @@ const tagTop = textTop && !highlight;
     outline-offset: 2px;
   }
 
-  /* Hover / expanded detail: the category colour, kept slightly translucent
-     so the project content stays faintly visible behind it. */
-  .card-hover {
-    font-family: var(--font-display);
-    background: color-mix(in srgb, var(--cat) 88%, transparent);
-    color: #210f03;
+  /* --- Media (top): fills the space above the body; hover detail overlays it. */
+  .card-media {
+    position: relative;
+    flex: 1 1 auto;
+    min-height: 17rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+  }
+  .card-media img { display: block; }
+  /* Photos cover the media area; blended illustrations stay contained. */
+  .card:not(.card--blend-darken):not(.card--blend-lighten) .card-media img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  .card--blend-darken .card-media img,
+  .card--blend-lighten .card-media img {
+    max-width: 86%;
+    max-height: 80%;
+    width: auto;
+    height: auto;
+  }
+  .card--media-sm .card-media img { max-width: 64%; }
+  .card--blend-darken .card-media img { mix-blend-mode: darken; }
+  .card--blend-lighten .card-media img { mix-blend-mode: lighten; }
+
+  /* --- Body: title + company name + sector tag, always visible. */
+  .card-body {
     display: flex;
     flex-direction: column;
-    gap: 2rem;
-    padding: 2rem 2.5rem;
+    gap: 0.85rem;
+    padding: 1.5rem 2rem 2rem;
   }
-  .hover-main { display: flex; flex-direction: column; gap: 2rem; }
-  .hover-year {
-    text-align: right;
+  .card-title {
+    font-family: var(--font-display);
+    font-weight: 800;
+    font-size: clamp(1.3rem, 1.05rem + 0.9vw, 1.85rem);
+    line-height: 1.12;
+    letter-spacing: -0.01em;
+    color: var(--color-text);
+  }
+  /* Company name + tag sit together (one sector per client). */
+  .card-meta { display: flex; align-items: center; gap: 0.75rem; flex-wrap: wrap; }
+  .card-client {
+    font-family: var(--font-body); /* Fira Code */
+    font-weight: 400;
     text-transform: uppercase;
     letter-spacing: 0.06em;
-    font-size: 1rem;
+    font-size: clamp(0.8rem, 0.72rem + 0.3vw, 1rem);
+    color: var(--color-text);
   }
-  .hover-block { display: flex; flex-direction: column; gap: 0.5rem; }
-  .hover-label { text-transform: uppercase; letter-spacing: 0.06em; font-size: 1rem; }
-  .hover-role { font-size: 1.25rem; line-height: 1.4; }
-  .hover-result { font-size: 1.25rem; line-height: 1.4; font-weight: 700; }
+  /* Tag: distinct from the filter chips — squared-off, monospace. */
+  .card-tag {
+    font-family: var(--font-body);
+    font-size: 0.8rem;
+    line-height: 1.3;
+    padding: 0.25rem 0.55rem;
+    border-radius: 3px;
+    background: color-mix(in srgb, var(--color-text) 8%, transparent);
+    color: var(--color-muted);
+    white-space: nowrap;
+  }
+
+  /* --- Hover detail, over the media only. */
+  .card-hover {
+    position: absolute;
+    inset: 0;
+    z-index: 2;
+    display: flex;
+    gap: var(--space-4);
+    padding: var(--space-4) 2rem;
+    overflow: auto;
+    background: color-mix(in srgb, var(--cat) 88%, transparent);
+    color: #210f03;
+    font-family: var(--font-display);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.35s var(--ease);
+  }
+  .card:hover .card-hover,
+  .card:focus-within .card-hover,
+  .card.is-open .card-hover { opacity: 1; pointer-events: auto; }
+
+  .hover-col { flex: 1 1 0; min-width: 0; }
+  .hover-col + .hover-col {
+    border-left: 1.5px solid color-mix(in srgb, #210f03 28%, transparent);
+    padding-left: var(--space-4);
+  }
+  .hover-label {
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    font-size: 0.9rem;
+    margin-bottom: 0.6rem;
+  }
+  .hover-role { font-size: 1.05rem; line-height: 1.4; }
+  .hover-result { font-size: 1.05rem; line-height: 1.4; font-weight: 700; margin-bottom: 1.1rem; }
   .hover-cta {
-    align-self: flex-start;
-    background: #210f03;
-    color: #ffffff;
-    padding: 0.6rem 1rem;
-    border-radius: 50px;
-    font-weight: 500;
-    font-size: 1rem;
-    text-decoration: none;
+    font-weight: 700;
+    color: #210f03;
+    text-decoration: underline;
+    text-underline-offset: 3px;
   }
   .sr-only {
     position: absolute;
@@ -148,121 +196,16 @@ const tagTop = textTop && !highlight;
     border: 0;
   }
 
-  .card-media img {
-    display: block;
-    width: 100%;
-    height: auto;
-  }
-
-  .card-body {
-    display: flex;
-    flex-direction: column;
-    gap: 1.25rem;
-  }
-  .card-text { display: flex; flex-direction: column; gap: 0.75rem; }
-  .card-title {
-    font-family: var(--font-display);
-    font-weight: 800;
-    font-size: clamp(1.5rem, 1.1rem + 1.1vw, 2rem);
-    line-height: 1.12;
-    letter-spacing: -0.01em;
-    color: var(--color-text);
-  }
-  .card-client {
-    font-family: var(--font-body); /* Fira Code, like the design */
-    font-weight: 400;
-    text-transform: uppercase;
-    letter-spacing: 0.06em;
-    font-size: clamp(0.95rem, 0.85rem + 0.35vw, 1.25rem);
-  }
-  .card-tag {
-    align-self: flex-start;
-    background: color-mix(in srgb, var(--cat) 26%, transparent);
-    color: var(--color-text);
-    padding: 0.35rem 0.8rem;
-    border-radius: 50px;
-    font-family: var(--font-display);
-    font-weight: 500;
-    font-size: 1rem;
-  }
-
-  /* media-top: full-bleed image, padded text below. */
-  .card--media-top { gap: 2.5rem; }
-  .card--media-top .card-body { padding: 0 2.5rem 2rem; }
-
-  /* media-pad: padded, rounded image then text. */
-  .card--media-pad { gap: 2.5rem; padding: 2rem 2.5rem; }
-
-  /* text-top: padded text then image below. */
-  .card--text-top { gap: 2.5rem; padding: 2rem 2.5rem; }
-
-  .card--round .card-media { border-radius: 0; overflow: hidden; }
-  .card--center .card-body { align-items: center; text-align: center; }
-  .card--center .card-tag { align-self: center; }
-
-  /* image sizing for text-top cards */
-  .card--media-sm .card-media { width: 60%; margin-inline: auto; }
-  .card--media-md .card-media { width: 86%; margin-inline: auto; }
-  .card--blend-darken .card-media img { mix-blend-mode: darken; }
-  .card--blend-lighten .card-media img { mix-blend-mode: lighten; }
-
-  /* Compact (stacked, right column): slightly smaller title. */
-  .card--compact .card-title { font-size: clamp(1.2rem, 1rem + 0.6vw, 1.55rem); }
-
-  /* Highlight (large, left column): the image fills the card; text sits below.
-     Overrides the per-layout padding/sizing so it reads as one big image card. */
-  .card--highlight { gap: 0; padding: 0; }
-  .card--highlight .card-media {
-    flex: 1 1 auto;
-    min-height: 240px;
-    width: 100%;
-    margin: 0;
-    border-radius: 0;
-    overflow: hidden;
-  }
-  .card--highlight .card-media img { width: 100%; height: 100%; object-fit: cover; }
-  .card--highlight .card-body {
-    padding: 1.75rem 2rem;
-    gap: 1rem;
-    align-items: flex-start;
-    text-align: left;
-  }
-  .card--highlight .card-tag { align-self: flex-start; }
-  .card--highlight .card-title { font-size: clamp(1.6rem, 1.2rem + 1.1vw, 2.2rem); }
-
-  /* Pointer screens: the detail is an overlay that slides DOWN over the card
-     on hover / focus (or when a no-url button card is toggled open). */
-  @media (min-width: 721px) {
-    .card-hover {
-      position: absolute;
-      inset: 0;
-      z-index: 2;
-      overflow: auto;
-      justify-content: space-between;
-      opacity: 0;
-      pointer-events: none;
-      transition: opacity 0.35s var(--ease);
-    }
-    .card:hover .card-hover,
-    .card:focus-within .card-hover,
-    .card.is-open .card-hover { opacity: 1; pointer-events: auto; }
-  }
-
-  /* Phones: tapping a card opens the detail at the bottom. */
+  /* Phones: stack the two hover columns. */
   @media (max-width: 720px) {
-    .card-hover {
-      max-height: 0;
-      padding-block: 0;
-      overflow: hidden;
-      transition: max-height 0.4s var(--ease), padding 0.4s var(--ease);
-    }
-    .card.is-open .card-hover,
-    .card:focus-within .card-hover {
-      max-height: 60rem;
-      padding-block: 2rem;
+    .card-hover { flex-direction: column; gap: var(--space-3); }
+    .hover-col + .hover-col {
+      border-left: 0;
+      border-top: 1.5px solid color-mix(in srgb, #210f03 28%, transparent);
+      padding-left: 0;
+      padding-top: var(--space-3);
     }
   }
-
   @media (prefers-reduced-motion: reduce) {
     .card-hover { transition: none; }
   }
