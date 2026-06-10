@@ -61,6 +61,7 @@ const href = hasUrl ? (isExternal ? c.url : base + c.url) : undefined;
     display: flex;
     flex-direction: column;
     min-width: 0;
+    height: 27rem; /* every card the same height */
     border-radius: 0;
     overflow: hidden;
     /* Soft tint of the category colour. */
@@ -83,8 +84,7 @@ const href = hasUrl ? (isExternal ? c.url : base + c.url) : undefined;
   /* --- Media (top): fills the space above the body; hover detail overlays it. */
   .card-media {
     position: relative;
-    flex: 1 1 auto;
-    min-height: 17rem;
+    flex: 0 0 16rem; /* fixed image area, same on every card */
     display: flex;
     align-items: center;
     justify-content: center;
@@ -110,6 +110,8 @@ const href = hasUrl ? (isExternal ? c.url : base + c.url) : undefined;
 
   /* --- Body: title + company name + sector tag, always visible. */
   .card-body {
+    flex: 1 1 auto; /* fills the remaining height — same text area on every card */
+    overflow: hidden;
     display: flex;
     flex-direction: column;
     gap: 0.85rem;
@@ -154,7 +156,7 @@ const href = hasUrl ? (isExternal ? c.url : base + c.url) : undefined;
     gap: var(--space-4);
     padding: var(--space-4) 2rem;
     overflow: auto;
-    background: color-mix(in srgb, var(--cat) 88%, transparent);
+    background: color-mix(in srgb, var(--cat) 93%, transparent);
     color: #210f03;
     font-family: var(--font-display);
     opacity: 0;
