@@ -52,6 +52,10 @@ const byCat = CATS.map((cat) => {
         {items.map((p) => <ProjectCard c={p} d={DESIGN[p.slug]} base={base} />)}
       </div>
     ))}
+
+    <button type="button" class="work-back" data-work-back>
+      <span aria-hidden="true">↑</span> Other categories
+    </button>
   </div>
 </section>
 
@@ -85,13 +89,27 @@ const byCat = CATS.map((cat) => {
     fbtns.forEach((b) => b.addEventListener('click', () => apply(b.dataset.filter)));
     document.addEventListener('work:filter', (e) => apply(e.detail));
   }
+
+  // Mobile: scroll back up to the filters to pick another category.
+  const backBtn = document.querySelector('[data-work-back]');
+  const work = document.getElementById('work');
+  if (backBtn && work) {
+    backBtn.addEventListener('click', () => {
+      const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      work.scrollIntoView({ behavior: reduce ? 'auto' : 'smooth', block: 'start' });
+    });
+  }
 </script>
 
 <style>
   .work {
     background: var(--color-section-bg);
     padding-block: var(--space-6) var(--space-5);
+    scroll-margin-top: 5rem; /* clear the fixed nav when scrolling back up */
   }
+
+  /* "Other categories" — discreet jump back to the filters (mobile only). */
+  .work-back { display: none; }
 
   /* Title with the filters sitting right beside it. */
   .work-head {
@@ -151,6 +169,39 @@ const byCat = CATS.map((cat) => {
   }
   @media (max-width: 720px) {
     .work-cat { max-width: 34rem; margin-inline: auto; }
+
+    /* Filters: one line, horizontally scrollable, a little bigger for tapping. */
+    .work-head { gap: var(--space-3); }
+    .work-filters {
+      flex-wrap: nowrap;
+      overflow-x: auto;
+      scrollbar-width: none;
+      -webkit-overflow-scrolling: touch;
+      width: 100%;
+    }
+    .work-filters::-webkit-scrollbar { display: none; }
+    .filter {
+      flex: 0 0 auto;
+      font-size: 1.05rem;
+      padding: 0.65rem 1.3rem;
+    }
+
+    /* Discreet jump back to the filters. */
+    .work-back {
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      width: fit-content;
+      margin: var(--space-5) auto 0;
+      padding: 0.55rem 1.2rem;
+      font-family: var(--font-body);
+      font-size: 0.9rem;
+      color: var(--color-muted);
+      background: transparent;
+      border: 1px solid var(--color-line);
+      border-radius: var(--radius-pill);
+      cursor: pointer;
+    }
   }
 
   /* Desktop: two equal columns. minmax(0, 1fr) forces them equal regardless of
