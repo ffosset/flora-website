@@ -165,23 +165,22 @@ const FILTERS = ['landing', 'product', 'storytelling'];
     gap: var(--space-4);
     min-height: 22rem;
     padding: var(--space-4);
-    border-radius: var(--radius-card);
-    background: rgba(255, 255, 255, 0.06);
+    border-radius: 0;
+    background: var(--color-primary); /* same as the section ground */
     border: 1px solid rgba(255, 255, 255, 0.45);
-    -webkit-backdrop-filter: blur(3px);
-    backdrop-filter: blur(3px);
     cursor: pointer;
     text-align: center;
+    /* Hard offset shadow in the category colour, visible at rest. */
+    box-shadow: 7px 7px 0 0 var(--cat);
     transition: transform 0.3s var(--ease), box-shadow 0.3s var(--ease),
       border-color 0.3s var(--ease);
   }
-  /* Hover: the card lifts toward the top-left and casts a hard offset shadow
-     in its category colour. */
+  /* Hover: the card lifts toward the top-left and the shadow grows. */
   .service:hover,
   .service:focus-visible {
-    transform: translate(-5px, -5px);
+    transform: translate(-6px, -6px);
     border-color: #ffffff;
-    box-shadow: 14px 14px 0 0 var(--cat);
+    box-shadow: 16px 16px 0 0 var(--cat);
   }
   .service:focus-visible { outline: 2px solid #ffffff; outline-offset: 3px; }
 
