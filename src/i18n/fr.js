@@ -12,14 +12,14 @@ export default {
     services: 'services',
     work: 'projets',
     about: 'à propos',
-    contact: 'discutons',
+    contact: 'on discute ?',
   },
   hero: {
     nameWord: 'flora',
     roleWord: 'designer',
     roles: ['product design', 'expérience UX', 'recherche UX', 'storytelling', 'design graphique'],
     scroll: 'Défiler',
-    subhead: 'discutons',
+    subhead: 'on discute ?',
     headline: 'La clarté, dessinée.',
     cta: 'Parlons-en',
   },
@@ -57,7 +57,7 @@ export default {
       'La plupart des équipes engagent un designer, un rédacteur et un développeur, puis essaient de recoudre le tout. Je vois l’ensemble d’un seul regard — le récit, le design et le produit qui marche — parce que mon parcours est passé par le journalisme, la data, le design et la création d’entreprises.',
   },
   work: {
-    sectionTitle: 'projets choisis',
+    sectionTitle: 'quelques projets',
     intro:
       'J’ai conçu pour des secteurs radicalement différents. Le sujet change sans cesse ; le travail reste le même : rendre clair ce qui est emmêlé.',
     counterSeparator: '/',
@@ -212,7 +212,7 @@ export default {
     ],
   },
   contact: {
-    sectionTitle: 'Discutons',
+    sectionTitle: 'On discute ?',
     subhead: 'Envoyez-moi quelques lignes sur vous ou votre entreprise',
     note: 'Je lis chaque message et je réponds sous quelques jours.',
     emailLabel: 'E-mail',

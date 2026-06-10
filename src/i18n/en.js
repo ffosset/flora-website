@@ -117,7 +117,7 @@ export default {
         category: 'landing',
         tag: 'Food & Sustainability',
         subtitle: 'Soy de temporada',
-        title: 'Find out what products are in season in two clics',
+        title: 'Find out what products are in season in two clicks',
         year: '2016–2018',
         did: 'Designed and launched a platform that shows which fruits and vegetables are in season. A personal project that became an everyday tool for many people.',
         result: '+500 daily users, six years after the platform launch.',

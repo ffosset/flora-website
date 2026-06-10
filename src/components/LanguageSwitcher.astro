@@ -5,10 +5,12 @@ const { currentLocale } = Astro.props;
 
 // Order shown in the design: en · es · fr.
 const order = ['en', 'es', 'fr'];
-const base = import.meta.env.BASE_URL; // includes a trailing slash, e.g. '/flora-website/'
+// BASE_URL has no trailing slash (config base is '/flora-website'); strip
+// defensively so the join below is correct either way.
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 
 function localePath(loc) {
-  return loc === defaultLang ? base : `${base}${loc}/`;
+  return loc === defaultLang ? `${base}/` : `${base}/${loc}/`;
 }
 ---
 

@@ -57,7 +57,7 @@ export default {
       'La mayoría de los equipos contratan a un diseñador, un redactor y un desarrollador, y luego intentan coser las piezas. Yo veo el conjunto de una vez —la historia, el diseño y el producto funcionando— porque mi camino pasó por el periodismo, los datos, el diseño y la creación de empresas.',
   },
   work: {
-    sectionTitle: 'selección',
+    sectionTitle: 'proyectos destacados',
     intro:
       'He diseñado para sectores de lo más distintos. El tema cambia todo el rato; el trabajo es siempre el mismo: aclarar lo enredado.',
     counterSeparator: '/',
@@ -194,7 +194,7 @@ export default {
     facts: [
       '+9 años de experiencia como diseñadora',
       'Perfectamente trilingüe: inglés, francés y español',
-      'Afincada entre Bruselas y Madrid',
+      'Vivo entre Madrid y Bruselas',
     ],
     howIWorkTitle: 'cómo trabajo',
     howIWorkBody:
