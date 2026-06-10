@@ -130,10 +130,9 @@ const FILTERS = ['landing', 'product', 'storytelling'];
 </script>
 
 <style>
-  /* A bold primary block that punctuates the light hero / work sections. */
   .services {
-    background: var(--color-primary);
-    color: var(--color-ink-on-primary);
+    background: var(--color-card); /* white */
+    color: var(--color-text);
   }
 
   .services-title {
@@ -141,12 +140,10 @@ const FILTERS = ['landing', 'product', 'storytelling'];
     font-weight: 600;
     line-height: 1.05;
     letter-spacing: -0.02em;
-    color: #ffffff;
+    color: var(--color-text);
     margin-bottom: var(--space-5);
   }
-  /* The slash is orange-on-light elsewhere; on this orange ground it needs a
-     light accent to stay visible. */
-  .services-title .slash { color: var(--color-secondary); }
+  .services-title .slash { color: var(--color-primary); }
 
   .services-list {
     list-style: none;
@@ -155,8 +152,7 @@ const FILTERS = ['landing', 'product', 'storytelling'];
     gap: var(--space-4);
   }
 
-  /* Glass card (acts as a filter button): number pinned to the top,
-     name + copy anchored to the bottom. */
+  /* Card (also acts as a filter button). */
   .service {
     display: flex;
     flex-direction: column;
@@ -166,23 +162,19 @@ const FILTERS = ['landing', 'product', 'storytelling'];
     min-height: 22rem;
     padding: var(--space-4);
     border-radius: 0;
-    background: var(--color-primary); /* same as the section ground */
-    border: 1px solid rgba(255, 255, 255, 0.45);
+    background: #feebde; /* peach */
     cursor: pointer;
     text-align: center;
-    /* Hard offset shadow in the category colour, visible at rest. */
-    box-shadow: 7px 7px 0 0 var(--cat);
-    transition: transform 0.3s var(--ease), box-shadow 0.3s var(--ease),
-      border-color 0.3s var(--ease);
+    transition: transform 0.3s var(--ease), box-shadow 0.3s var(--ease);
   }
-  /* Hover: the card lifts toward the top-left and the shadow grows. */
+  /* Hover: the card lifts toward the top-left and casts a hard offset shadow
+     in its category colour. */
   .service:hover,
   .service:focus-visible {
     transform: translate(-6px, -6px);
-    border-color: #ffffff;
     box-shadow: 16px 16px 0 0 var(--cat);
   }
-  .service:focus-visible { outline: 2px solid #ffffff; outline-offset: 3px; }
+  .service:focus-visible { outline: 2px solid var(--color-text); outline-offset: 3px; }
 
   /* "View projects →" hint — appears/strengthens on hover. */
   .service-go {
@@ -190,7 +182,7 @@ const FILTERS = ['landing', 'product', 'storytelling'];
     font-family: var(--font-body);
     font-size: var(--fs-small);
     letter-spacing: 0.04em;
-    color: rgba(255, 255, 255, 0.7);
+    color: var(--color-muted);
     opacity: 0;
     transform: translateX(-4px);
     transition: opacity 0.3s var(--ease), transform 0.3s var(--ease), color 0.3s var(--ease);
@@ -199,7 +191,7 @@ const FILTERS = ['landing', 'product', 'storytelling'];
   .service:focus-visible .service-go {
     opacity: 1;
     transform: translateX(0);
-    color: #ffffff;
+    color: var(--color-text);
   }
   @media (prefers-reduced-motion: reduce) {
     .service-go { opacity: 1; transform: none; }
@@ -210,7 +202,7 @@ const FILTERS = ['landing', 'product', 'storytelling'];
     width: 180px;
     height: 180px;
     display: block;
-    color: var(--color-secondary); /* cream, matches the source art */
+    color: var(--color-muted); /* dark grey line-art */
     overflow: visible;
   }
   /* Self-building animation: strokes draw on, filled bits (dots, arrows) pop in.
@@ -244,10 +236,10 @@ const FILTERS = ['landing', 'product', 'storytelling'];
     font-size: clamp(1.4rem, 1.1rem + 1vw, 1.9rem);
     line-height: 1.1;
     letter-spacing: -0.01em;
-    color: #ffffff;
+    color: var(--color-text);
   }
   .service-desc {
-    color: rgba(255, 255, 255, 0.82);
+    color: var(--color-muted);
     font-size: 1.0625rem;
     line-height: 1.5;
   }
