@@ -282,6 +282,9 @@ const roles = t.hero.roles?.length ? t.hero.roles : [t.hero.roleWord];
     /* Keep the portrait clear of the title on small screens. */
     .hero-aside { width: 11rem; top: clamp(6rem, 18vh, 9rem); }
     .hero-photo { --d: 156px; --ring: 20px; }
+    /* Always stack the rotating role under "flora ·" so the line doesn't
+       reflow (and jolt the scroll) as the word changes width. */
+    .hero-role { flex-basis: 100%; }
   }
 
   .hero-line {
