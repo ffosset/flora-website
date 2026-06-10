@@ -138,10 +138,21 @@ const byCat = CATS.map((cat) => {
   }
   .filter:hover { color: var(--color-text); border-color: var(--color-muted); }
   .filter:focus-visible { outline: 2px solid var(--color-primary); outline-offset: 2px; }
-  .filter[aria-pressed='true'] {
-    background: var(--color-primary);
-    border-color: var(--color-primary);
-    color: var(--color-ink-on-primary);
+  /* Selected chip fills with its category colour. */
+  .filter[data-filter='landing'][aria-pressed='true'] {
+    background: var(--cat-landing);
+    border-color: var(--cat-landing);
+    color: var(--color-text);
+  }
+  .filter[data-filter='product'][aria-pressed='true'] {
+    background: var(--cat-product);
+    border-color: var(--cat-product);
+    color: var(--color-text);
+  }
+  .filter[data-filter='storytelling'][aria-pressed='true'] {
+    background: var(--cat-storytelling);
+    border-color: var(--cat-storytelling);
+    color: var(--color-text);
   }
 
   /* One category shown at a time. Phones: a single centred column. */

@@ -16,6 +16,7 @@ const FILTERS = ['landing', 'product', 'storytelling'];
           role="button"
           tabindex="0"
           data-filter={FILTERS[i]}
+          style={`--cat: var(--cat-${FILTERS[i]})`}
           aria-label={`Show ${s.name} projects`}
         >
           {i === 0 && (
@@ -222,6 +223,9 @@ const FILTERS = ['landing', 'product', 'storytelling'];
     transform-box: fill-box;
     transform-origin: center;
   }
+  /* The focal "pop" bits carry the category colour — the visual mention. */
+  .service-icon circle.s-pop { fill: var(--cat); }
+  .service-icon line.s-pop { stroke: var(--cat); }
   .services.is-drawn .service-icon .s-draw {
     animation: icon-draw 2.6s linear forwards;
   }

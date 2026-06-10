@@ -20,7 +20,7 @@ const tagTop = textTop && !highlight;
     d.media && `card--media-${d.media}`,
     { 'card--center': d.center, 'card--round': d.round, 'card--highlight': highlight, 'card--compact': !highlight },
   ]}
-  style={`--bg:${d.bg}; --fg:${d.fg}; --hover:${d.hover}; --pill:${d.pill}`}
+  style={`--cat: var(--cat-${c.category})`}
   data-cat={c.category}
   role={!hasUrl ? 'button' : undefined}
   tabindex={!hasUrl ? '0' : undefined}
@@ -87,8 +87,13 @@ const tagTop = textTop && !highlight;
     min-width: 0;
     border-radius: 12px;
     overflow: hidden;
-    background: var(--bg);
-    color: var(--fg);
+    /* Default: a soft tint of the category colour. */
+    background: linear-gradient(
+      160deg,
+      color-mix(in srgb, var(--cat) 13%, #ffffff),
+      color-mix(in srgb, var(--cat) 30%, #ffffff)
+    );
+    color: var(--color-text);
     text-decoration: none;
     box-shadow: 0 4px 10px rgba(196, 196, 196, 0.12);
   }
@@ -99,10 +104,10 @@ const tagTop = textTop && !highlight;
     outline-offset: 2px;
   }
 
-  /* Hover / expanded detail. */
+  /* Hover / expanded detail: the full category colour. */
   .card-hover {
     font-family: var(--font-display);
-    background: var(--hover);
+    background: var(--cat);
     color: #210f03;
     display: flex;
     flex-direction: column;
@@ -123,7 +128,7 @@ const tagTop = textTop && !highlight;
   .hover-cta {
     align-self: flex-start;
     background: #210f03;
-    color: var(--pill);
+    color: #ffffff;
     padding: 0.6rem 1rem;
     border-radius: 50px;
     font-weight: 500;
@@ -160,7 +165,7 @@ const tagTop = textTop && !highlight;
     font-size: clamp(1.5rem, 1.1rem + 1.1vw, 2rem);
     line-height: 1.12;
     letter-spacing: -0.01em;
-    color: var(--fg); /* override the global h3 colour so dark cards read white */
+    color: var(--color-text);
   }
   .card-client {
     font-family: var(--font-body); /* Fira Code, like the design */
@@ -171,8 +176,8 @@ const tagTop = textTop && !highlight;
   }
   .card-tag {
     align-self: flex-start;
-    background: color-mix(in srgb, var(--fg) 13%, transparent);
-    color: var(--fg);
+    background: color-mix(in srgb, var(--cat) 26%, transparent);
+    color: var(--color-text);
     padding: 0.35rem 0.8rem;
     border-radius: 50px;
     font-family: var(--font-display);
