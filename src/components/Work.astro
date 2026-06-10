@@ -16,11 +16,11 @@ const DESIGN = {
   'rosen':                  { bg: '#ece6e1', fg: '#210f03', layout: 'media-top', hover: '#cdbfb1', pill: '#cdbfb1', cta: 'Read' },
 };
 
-// Category order (also the filter order; Landing is the default view) and the
-// one highlighted (large, left) project per category. The rest stack on the
-// right. We expect at most three projects per category.
+// Category order (also the filter order; Landing is the default view). Each
+// category shows its projects as equal-width columns; the LEAD slug is just
+// rendered first. We expect at most three projects per category.
 const CATS = ['landing', 'product', 'storytelling'];
-const HIGHLIGHT = {
+const LEAD = {
   landing: 'cercle-histoire-forest',
   product: 'minnow-collective',
   storytelling: 'couleur-du-peche',
@@ -28,9 +28,10 @@ const HIGHLIGHT = {
 
 const byCat = CATS.map((cat) => {
   const list = projects.filter((p) => p.category === cat && DESIGN[p.slug]);
-  const highlight = list.find((p) => p.slug === HIGHLIGHT[cat]) || list[0];
-  const rest = list.filter((p) => p !== highlight);
-  return { cat, highlight, rest };
+  // Lead slug first, then the rest — all equal size.
+  const lead = list.find((p) => p.slug === LEAD[cat]);
+  const items = lead ? [lead, ...list.filter((p) => p !== lead)] : list;
+  return { cat, items };
 });
 ---
 
@@ -47,12 +48,9 @@ const byCat = CATS.map((cat) => {
   </div>
 
   <div class="container">
-    {byCat.map(({ cat, highlight, rest }, i) => (
+    {byCat.map(({ cat, items }, i) => (
       <div class:list={['work-cat', { 'is-shown': i === 0 }]} data-cat={cat}>
-        {highlight && <ProjectCard c={highlight} d={DESIGN[highlight.slug]} base={base} highlight={true} />}
-        <div class="work-stack">
-          {rest.map((p) => <ProjectCard c={p} d={DESIGN[p.slug]} base={base} />)}
-        </div>
+        {items.map((p) => <ProjectCard c={p} d={DESIGN[p.slug]} base={base} />)}
       </div>
     ))}
   </div>
@@ -146,26 +144,33 @@ const byCat = CATS.map((cat) => {
     color: var(--color-ink-on-primary);
   }
 
-  /* One category at a time: highlight on the left, up to two stacked on the
-     right. Only the active category is displayed. */
+  /* One category shown at a time. Phones: a single centred column. */
   .work-cat { display: none; }
   .work-cat.is-shown {
-    display: grid;
-    grid-template-columns: 1.1fr 0.9fr;
-    gap: 2rem;
-    align-items: stretch;
-  }
-  .work-stack {
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
     gap: 2rem;
-    min-width: 0;
   }
-
-  /* Phones: stack everything into one centred column. */
   @media (max-width: 720px) {
     .work-cat { max-width: 34rem; margin-inline: auto; }
-    .work-cat.is-shown { grid-template-columns: 1fr; }
+  }
+
+  /* Desktop: equal-width columns. Hovering one card expands it; the others
+     narrow and fade back. */
+  @media (min-width: 721px) {
+    .work-cat.is-shown {
+      flex-direction: row;
+      align-items: stretch;
+    }
+    .work-cat > .card {
+      flex: 1 1 0;
+      min-width: 0;
+      transition: flex-grow 0.45s var(--ease), opacity 0.45s var(--ease);
+    }
+    .work-cat:hover > .card { opacity: 0.5; }
+    .work-cat > .card:hover {
+      flex-grow: 2.2;
+      opacity: 1;
+    }
   }
 </style>
