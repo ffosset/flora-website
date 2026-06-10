@@ -56,28 +56,17 @@ const byCat = CATS.map((cat) => {
 </section>
 
 <script>
-  // Desktop: the overlay reveals on hover/focus (CSS). Mobile (and no-url
-  // button cards): a click/Enter/Space opens it at the bottom of the card.
-  const mq = window.matchMedia('(max-width: 720px)');
+  // Desktop: the detail reveals on hover/focus (CSS).
+  // Mobile: a "read more" button expands it inline below the card body.
   document.querySelectorAll('.work .card').forEach((card) => {
-    const isButton = card.getAttribute('role') === 'button';
-    const setOpen = (open) => {
+    const moreBtn = card.querySelector('[data-more]');
+    if (!moreBtn) return;
+    moreBtn.addEventListener('click', () => {
+      const open = !card.classList.contains('is-open');
       card.classList.toggle('is-open', open);
-      if (isButton) card.setAttribute('aria-expanded', String(open));
-    };
-    card.addEventListener('click', (e) => {
-      if (e.target.closest('.hover-cta')) return; // let the CTA link navigate
-      if (isButton) return setOpen(!card.classList.contains('is-open'));
-      if (mq.matches) setOpen(!card.classList.contains('is-open'));
+      moreBtn.setAttribute('aria-expanded', String(open));
+      moreBtn.textContent = open ? 'Read less' : 'Read more';
     });
-    if (isButton) {
-      card.addEventListener('keydown', (e) => {
-        if (e.key === 'Enter' || e.key === ' ') {
-          e.preventDefault();
-          setOpen(!card.classList.contains('is-open'));
-        }
-      });
-    }
   });
 </script>
 

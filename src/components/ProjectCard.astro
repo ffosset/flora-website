@@ -22,28 +22,6 @@ const href = hasUrl ? (isExternal ? c.url : base + c.url) : undefined;
 >
   <div class="card-media">
     <img src={base + c.image} alt={c.subtitle} loading="lazy" />
-
-    <div class="card-hover" id={`hover-${c.slug}`}>
-      <div class="hover-col">
-        <p class="hover-label">My role</p>
-        <p class="hover-role">{c.did}</p>
-      </div>
-      <div class="hover-col">
-        <p class="hover-label">Result</p>
-        <p class="hover-result">{c.result}</p>
-        {hasUrl && (
-          <a
-            class="hover-cta"
-            href={href}
-            target={isExternal ? '_blank' : undefined}
-            rel={isExternal ? 'noopener noreferrer' : undefined}
-          >
-            {d.cta}
-            {isExternal && <span class="sr-only"> (opens in new tab)</span>}
-          </a>
-        )}
-      </div>
-    </div>
   </div>
 
   <div class="card-body">
@@ -52,6 +30,37 @@ const href = hasUrl ? (isExternal ? c.url : base + c.url) : undefined;
       <span class="card-client">{c.subtitle}</span>
       {c.tag && <span class="card-tag">{c.tag}</span>}
     </p>
+    <button
+      type="button"
+      class="card-more"
+      data-more
+      aria-expanded="false"
+      aria-controls={`hover-${c.slug}`}
+    >
+      Read more
+    </button>
+  </div>
+
+  <div class="card-hover" id={`hover-${c.slug}`}>
+    <div class="hover-col">
+      <p class="hover-label">My role</p>
+      <p class="hover-role">{c.did}</p>
+    </div>
+    <div class="hover-col">
+      <p class="hover-label">Result</p>
+      <p class="hover-result">{c.result}</p>
+      {hasUrl && (
+        <a
+          class="hover-cta"
+          href={href}
+          target={isExternal ? '_blank' : undefined}
+          rel={isExternal ? 'noopener noreferrer' : undefined}
+        >
+          {d.cta}
+          {isExternal && <span class="sr-only"> (opens in new tab)</span>}
+        </a>
+      )}
+    </div>
   </div>
 </article>
 
@@ -135,6 +144,22 @@ const href = hasUrl ? (isExternal ? c.url : base + c.url) : undefined;
     font-size: clamp(0.8rem, 0.72rem + 0.3vw, 1rem);
     color: var(--color-text);
   }
+  /* "Read more" — only on touch / narrow screens (see media query). */
+  .card-more {
+    display: none;
+    align-self: flex-start;
+    margin-top: 0.4rem;
+    font-family: var(--font-body);
+    font-size: 0.85rem;
+    font-weight: 500;
+    color: var(--color-text);
+    background: none;
+    border: 1px solid color-mix(in srgb, var(--color-text) 25%, transparent);
+    border-radius: 3px;
+    padding: 0.35rem 0.8rem;
+    cursor: pointer;
+  }
+
   /* Tag: distinct from the filter chips — squared-off, monospace. */
   .card-tag {
     font-family: var(--font-body);
@@ -150,7 +175,10 @@ const href = hasUrl ? (isExternal ? c.url : base + c.url) : undefined;
   /* --- Hover detail, over the media only. */
   .card-hover {
     position: absolute;
-    inset: 0;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 16rem; /* covers the image area on pointer devices */
     z-index: 2;
     display: flex;
     gap: var(--space-4);
@@ -198,9 +226,30 @@ const href = hasUrl ? (isExternal ? c.url : base + c.url) : undefined;
     border: 0;
   }
 
-  /* Phones: stack the two hover columns. */
+  /* Phones: the detail is no longer an overlay — a "read more" button expands
+     it inline below the title / company name. */
   @media (max-width: 720px) {
-    .card-hover { flex-direction: column; gap: var(--space-3); }
+    .card { height: auto; }
+    .card-more { display: inline-flex; }
+
+    .card-hover {
+      position: static;
+      height: auto;
+      max-height: 0;
+      padding-top: 0;
+      padding-bottom: 0;
+      overflow: hidden;
+      opacity: 1;
+      pointer-events: auto;
+      flex-direction: column;
+      gap: var(--space-3);
+      transition: max-height 0.4s var(--ease), padding 0.4s var(--ease);
+    }
+    .card.is-open .card-hover {
+      max-height: 45rem;
+      padding-top: var(--space-4);
+      padding-bottom: var(--space-4);
+    }
     .hover-col + .hover-col {
       border-left: 0;
       border-top: 1.5px solid color-mix(in srgb, #210f03 28%, transparent);
