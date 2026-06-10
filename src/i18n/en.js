@@ -181,32 +181,28 @@ export default {
   },
   about: {
     sectionTitle: 'about me',
-    bio:
-      'I started out as a data journalist, turning datasets into gripping stories. That curiosity about how to make complicated things land turned into a career: information design, then product design, then product management. Today I freelance from Brussels and Madrid, and I co-run a startup called Minnow that puts environmental risk into the systems companies use to make real decisions.',
-    experienceTitle: 'experience.',
-    experience: [
-      {
-        role: 'Co-founder',
-        org: 'Minnow',
-        note: 'Building tools that put nature-related risk into real business decisions.',
-        when: '2024 — present',
-      },
-      {
-        role: 'Product Designer',
-        org: 'Rosa',
-        note: '',
-        when: '2022 — 2024',
-      },
-      {
-        role: 'Product Designer · Data journalist',
-        org: 'urbanData Analytics',
-        note: '',
-        when: '2017 — 2021',
-      },
+    headline: 'Product leader and expert in bridging design, technology, and business strategy.',
+    // Each fact: a bold lead-in + a primary-coloured remainder.
+    facts: [
+      { strong: '+9 years experience', rest: 'as a designer' },
+      { strong: 'English, French, Spanish', rest: 'perfect fluency' },
+      { strong: 'Brussels & Madrid', rest: 'based in both cities' },
     ],
+    howIWorkTitle: 'how I work',
+    howIWorkBody:
+      'Most teams hire a designer, a writer, and a developer, then stitch them together. My path ran through all of it, so I work across the seams.',
     valuesTitle: 'value driven',
     values:
-      'I choose work that supports a greener, fairer, more inclusive world. If that is the kind of thing you are building, we will get along.',
+      "I take on work that supports a greener, fairer, more inclusive world. I'm enthusiastic, naturally curious, and an active listener.",
+    pathTitle: 'my path',
+    // Career timeline, animated in order. `current` marks the latest step.
+    path: [
+      { label: 'journalism', year: '2012' },
+      { label: 'dataviz', year: '2015' },
+      { label: 'design', year: '2017' },
+      { label: 'product', year: '2018' },
+      { label: 'founder', year: '2025', current: true },
+    ],
   },
   contact: {
     sectionTitle: 'Tell me about your project',
