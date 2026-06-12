@@ -16,8 +16,8 @@ const roles = t.hero.roles?.length ? t.hero.roles : [t.hero.roleWord];
         <span class="hero-name">{t.hero.nameWord}</span>
         <span class="hero-dot" aria-hidden="true">·</span>
         <span class="hero-role" data-rotator data-words={JSON.stringify(roles)}>
-          <span class="role-stack" aria-hidden="true"></span>
           <span class="role-current">{roles[0]}</span>
+          <span class="role-stack" aria-hidden="true"></span>
         </span>
       </h1>
     </div>
@@ -53,10 +53,12 @@ const roles = t.hero.roles?.length ? t.hero.roles : [t.hero.roleWord];
 </script>
 
 <script>
-  // Rising-stack rotator. Each interval the current role "lifts off" the
-  // baseline as a ghost and the next word takes its place underneath. Ghosts
-  // keep climbing and fading on every tick until they reach the top of the
-  // stack, then they're removed — so the loop runs forever with no hard reset.
+  // Build-up rotator (runs ONCE, no loop). The live role sits on the baseline
+  // next to "flora ·". Every interval the live word lifts off as a ghost and
+  // the next role drops in beneath it; each existing ghost climbs another row
+  // and loses 0.2 opacity. After the last role the interval stops and the whole
+  // stack stays on screen — newest at the baseline (full), oldest at the top
+  // (faintest).
   const root = document.querySelector('[data-rotator]');
   const current = root && root.querySelector('.role-current');
   const stack = root && root.querySelector('.role-stack');
@@ -66,43 +68,54 @@ const roles = t.hero.roles?.length ? t.hero.roles : [t.hero.roleWord];
 
     const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
+    // Position a ghost at a given level (0 = baseline). The rise distance is a
+    // CSS var (--role-rise) so it can shrink on small screens automatically.
+    const FADE = 0.2;              // opacity lost per row
+    const place = (el, level) => {
+      el.style.transform = 'translateY(calc(var(--role-rise) * ' + (-level) + '))';
+      el.style.opacity = String(Math.max(0, 1 - level * FADE));
+    };
+
     if (words.length > 1) {
-      // Layout: the live word sits on the baseline (row 0); each departed word
-      // becomes a ghost that climbs and fades over ROWS steps before it's gone.
-      const STEP = 1.15;             // em between stacked rows
-      const ROWS = 5;                // travel span in rows (4 visible + fade-out)
-      const INTERVAL = 2200;         // one new word per interval
-      // Span the rise over ROWS intervals so one interval == exactly one row:
-      // that keeps the visible ghosts evenly spaced on a grid (matching design).
-      const DUR = INTERVAL * ROWS;
-      let i = 0;
-
-      const tick = () => {
-        const departing = words[i];
-        i = (i + 1) % words.length;
-
-        if (reduce) {
-          // No motion: just swap the word in place.
-          current.textContent = words[i];
-          return;
+      // Reduced motion: render the finished stack immediately, no animation.
+      if (reduce) {
+        current.textContent = words[words.length - 1];
+        for (let level = 1; level < words.length; level++) {
+          const g = document.createElement('span');
+          g.className = 'role-ghost';
+          g.textContent = words[words.length - 1 - level];
+          place(g, level);
+          stack.appendChild(g);
         }
+      } else {
+        const ghosts = [];          // { el, level }
+        let i = 0;                  // index of the word currently on the baseline
 
-        // The departing word lifts off the baseline as a ghost. The CSS
-        // animation (role-rise) drives the climb + fade; we just set how far it
-        // travels and how long it lives, then bin it when the animation ends.
-        const g = document.createElement('span');
-        g.className = 'role-ghost';
-        g.textContent = departing;
-        g.style.setProperty('--rise', (-STEP * ROWS) + 'em');
-        g.style.animationDuration = DUR + 'ms';
-        g.addEventListener('animationend', () => g.remove());
-        stack.appendChild(g);
+        const timer = setInterval(() => {
+          // The word leaving the baseline becomes a ghost, born exactly over it.
+          const g = document.createElement('span');
+          g.className = 'role-ghost';
+          g.textContent = words[i];
+          place(g, 0);
+          stack.appendChild(g);
+          ghosts.push({ el: g, level: 0 });
 
-        // Reveal the next word underneath the lifting ghost.
-        current.textContent = words[i];
-      };
+          // Reveal the next role on the baseline.
+          i += 1;
+          current.textContent = words[i];
 
-      setInterval(tick, INTERVAL);
+          // Commit the level-0 state before moving, so the transition fires
+          // reliably (a synchronous layout read is enough — no rAF guessing).
+          void stack.offsetHeight;
+
+          // Climb every ghost one row (the just-departed one lifts off the
+          // baseline; the rest rise + fade further). Nothing is ever removed.
+          ghosts.forEach((o) => place(o.el, ++o.level));
+
+          // Stop on the last role — the stack stays put, fully built.
+          if (i >= words.length - 1) clearInterval(timer);
+        }, 2200);
+      }
     }
   }
 </script>
@@ -363,6 +376,9 @@ const roles = t.hero.roles?.length ? t.hero.roles : [t.hero.roleWord];
      "flora ·" aligned), while departed words rise as absolutely-positioned
      ghosts in .role-stack above it. */
   .hero-role {
+    /* How far each role climbs per step (the user-spec'd ~80px). Smaller on
+       phones so the stack doesn't overrun the shorter title. */
+    --role-rise: 80px;
     position: relative;
     display: inline-block;
     color: var(--color-primary);
@@ -383,22 +399,12 @@ const roles = t.hero.roles?.length ? t.hero.roles : [t.hero.roleWord];
     bottom: 0;
     white-space: nowrap;
     will-change: transform, opacity;
-    /* Born over the live word, then climbs + fades. animation-duration is set
-       per-ghost in JS so one interval lands the word exactly one row up. */
-    animation: role-rise linear forwards;
+    /* Climb + fade are driven by inline transform/opacity set in JS; the
+       transition makes each step glide. */
+    transition: transform 0.7s var(--ease), opacity 0.7s var(--ease);
   }
-  /* Linear travel keeps the rows evenly spaced; the opacity stops make the
-     fade fall off quickly (0.4 → 0.24 → 0.13 → 0.06) like the design. */
-  @keyframes role-rise {
-    0%   { transform: translateY(0);                  opacity: 1; }
-    20%  { opacity: 0.4; }
-    40%  { opacity: 0.24; }
-    60%  { opacity: 0.13; }
-    80%  { opacity: 0.06; }
-    100% { transform: translateY(var(--rise, -5.75em)); opacity: 0; }
-  }
-  @media (prefers-reduced-motion: reduce) {
-    .role-ghost { animation: none; display: none; }
+  @media (max-width: 600px) {
+    .hero-role { --role-rise: 56px; }
   }
 
   /* Real scroll button, pinned to the hero's bottom-right (aligned to the
