@@ -68,11 +68,13 @@ const roles = t.hero.roles?.length ? t.hero.roles : [t.hero.roleWord];
 
     const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-    // Position a ghost at a given level (0 = baseline). The rise distance is a
-    // CSS var (--role-rise) so it can shrink on small screens automatically.
+    // Position a ghost at a given level (0 = baseline). We drive `bottom` (a
+    // POSITIVE offset, which moves the word UP, away from the baseline) rather
+    // than a translateY — there's no sign to get wrong, so it can never render
+    // below the line. The rise distance is a CSS var so it shrinks on phones.
     const FADE = 0.2;              // opacity lost per row
     const place = (el, level) => {
-      el.style.transform = 'translateY(calc(var(--role-rise) * ' + (-level) + '))';
+      el.style.bottom = 'calc(var(--role-rise) * ' + level + ')';
       el.style.opacity = String(Math.max(0, 1 - level * FADE));
     };
 
@@ -396,12 +398,12 @@ const roles = t.hero.roles?.length ? t.hero.roles : [t.hero.roleWord];
   .role-ghost {
     position: absolute;
     left: 0;
-    bottom: 0;
+    bottom: 0;            /* JS raises this (positive = upward) to climb rows */
     white-space: nowrap;
-    will-change: transform, opacity;
-    /* Climb + fade are driven by inline transform/opacity set in JS; the
-       transition makes each step glide. */
-    transition: transform 0.7s var(--ease), opacity 0.7s var(--ease);
+    will-change: bottom, opacity;
+    /* Climb + fade are driven by inline bottom/opacity set in JS; the
+       transition makes each step glide upward. */
+    transition: bottom 0.7s var(--ease), opacity 0.7s var(--ease);
   }
   @media (max-width: 600px) {
     .hero-role { --role-rise: 56px; }
