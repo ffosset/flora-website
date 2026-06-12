@@ -15,10 +15,15 @@ const roles = t.hero.roles?.length ? t.hero.roles : [t.hero.roleWord];
       <h1 class="hero-line">
         <span class="hero-name">{t.hero.nameWord}</span>
         <span class="hero-dot" aria-hidden="true">·</span>
-        <span class="hero-role" data-rotator data-words={JSON.stringify(roles)}>{roles[0]}</span>
+        <span class="hero-role" data-rotator data-words={JSON.stringify(roles)}>
+          <span class="role-stack" aria-hidden="true"></span>
+          <span class="role-current">{roles[0]}</span>
+        </span>
       </h1>
     </div>
   </div>
+
+  {t.hero.tagline && <p class="hero-tagline">{t.hero.tagline}</p>}
 
   <button type="button" class="scroll-btn" data-scroll-next aria-label={t.hero.scroll}>
     <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
@@ -48,20 +53,67 @@ const roles = t.hero.roles?.length ? t.hero.roles : [t.hero.roleWord];
 </script>
 
 <script>
-  const el = document.querySelector('[data-rotator]');
-  if (el) {
+  // Rising-stack rotator. Each interval the current role "lifts off" the
+  // baseline as a ghost and the next word takes its place underneath. Ghosts
+  // keep climbing and fading on every tick until they reach the top of the
+  // stack, then they're removed — so the loop runs forever with no hard reset.
+  const root = document.querySelector('[data-rotator]');
+  const current = root && root.querySelector('.role-current');
+  const stack = root && root.querySelector('.role-stack');
+  if (root && current && stack) {
     let words = [];
-    try { words = JSON.parse(el.dataset.words || '[]'); } catch {}
+    try { words = JSON.parse(root.dataset.words || '[]'); } catch {}
+
+    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
     if (words.length > 1) {
+      // Opacity by level: 0 is the live word (full); ghosts fade as they climb.
+      const FADE = [1, 0.4, 0.24, 0.13, 0.06];
+      const MAX = FADE.length - 1;   // remove a ghost once it climbs past this
+      const STEP = 1.15;             // em risen per level
       let i = 0;
-      setInterval(() => {
+      let ghosts = [];               // [{ el, level }], newest first
+
+      const tick = () => {
+        const departing = words[i];
         i = (i + 1) % words.length;
-        el.classList.add('is-out');
-        setTimeout(() => {
-          el.textContent = words[i];
-          el.classList.remove('is-out');
-        }, 320);
-      }, 2200);
+
+        if (reduce) {
+          // No motion: just swap the word in place.
+          current.textContent = words[i];
+          return;
+        }
+
+        // The word leaving the baseline becomes a ghost, born exactly over the
+        // live word (level 0) so it can transition up from there.
+        const g = document.createElement('span');
+        g.className = 'role-ghost';
+        g.textContent = departing;
+        g.style.transform = 'translateY(0)';
+        g.style.opacity = '1';
+        stack.appendChild(g);
+        ghosts.unshift({ el: g, level: 0 });
+
+        // Reveal the next word underneath the lifting ghost.
+        current.textContent = words[i];
+
+        // Next frame (after the level-0 state has painted), climb every ghost
+        // one level — the just-departed one rises off the baseline, the rest
+        // continue upward and fade further.
+        requestAnimationFrame(() => requestAnimationFrame(() => {
+          ghosts.forEach((o) => {
+            o.level += 1;
+            o.el.style.transform = 'translateY(' + (-o.level * STEP) + 'em)';
+            o.el.style.opacity = String(FADE[o.level] ?? 0);
+          });
+          ghosts = ghosts.filter((o) => {
+            if (o.level > MAX) { o.el.remove(); return false; }
+            return true;
+          });
+        }));
+      };
+
+      setInterval(tick, 2200);
     }
   }
 </script>
@@ -318,24 +370,42 @@ const roles = t.hero.roles?.length ? t.hero.roles : [t.hero.roleWord];
   }
   .hero-name { color: var(--color-text); font-weight: 800; } /* Extra Bold */
   .hero-dot { color: var(--color-primary); font-weight: 300; }
+  /* The role is a baseline anchor: the live word sits in normal flow (keeps
+     "flora ·" aligned), while departed words rise as absolutely-positioned
+     ghosts in .role-stack above it. */
   .hero-role {
+    position: relative;
+    display: inline-block;
     color: var(--color-primary);
     font-weight: 300;
-    transition: opacity 0.32s var(--ease), transform 0.32s var(--ease);
   }
-  /* Word swaps: fade/slide out, change text, fade back in. */
-  .hero-role.is-out { opacity: 0; transform: translateY(0.22em); }
-
-  @media (prefers-reduced-motion: reduce) {
-    .hero-role { transition: none; }
-    .hero-role.is-out { opacity: 1; transform: none; }
+  .role-current { display: inline-block; }
+  .role-stack {
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 0;
+    height: 0;
+    pointer-events: none;
+  }
+  .role-ghost {
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    white-space: nowrap;
+    will-change: transform, opacity;
+    transition: transform 0.9s var(--ease), opacity 0.9s var(--ease);
   }
 
   /* Real scroll button, pinned to the hero's bottom-right (aligned to the
      content gutter). z-index 3 keeps it above the cursor follower. */
   .scroll-btn {
     position: absolute;
-    right: var(--gutter);
+    /* Centred along the bottom so it clears the bottom-right tagline. Using
+       left + negative margin (button is 28px wide) keeps `transform` free for
+       the hover nudge and the idle animation. */
+    left: 50%;
+    margin-left: -14px;
     bottom: var(--space-5);
     z-index: 3;
     padding: 0;
@@ -358,5 +428,24 @@ const roles = t.hero.roles?.length ? t.hero.roles : [t.hero.roleWord];
   }
   @media (prefers-reduced-motion: reduce) {
     .scroll-btn svg { animation: none; }
+  }
+
+  /* Bottom-right tagline, justified right, pinned to the content gutter. */
+  .hero-tagline {
+    position: absolute;
+    right: var(--gutter);
+    bottom: var(--space-5);
+    z-index: 3;
+    max-width: 14ch;
+    margin: 0;
+    text-align: right;
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: clamp(1rem, 0.85rem + 0.7vw, 1.25rem);
+    line-height: 1.25;
+    color: var(--color-primary);
+  }
+  @media (max-width: 600px) {
+    .hero-tagline { font-size: 0.95rem; max-width: 11ch; }
   }
 </style>

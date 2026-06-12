@@ -20,6 +20,7 @@ export default {
     roles: ['product design', 'experiencia UX', 'investigación UX', 'storytelling', 'diseño gráfico'],
     scroll: 'Desplázate',
     subhead: '¿hablamos?',
+    tagline: 'te acompaño y hago realidad tus proyectos web',
     headline: 'Claridad, diseñada.',
     cta: 'Hablemos',
   },

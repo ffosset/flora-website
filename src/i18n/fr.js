@@ -21,6 +21,7 @@ export default {
     roles: ['plateformes', 'expérience UX', 'recherche UX', 'storytelling', 'design graphique'],
     scroll: 'Défiler',
     subhead: 'on discute ?',
+    tagline: 'je vous accompagne et réalise vos projets web',
     headline: 'La clarté, dessinée.',
     cta: 'Parlons-en',
   },

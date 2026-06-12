@@ -22,6 +22,8 @@ export default {
     scroll: 'Scroll',
     // Right-aligned subtitle beside the portrait.
     subhead: "let's chat",
+    // Bottom-right tagline, justified right.
+    tagline: 'I bring your web projects to life',
     // Kept for back-compat with any old references.
     headline: 'Clarity, designed.',
     cta: "Let's talk",
