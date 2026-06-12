@@ -67,12 +67,15 @@ const roles = t.hero.roles?.length ? t.hero.roles : [t.hero.roleWord];
     const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
     if (words.length > 1) {
-      // Opacity by level: 0 is the live word (full); ghosts fade as they climb.
-      const FADE = [1, 0.4, 0.24, 0.13, 0.06];
-      const MAX = FADE.length - 1;   // remove a ghost once it climbs past this
-      const STEP = 1.15;             // em risen per level
+      // Layout: the live word sits on the baseline (row 0); each departed word
+      // becomes a ghost that climbs and fades over ROWS steps before it's gone.
+      const STEP = 1.15;             // em between stacked rows
+      const ROWS = 5;                // travel span in rows (4 visible + fade-out)
+      const INTERVAL = 2200;         // one new word per interval
+      // Span the rise over ROWS intervals so one interval == exactly one row:
+      // that keeps the visible ghosts evenly spaced on a grid (matching design).
+      const DUR = INTERVAL * ROWS;
       let i = 0;
-      let ghosts = [];               // [{ el, level }], newest first
 
       const tick = () => {
         const departing = words[i];
@@ -84,36 +87,22 @@ const roles = t.hero.roles?.length ? t.hero.roles : [t.hero.roleWord];
           return;
         }
 
-        // The word leaving the baseline becomes a ghost, born exactly over the
-        // live word (level 0) so it can transition up from there.
+        // The departing word lifts off the baseline as a ghost. The CSS
+        // animation (role-rise) drives the climb + fade; we just set how far it
+        // travels and how long it lives, then bin it when the animation ends.
         const g = document.createElement('span');
         g.className = 'role-ghost';
         g.textContent = departing;
-        g.style.transform = 'translateY(0)';
-        g.style.opacity = '1';
+        g.style.setProperty('--rise', (-STEP * ROWS) + 'em');
+        g.style.animationDuration = DUR + 'ms';
+        g.addEventListener('animationend', () => g.remove());
         stack.appendChild(g);
-        ghosts.unshift({ el: g, level: 0 });
 
         // Reveal the next word underneath the lifting ghost.
         current.textContent = words[i];
-
-        // Next frame (after the level-0 state has painted), climb every ghost
-        // one level — the just-departed one rises off the baseline, the rest
-        // continue upward and fade further.
-        requestAnimationFrame(() => requestAnimationFrame(() => {
-          ghosts.forEach((o) => {
-            o.level += 1;
-            o.el.style.transform = 'translateY(' + (-o.level * STEP) + 'em)';
-            o.el.style.opacity = String(FADE[o.level] ?? 0);
-          });
-          ghosts = ghosts.filter((o) => {
-            if (o.level > MAX) { o.el.remove(); return false; }
-            return true;
-          });
-        }));
       };
 
-      setInterval(tick, 2200);
+      setInterval(tick, INTERVAL);
     }
   }
 </script>
@@ -394,7 +383,22 @@ const roles = t.hero.roles?.length ? t.hero.roles : [t.hero.roleWord];
     bottom: 0;
     white-space: nowrap;
     will-change: transform, opacity;
-    transition: transform 0.9s var(--ease), opacity 0.9s var(--ease);
+    /* Born over the live word, then climbs + fades. animation-duration is set
+       per-ghost in JS so one interval lands the word exactly one row up. */
+    animation: role-rise linear forwards;
+  }
+  /* Linear travel keeps the rows evenly spaced; the opacity stops make the
+     fade fall off quickly (0.4 → 0.24 → 0.13 → 0.06) like the design. */
+  @keyframes role-rise {
+    0%   { transform: translateY(0);                  opacity: 1; }
+    20%  { opacity: 0.4; }
+    40%  { opacity: 0.24; }
+    60%  { opacity: 0.13; }
+    80%  { opacity: 0.06; }
+    100% { transform: translateY(var(--rise, -5.75em)); opacity: 0; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .role-ghost { animation: none; display: none; }
   }
 
   /* Real scroll button, pinned to the hero's bottom-right (aligned to the
