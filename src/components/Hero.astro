@@ -15,10 +15,7 @@ const roles = t.hero.roles?.length ? t.hero.roles : [t.hero.roleWord];
       <h1 class="hero-line">
         <span class="hero-name">{t.hero.nameWord}</span>
         <span class="hero-dot" aria-hidden="true">·</span>
-        <span class="hero-role" data-rotator data-words={JSON.stringify(roles)}>
-          <span class="role-current">{roles[0]}</span>
-          <span class="role-stack" aria-hidden="true"></span>
-        </span>
+        <span class="hero-role" data-rotator data-words={JSON.stringify(roles)}>{roles[0]}</span>
       </h1>
     </div>
   </div>
@@ -53,71 +50,20 @@ const roles = t.hero.roles?.length ? t.hero.roles : [t.hero.roleWord];
 </script>
 
 <script>
-  // Build-up rotator (runs ONCE, no loop). The live role sits on the baseline
-  // next to "flora ·". Every interval the live word lifts off as a ghost and
-  // the next role drops in beneath it; each existing ghost climbs another row
-  // and loses 0.2 opacity. After the last role the interval stops and the whole
-  // stack stays on screen — newest at the baseline (full), oldest at the top
-  // (faintest).
-  const root = document.querySelector('[data-rotator]');
-  const current = root && root.querySelector('.role-current');
-  const stack = root && root.querySelector('.role-stack');
-  if (root && current && stack) {
+  const el = document.querySelector('[data-rotator]');
+  if (el) {
     let words = [];
-    try { words = JSON.parse(root.dataset.words || '[]'); } catch {}
-
-    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-
-    // Position a ghost at a given level (0 = baseline). We drive `bottom` (a
-    // POSITIVE offset, which moves the word UP, away from the baseline) rather
-    // than a translateY — there's no sign to get wrong, so it can never render
-    // below the line. The rise distance is a CSS var so it shrinks on phones.
-    const FADE = 0.2;              // opacity lost per row
-    const place = (el, level) => {
-      el.style.bottom = 'calc(var(--role-rise) * ' + level + ')';
-      el.style.opacity = String(Math.max(0, 1 - level * FADE));
-    };
-
+    try { words = JSON.parse(el.dataset.words || '[]'); } catch {}
     if (words.length > 1) {
-      // Reduced motion: render the finished stack immediately, no animation.
-      if (reduce) {
-        current.textContent = words[words.length - 1];
-        for (let level = 1; level < words.length; level++) {
-          const g = document.createElement('span');
-          g.className = 'role-ghost';
-          g.textContent = words[words.length - 1 - level];
-          place(g, level);
-          stack.appendChild(g);
-        }
-      } else {
-        const ghosts = [];          // { el, level }
-        let i = 0;                  // index of the word currently on the baseline
-
-        const timer = setInterval(() => {
-          // The word leaving the baseline becomes a ghost, born exactly over it.
-          const g = document.createElement('span');
-          g.className = 'role-ghost';
-          g.textContent = words[i];
-          place(g, 0);
-          stack.appendChild(g);
-          ghosts.push({ el: g, level: 0 });
-
-          // Reveal the next role on the baseline.
-          i += 1;
-          current.textContent = words[i];
-
-          // Commit the level-0 state before moving, so the transition fires
-          // reliably (a synchronous layout read is enough — no rAF guessing).
-          void stack.offsetHeight;
-
-          // Climb every ghost one row (the just-departed one lifts off the
-          // baseline; the rest rise + fade further). Nothing is ever removed.
-          ghosts.forEach((o) => place(o.el, ++o.level));
-
-          // Stop on the last role — the stack stays put, fully built.
-          if (i >= words.length - 1) clearInterval(timer);
-        }, 2200);
-      }
+      let i = 0;
+      setInterval(() => {
+        i = (i + 1) % words.length;
+        el.classList.add('is-out');
+        setTimeout(() => {
+          el.textContent = words[i];
+          el.classList.remove('is-out');
+        }, 320);
+      }, 2200);
     }
   }
 </script>
@@ -374,39 +320,17 @@ const roles = t.hero.roles?.length ? t.hero.roles : [t.hero.roleWord];
   }
   .hero-name { color: var(--color-text); font-weight: 800; } /* Extra Bold */
   .hero-dot { color: var(--color-primary); font-weight: 300; }
-  /* The role is a baseline anchor: the live word sits in normal flow (keeps
-     "flora ·" aligned), while departed words rise as absolutely-positioned
-     ghosts in .role-stack above it. */
   .hero-role {
-    /* How far each role climbs per step (the user-spec'd ~80px). Smaller on
-       phones so the stack doesn't overrun the shorter title. */
-    --role-rise: 80px;
-    position: relative;
-    display: inline-block;
     color: var(--color-primary);
     font-weight: 300;
+    transition: opacity 0.32s var(--ease), transform 0.32s var(--ease);
   }
-  .role-current { display: inline-block; }
-  .role-stack {
-    position: absolute;
-    left: 0;
-    bottom: 0;
-    width: 0;
-    height: 0;
-    pointer-events: none;
-  }
-  .role-ghost {
-    position: absolute;
-    left: 0;
-    bottom: 0;            /* JS raises this (positive = upward) to climb rows */
-    white-space: nowrap;
-    will-change: bottom, opacity;
-    /* Climb + fade are driven by inline bottom/opacity set in JS; the
-       transition makes each step glide upward. */
-    transition: bottom 0.7s var(--ease), opacity 0.7s var(--ease);
-  }
-  @media (max-width: 600px) {
-    .hero-role { --role-rise: 56px; }
+  /* Word swaps: fade/slide out, change text, fade back in. */
+  .hero-role.is-out { opacity: 0; transform: translateY(0.22em); }
+
+  @media (prefers-reduced-motion: reduce) {
+    .hero-role { transition: none; }
+    .hero-role.is-out { opacity: 1; transform: none; }
   }
 
   /* Real scroll button, pinned to the hero's bottom-right (aligned to the
