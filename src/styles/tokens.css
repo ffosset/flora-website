@@ -140,9 +140,10 @@
 
   /* Layout */
   /* Centering kicks in only above this width; below it, content stays
-     pinned to the gutter. Set wide enough to cover MacBook Pro screens
-     (14" ≈ 1512px, 16" ≈ 1728px) so the margin doesn't drift at full size. */
-  --maxw: 1760px;
+     pinned to the gutter. Sections cap at 1440px; the hero runs wider
+     (1760px, ~16" MacBook Pro) so its full-bleed cluster keeps breathing. */
+  --maxw: 1440px;
+  --maxw-hero: 1760px;
   --gutter: clamp(1.25rem, 4vw, 3.5rem);
 
   /* Motion */
