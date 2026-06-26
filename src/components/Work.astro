@@ -4,17 +4,18 @@ const { t } = Astro.props;
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 const projects = t.work.projects || [];
 
-// Per-card visual treatment (colours / layout / blend), keyed by slug.
-// `cta` is a key into t.work.ctas so the label is translated per locale.
+// Per-card CTA label (a key into t.work.ctas, translated per locale). Every
+// card now shares one identical visual structure, so the CTA wording is the
+// only per-project treatment left.
 const DESIGN = {
-  'cercle-histoire-forest': { bg: '#efe9e3', fg: '#210f03', layout: 'media-top', hover: '#c7a98a', pill: '#d7c5b3', cta: 'website' },
-  'minnow-collective':      { bg: '#124b4b', fg: '#ffffff', layout: 'text-top', centered: true, hover: '#4e9d9d', pill: '#349494', cta: 'website' },
-  'soy-de-temporada':       { bg: '#fcf4be', fg: '#210f03', layout: 'text-top', media: 'sm', blend: 'darken', center: true, hover: '#f6e35c', pill: '#f6e35c', cta: 'platform' },
-  'rosa-ebilling':          { bg: '#916cb1', fg: '#ffffff', layout: 'text-top', centered: true, hover: '#bf8aed', pill: '#bf8aed', cta: 'website' },
-  'neighborhood-map':       { bg: '#d1d5ef', fg: '#210f03', layout: 'media-top', hover: '#7a88ed', pill: '#7a88ed', cta: 'website' },
-  'couleur-du-peche':       { bg: '#fce4be', fg: '#210f03', layout: 'media-pad', padded: true, hover: '#f1c173', pill: '#f1c173', cta: 'read' },
-  'oyas-belgique':          { bg: '#dfe7d8', fg: '#210f03', layout: 'media-top', padded: true, hover: '#a8c08f', pill: '#a8c08f', cta: 'website' },
-  'rosen':                  { bg: '#ece6e1', fg: '#210f03', layout: 'media-top', hover: '#cdbfb1', pill: '#cdbfb1', cta: 'read' },
+  'cercle-histoire-forest': { cta: 'website' },
+  'minnow-collective':      { cta: 'website' },
+  'soy-de-temporada':       { cta: 'platform' },
+  'rosa-ebilling':          { cta: 'website' },
+  'neighborhood-map':       { cta: 'website' },
+  'couleur-du-peche':       { cta: 'read' },
+  'oyas-belgique':          { cta: 'website' },
+  'rosen':                  { cta: 'read' },
 };
 
 // Labels ProjectCard needs (it doesn't receive the whole dictionary).

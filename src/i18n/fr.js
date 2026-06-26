@@ -1,5 +1,5 @@
 // French — first draft, mirrors en.js keys exactly.
-// Register: vous. Kept-English terms (UX/UI, Storytelling) stay verbatim.
+// Register: vous. Kept-English terms (UX/UI) stay verbatim; 'storytelling' → 'communication' in FR.
 // FR-specific: Landing pages → Sites web, Product design → Plateformes.
 // Empty strings fall back to English via t().
 
@@ -18,7 +18,7 @@ export default {
   hero: {
     nameWord: 'flora',
     roleWord: 'designer',
-    roles: ['plateformes', 'expérience UX', 'recherche UX', 'storytelling', 'design graphique'],
+    roles: ['plateformes', 'expérience UX', 'recherche UX', 'communication', 'design graphique'],
     scroll: 'Défiler',
     subhead: 'on discute ?',
     tagline: 'je vous accompagne et réalise vos projets web',
@@ -32,7 +32,7 @@ export default {
     items: [
       { name: 'Sites web', desc: 'pour les organisations et les personnes qui ont besoin d’une présence en ligne' },
       { name: 'Plateformes', desc: 'pour les équipes produit qui ont besoin d’une expertise senior en design et en UX' },
-      { name: 'Storytelling', desc: 'pour les entreprises qui ont besoin de créer du contenu visuel' },
+      { name: 'Communication', desc: 'pour les entreprises qui ont besoin de créer du contenu visuel' },
     ],
   },
   whatIDo: {
@@ -68,7 +68,7 @@ export default {
     filters: {
       landing: 'Site web',
       product: 'Plateformes',
-      storytelling: 'Storytelling',
+      storytelling: 'Communication',
     },
     prev: 'Projets précédents',
     next: 'Projets suivants',

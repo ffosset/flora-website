@@ -11,12 +11,7 @@ const href = hasUrl ? (isExternal ? c.url : base + c.url) : undefined;
 ---
 
 <article
-  class:list={[
-    'card',
-    d.blend && `card--blend-${d.blend}`,
-    d.media && `card--media-${d.media}`,
-    { 'card--centered': d.centered, 'card--padded': d.padded, 'is-extra': extra },
-  ]}
+  class:list={['card', { 'is-extra': extra }]}
   style={`--cat: var(--cat-${c.category})`}
   data-cat={c.category}
   role={!hasUrl ? 'button' : undefined}
@@ -103,38 +98,13 @@ const href = hasUrl ? (isExternal ? c.url : base + c.url) : undefined;
     justify-content: center;
     overflow: hidden;
   }
-  .card-media img { display: block; }
-  /* Photos cover the media area; blended/centered illustrations stay contained. */
-  .card:not(.card--blend-darken):not(.card--blend-lighten):not(.card--centered) .card-media img {
+  /* Every image fills the media area the same way (full-bleed cover). */
+  .card-media img {
+    display: block;
     width: 100%;
     height: 100%;
     object-fit: cover;
   }
-  .card--blend-darken .card-media img,
-  .card--blend-lighten .card-media img {
-    max-width: 86%;
-    max-height: 80%;
-    width: auto;
-    height: auto;
-  }
-  .card--media-sm .card-media img { max-width: 64%; }
-  /* Centered (Minnow / Rosa): contained screenshot, centred text. */
-  .card--centered .card-media img {
-    max-width: 90%;
-    max-height: 86%;
-    width: auto;
-    height: auto;
-    object-fit: contain;
-  }
-  .card--centered .card-body { align-items: center; text-align: center; }
-  .card--centered .card-meta { justify-content: center; }
-  /* Centred cards also centre the hover detail. */
-  .card--centered .card-hover { align-items: center; justify-content: center; text-align: center; }
-  .card--centered .hover-cta { align-self: center; margin-top: 0; }
-  /* Padded (storytelling): the photo keeps a margin of card colour around it. */
-  .card--padded .card-media { padding: 1.25rem; }
-  .card--blend-darken .card-media img { mix-blend-mode: darken; }
-  .card--blend-lighten .card-media img { mix-blend-mode: lighten; }
 
   /* --- Body: title + company name + sector tag, always visible. */
   .card-body {
