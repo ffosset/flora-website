@@ -197,6 +197,7 @@ export default {
     headline: 'Product leader y experta en tender puentes entre diseño, tecnología y estrategia de negocio.',
     facts: [
       '+9 años de experiencia como diseñadora',
+      'Cómoda con el liderazgo y la colaboración',
       'Perfectamente trilingüe: inglés, francés y español',
       'Vivo entre Madrid y Bruselas',
     ],

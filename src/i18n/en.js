@@ -202,10 +202,11 @@ export default {
     ],
   },
   about: {
-    sectionTitle: 'about me',
+    sectionTitle: 'about',
     headline: 'Product leader and expert in bridging design, technology, and business strategy.',
     facts: [
       '+9 years experience as a designer',
+      'Comfortable with leadership, collaboration',
       'Perfectly fluent in English, French, and Spanish',
       'Based between Brussels & Madrid',
     ],

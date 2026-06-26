@@ -198,6 +198,7 @@ export default {
     headline: 'Product leader, experte dans l’art de relier design, technologie et stratégie d’entreprise.',
     facts: [
       '+9 ans d’expérience en design',
+      'À l’aise avec le leadership et la collaboration',
       'Parfaitement trilingue : anglais, français et espagnol',
       'Basée entre Bruxelles et Madrid',
     ],

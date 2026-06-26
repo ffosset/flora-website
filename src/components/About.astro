@@ -8,7 +8,10 @@ const path = t.about.path || [];
 
 <section id="about" class="about">
   <div class="container">
-    <h2 class="about-title"><span class="slash">·</span>{t.about.sectionTitle}</h2>
+    <header class="about-head">
+      <p class="about-eyebrow"><span class="slash">·</span>{t.about.sectionTitle}</p>
+      <h2 class="about-title">{t.about.headline}</h2>
+    </header>
 
     <div class="about-grid">
       <div class="about-media">
@@ -23,8 +26,6 @@ const path = t.about.path || [];
       </div>
 
       <div class="about-right">
-        <p class="about-headline">{t.about.headline}</p>
-
         <ul class="about-facts">
           {facts.map((f) => (
             <li><span class="slash" aria-hidden="true">·</span>{f}</li>
@@ -34,7 +35,7 @@ const path = t.about.path || [];
     </div>
 
     <div class="about-path" data-path>
-      <h2 class="about-title"><span class="slash">·</span>{t.about.pathTitle}</h2>
+      <h2 class="about-subhead"><span class="slash">·</span>{t.about.pathTitle}</h2>
       <ol class="path">
         {path.map((p, i) => (
           <li class:list={['path-step', { 'is-current': p.current }]} style={`--i:${i}`}>
@@ -80,7 +81,32 @@ const path = t.about.path || [];
 <style>
   .about { background: var(--color-section-bg); }
 
+  /* Centred header: small orange eyebrow over a large bold statement
+     (same pattern as the services and projects sections). */
+  .about-head {
+    text-align: center;
+    max-width: 56rem;
+    margin: 0 auto var(--space-5);
+  }
+  .about-eyebrow {
+    font-family: var(--font-body);
+    font-size: var(--fs-small);
+    letter-spacing: 0.04em;
+    color: var(--color-primary);
+    margin-bottom: var(--space-2);
+  }
+  .about-eyebrow .slash { color: var(--color-primary); margin-right: 0.4em; }
   .about-title {
+    font-size: var(--fs-section);
+    font-weight: 700;
+    line-height: 1.15;
+    letter-spacing: -0.02em;
+    color: var(--color-text);
+  }
+
+  /* Sub-heading used by the timeline ("· my path") — keeps the older
+     left-aligned heading style. */
+  .about-subhead {
     font-size: var(--fs-section);
     font-weight: 600;
     line-height: 1.05;
@@ -90,7 +116,6 @@ const path = t.about.path || [];
   .about-grid {
     display: grid;
     gap: var(--space-4);
-    margin-top: var(--space-4);
   }
   @media (min-width: 900px) {
     /* align-items: center vertically centres the headline + facts against the
@@ -110,23 +135,12 @@ const path = t.about.path || [];
     .about-portrait { max-width: 20rem; }
   }
 
-  .about-headline {
-    font-family: var(--font-display);
-    font-weight: 600;
-    font-size: clamp(1.5rem, 1.05rem + 1.6vw, 2.1rem);
-    line-height: 1.25;
-    letter-spacing: -0.01em;
-    color: var(--color-text);
-    max-width: 26ch;
-  }
-
   /* Quick facts: a small orange dot before each line. */
   .about-facts {
     list-style: none;
     display: flex;
     flex-direction: column;
     gap: var(--space-2);
-    margin-top: var(--space-4);
   }
   .about-facts li {
     font-family: var(--font-display);
