@@ -8,6 +8,7 @@ const roles = t.hero.roles?.length ? t.hero.roles : [t.hero.roleWord];
     <a class="hero-photo" href="#contact" aria-label={t.a11y.getInTouch}>
       <img src={portrait.src} alt="Flora Fosset" width="203" height="203" loading="eager" />
     </a>
+    {t.hero.tagline && <p class="hero-tagline">{t.hero.tagline}</p>}
   </aside>
 
   <div class="container hero-inner">
@@ -19,8 +20,6 @@ const roles = t.hero.roles?.length ? t.hero.roles : [t.hero.roleWord];
       </h1>
     </div>
   </div>
-
-  {t.hero.tagline && <p class="hero-tagline">{t.hero.tagline}</p>}
 
   <button type="button" class="scroll-btn" data-scroll-next aria-label={t.hero.scroll}>
     <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
@@ -367,15 +366,10 @@ const roles = t.hero.roles?.length ? t.hero.roles : [t.hero.roleWord];
     .scroll-btn svg { animation: none; }
   }
 
-  /* Bottom-right tagline, justified right, pinned to the content gutter. */
+  /* Tagline, centered directly under the portrait (inside .hero-aside). */
   .hero-tagline {
-    position: absolute;
-    right: var(--gutter);
-    bottom: var(--space-5);
-    z-index: 3;
-    max-width: 14ch;
     margin: 0;
-    text-align: right;
+    text-align: center;
     font-family: var(--font-display);
     font-weight: 700;
     font-size: clamp(1rem, 0.85rem + 0.7vw, 1.25rem);
@@ -383,6 +377,6 @@ const roles = t.hero.roles?.length ? t.hero.roles : [t.hero.roleWord];
     color: var(--color-primary);
   }
   @media (max-width: 600px) {
-    .hero-tagline { font-size: 0.95rem; max-width: 11ch; }
+    .hero-tagline { font-size: 0.95rem; }
   }
 </style>
