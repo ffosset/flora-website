@@ -20,54 +20,53 @@ const DESIGN = {
 // Labels ProjectCard needs (it doesn't receive the whole dictionary).
 const cardLabels = { readMore: t.work.readMore, newTab: t.a11y.newTab };
 
-// Category order (also the filter order; Landing is the default view). Each
-// category shows equal-width columns. SHOW lists exactly which projects to
-// display per category, in order (two each for now).
-const CATS = ['landing', 'product', 'storytelling'];
-const SHOW = {
-  landing: ['cercle-histoire-forest', 'soy-de-temporada'],
-  product: ['minnow-collective', 'rosa-ebilling'],
-  storytelling: ['oyas-belgique', 'couleur-du-peche'],
-};
+// Display order for the projects grid. The first VISIBLE show by default; the
+// rest reveal STEP at a time via the "see more" button. Edit this list to
+// change which projects show and in what order.
+const ORDER = [
+  'cercle-histoire-forest', // 1
+  'oyas-belgique',          // 2
+  'minnow-collective',      // 3
+  'soy-de-temporada',       // 4
+  'rosa-ebilling',          // 5
+  'couleur-du-peche',       // 6 (métis investigation)
+];
+const VISIBLE = 4; // shown before any "see more" click
+const STEP = 2;    // revealed per click
 
-const byCat = CATS.map((cat) => {
-  const items = (SHOW[cat] || [])
-    .map((slug) => projects.find((p) => p.slug === slug))
-    .filter((p) => p && DESIGN[p.slug]);
-  return { cat, items };
-});
+const ordered = ORDER
+  .map((slug) => projects.find((p) => p.slug === slug))
+  .filter((p) => p && DESIGN[p.slug]);
 ---
 
 <section id="work" class="work">
-  <div class="container work-head">
-    <h2 class="work-h2"><span class="slash">·</span>{t.work.sectionTitle}</h2>
-    <div class="work-filters" role="group" aria-label={t.a11y.filterProjects}>
-      {CATS.map((k, i) => (
-        <button type="button" class="filter" data-filter={k} aria-pressed={i === 0 ? 'true' : 'false'}>
-          {t.work.filters[k]}
-        </button>
+  <div class="container">
+    <header class="work-head">
+      <p class="work-eyebrow"><span class="slash">·</span>{t.work.sectionTitle}</p>
+      <h2 class="work-title">{t.work.sectionSubtitle}</h2>
+    </header>
+
+    <div class="work-grid">
+      {ordered.map((p, i) => (
+        <ProjectCard
+          c={p}
+          d={{ ...DESIGN[p.slug], cta: t.work.ctas[DESIGN[p.slug].cta] }}
+          base={base}
+          labels={cardLabels}
+          service={t.work.filters[p.category]}
+          extra={i >= VISIBLE}
+        />
       ))}
     </div>
+
+    {ordered.length > VISIBLE && (
+      <button type="button" class="work-more" data-work-more data-step={STEP}>
+        {t.work.seeMore}
+      </button>
+    )}
   </div>
 
-  <div class="container">
-    {byCat.map(({ cat, items }, i) => (
-      <div class:list={['work-cat', { 'is-shown': i === 0 }]} data-cat={cat}>
-        {items.map((p) => (
-          <ProjectCard
-            c={p}
-            d={{ ...DESIGN[p.slug], cta: t.work.ctas[DESIGN[p.slug].cta] }}
-            base={base}
-            labels={cardLabels}
-          />
-        ))}
-      </div>
-    ))}
-
-    <button type="button" class="work-back" data-work-back>
-      <span aria-hidden="true">↑</span> {t.work.otherCategories}
-    </button>
-  </div>
+  <noscript set:html={'<style>.card.is-extra{display:flex !important}.work-more{display:none !important}</style>'} />
 </section>
 
 <script>
@@ -86,28 +85,15 @@ const byCat = CATS.map((cat) => {
 </script>
 
 <script>
-  // Category filtering. One category is shown at a time (Landing by default).
-  // Driven by the filter buttons and by the Services cards (which dispatch a
-  // 'work:filter' event before scrolling to #work).
-  const fbtns = Array.from(document.querySelectorAll('.work-filters .filter'));
-  const cats = Array.from(document.querySelectorAll('.work-cat'));
-  if (fbtns.length && cats.length) {
-    const apply = (cat) => {
-      if (!cats.some((c) => c.dataset.cat === cat)) return;
-      fbtns.forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.filter === cat)));
-      cats.forEach((c) => c.classList.toggle('is-shown', c.dataset.cat === cat));
-    };
-    fbtns.forEach((b) => b.addEventListener('click', () => apply(b.dataset.filter)));
-    document.addEventListener('work:filter', (e) => apply(e.detail));
-  }
-
-  // Mobile: scroll back up to the filters to pick another category.
-  const backBtn = document.querySelector('[data-work-back]');
-  const work = document.getElementById('work');
-  if (backBtn && work) {
-    backBtn.addEventListener('click', () => {
-      const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-      work.scrollIntoView({ behavior: reduce ? 'auto' : 'smooth', block: 'start' });
+  // "See more": reveal the next batch of hidden cards (STEP at a time). When
+  // none are left hidden, the button removes itself.
+  const moreBtn = document.querySelector('[data-work-more]');
+  if (moreBtn) {
+    const step = Number(moreBtn.getAttribute('data-step')) || 2;
+    moreBtn.addEventListener('click', () => {
+      const hidden = document.querySelectorAll('.work .card.is-extra');
+      Array.from(hidden).slice(0, step).forEach((card) => card.classList.remove('is-extra'));
+      if (!document.querySelector('.work .card.is-extra')) moreBtn.remove();
     });
   }
 </script>
@@ -116,118 +102,74 @@ const byCat = CATS.map((cat) => {
   .work {
     background: var(--color-section-bg);
     padding-block: var(--space-6) var(--space-5);
-    scroll-margin-top: 5rem; /* clear the fixed nav when scrolling back up */
+    scroll-margin-top: 5rem; /* clear the fixed nav when scrolling to #work */
   }
 
-  /* "Other categories" — discreet jump back to the filters (mobile only). */
-  .work-back { display: none; }
-
-  /* Title with the filters sitting right beside it. */
+  /* Centred header: small orange eyebrow over a large bold statement
+     (same pattern as the services section). */
   .work-head {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    gap: var(--space-3) var(--space-4);
-    margin-bottom: var(--space-4);
+    text-align: center;
+    max-width: 56rem;
+    margin: 0 auto var(--space-5);
   }
-  .work-h2 {
+  .work-eyebrow {
+    font-family: var(--font-body);
+    font-size: var(--fs-small);
+    letter-spacing: 0.04em;
+    color: var(--color-primary);
+    margin-bottom: var(--space-2);
+  }
+  .work-eyebrow .slash { color: var(--color-primary); margin-right: 0.4em; }
+  .work-title {
     font-size: var(--fs-section);
-    font-weight: 600;
-    line-height: 1.05;
+    font-weight: 700;
+    line-height: 1.15;
     letter-spacing: -0.02em;
+    color: var(--color-text);
   }
 
-  /* Filter pills. */
-  .work-filters { display: flex; flex-wrap: wrap; gap: 0.5rem; }
-  .filter {
+  /* Projects grid. Phones: a single centred column. */
+  .work-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 2rem;
+    max-width: 34rem;
+    margin-inline: auto;
+  }
+
+  /* "See more" — reveals the next batch of cards. */
+  .work-more {
+    display: block;
+    margin: var(--space-5) auto 0;
+    padding: 0.7rem 1.7rem;
     font-family: var(--font-display);
-    font-size: 0.95rem;
+    font-size: 1rem;
     font-weight: 500;
-    padding: 0.5rem 1.1rem;
-    border-radius: var(--radius-pill);
-    border: 1px solid var(--color-line);
+    color: var(--color-text);
     background: transparent;
-    color: var(--color-muted);
+    border: 1px solid var(--color-line);
+    border-radius: var(--radius-pill);
     cursor: pointer;
     transition: color 0.25s var(--ease), background 0.25s var(--ease),
       border-color 0.25s var(--ease);
   }
-  .filter:hover { color: var(--color-text); border-color: var(--color-muted); }
-  .filter:focus-visible { outline: 2px solid var(--color-primary); outline-offset: 2px; }
-  /* Selected chip fills with its category colour. */
-  .filter[data-filter='landing'][aria-pressed='true'] {
-    background: var(--cat-landing);
-    border-color: var(--cat-landing);
-    color: var(--color-text);
+  .work-more:hover {
+    border-color: var(--color-muted);
+    background: color-mix(in srgb, var(--color-text) 5%, transparent);
   }
-  .filter[data-filter='product'][aria-pressed='true'] {
-    background: var(--cat-product);
-    border-color: var(--cat-product);
-    color: var(--color-text);
-  }
-  .filter[data-filter='storytelling'][aria-pressed='true'] {
-    background: var(--cat-storytelling);
-    border-color: var(--cat-storytelling);
-    color: var(--color-text);
-  }
-
-  /* One category shown at a time. Phones: a single centred column. */
-  .work-cat { display: none; }
-  .work-cat.is-shown {
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: 2rem;
-  }
-  @media (max-width: 720px) {
-    .work-cat { max-width: 34rem; margin-inline: auto; }
-
-    /* Filters: one line, horizontally scrollable, a little bigger for tapping. */
-    .work-head { gap: var(--space-3); }
-    .work-filters {
-      flex-wrap: nowrap;
-      overflow-x: auto;
-      scrollbar-width: none;
-      -webkit-overflow-scrolling: touch;
-      width: 100%;
-    }
-    .work-filters::-webkit-scrollbar { display: none; }
-    .filter {
-      flex: 0 0 auto;
-      font-size: 1.05rem;
-      padding: 0.65rem 1.3rem;
-    }
-
-    /* Discreet jump back to the filters. */
-    .work-back {
-      display: flex;
-      align-items: center;
-      gap: 0.4rem;
-      width: fit-content;
-      margin: var(--space-5) auto 0;
-      padding: 0.55rem 1.2rem;
-      font-family: var(--font-body);
-      font-size: 0.9rem;
-      color: var(--color-muted);
-      background: transparent;
-      border: 1px solid var(--color-line);
-      border-radius: var(--radius-pill);
-      cursor: pointer;
-    }
-  }
+  .work-more:focus-visible { outline: 2px solid var(--color-primary); outline-offset: 2px; }
 
   /* Desktop: two equal columns. minmax(0, 1fr) forces them equal regardless of
-     the image inside. Hovering a card widens it (grid transition) and dims the
-     other. */
+     the image inside. Hovering one card fades the others back so the eye goes
+     to the hovered card; its detail overlay reveals separately (ProjectCard). */
   @media (min-width: 721px) {
-    .work-cat.is-shown {
+    .work-grid {
       grid-template-columns: repeat(2, minmax(0, 1fr));
       align-items: stretch;
+      max-width: none;
     }
-    /* Equal-width cards (no size change on hover). Hovering one fades the
-       other back so the eye goes to the hovered card; its detail overlay
-       reveals separately (see ProjectCard). */
-    .work-cat > .card { min-width: 0; transition: opacity 0.45s var(--ease); }
-    .work-cat:hover > .card { opacity: 0.35; }
-    .work-cat > .card:hover { opacity: 1; }
+    .work-grid > .card { min-width: 0; transition: opacity 0.45s var(--ease); }
+    .work-grid:hover > .card { opacity: 0.35; }
+    .work-grid > .card:hover { opacity: 1; }
   }
 </style>

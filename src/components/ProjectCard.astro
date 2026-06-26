@@ -2,7 +2,7 @@
 // A single project card: image on top with the hover detail laid over it,
 // and the title + company name + sector tag always visible below.
 // `labels` carries the translated UI strings (with English fallbacks).
-const { c, d, base, labels = {} } = Astro.props;
+const { c, d, base, labels = {}, service, extra = false } = Astro.props;
 const readMore = labels.readMore ?? 'Read more';
 const newTab = labels.newTab ?? 'opens in new tab';
 const hasUrl = Boolean(c.url);
@@ -15,7 +15,7 @@ const href = hasUrl ? (isExternal ? c.url : base + c.url) : undefined;
     'card',
     d.blend && `card--blend-${d.blend}`,
     d.media && `card--media-${d.media}`,
-    { 'card--centered': d.centered, 'card--padded': d.padded },
+    { 'card--centered': d.centered, 'card--padded': d.padded, 'is-extra': extra },
   ]}
   style={`--cat: var(--cat-${c.category})`}
   data-cat={c.category}
@@ -31,7 +31,8 @@ const href = hasUrl ? (isExternal ? c.url : base + c.url) : undefined;
   <div class="card-body">
     <h3 class="card-title">{c.title}</h3>
     <p class="card-meta">
-      <span class="card-client">{c.subtitle}</span>
+      {/* Client name hidden for now — restore by re-adding the .card-client span here. */}
+      {service && <span class="card-service">{service}</span>}
       {c.tag && <span class="card-tag">{c.tag}</span>}
     </p>
     <button
@@ -84,6 +85,9 @@ const href = hasUrl ? (isExternal ? c.url : base + c.url) : undefined;
     box-shadow: 0 4px 10px rgba(196, 196, 196, 0.12);
   }
   .card[role='button'] { cursor: pointer; }
+  /* Extra cards stay hidden until "see more" reveals them (JS removes the
+     class). The grid only lays out the visible ones. */
+  .card.is-extra { display: none; }
   .card[role='button']:focus-visible,
   .hover-cta:focus-visible {
     outline: 2px solid var(--color-primary);
@@ -175,16 +179,24 @@ const href = hasUrl ? (isExternal ? c.url : base + c.url) : undefined;
     cursor: pointer;
   }
 
-  /* Tag: distinct from the filter chips — squared-off, monospace. */
+  /* Tags row: the service (filled with its category colour), then the client's
+     sector in muted grey. Both squared and monospace. */
+  .card-service,
   .card-tag {
     font-family: var(--font-body);
-    font-size: 0.8rem;
+    font-size: 0.85rem;
     line-height: 1.3;
-    padding: 0.25rem 0.55rem;
-    border-radius: 3px;
+    padding: 0.35rem 0.7rem;
+    border-radius: 4px;
+    white-space: nowrap;
+  }
+  .card-service { background: var(--cat); color: #210f03; }
+  /* Teal and raspberry are too dark for dark text — flip to white. */
+  .card[data-cat='product'] .card-service,
+  .card[data-cat='storytelling'] .card-service { color: #ffffff; }
+  .card-tag {
     background: color-mix(in srgb, var(--color-text) 8%, transparent);
     color: var(--color-muted);
-    white-space: nowrap;
   }
 
   /* --- Hover detail, over the media: the result big, then a keyword recap. */

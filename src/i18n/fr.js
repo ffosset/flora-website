@@ -26,7 +26,8 @@ export default {
     cta: 'Parlons-en',
   },
   services: {
-    sectionTitle: 'mes services',
+    sectionTitle: 'services',
+    sectionSubtitle: 'Je vous aide à concrétiser vos projets en ligne et vous accompagne dans le choix du message et de la plateforme',
     viewProjects: 'Voir les projets',
     items: [
       { name: 'Sites web', desc: 'pour les organisations et les personnes qui ont besoin d’une présence en ligne' },
@@ -59,12 +60,13 @@ export default {
       'La plupart des équipes engagent un designer, un rédacteur et un développeur, puis essaient de recoudre le tout. Je vois l’ensemble d’un seul regard — le récit, le design et le produit qui marche — parce que mon parcours est passé par le journalisme, la data, le design et la création d’entreprises.',
   },
   work: {
-    sectionTitle: 'sélection de projets',
+    sectionTitle: 'projets',
+    sectionSubtitle: '9 ans d’expérience m’ont menée des simples landing pages aux plateformes de données complexes',
     intro:
       'J’ai conçu pour des secteurs radicalement différents. Le sujet change sans cesse ; le travail reste le même : rendre clair ce qui est emmêlé.',
     counterSeparator: '/',
     filters: {
-      landing: 'Sites web',
+      landing: 'Site web',
       product: 'Plateformes',
       storytelling: 'Storytelling',
     },
@@ -73,6 +75,7 @@ export default {
     visit: 'Voir la page',
     readMore: 'Voir plus',
     otherCategories: 'Autres catégories',
+    seeMore: 'Voir plus',
     ctas: {
       website: 'Voir le site',
       platform: 'Voir la plateforme',

@@ -29,7 +29,10 @@ export default {
     cta: "Let's talk",
   },
   services: {
-    sectionTitle: 'my services',
+    // Small orange eyebrow above the heading.
+    sectionTitle: 'services',
+    // Large bold statement under the eyebrow (the section's lead line).
+    sectionSubtitle: 'I help you realize your online projects and support you with the message and platform choice',
     viewProjects: 'View projects',
     items: [
       { name: 'Landing pages', desc: 'for organisations and people who need a presence online' },
@@ -63,12 +66,13 @@ export default {
       'Most teams hire a designer, a writer, and a developer, then try to stitch them together. I see the whole thing at once: the story, the design, and the working product, because my path ran through journalism, data, design, and building companies.',
   },
   work: {
-    sectionTitle: 'selected work',
+    sectionTitle: 'projects',
+    sectionSubtitle: '9 years of experience led me from simple landing pages to complex data platforms',
     intro:
       'I have designed across wildly different sectors. The subject keeps changing; the job stays the same: making tangled things clear.',
     counterSeparator: '/',
     filters: {
-      landing: 'Landing pages',
+      landing: 'Landing page',
       product: 'Product design',
       storytelling: 'Storytelling',
     },
@@ -77,6 +81,7 @@ export default {
     visit: 'Visit page',
     readMore: 'Read more',
     otherCategories: 'Other categories',
+    seeMore: 'See more',
     // Per-card CTA labels; Work.astro's DESIGN map picks one by key.
     ctas: {
       website: 'Visit website',

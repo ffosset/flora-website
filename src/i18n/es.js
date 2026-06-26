@@ -25,7 +25,8 @@ export default {
     cta: 'Hablemos',
   },
   services: {
-    sectionTitle: 'mis servicios',
+    sectionTitle: 'servicios',
+    sectionSubtitle: 'Te ayudo a hacer realidad tus proyectos online y te acompaño en la elección del mensaje y la plataforma',
     viewProjects: 'Ver proyectos',
     items: [
       { name: 'Landing pages', desc: 'para organizaciones y personas que necesitan presencia online' },
@@ -58,12 +59,13 @@ export default {
       'La mayoría de los equipos contratan a un diseñador, un redactor y un desarrollador, y luego intentan coser las piezas. Yo veo el conjunto de una vez —la historia, el diseño y el producto funcionando— porque mi camino pasó por el periodismo, los datos, el diseño y la creación de empresas.',
   },
   work: {
-    sectionTitle: 'proyectos destacados',
+    sectionTitle: 'proyectos',
+    sectionSubtitle: '9 años de experiencia me llevaron de simples landing pages a complejas plataformas de datos',
     intro:
       'He diseñado para sectores de lo más distintos. El tema cambia todo el rato; el trabajo es siempre el mismo: aclarar lo enredado.',
     counterSeparator: '/',
     filters: {
-      landing: 'Landing pages',
+      landing: 'Landing page',
       product: 'Product design',
       storytelling: 'Storytelling',
     },
@@ -72,6 +74,7 @@ export default {
     visit: 'Ver la página',
     readMore: 'Leer más',
     otherCategories: 'Otras categorías',
+    seeMore: 'Ver más',
     ctas: {
       website: 'Visitar la web',
       platform: 'Ver la plataforma',
