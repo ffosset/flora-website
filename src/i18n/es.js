@@ -234,6 +234,7 @@ export default {
     homeLink: 'Flora Fosset — inicio',
     openMenu: 'Abrir el menú',
     getInTouch: 'Escríbeme',
+    aboutMe: 'Sobre mí',
     filterProjects: 'Filtrar proyectos',
     showProjects: 'Mostrar proyectos de {name}',
     newTab: 'se abre en una pestaña nueva',
