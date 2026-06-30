@@ -239,7 +239,7 @@ export default {
         label: 'business owner',
         year: '2024',
         current: true,
-        sub: 'Co-founded <a href="https://www.minnowcollective.com/" target="_blank" rel="noopener noreferrer">Minnow Collective</a>, a nature-tech startup. Took it from zero to leading a small team.',
+        sub: 'Co-founded <a href="https://www.minnowcollective.com/" target="_blank" rel="noopener noreferrer">Minnow Collective</a>, a nature-tech startup. Launched my design consultancy company.',
       },
     ],
   },

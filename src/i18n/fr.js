@@ -230,7 +230,7 @@ export default {
         label: 'entrepreneuse',
         year: '2024',
         current: true,
-        sub: 'Co-fondatrice de <a href="https://www.minnowcollective.com/" target="_blank" rel="noopener noreferrer">Minnow Collective</a>, une startup nature-tech. De zéro jusqu’à diriger une petite équipe.',
+        sub: 'Co-fondatrice de <a href="https://www.minnowcollective.com/" target="_blank" rel="noopener noreferrer">Minnow Collective</a>, une startup nature-tech. J’ai lancé mon entreprise de conseil en design.',
       },
     ],
   },

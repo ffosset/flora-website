@@ -1,9 +1,24 @@
 ---
 import { Image } from 'astro:assets';
-import portrait from '../assets/flora-about.png';
+import portrait from '../assets/flora-garden.jpg';
 const { t } = Astro.props;
 const facts = t.about.facts || [];
 const path = t.about.path || [];
+
+// Desktop "vertical wave" geometry (px, in a 660×760 box). Each milestone sits
+// at a wave extreme, alternating right/left; the SVG path snakes between them.
+// Mobile ignores this and falls back to a straight vertical rail (see styles).
+const WAVE = {
+  w: 700,
+  h: 940,
+  nodes: [
+    { x: 420, y: 140, side: 'right' },
+    { x: 280, y: 340, side: 'left' },
+    { x: 420, y: 540, side: 'right' },
+    { x: 280, y: 740, side: 'left' },
+  ],
+  d: 'M350,40 C350,90 420,90 420,140 C420,240 280,240 280,340 C280,440 420,440 420,540 C420,640 280,640 280,740',
+};
 ---
 
 <section id="about" class="about">
@@ -18,7 +33,7 @@ const path = t.about.path || [];
         <Image
           class="about-portrait"
           src={portrait}
-          alt="Flora Fosset"
+          alt="Flora seated in the garden of her brick townhouse"
           width={640}
           format="webp"
           loading="lazy"
@@ -36,18 +51,31 @@ const path = t.about.path || [];
 
     <div class="about-path" data-path>
       <h2 class="about-subhead"><span class="slash">·</span>{t.about.pathTitle}</h2>
-      <ol class="path">
-        {path.map((p, i) => (
-          <li class:list={['path-step', { 'is-current': p.current }]} style={`--i:${i}`}>
-            <span class="path-dot" aria-hidden="true"></span>
-            <div class="path-content">
-              <span class="path-year">{p.year}</span>
-              <span class="path-label">{p.label}</span>
-              {p.sub && <p class="path-sub" set:html={p.sub} />}
-            </div>
-          </li>
-        ))}
-      </ol>
+      <div class="path-track">
+        <svg class="path-wave" width={WAVE.w} height={WAVE.h} viewBox={`0 0 ${WAVE.w} ${WAVE.h}`} aria-hidden="true">
+          <path d={WAVE.d} />
+        </svg>
+        <ol class="path">
+          {path.map((p, i) => {
+            const n = WAVE.nodes[i] || {};
+            return (
+              <li
+                class:list={['path-step', `is-${n.side ?? 'right'}`, { 'is-current': p.current }]}
+                style={`--i:${i}; --wx:${n.x ?? 0}px; --wy:${n.y ?? 0}px`}
+                data-wx={n.x}
+                data-wy={n.y}
+              >
+                <span class="path-dot" aria-hidden="true"></span>
+                <div class="path-content">
+                  <span class="path-year">{p.year}</span>
+                  <span class="path-label">{p.label}</span>
+                  {p.sub && <p class="path-sub" set:html={p.sub} />}
+                </div>
+              </li>
+            );
+          })}
+        </ol>
+      </div>
     </div>
 
     <div class="about-blocks">
@@ -64,19 +92,62 @@ const path = t.about.path || [];
 </section>
 
 <script>
-  // Reveal the timeline (line draws + steps appear one after another) the first
-  // time it scrolls into view.
-  const path = document.querySelector('[data-path]');
-  if (path) {
-    const reveal = () => path.classList.add('is-revealed');
+  // Reveal the timeline the first time it scrolls into view.
+  //  - Mobile (<760px): a straight vertical rail grows and the steps fade in
+  //    one after another, driven entirely by CSS (the `is-revealed` class).
+  //  - Desktop (≥760px): the SVG "wave" path is drawn top-to-bottom and each
+  //    milestone fades in exactly as the line reaches it. We find the arc-length
+  //    position of every node so the reveals stay locked to the line at any size.
+  const root = document.querySelector('[data-path]');
+  if (root) {
+    const desktop = window.matchMedia('(min-width: 760px)');
+    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)');
+    const steps = Array.from(root.querySelectorAll('.path-step'));
+    const wave = root.querySelector('.path-wave path');
+
+    const showAll = () => {
+      root.classList.add('is-revealed');
+      steps.forEach((s) => s.classList.add('is-shown'));
+      if (wave) wave.style.strokeDashoffset = '0';
+    };
+
+    const animateWave = () => {
+      if (!wave) { root.classList.add('is-revealed'); return; }
+      const len = wave.getTotalLength();
+      const dur = 3600;
+      wave.style.transition = 'none';
+      wave.style.strokeDasharray = String(len);
+      wave.style.strokeDashoffset = String(len);
+      wave.getBoundingClientRect(); // force reflow so the transition runs
+      wave.style.transition = `stroke-dashoffset ${dur}ms cubic-bezier(.4,0,.2,1)`;
+      wave.style.strokeDashoffset = '0';
+      steps.forEach((s) => {
+        const nx = Number(s.dataset.wx);
+        const ny = Number(s.dataset.wy);
+        let best = 0, bd = Infinity;
+        for (let l = 0; l <= len; l += 3) {
+          const pt = wave.getPointAtLength(l);
+          const d = (pt.x - nx) ** 2 + (pt.y - ny) ** 2;
+          if (d < bd) { bd = d; best = l; }
+        }
+        setTimeout(() => s.classList.add('is-shown'), (best / len) * dur);
+      });
+    };
+
+    const reveal = () => {
+      if (reduce.matches) { showAll(); return; }
+      if (desktop.matches) animateWave();
+      else root.classList.add('is-revealed');
+    };
+
     if ('IntersectionObserver' in window) {
       const io = new IntersectionObserver(
         (entries) => entries.forEach((e) => { if (e.isIntersecting) { reveal(); io.disconnect(); } }),
-        { threshold: 0.4 }
+        { threshold: 0.25 }
       );
-      io.observe(path);
+      io.observe(root);
     } else {
-      reveal();
+      showAll();
     }
   }
 </script>
@@ -123,7 +194,7 @@ const path = t.about.path || [];
   @media (min-width: 900px) {
     /* align-items: center vertically centres the headline + facts against the
        (taller) portrait. */
-    .about-grid { grid-template-columns: 1fr 1.6fr; gap: var(--space-5); align-items: center; }
+    .about-grid { grid-template-columns: 1fr 1fr; gap: var(--space-5); align-items: center; }
   }
 
   .about-portrait {
@@ -176,11 +247,14 @@ const path = t.about.path || [];
   .about-block p { color: var(--color-muted); }
 
   /* --- Timeline ---
-     A single vertical timeline at every breakpoint: a rail down the left with
-     a dot per milestone, and left-aligned content (year eyebrow, bold label,
-     readable subtext). Vertical + left-aligned keeps the prose legible; the
-     old horizontal 4-column layout squeezed each paragraph too narrow. */
+     Mobile (<760px): a straight vertical rail with the dots down the left and
+     left-aligned content; the rail grows and the steps fade in on reveal.
+     Desktop (≥760px): a centred "vertical wave" — the SVG path is the line and
+     each milestone is positioned at its wave extreme, revealed as the line is
+     drawn (see the <script> and the min-width block below). */
   .about-path { margin-top: var(--space-6); }
+  .path-track { position: relative; }
+  .path-wave { display: none; } /* mobile uses the straight CSS rail instead */
   .path {
     list-style: none;
     position: relative;
@@ -191,22 +265,6 @@ const path = t.about.path || [];
     margin: var(--space-5) auto 0;
     padding-left: 0.25rem;
   }
-  /* The rail, drawn top-to-bottom on reveal. Sits under the centre of the dots. */
-  .path::before {
-    content: '';
-    position: absolute;
-    top: 8px;
-    bottom: 8px;
-    left: 5px;
-    width: 1.5px;
-    background: var(--color-line);
-    transform: scaleY(0);
-    transform-origin: top;
-  }
-  .about-path.is-revealed .path::before {
-    animation: line-grow 1s var(--ease) forwards;
-  }
-  @keyframes line-grow { to { transform: scaleY(1); } }
 
   .path-step {
     display: grid;
@@ -217,11 +275,30 @@ const path = t.about.path || [];
     opacity: 0;
     transform: translateY(10px);
   }
-  .about-path.is-revealed .path-step {
-    animation: step-in 0.5s var(--ease) forwards;
-    animation-delay: calc(0.3s + var(--i) * 0.18s);
-  }
   @keyframes step-in { to { opacity: 1; transform: translateY(0); } }
+  @keyframes line-grow { to { transform: scaleY(1); } }
+
+  /* Mobile rail + sequential fade-in (driven by the `is-revealed` class). */
+  @media (max-width: 759.98px) {
+    .path::before {
+      content: '';
+      position: absolute;
+      top: 8px;
+      bottom: 8px;
+      left: 5px;
+      width: 1.5px;
+      background: var(--color-line);
+      transform: scaleY(0);
+      transform-origin: top;
+    }
+    .about-path.is-revealed .path::before {
+      animation: line-grow 1s var(--ease) forwards;
+    }
+    .about-path.is-revealed .path-step {
+      animation: step-in 0.5s var(--ease) forwards;
+      animation-delay: calc(0.3s + var(--i) * 0.18s);
+    }
+  }
 
   .path-dot {
     position: relative;
@@ -284,15 +361,67 @@ const path = t.about.path || [];
   }
   .path-sub :global(a:hover) { opacity: 0.7; }
 
-  /* Desktop: more breathing room between milestones. */
+  /* Desktop: the vertical wave. The SVG path is the connecting line; each step
+     is absolutely placed at its wave extreme (--wx/--wy) and revealed (JS adds
+     `is-shown`) as the line is drawn past it. */
   @media (min-width: 760px) {
-    .path { gap: var(--space-6); column-gap: 0; }
-    .path-step { column-gap: var(--space-5); }
+    .path-track {
+      width: 700px;
+      height: 940px;
+      margin: var(--space-5) auto 0;
+    }
+    .path-wave {
+      display: block;
+      position: absolute;
+      inset: 0;
+      overflow: visible;
+    }
+    .path-wave path {
+      fill: none;
+      stroke: var(--color-line);
+      stroke-width: 2;
+      stroke-linecap: round;
+      /* Hidden by default; JS recomputes the exact length and draws it. The
+         dasharray comfortably exceeds the real path length (~1130px). */
+      stroke-dasharray: 1600;
+      stroke-dashoffset: 1600;
+    }
+    .path {
+      position: absolute;
+      inset: 0;
+      display: block;
+      max-width: none;
+      margin: 0;
+      padding: 0;
+    }
+    .path-step {
+      --dot: 12px;
+      --card-w: 240px;
+      --gap: 16px;
+      position: absolute;
+      top: calc(var(--wy) - 8px);
+      column-gap: var(--gap);
+      transition: opacity 0.5s var(--ease), transform 0.5s var(--ease);
+    }
+    .path-step.is-right {
+      grid-template-columns: var(--dot) var(--card-w);
+      left: calc(var(--wx) - var(--dot) / 2);
+    }
+    .path-step.is-left {
+      grid-template-columns: var(--card-w) var(--dot);
+      left: calc(var(--wx) - var(--dot) / 2 - var(--card-w) - var(--gap));
+    }
+    .path-step.is-left .path-dot { order: 2; }
+    .path-step.is-left .path-content { order: 1; text-align: right; }
+    .path-step.is-left .path-sub { margin-left: auto; }
+    .path-step.is-shown { opacity: 1; transform: none; }
+    .path-sub { max-width: none; } /* the fixed card column already constrains it */
   }
 
   @media (prefers-reduced-motion: reduce) {
     .path::before { transform: none; animation: none; }
-    .path-step { opacity: 1; transform: none; animation: none; }
+    .path-wave path { stroke-dashoffset: 0 !important; transition: none !important; }
+    .path-step { opacity: 1; transform: none; animation: none; transition: none; }
     .path-step.is-current .path-dot::after { animation: none; opacity: 0; }
   }
 </style>
@@ -300,6 +429,7 @@ const path = t.about.path || [];
 <noscript>
   <style>
     .path::before { transform: none !important; }
+    .path-wave path { stroke-dashoffset: 0 !important; }
     .path-step { opacity: 1 !important; transform: none !important; }
   </style>
 </noscript>
