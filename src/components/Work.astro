@@ -61,7 +61,15 @@ const ordered = ORDER
     </div>
 
     {ordered.length > VISIBLE && (
-      <button type="button" class="work-more" data-work-more data-step={STEP}>
+      <button
+        type="button"
+        class="work-more"
+        data-work-more
+        data-step={STEP}
+        data-visible={VISIBLE}
+        data-more-label={t.work.seeMore}
+        data-less-label={t.work.seeLess}
+      >
         {t.work.seeMore}
       </button>
     )}
@@ -86,15 +94,31 @@ const ordered = ORDER
 </script>
 
 <script>
-  // "See more": reveal the next batch of hidden cards (STEP at a time). When
-  // none are left hidden, the button removes itself.
+  // "See more": reveal the next batch of hidden cards (STEP at a time). Once
+  // every card is visible, the button flips to "See less", which re-hides all
+  // cards beyond the default visible count.
   const moreBtn = document.querySelector('[data-work-more]');
   if (moreBtn) {
     const step = Number(moreBtn.getAttribute('data-step')) || 2;
+    const visible = Number(moreBtn.getAttribute('data-visible')) || 4;
+    const moreLabel = moreBtn.getAttribute('data-more-label') || 'See more';
+    const lessLabel = moreBtn.getAttribute('data-less-label') || 'See less';
+    const cards = Array.from(document.querySelectorAll('.work .card'));
+
     moreBtn.addEventListener('click', () => {
-      const hidden = document.querySelectorAll('.work .card.is-extra');
-      Array.from(hidden).slice(0, step).forEach((card) => card.classList.remove('is-extra'));
-      if (!document.querySelector('.work .card.is-extra')) moreBtn.remove();
+      const allVisible = !document.querySelector('.work .card.is-extra');
+      if (allVisible) {
+        // Collapse back to the default set.
+        cards.forEach((card, i) => card.classList.toggle('is-extra', i >= visible));
+        moreBtn.textContent = moreLabel;
+        moreBtn.scrollIntoView({ block: 'nearest' });
+      } else {
+        // Reveal the next batch; if that exposes the last card, switch to "See less".
+        document.querySelectorAll('.work .card.is-extra').forEach((card, i) => {
+          if (i < step) card.classList.remove('is-extra');
+        });
+        if (!document.querySelector('.work .card.is-extra')) moreBtn.textContent = lessLabel;
+      }
     });
   }
 </script>

@@ -82,6 +82,7 @@ export default {
     readMore: 'Read more',
     otherCategories: 'Other categories',
     seeMore: 'See more',
+    seeLess: 'See less',
     // Per-card CTA labels; Work.astro's DESIGN map picks one by key.
     ctas: {
       website: 'Visit website',
@@ -219,11 +220,27 @@ export default {
     pathTitle: 'my path',
     // Career timeline, animated in order. `current` marks the latest step.
     path: [
-      { label: 'journalism', year: '2012' },
-      { label: 'dataviz', year: '2015' },
-      { label: 'design', year: '2017' },
-      { label: 'product', year: '2018' },
-      { label: 'founder', year: '2025', current: true },
+      {
+        label: 'data journalism',
+        year: '2012',
+        sub: 'Trained as a journalist at IHECS, then led data projects at Medialab-Prado (ES) bridging investigation and numbers. Published along the way in Wilfried magazine (BE).',
+      },
+      {
+        label: 'design',
+        year: '2017',
+        sub: 'At urbanData Analytics, design stopped being decoration and became a system: branding, layouts, and the visual standards that made dense analytics digestible.',
+      },
+      {
+        label: 'product management',
+        year: '2018',
+        sub: "Owned products end-to-end at urbanData and ROSA: research, roadmap, and trade-offs between what users want and what's buildable.",
+      },
+      {
+        label: 'business owner',
+        year: '2025',
+        current: true,
+        sub: 'Co-founded Minnow Collective, a nature-tech startup. Took it from zero to leading a small team.',
+      },
     ],
   },
   contact: {

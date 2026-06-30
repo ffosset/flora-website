@@ -75,6 +75,7 @@ export default {
     readMore: 'Leer más',
     otherCategories: 'Otras categorías',
     seeMore: 'Ver más',
+    seeLess: 'Ver menos',
     ctas: {
       website: 'Visitar la web',
       platform: 'Ver la plataforma',
@@ -209,11 +210,27 @@ export default {
       'Acepto trabajos que apoyen un mundo más verde, más justo y más inclusivo. Soy entusiasta, curiosa por naturaleza y sé escuchar.',
     pathTitle: 'mi camino',
     path: [
-      { label: 'periodismo', year: '2012' },
-      { label: 'dataviz', year: '2015' },
-      { label: 'diseño', year: '2017' },
-      { label: 'producto', year: '2018' },
-      { label: 'fundadora', year: '2025', current: true },
+      {
+        label: 'periodismo de datos',
+        year: '2012',
+        sub: 'Formada como periodista en IHECS, luego lideré proyectos de datos en Medialab-Prado (ES), uniendo investigación y números. Publiqué por el camino en la revista Wilfried (BE).',
+      },
+      {
+        label: 'diseño',
+        year: '2017',
+        sub: 'En urbanData Analytics, el diseño dejó de ser decoración para volverse un sistema: branding, maquetación y los estándares visuales que hacían digeribles análisis densos.',
+      },
+      {
+        label: 'gestión de producto',
+        year: '2018',
+        sub: 'Productos gestionados de principio a fin en urbanData y ROSA: investigación, roadmap y el equilibrio entre lo que los usuarios quieren y lo que se puede construir.',
+      },
+      {
+        label: 'emprendedora',
+        year: '2025',
+        current: true,
+        sub: 'Cofundadora de Minnow Collective, una startup nature-tech. La llevé de cero a liderar un equipo pequeño.',
+      },
     ],
   },
   contact: {

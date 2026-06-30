@@ -85,8 +85,7 @@ const alternates =
     <footer id="contact" class="site-footer footer-reveal">
       <div class="container footer-cta">
         <h2>{t.contact.sectionTitle}</h2>
-        <p class="footer-sub">{t.contact.subhead}</p>
-        {t.contact.note && <p class="footer-note">{t.contact.note}</p>}
+        <p class="footer-sub">{t.contact.subhead}{t.contact.note && ` ${t.contact.note}`}</p>
         <div class="footer-links">
           <a href={`mailto:${t.contact.email}`} class="footer-cta-btn">{t.contact.email}</a>
         </div>
@@ -407,13 +406,6 @@ const alternates =
         margin: var(--space-3) auto 0;
         max-width: 52ch;
         font-size: 1.125rem;
-        line-height: 1.5;
-        color: var(--color-muted-on-purple);
-      }
-      .footer-note {
-        margin: var(--space-2) auto 0;
-        max-width: 52ch;
-        font-size: 1rem;
         line-height: 1.5;
         color: var(--color-muted-on-purple);
       }

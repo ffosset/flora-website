@@ -76,6 +76,7 @@ export default {
     readMore: 'Voir plus',
     otherCategories: 'Autres catégories',
     seeMore: 'Voir plus',
+    seeLess: 'Voir moins',
     ctas: {
       website: 'Voir le site',
       platform: 'Voir la plateforme',
@@ -210,11 +211,27 @@ export default {
       'Je choisis des projets qui font avancer un monde plus vert, plus juste et plus inclusif. Je suis enthousiaste, naturellement curieuse et vraiment à l’écoute.',
     pathTitle: 'parcours',
     path: [
-      { label: 'journalisme', year: '2012' },
-      { label: 'dataviz', year: '2015' },
-      { label: 'design', year: '2017' },
-      { label: 'produit', year: '2018' },
-      { label: 'fondatrice', year: '2025', current: true },
+      {
+        label: 'journalisme de données',
+        year: '2012',
+        sub: 'Formée au journalisme à l’IHECS, puis responsable de projets data au Medialab-Prado (ES), à la croisée de l’investigation et des chiffres. Publiée en chemin dans le magazine Wilfried (BE).',
+      },
+      {
+        label: 'design',
+        year: '2017',
+        sub: 'Chez urbanData Analytics, le design a cessé d’être un ornement pour devenir un système : branding, mises en page et standards visuels qui rendaient digestes des analyses denses.',
+      },
+      {
+        label: 'gestion de produit',
+        year: '2018',
+        sub: 'Produits pilotés de bout en bout chez urbanData et ROSA : recherche, roadmap et arbitrages entre les attentes des utilisateurs et ce qui est réalisable.',
+      },
+      {
+        label: 'entrepreneuse',
+        year: '2025',
+        current: true,
+        sub: 'Co-fondatrice de Minnow Collective, une startup nature-tech. De zéro jusqu’à diriger une petite équipe.',
+      },
     ],
   },
   contact: {

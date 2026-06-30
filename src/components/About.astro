@@ -42,6 +42,7 @@ const path = t.about.path || [];
             <span class="path-dot" aria-hidden="true"></span>
             <span class="path-label">{p.label}</span>
             <span class="path-year">{p.year}</span>
+            {p.sub && <p class="path-sub">{p.sub}</p>}
           </li>
         ))}
       </ol>
@@ -177,35 +178,10 @@ const path = t.about.path || [];
   .path {
     list-style: none;
     position: relative;
-    display: flex;
-    align-items: flex-start;
     margin-top: var(--space-5);
-    padding-top: 0.75rem;
   }
-  /* The connecting line, drawn left-to-right on reveal. */
-  .path::before {
-    content: '';
-    position: absolute;
-    top: calc(0.75rem + 6px);
-    left: 0;
-    right: 0;
-    height: 1.5px;
-    background: var(--color-line);
-    transform: scaleX(0);
-    transform-origin: left;
-  }
-  .about-path.is-revealed .path::before {
-    animation: line-grow 1s var(--ease) forwards;
-  }
-  @keyframes line-grow { to { transform: scaleX(1); } }
 
   .path-step {
-    flex: 1 1 0;
-    min-width: 0;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 0.5rem;
     /* hidden until revealed */
     opacity: 0;
     transform: translateY(10px);
@@ -222,6 +198,7 @@ const path = t.about.path || [];
     height: 12px;
     border-radius: 50%;
     background: var(--color-primary);
+    flex: none;
   }
   .path-step.is-current .path-dot {
     box-shadow: 0 0 0 5px color-mix(in srgb, var(--color-primary) 22%, transparent);
@@ -241,22 +218,88 @@ const path = t.about.path || [];
     100% { transform: scale(2.8); opacity: 0; }
   }
   .path-label {
-    width: 100%;
-    text-align: center;
     font-family: var(--font-display);
-    font-weight: 500;
-    font-size: clamp(0.8rem, 0.7rem + 0.35vw, 1rem);
+    font-weight: 600;
+    font-size: clamp(0.95rem, 0.85rem + 0.35vw, 1.15rem);
+    line-height: 1.2;
     color: var(--color-text);
   }
   .path-year {
-    width: 100%;
-    text-align: center;
     font-size: clamp(0.72rem, 0.66rem + 0.2vw, 0.8125rem);
+    color: var(--color-primary);
+    letter-spacing: 0.02em;
+  }
+  .path-sub {
+    font-size: var(--fs-small);
+    line-height: 1.45;
     color: var(--color-muted);
   }
 
+  /* Mobile (default): vertical stack with a connecting line down the left. */
+  .path { display: flex; flex-direction: column; gap: var(--space-4); }
+  .path::before {
+    content: '';
+    position: absolute;
+    top: 6px;
+    bottom: 6px;
+    left: 5px;
+    width: 1.5px;
+    background: var(--color-line);
+    transform: scaleY(0);
+    transform-origin: top;
+  }
+  .about-path.is-revealed .path::before {
+    animation: line-grow-y 1s var(--ease) forwards;
+  }
+  @keyframes line-grow-y { to { transform: scaleY(1); } }
+  .path-step {
+    display: grid;
+    grid-template-columns: 12px 1fr;
+    column-gap: var(--space-3);
+    align-items: baseline;
+  }
+  .path-step .path-dot { grid-row: 1; align-self: center; }
+  .path-step .path-label { grid-column: 2; }
+  .path-step .path-year { grid-column: 2; }
+  .path-step .path-sub { grid-column: 2; margin-top: 0.35rem; }
+
+  /* Desktop: horizontal timeline, four columns, line drawn left-to-right. */
+  @media (min-width: 760px) {
+    .path {
+      flex-direction: row;
+      align-items: flex-start;
+      gap: 0;
+      padding-top: 0.75rem;
+    }
+    .path::before {
+      top: calc(0.75rem + 6px);
+      bottom: auto;
+      left: 0;
+      right: 0;
+      width: auto;
+      height: 1.5px;
+      transform: scaleX(0);
+      transform-origin: left;
+    }
+    .about-path.is-revealed .path::before {
+      animation: line-grow-x 1s var(--ease) forwards;
+    }
+    .path-step {
+      flex: 1 1 0;
+      min-width: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      gap: 0.4rem;
+      padding: 0 var(--space-2);
+    }
+    .path-step .path-sub { margin-top: 0.25rem; }
+  }
+  @keyframes line-grow-x { to { transform: scaleX(1); } }
+
   @media (prefers-reduced-motion: reduce) {
-    .path::before { transform: scaleX(1); animation: none; }
+    .path::before { transform: none; animation: none; }
     .path-step { opacity: 1; transform: none; animation: none; }
     .path-step.is-current .path-dot::after { animation: none; opacity: 0; }
   }
@@ -264,7 +307,7 @@ const path = t.about.path || [];
 
 <noscript>
   <style>
-    .path::before { transform: scaleX(1) !important; }
+    .path::before { transform: none !important; }
     .path-step { opacity: 1 !important; transform: none !important; }
   </style>
 </noscript>
