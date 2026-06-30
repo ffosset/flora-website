@@ -157,9 +157,9 @@ const alternates =
       const yearEl = document.querySelector('[data-year]');
       if (yearEl) yearEl.textContent = String(new Date().getFullYear());
 
-      // The footer is position:fixed, so a plain #contact anchor doesn't move.
-      // Intercept "let's chat" links (nav + hero photo) and scroll to the
-      // bottom of the page, which reveals the footer drawer.
+      // Intercept "let's chat" links (nav + hero photo) and smooth-scroll to the
+      // very bottom, which slides the footer panel fully up over the pinned page
+      // — nicer than the instant jump a plain #contact anchor would do.
       document.addEventListener('click', (e) => {
         const link = e.target instanceof Element ? e.target.closest('a[href="#contact"]') : null;
         if (!link) return;
@@ -348,26 +348,24 @@ const alternates =
         }
       }
 
-      /* Fixed-footer reveal. The page content rides ABOVE the footer on its own
-         opaque layer (z-index 1 + solid bg), so the footer stays hidden while
-         scrolling. main's bottom margin equals the footer height, opening the
-         scroll room that uncovers the footer like a drawer at the end. No JS. */
+      /* Footer-over-page reveal. The page content is the STATIONARY back layer:
+         main is sticky, so once you reach its end it pins to the bottom of the
+         viewport (z-index 0 + solid bg). The footer flows normally after it on a
+         higher, opaque layer, so it slides UP and OVER the pinned page like a
+         panel climbing into view at the end. No JS. */
       main {
-        position: relative;
-        z-index: 1;
+        position: sticky;
+        bottom: 0;
+        z-index: 0;
         background: var(--color-bg);
-        margin-bottom: 100vh;
       }
 
-      /* The merged Contact CTA + footer, pinned behind the page (z-index -1).
-         Orange = the existing brand accent, so the drawer matches the other
+      /* The merged Contact CTA + footer, the moving front layer (z-index 1).
+         Orange = the existing brand accent, so the panel matches the other
          orange sections; light text + an inverted (light) pill read well on it. */
       .footer-reveal {
-        position: fixed;
-        bottom: 0;
-        left: 0;
-        right: 0;
-        z-index: -1;
+        position: relative;
+        z-index: 1;
         min-height: 100vh;
         display: flex;
         flex-direction: column;
@@ -376,12 +374,11 @@ const alternates =
         text-align: center;
       }
 
-      /* Mobile: drop the fixed "drawer" reveal — it scrolls janky on touch.
-         The footer just flows normally after the page content. */
+      /* Mobile: drop the sticky reveal — it scrolls janky on touch. The page and
+         footer just stack and flow normally. */
       @media (max-width: 768px) {
-        main { margin-bottom: 0; }
+        main { position: static; z-index: auto; }
         .footer-reveal {
-          position: static;
           z-index: auto;
           min-height: auto;
         }
