@@ -222,24 +222,24 @@ export default {
     path: [
       {
         label: 'data journalism',
-        year: '2012',
-        sub: 'Trained as a journalist at IHECS, then led data projects at Medialab-Prado (ES) bridging investigation and numbers. Published along the way in Wilfried magazine (BE).',
+        year: '2015',
+        sub: 'Trained as a journalist at <a href="https://www.ihecs.be/" target="_blank" rel="noopener noreferrer">IHECS</a>, then led data projects at <a href="https://www.medialab-matadero.es/personal/flora-fosset" target="_blank" rel="noopener noreferrer">Medialab-Prado</a> (ES) bridging investigation and numbers. Published along the way in <a href="https://www.wilfriedmag.be/auteur/flora-fosset/" target="_blank" rel="noopener noreferrer">Wilfried</a> magazine (BE).',
       },
       {
         label: 'design',
         year: '2017',
-        sub: 'At urbanData Analytics, design stopped being decoration and became a system: branding, layouts, and the visual standards that made dense analytics digestible.',
+        sub: 'At <a href="https://www.urbandataanalytics.com/" target="_blank" rel="noopener noreferrer">urbanData Analytics</a>, design stopped being decoration and became a system: branding, layouts, and the visual standards that made dense analytics digestible.',
       },
       {
         label: 'product management',
-        year: '2018',
-        sub: "Owned products end-to-end at urbanData and ROSA: research, roadmap, and trade-offs between what users want and what's buildable.",
+        year: '2019',
+        sub: "Owned products end-to-end at <a href='https://www.urbandataanalytics.com/' target='_blank' rel='noopener noreferrer'>urbanData</a> and <a href='https://rosa.be' target='_blank' rel='noopener noreferrer'>ROSA</a>: research, roadmap, and trade-offs between what users want and what's buildable.",
       },
       {
         label: 'business owner',
-        year: '2025',
+        year: '2024',
         current: true,
-        sub: 'Co-founded Minnow Collective, a nature-tech startup. Took it from zero to leading a small team.',
+        sub: 'Co-founded <a href="https://www.minnowcollective.com/" target="_blank" rel="noopener noreferrer">Minnow Collective</a>, a nature-tech startup. Took it from zero to leading a small team.',
       },
     ],
   },

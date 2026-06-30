@@ -40,9 +40,11 @@ const path = t.about.path || [];
         {path.map((p, i) => (
           <li class:list={['path-step', { 'is-current': p.current }]} style={`--i:${i}`}>
             <span class="path-dot" aria-hidden="true"></span>
-            <span class="path-label">{p.label}</span>
-            <span class="path-year">{p.year}</span>
-            {p.sub && <p class="path-sub">{p.sub}</p>}
+            <div class="path-content">
+              <span class="path-year">{p.year}</span>
+              <span class="path-label">{p.label}</span>
+              {p.sub && <p class="path-sub" set:html={p.sub} />}
+            </div>
           </li>
         ))}
       </ol>
@@ -173,15 +175,44 @@ const path = t.about.path || [];
   }
   .about-block p { color: var(--color-muted); }
 
-  /* --- Timeline --- */
+  /* --- Timeline ---
+     A single vertical timeline at every breakpoint: a rail down the left with
+     a dot per milestone, and left-aligned content (year eyebrow, bold label,
+     readable subtext). Vertical + left-aligned keeps the prose legible; the
+     old horizontal 4-column layout squeezed each paragraph too narrow. */
   .about-path { margin-top: var(--space-6); }
   .path {
     list-style: none;
     position: relative;
-    margin-top: var(--space-5);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-5);
+    max-width: 46rem;
+    margin: var(--space-5) auto 0;
+    padding-left: 0.25rem;
   }
+  /* The rail, drawn top-to-bottom on reveal. Sits under the centre of the dots. */
+  .path::before {
+    content: '';
+    position: absolute;
+    top: 8px;
+    bottom: 8px;
+    left: 5px;
+    width: 1.5px;
+    background: var(--color-line);
+    transform: scaleY(0);
+    transform-origin: top;
+  }
+  .about-path.is-revealed .path::before {
+    animation: line-grow 1s var(--ease) forwards;
+  }
+  @keyframes line-grow { to { transform: scaleY(1); } }
 
   .path-step {
+    display: grid;
+    grid-template-columns: 12px 1fr;
+    column-gap: var(--space-4);
+    align-items: start;
     /* hidden until revealed */
     opacity: 0;
     transform: translateY(10px);
@@ -196,9 +227,9 @@ const path = t.about.path || [];
     position: relative;
     width: 12px;
     height: 12px;
+    margin-top: 0.2rem; /* nudge onto the year line */
     border-radius: 50%;
     background: var(--color-primary);
-    flex: none;
   }
   .path-step.is-current .path-dot {
     box-shadow: 0 0 0 5px color-mix(in srgb, var(--color-primary) 22%, transparent);
@@ -217,86 +248,47 @@ const path = t.about.path || [];
     0% { transform: scale(1); opacity: 0.55; }
     100% { transform: scale(2.8); opacity: 0; }
   }
+
+  .path-content {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+  .path-year {
+    font-size: var(--fs-small);
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--color-primary);
+  }
   .path-label {
     font-family: var(--font-display);
     font-weight: 600;
-    font-size: clamp(0.95rem, 0.85rem + 0.35vw, 1.15rem);
+    font-size: clamp(1.05rem, 0.95rem + 0.4vw, 1.3rem);
     line-height: 1.2;
     color: var(--color-text);
   }
-  .path-year {
-    font-size: clamp(0.72rem, 0.66rem + 0.2vw, 0.8125rem);
-    color: var(--color-primary);
-    letter-spacing: 0.02em;
-  }
   .path-sub {
+    margin-top: 0.25rem;
+    max-width: 52ch;
     font-size: var(--fs-small);
-    line-height: 1.45;
+    line-height: 1.55;
     color: var(--color-muted);
   }
+  .path-sub :global(a) {
+    color: var(--color-primary);
+    text-decoration: underline;
+    text-underline-offset: 2px;
+    text-decoration-thickness: 1px;
+    transition: opacity 0.15s var(--ease);
+  }
+  .path-sub :global(a:hover) { opacity: 0.7; }
 
-  /* Mobile (default): vertical stack with a connecting line down the left. */
-  .path { display: flex; flex-direction: column; gap: var(--space-4); }
-  .path::before {
-    content: '';
-    position: absolute;
-    top: 6px;
-    bottom: 6px;
-    left: 5px;
-    width: 1.5px;
-    background: var(--color-line);
-    transform: scaleY(0);
-    transform-origin: top;
-  }
-  .about-path.is-revealed .path::before {
-    animation: line-grow-y 1s var(--ease) forwards;
-  }
-  @keyframes line-grow-y { to { transform: scaleY(1); } }
-  .path-step {
-    display: grid;
-    grid-template-columns: 12px 1fr;
-    column-gap: var(--space-3);
-    align-items: baseline;
-  }
-  .path-step .path-dot { grid-row: 1; align-self: center; }
-  .path-step .path-label { grid-column: 2; }
-  .path-step .path-year { grid-column: 2; }
-  .path-step .path-sub { grid-column: 2; margin-top: 0.35rem; }
-
-  /* Desktop: horizontal timeline, four columns, line drawn left-to-right. */
+  /* Desktop: more breathing room between milestones. */
   @media (min-width: 760px) {
-    .path {
-      flex-direction: row;
-      align-items: flex-start;
-      gap: 0;
-      padding-top: 0.75rem;
-    }
-    .path::before {
-      top: calc(0.75rem + 6px);
-      bottom: auto;
-      left: 0;
-      right: 0;
-      width: auto;
-      height: 1.5px;
-      transform: scaleX(0);
-      transform-origin: left;
-    }
-    .about-path.is-revealed .path::before {
-      animation: line-grow-x 1s var(--ease) forwards;
-    }
-    .path-step {
-      flex: 1 1 0;
-      min-width: 0;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      text-align: center;
-      gap: 0.4rem;
-      padding: 0 var(--space-2);
-    }
-    .path-step .path-sub { margin-top: 0.25rem; }
+    .path { gap: var(--space-6); column-gap: 0; }
+    .path-step { column-gap: var(--space-5); }
   }
-  @keyframes line-grow-x { to { transform: scaleX(1); } }
 
   @media (prefers-reduced-motion: reduce) {
     .path::before { transform: none; animation: none; }

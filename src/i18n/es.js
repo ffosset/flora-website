@@ -212,24 +212,24 @@ export default {
     path: [
       {
         label: 'periodismo de datos',
-        year: '2012',
-        sub: 'Formada como periodista en IHECS, luego lideré proyectos de datos en Medialab-Prado (ES), uniendo investigación y números. Publiqué por el camino en la revista Wilfried (BE).',
+        year: '2015',
+        sub: 'Formada como periodista en <a href="https://www.ihecs.be/" target="_blank" rel="noopener noreferrer">IHECS</a>, luego lideré proyectos de datos en <a href="https://www.medialab-matadero.es/personal/flora-fosset" target="_blank" rel="noopener noreferrer">Medialab-Prado</a> (ES), uniendo investigación y números. Publiqué por el camino en la revista <a href="https://www.wilfriedmag.be/auteur/flora-fosset/" target="_blank" rel="noopener noreferrer">Wilfried</a> (BE).',
       },
       {
         label: 'diseño',
         year: '2017',
-        sub: 'En urbanData Analytics, el diseño dejó de ser decoración para volverse un sistema: branding, maquetación y los estándares visuales que hacían digeribles análisis densos.',
+        sub: 'En <a href="https://www.urbandataanalytics.com/" target="_blank" rel="noopener noreferrer">urbanData Analytics</a>, el diseño dejó de ser decoración para volverse un sistema: branding, maquetación y los estándares visuales que hacían digeribles análisis densos.',
       },
       {
         label: 'gestión de producto',
-        year: '2018',
-        sub: 'Productos gestionados de principio a fin en urbanData y ROSA: investigación, roadmap y el equilibrio entre lo que los usuarios quieren y lo que se puede construir.',
+        year: '2019',
+        sub: 'Productos gestionados de principio a fin en <a href="https://www.urbandataanalytics.com/" target="_blank" rel="noopener noreferrer">urbanData</a> y <a href="https://rosa.be" target="_blank" rel="noopener noreferrer">ROSA</a>: investigación, roadmap y el equilibrio entre lo que los usuarios quieren y lo que se puede construir.',
       },
       {
         label: 'emprendedora',
-        year: '2025',
+        year: '2024',
         current: true,
-        sub: 'Cofundadora de Minnow Collective, una startup nature-tech. La llevé de cero a liderar un equipo pequeño.',
+        sub: 'Cofundadora de <a href="https://www.minnowcollective.com/" target="_blank" rel="noopener noreferrer">Minnow Collective</a>, una startup nature-tech. La llevé de cero a liderar un equipo pequeño.',
       },
     ],
   },
