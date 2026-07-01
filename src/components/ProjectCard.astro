@@ -3,7 +3,7 @@
 // title, and the client name. Hover fills the whole card with the category
 // colour and reveals the result, keywords, a CTA and the client name.
 // `labels` carries the translated UI strings (with English fallbacks).
-const { c, d, base, labels = {}, service, extra = false } = Astro.props;
+const { c, d, base, labels = {}, service } = Astro.props;
 const readMore = labels.readMore ?? 'Read more';
 const newTab = labels.newTab ?? 'opens in new tab';
 const hasUrl = Boolean(c.url);
@@ -12,7 +12,7 @@ const href = hasUrl ? (isExternal ? c.url : base + c.url) : undefined;
 ---
 
 <article
-  class:list={['card', { 'is-extra': extra }]}
+  class="card"
   style={`--cat: var(--cat-${c.category})`}
   data-cat={c.category}
   role={!hasUrl ? 'button' : undefined}
@@ -87,9 +87,6 @@ const href = hasUrl ? (isExternal ? c.url : base + c.url) : undefined;
     box-shadow: 0 4px 10px rgba(196, 196, 196, 0.12);
   }
   .card[role='button'] { cursor: pointer; }
-  /* Extra cards stay hidden until "see more" reveals them (JS removes the
-     class). The grid only lays out the visible ones. */
-  .card.is-extra { display: none; }
   .card[role='button']:focus-visible,
   .hover-cta:focus-visible {
     outline: 2px solid var(--color-primary);
@@ -99,7 +96,7 @@ const href = hasUrl ? (isExternal ? c.url : base + c.url) : undefined;
   /* --- Media (top): fills the space above the body; hover detail overlays it. */
   .card-media {
     position: relative;
-    flex: 0 0 16rem; /* fixed image area, same on every card */
+    flex: 0 0 40%; /* ~40% image / 60% content; card has a fixed height */
     display: flex;
     align-items: center;
     justify-content: center;
@@ -257,6 +254,8 @@ const href = hasUrl ? (isExternal ? c.url : base + c.url) : undefined;
      it inline below the title / company name. */
   @media (max-width: 720px) {
     .card { height: auto; }
+    /* Card height is auto here, so a % basis has nothing to resolve against. */
+    .card-media { flex-basis: 12rem; }
     .card-more { display: inline-flex; }
 
     .card-hover {

@@ -81,8 +81,8 @@ export default {
     visit: 'Visit page',
     readMore: 'Read more',
     otherCategories: 'Other categories',
-    seeMore: 'See more',
-    seeLess: 'See less',
+    seeMore: 'Load more',
+    seeLess: 'Load less',
     // Per-card CTA labels; Work.astro's DESIGN map picks one by key.
     ctas: {
       website: 'Visit website',
