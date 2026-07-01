@@ -21,13 +21,6 @@ const roles = t.hero.roles?.length ? t.hero.roles : [t.hero.roleWord];
     </div>
   </div>
 
-  <button type="button" class="scroll-btn" data-scroll-next aria-label={t.hero.scroll}>
-    <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
-      <path d="M12 4v15M5 13l7 7 7-7" stroke="currentColor" stroke-width="1.6"
-        stroke-linecap="round" stroke-linejoin="round" />
-    </svg>
-  </button>
-
   <!-- Spotlight cursor follower — additive, scoped to the hero. -->
   <div class="hero-cursor" data-hero-cursor aria-hidden="true"></div>
 </section>
@@ -64,24 +57,6 @@ const roles = t.hero.roles?.length ? t.hero.roles : [t.hero.roleWord];
         }, 320);
       }, 2200);
     }
-  }
-</script>
-
-<script>
-  // Scroll button: jump to the section after the hero. Wired up regardless of
-  // pointer/motion settings (it must work on touch too); only the easing of
-  // the scroll respects prefers-reduced-motion.
-  const scrollBtn = document.querySelector('[data-scroll-next]');
-  if (scrollBtn) {
-    scrollBtn.addEventListener('click', () => {
-      const heroSection = scrollBtn.closest('section');
-      const next = heroSection && heroSection.nextElementSibling;
-      const target = next || document.getElementById('services');
-      if (target) {
-        const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-        target.scrollIntoView({ behavior: reduce ? 'auto' : 'smooth', block: 'start' });
-      }
-    });
   }
 </script>
 
@@ -331,39 +306,6 @@ const roles = t.hero.roles?.length ? t.hero.roles : [t.hero.roleWord];
   @media (prefers-reduced-motion: reduce) {
     .hero-role { transition: none; }
     .hero-role.is-out { opacity: 1; transform: none; }
-  }
-
-  /* Real scroll button, pinned to the hero's bottom-right (aligned to the
-     content gutter). z-index 3 keeps it above the cursor follower. */
-  .scroll-btn {
-    position: absolute;
-    /* Centred along the bottom so it clears the bottom-right tagline. Using
-       left + negative margin (button is 28px wide) keeps `transform` free for
-       the hover nudge and the idle animation. */
-    left: 50%;
-    margin-left: -14px;
-    bottom: var(--space-5);
-    z-index: 3;
-    padding: 0;
-    border: 0;
-    background: transparent;
-    color: var(--color-primary);
-    display: grid;
-    place-items: center;
-    transition: transform 0.25s var(--ease);
-  }
-  .scroll-btn svg { width: 28px; height: 28px; display: block; }
-  /* Idle is just the arrow — no border, no pill. Subtle shift on hover/focus. */
-  .scroll-btn:hover,
-  .scroll-btn:focus-visible { transform: translateY(2px); }
-  /* Gentle nudge on the arrow to hint "scroll down". */
-  .scroll-btn svg { animation: scroll-nudge 1.8s var(--ease) infinite; }
-  @keyframes scroll-nudge {
-    0%, 100% { transform: translateY(0); }
-    50% { transform: translateY(3px); }
-  }
-  @media (prefers-reduced-motion: reduce) {
-    .scroll-btn svg { animation: none; }
   }
 
   /* Tagline, centered directly under the portrait (inside .hero-aside). */
