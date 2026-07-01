@@ -5,9 +5,9 @@
 
 export default {
   meta: {
-    title: 'Flora Fosset · Designer',
+    title: 'Flora Fosset · design, technologie, stratégie',
     description:
-      'Profil senior à la croisée du design, de la technologie et de la stratégie.',
+      'Profil senior à la croisée du design, de la technologie et de la stratégie. Du site vitrine à la plateforme de données.',
   },
   nav: {
     services: 'services',
@@ -150,7 +150,7 @@ export default {
         category: 'storytelling',
         tag: 'durabilité',
         subtitle: 'Oyas Belgique & Drohme Park',
-        title: 'Développer l’audience d’un nouveau salon du jardin durable à Bruxelles.',
+        title: 'Développer l’audience d’une nouvelle fête des plantes à Bruxelles',
         year: '2026',
         did: 'Je gère les réseaux sociaux et pilote toute la communication autour de leur marché du jardin de septembre : ton, calendrier, visuels, comm d’événement.',
         result: 'Objectif : 5 000 visiteurs pour sa première année (septembre 2026).',

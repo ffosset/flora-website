@@ -4,9 +4,9 @@
 
 export default {
   meta: {
-    title: 'Flora Fosset · Product & Design',
+    title: 'Flora Fosset · design, technology, strategy',
     description:
-      'Senior product designer bridging design, tech, and strategy. From landing pages to complex data platforms.',
+      'Senior designer bridging design, technology, and strategy, from one-page sites to complex data platforms.',
   },
   nav: {
     services: 'services',

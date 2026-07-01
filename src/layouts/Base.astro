@@ -25,17 +25,56 @@ if (pagePath && !pagePath.endsWith('/')) pagePath += '/';
 const abs = (p) => (Astro.site ? new URL(`${base}/${p}`, Astro.site).href : `${base}/${p}`);
 const canonical = abs((locale === 'en' ? '' : `${locale}/`) + pagePath);
 const ogImage = abs('og-img.png');
-const ogLocale = { en: 'en_US', fr: 'fr_FR', es: 'es_ES' }[locale] ?? 'en_US';
-// Only pages that exist in every locale get alternates — today just the home page.
+const siteHome = abs(''); // absolute default-locale homepage (JSON-LD url + x-default)
+
+// Per-locale OG locale codes (regional variants) + the alternates for the other two.
+const ogLocales = { en: 'en_GB', fr: 'fr_BE', es: 'es_ES' };
+const ogLocale = ogLocales[locale] ?? ogLocales.en;
+const ogLocaleAlternates = Object.keys(ogLocales)
+  .filter((l) => l !== locale)
+  .map((l) => ogLocales[l]);
+
+// Per-locale share-image alt text.
+const ogImageAlts = {
+  en: 'Flora Fosset · senior designer, Brussels and Madrid',
+  fr: 'Flora Fosset · profil senior en design, Bruxelles et Madrid',
+  es: 'Flora Fosset · perfil sénior en diseño, Bruselas y Madrid',
+};
+const ogImageAlt = ogImageAlts[locale] ?? ogImageAlts.en;
+
+// hreflang: the home page exists in all three locales (reciprocal set +
+// x-default). Single-locale pages (e.g. the work article) only self-reference
+// by their own locale, plus x-default → default homepage. No fake fr/es URLs.
 const alternates =
   pagePath === ''
     ? [
         { hreflang: 'en', href: abs('') },
         { hreflang: 'fr', href: abs('fr/') },
         { hreflang: 'es', href: abs('es/') },
-        { hreflang: 'x-default', href: abs('') },
+        { hreflang: 'x-default', href: siteHome },
       ]
-    : [];
+    : [
+        { hreflang: locale, href: canonical },
+        { hreflang: 'x-default', href: siteHome },
+      ];
+
+// schema.org Person — one JSON-LD block per page. jobTitle is the descriptor
+// after "·" in the locale title. sameAs left empty for social links.
+const jobTitle = (t.meta.title.split('·')[1] ?? t.meta.title).trim();
+const personLd = {
+  '@context': 'https://schema.org',
+  '@type': 'Person',
+  name: 'Flora Fosset',
+  url: siteHome,
+  jobTitle,
+  knowsLanguage: ['French', 'Spanish', 'English'],
+  areaServed: ['Brussels', 'Madrid'],
+  address: [
+    { '@type': 'PostalAddress', addressLocality: 'Brussels', addressCountry: 'BE' },
+    { '@type': 'PostalAddress', addressLocality: 'Madrid', addressCountry: 'ES' },
+  ],
+  sameAs: [],
+};
 ---
 
 <!doctype html>
@@ -56,15 +95,25 @@ const alternates =
     <meta property="og:title" content={pageTitle} />
     <meta property="og:description" content={pageDescription} />
     <meta property="og:url" content={canonical} />
+    <meta property="og:locale" content={ogLocale} />
+    {ogLocaleAlternates.map((l) => (
+      <meta property="og:locale:alternate" content={l} />
+    ))}
     <meta property="og:image" content={ogImage} />
+    <meta property="og:image:type" content="image/png" />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
-    <meta property="og:locale" content={ogLocale} />
+    <meta property="og:image:alt" content={ogImageAlt} />
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content={pageTitle} />
     <meta name="twitter:description" content={pageDescription} />
     <meta name="twitter:image" content={ogImage} />
+
+    <!-- Structured data: schema.org Person -->
+    <script type="application/ld+json" set:html={JSON.stringify(personLd)} />
+
     <link rel="icon" type="image/svg+xml" href={`${base}/favicon.svg`} />
+    <link rel="apple-touch-icon" href={`${base}/apple-touch-icon.png`} />
   </head>
   <body>
     <header class="site-header at-top">

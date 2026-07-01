@@ -4,9 +4,9 @@
 
 export default {
   meta: {
-    title: 'Flora Fosset · Diseñadora',
+    title: 'Flora Fosset · diseño, tecnología, estrategia',
     description:
-      'Perfil sénior en el cruce entre diseño, tecnología y estrategia.',
+      'Perfil sénior en el cruce entre diseño, tecnología y estrategia. Del simple one-pager a la plataforma de datos.',
   },
   nav: {
     services: 'servicios',
@@ -252,7 +252,7 @@ export default {
         sub: 'Cofundadora de <a href="https://www.minnowcollective.com/" target="_blank" rel="noopener noreferrer">Minnow Collective</a> y fundadora de mi propia agencia de diseño.',
       },
       {
-        label: '¿un proyecto contigo, quizás?',
+        label: 'un proyecto juntos, ¿quizás?',
         year: 'HOY',
       },
     ],
