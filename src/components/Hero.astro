@@ -59,6 +59,16 @@ const roles = t.hero.roles?.length ? t.hero.roles : [t.hero.roleWord];
     const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
     const wait = (ms) => new Promise((r) => setTimeout(r, ms));
 
+    // Tighten the word column right up to "flora ·": measure the anchor's real
+    // width (font/locale-dependent) and set the gutter to exactly that plus a
+    // small gap, instead of guessing a fixed em value.
+    const anchor = stack.querySelector('.flora-anchor');
+    const fitGutter = () => {
+      if (!anchor) return;
+      const gap = 0.16 * parseFloat(getComputedStyle(stack).fontSize); // small breathing gap
+      stack.style.paddingLeft = anchor.getBoundingClientRect().width + gap + 'px';
+    };
+
     const makeRow = (text) => {
       const row = document.createElement('span');
       row.className = 'word';
@@ -85,7 +95,12 @@ const roles = t.hero.roles?.length ? t.hero.roles : [t.hero.roleWord];
         await wait(STEP + HOLD);
       }
     };
-    window.addEventListener('load', build);
+    fitGutter();
+    // Re-measure once webfonts land (glyph widths change on swap) and on resize
+    // (the clamp() font-size scales with the viewport).
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(fitGutter);
+    window.addEventListener('resize', fitGutter);
+    window.addEventListener('load', () => { fitGutter(); build(); });
   }
 </script>
 
@@ -331,7 +346,7 @@ const roles = t.hero.roles?.length ? t.hero.roles : [t.hero.roleWord];
     justify-content: flex-start;
     align-items: flex-start;
     gap: 0.34em;                       /* vertical breathing room between rows */
-    padding-left: 3.6em;               /* gutter that flora· hangs in */
+    padding-left: 3em;                 /* fallback gutter; JS fits it to flora· exactly */
     font-family: var(--font-display);
     font-size: var(--fs-mega);
     font-weight: 800;
