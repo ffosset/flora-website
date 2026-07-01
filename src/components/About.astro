@@ -80,11 +80,11 @@ const WAVE = {
 
     <div class="about-blocks">
       <div class="about-block">
-        <h3><span class="slash">·</span>{t.about.howIWorkTitle}</h3>
+        <h3>{t.about.howIWorkTitle}</h3>
         <p>{t.about.howIWorkBody}</p>
       </div>
       <div class="about-block">
-        <h3><span class="slash">·</span>{t.about.valuesTitle}</h3>
+        <h3>{t.about.valuesTitle}</h3>
         <p>{t.about.values}</p>
       </div>
     </div>
@@ -229,7 +229,9 @@ const WAVE = {
   }
   .about-facts .slash { color: var(--color-primary); margin-right: 0.5em; font-weight: 700; }
 
-  /* "how I work" / "value driven" — two cards below the timeline. */
+  /* "how I work" / "value driven" — two cards below the timeline. Same box +
+     text styling as the services cards: peach panel, always-on hard shadow and
+     matching-colour title (burnt orange), left-aligned, text in Inter. */
   .about-blocks {
     display: grid;
     gap: var(--space-4);
@@ -240,16 +242,24 @@ const WAVE = {
   }
   .about-block {
     background: #faf0ea;
-    border-radius: 18px;
+    border-radius: 4px;
     padding: var(--space-4) var(--space-5);
-    text-align: center;
+    text-align: left;
+    box-shadow: 8px 8px 0 0 var(--color-primary);
   }
   .about-block h3 {
+    font-family: var(--font-display);
+    font-weight: 700;
     font-size: 1.375rem;
     letter-spacing: -0.01em;
+    color: var(--color-primary);
     margin-bottom: var(--space-2);
   }
-  .about-block p { color: var(--color-muted); }
+  .about-block h3::after { content: ' ·'; }
+  .about-block p {
+    font-family: var(--font-display);
+    color: var(--color-text);
+  }
 
   /* --- Timeline ---
      Mobile (<760px): a straight vertical rail with the dots down the left and
