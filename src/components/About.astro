@@ -1,6 +1,6 @@
 ---
 import { Image } from 'astro:assets';
-import portrait from '../assets/flora-cats-house.jpg';
+import portrait from '../assets/flora-house.png';
 const { t } = Astro.props;
 const facts = t.about.facts || [];
 const path = t.about.path || [];
@@ -205,8 +205,10 @@ const WAVE = {
     width: 100%;
     max-width: 26rem;
     height: auto;
-    /* The sepia tone, rounded frame and cream stroke are baked into the
-       image itself, so no CSS treatment is needed here. */
+    border-radius: 4px;
+    /* Hard shadow: a solid primary-orange block offset up/left (no blur),
+       matching the hero portrait's treatment. */
+    box-shadow: -12px -12px 0 0 var(--color-primary);
   }
   /* Mobile: centre the portrait above the text. */
   @media (max-width: 899px) {
@@ -363,9 +365,11 @@ const WAVE = {
   .path-sub {
     margin-top: 0.25rem;
     max-width: 52ch;
-    font-size: var(--fs-small);
-    line-height: 1.55;
-    color: var(--color-muted);
+    /* Same text style as the service-box body (.service-desc). */
+    font-family: var(--font-display);
+    font-size: 1.0625rem;
+    line-height: 1.5;
+    color: var(--color-text);
   }
   .path-sub :global(a) {
     color: var(--color-primary);
