@@ -94,7 +94,7 @@ export default {
         year: '2025',
         did: 'Construí una plataforma completa en Webflow: landing page, bases de datos y un programa de socios en torno a su revista. Renové su página de Facebook y llevé sus archivos a un espacio compartido en la nube.',
         result: 'La buscan y la encuentran online +40 veces al mes.',
-        keywords: ['Plataforma Webflow', 'Bases de datos', 'Publicaciones online'],
+        keywords: ['CMS', 'Accesibilidad', 'Branding'],
         awards: [],
       },
       {
@@ -108,7 +108,7 @@ export default {
         year: '2024–actualidad',
         did: 'Cofundé la empresa y hoy dirijo la estrategia de producto y el diseño. Convertimos datos ecológicos en herramientas que encajan con cómo trabajan de verdad los equipos de compras y aprovisionamiento.',
         result: 'Cofundé una plataforma que ayuda a los equipos de compras a mapear sus cadenas de suministro según su contexto ecológico.',
-        keywords: ['Estrategia de producto', 'Usuarios B2B avanzados', 'Datos complejos'],
+        keywords: ['UX/UI empresarial', 'Estrategia', 'PM'],
         awards: [],
       },
       {
@@ -117,12 +117,12 @@ export default {
         url: 'https://soydetemporada.es/',
         category: 'landing',
         tag: 'Alimentación sostenible',
-        subtitle: 'Soy de temporada',
+        subtitle: 'Self-initiated',
         title: 'Saber qué productos son de temporada en dos clics',
         year: '2016–2018',
         did: 'Diseñé y lancé una plataforma que muestra qué frutas y verduras están de temporada. Un proyecto personal que se convirtió en una herramienta cotidiana para mucha gente.',
         result: '+500 usuarios diarios, seis años después del lanzamiento de la plataforma.',
-        keywords: ['Diseño de plataforma', 'Datos de temporada', 'Proyecto personal'],
+        keywords: ['Investigación', 'Accesibilidad'],
         awards: [],
       },
       {
@@ -136,7 +136,7 @@ export default {
         year: '2022–2024',
         did: 'Design lead de Rosa eBilling (software de eAttest y eFact), integrado con el INAMI, el sistema de mutualidades belga. Convertí un laberinto normativo en un flujo que los médicos completan en un par de minutos por consulta.',
         result: 'Lo usan a diario 3 softwares asociados para oftalmólogos.',
-        keywords: ['Design lead', 'Facturación eHealth', 'Integración INAMI'],
+        keywords: ['UX/UI empresarial', 'Integraciones'],
         awards: [],
       },
       {
@@ -150,7 +150,7 @@ export default {
         year: '2026',
         did: 'Llevo las redes sociales y toda la comunicación en torno a su mercado de jardinería de septiembre: voz, calendario, visuales y comunicación del evento.',
         result: '+20 % de seguidores en cuatro meses, con una voz que suena a ellos.',
-        keywords: ['Redes sociales', 'Comunicación de eventos', 'Voz de marca'],
+        keywords: ['RRPP', 'Redes sociales', 'Branding'],
         awards: [],
       },
       {
@@ -164,7 +164,7 @@ export default {
         year: '2020',
         did: 'Hice la investigación de usuarios y después diseñé un simulador que convierte precio de compra, alquiler e hipoteca en una lectura clara de la operación. Lideré los sprints, la aceptación funcional y el despliegue entre los usuarios.',
         result: 'Diseño aún en uso 6 años después de su implementación.',
-        keywords: ['Investigación de usuarios', 'Diseño de interacción y prototipos', 'Organización de sprints', 'Aceptación funcional', 'Comunicación de despliegue'],
+        keywords: ['Investigación', 'Design system', 'PM'],
         awards: [],
       },
       {
@@ -178,7 +178,7 @@ export default {
         year: '2019',
         did: 'Proyecto de fin de máster en UX / diseño de producto hecho en solitario —un «adblock» para el clickbait— que después co-construí como beta de extensión de navegador open source con un equipo de desarrolladores en Google Campus.',
         result: '',
-        keywords: ['UX / diseño de producto en solitario', 'Proyecto de máster', 'Extensión open source'],
+        keywords: ['Open-source', 'Integraciones'],
         awards: [],
       },
       {
@@ -192,7 +192,7 @@ export default {
         year: '2016',
         did: 'Escribí y diseñé una investigación de largo formato sobre los niños mestizos de la colonización belga. Cuatro testimonios entrelazados, un mapa cronológico colonial interactivo y fotografías de archivo.',
         result: 'El artículo más leído de la web de 24h01, con diferencia, hasta el cierre de la revista.',
-        keywords: ['Escritura de largo formato', 'Mapa interactivo', 'Diseño de archivo'],
+        keywords: ['Investigación', 'Slow journalism'],
         awards: [],
       },
       {

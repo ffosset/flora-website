@@ -179,7 +179,7 @@ export default {
         year: '2019',
         did: 'Projet de fin de master en UX / design produit mené en solo — un « adblock » pour le clickbait — puis co-construit en beta d’extension navigateur open source avec une équipe de développeurs au Google Campus.',
         result: '',
-        keywords: ['UX / design produit en solo', 'Projet de master', 'Extension open source'],
+        keywords: ['Open-source', 'Intégrations'],
         awards: [],
       },
       {
@@ -193,7 +193,7 @@ export default {
         year: '2016',
         did: 'J’ai écrit et mis en page une enquête au long cours sur les enfants métis de la colonisation belge. Quatre témoignages entrelacés, une carte chronologique interactive de la colonisation et des photos d’archives.',
         result: 'L’article le plus lu du site de 24h01, de loin, jusqu’à la fermeture de la revue.',
-        keywords: ['Écriture au long cours', 'Carte interactive', 'Design d’archives'],
+        keywords: ['Enquête', 'Slow journalism'],
         awards: [],
       },
       {
