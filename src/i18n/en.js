@@ -233,6 +233,9 @@ export default {
       'Splitting time between Brussels and Madrid',
       'Working from my garden boosts my creativity',
     ],
+    // Photo annotation callouts (desktop/tablet) + mobile summary chip.
+    tags: { me: 'me', cat1: 'cat 1', cat2: 'cat 2', cat3: 'cat 3', cast: 'cast: me + 3 cats' },
+    photoCaption: 'Photographed at home in Brussels — with me and three cats.',
     howIWorkTitle: 'how I work',
     howIWorkBody:
       'Most teams hire a designer, a writer, and a developer, then stitch them together. My path ran through all of it, so I work across the seams.',

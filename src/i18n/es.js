@@ -224,6 +224,9 @@ export default {
       'Entre Madrid y Bruselas',
       'Trabajar desde mi jardín potencia mi creatividad',
     ],
+    // Photo annotation callouts (desktop/tablet) + mobile summary chip.
+    tags: { me: 'yo', cat1: 'gato 1', cat2: 'gato 2', cat3: 'gato 3', cast: 'reparto: yo + 3 gatos' },
+    photoCaption: 'Fotografiada en casa, en Bruselas — conmigo y tres gatos.',
     howIWorkTitle: 'cómo trabajo',
     howIWorkBody:
       'La mayoría de los equipos contrata a un diseñador, un redactor y un desarrollador, y luego trata de hacerlos encajar. Mi trayectoria pasó por todos esos oficios, lo que me permite ser autónoma pero también colaborar con eficacia.',

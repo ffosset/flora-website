@@ -225,6 +225,9 @@ export default {
       'Entre Bruxelles et Madrid',
       'Travailler depuis mon jardin stimule ma créativité',
     ],
+    // Photo annotation callouts (desktop/tablet) + mobile summary chip.
+    tags: { me: 'moi', cat1: 'chat 1', cat2: 'chat 2', cat3: 'chat 3', cast: 'distribution : moi + 3 chats' },
+    photoCaption: 'Photographiée chez moi à Bruxelles — avec moi et mes trois chats.',
     howIWorkTitle: 'comment je travaille',
     howIWorkBody:
       'La plupart des équipes recrutent designer, rédacteur et développeur, puis tentent de les faire tenir ensemble. Mon parcours est passé par tous ces métiers, ce qui me permet d’être indépendante mais aussi de collaborer avec efficacité.',

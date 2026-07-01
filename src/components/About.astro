@@ -4,6 +4,21 @@ import portrait from '../assets/flora-house.png';
 const { t } = Astro.props;
 const facts = t.about.facts || [];
 const path = t.about.path || [];
+const tags = t.about.tags || {};
+
+// Annotation callouts over the About photo. Coordinates are percentages of the
+// displayed photo box: `l` = chip centre, `d` = leader-line endpoint, nudged to
+// sit *beside* each subject (never on top). Array order = reveal order, which
+// climbs the house: table → staircase → window (left → right). Verified against
+// the full-resolution photo. Desktop/tablet only; mobile shows the cast chip.
+const PHOTO_TAGS = [
+  { key: 'me',   label: tags.me,   lx: 30, ly: 89, dx: 52, dy: 84 }, // Flora at the table
+  // cat1's leader runs over the bright white-painted soffit — cream would
+  // vanish there, so this one line switches to terracotta (see spec).
+  { key: 'cat1', label: tags.cat1, lx: 84, ly: 50, dx: 58, dy: 52, tint: 'terra' }, // cat on the spiral staircase
+  { key: 'cat2', label: tags.cat2, lx: 18, ly: 9,  dx: 51, dy: 15 }, // white cat, left of the window
+  { key: 'cat3', label: tags.cat3, lx: 82, ly: 5,  dx: 80, dy: 15 }, // tabby cat, right of the window
+];
 
 // Desktop "vertical wave" geometry (px, in a 660×760 box). Each milestone sits
 // at a wave extreme, alternating right/left; the SVG path snakes between them.
@@ -30,16 +45,51 @@ const WAVE = {
     </header>
 
     <div class="about-grid">
-      <div class="about-media">
-        <Image
-          class="about-portrait"
-          src={portrait}
-          alt="Flora seated in the garden of her brick townhouse"
-          width={640}
-          format="webp"
-          loading="lazy"
-        />
-      </div>
+      <figure class="about-media">
+        <div class="about-photo" data-tags>
+          <Image
+            class="about-portrait"
+            src={portrait}
+            alt="Flora seated in the garden of her brick townhouse"
+            width={640}
+            format="webp"
+            loading="lazy"
+          />
+
+          {/* Leader lines (decorative): one <line> per tag, drawn in the
+              stretched 0–100 viewBox so its %s match the chips/dots exactly. */}
+          <svg class="tag-lines" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
+            {PHOTO_TAGS.map((tag, i) => (
+              <line
+                class:list={['tag-line', { 'tag-line--terra': tag.tint === 'terra' }]}
+                x1={tag.lx} y1={tag.ly} x2={tag.dx} y2={tag.dy}
+                vector-effect="non-scaling-stroke"
+                style={`--d:${(i * 0.16).toFixed(2)}s`}
+              />
+            ))}
+          </svg>
+
+          {PHOTO_TAGS.map((tag, i) => (
+            <span
+              class="tag-dot"
+              aria-hidden="true"
+              style={`left:${tag.dx}%; top:${tag.dy}%; --d:${(i * 0.16).toFixed(2)}s`}
+            ></span>
+          ))}
+
+          {PHOTO_TAGS.map((tag, i) => (
+            <span
+              class="tag-chip"
+              style={`left:${tag.lx}%; top:${tag.ly}%; --d:${(i * 0.16).toFixed(2)}s`}
+            >{tag.label}</span>
+          ))}
+        </div>
+
+        {/* Mobile-only summary (the positional callouts don't survive the crop). */}
+        <p class="tag-cast">{tags.cast}</p>
+        {/* Always present for screen readers; visually hidden. */}
+        <figcaption class="tag-caption">{t.about.photoCaption}</figcaption>
+      </figure>
 
       <div class="about-right">
         <ul class="about-facts">
@@ -204,6 +254,30 @@ const WAVE = {
   }
 </script>
 
+<script>
+  // Reveal the photo annotation tags the first time the photo scrolls into view.
+  // The stagger/cascade is pure CSS (per-tag `--d` delays); we only toggle the
+  // `is-revealed` class. Under reduced motion the CSS already paints the final
+  // state, so we don't need to wait for the observer.
+  const photo = document.querySelector('[data-tags]');
+  if (photo) {
+    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)');
+    if (reduce.matches) {
+      photo.classList.add('is-revealed');
+    } else if ('IntersectionObserver' in window) {
+      const io = new IntersectionObserver(
+        (entries) => entries.forEach((e) => {
+          if (e.isIntersecting) { photo.classList.add('is-revealed'); io.disconnect(); }
+        }),
+        { threshold: 0.35 }
+      );
+      io.observe(photo);
+    } else {
+      photo.classList.add('is-revealed');
+    }
+  }
+</script>
+
 <style>
   .about { background: var(--color-section-bg); }
 
@@ -257,10 +331,25 @@ const WAVE = {
     }
   }
 
+  /* The photo + its annotation overlay share one positioned box so the tags
+     (positioned by %) always line up with the image, whatever its rendered
+     size. Motion token for the chip's slight-overshoot pop lives here too. */
+  .about-media {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-3);
+    margin: 0;
+  }
+  .about-photo {
+    position: relative;
+    width: 100%;
+    max-width: 20.8rem;
+    --ease-overshoot: cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
   .about-portrait {
     display: block;
     width: 100%;
-    max-width: 20.8rem;
     height: auto;
     border-radius: 4px;
     /* Hard shadow: a solid primary-orange block offset up/left (no blur),
@@ -269,8 +358,101 @@ const WAVE = {
   }
   /* Mobile: centre the portrait above the text. */
   @media (max-width: 899px) {
-    .about-media { display: flex; justify-content: center; }
-    .about-portrait { max-width: 16rem; }
+    .about-photo { max-width: 16rem; }
+  }
+
+  /* --- Photo annotation tags ---------------------------------------------
+     A label chip is joined by a thin leader line to a dot that sits *beside*
+     each subject. Stacking: photo < lines < dots < chips. Tags reveal in a
+     staggered cascade (per-tag `--d`) when the photo scrolls into view.
+     Desktop/tablet only; below 760px a single "cast" chip stands in. */
+  .tag-lines {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+    overflow: visible;
+    pointer-events: none;
+  }
+  .tag-line {
+    stroke: var(--color-bg);          /* cream reads cleanly over the sepia */
+    stroke-width: 1.5;
+    stroke-linecap: round;
+    opacity: 0;
+    transform: scale(0.55);
+    transform-box: fill-box;
+    transform-origin: center;
+    transition: opacity 0.3s var(--ease), transform 0.35s var(--ease);
+    transition-delay: var(--d);
+  }
+  /* Terracotta stroke for any leader that would fade into a light patch. */
+  .tag-line--terra { stroke: var(--color-primary); }
+
+  .tag-dot {
+    position: absolute;
+    z-index: 2;
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    background: var(--color-primary);
+    border: 2px solid var(--color-bg);
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0.5);
+    transition: opacity 0.3s var(--ease), transform 0.3s var(--ease);
+    transition-delay: var(--d);
+    pointer-events: none;
+  }
+
+  .tag-chip,
+  .tag-cast {
+    /* Terracotta chip, cream mono text, three rounded + one sharp corner
+       (the site's corner language). Cream-on-terracotta ≈ 5:1 → passes AA. */
+    font-family: var(--font-body);
+    font-size: 12.5px;
+    line-height: 1;
+    color: var(--color-bg);
+    background: var(--color-primary);
+    padding: 5px 11px;
+    border-radius: 7px 7px 7px 2px;
+    box-shadow: 0 1px 0 rgba(0, 0, 0, 0.18);
+    white-space: nowrap;
+  }
+  .tag-chip {
+    position: absolute;
+    z-index: 3;
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0.8);
+    transition: opacity 0.36s var(--ease), transform 0.36s var(--ease-overshoot);
+    transition-delay: calc(var(--d) + 0.07s);
+    pointer-events: none;
+  }
+
+  .about-photo.is-revealed .tag-line { opacity: 0.92; transform: scale(1); }
+  .about-photo.is-revealed .tag-dot { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+  .about-photo.is-revealed .tag-chip { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+
+  /* Mobile summary chip: the callouts are hidden (they'd point at nothing on
+     the reflowed photo); this stands in below the image. */
+  .tag-cast { display: none; }
+  @media (max-width: 759.98px) {
+    .tag-lines, .tag-dot, .tag-chip { display: none; }
+    .tag-cast { display: inline-block; }
+  }
+
+  /* Descriptive caption for screen readers — the annotation makes sense
+     without the visuals. Visually hidden on every viewport. */
+  .tag-caption {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    margin: -1px;
+    padding: 0;
+    border: 0;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    clip-path: inset(50%);
+    white-space: nowrap;
   }
 
   /* Quick facts: a small orange dot before each line. */
@@ -506,6 +688,11 @@ const WAVE = {
     .path-runner { opacity: 0 !important; }
     .path-step { opacity: 1; transform: none; animation: none; transition: none; }
     .path-step.is-current .path-dot::after { animation: none; opacity: 0; }
+
+    /* Photo tags: render in their final state immediately, no animation. */
+    .tag-line { opacity: 0.92; transform: none; transition: none; }
+    .tag-dot { opacity: 1; transform: translate(-50%, -50%); transition: none; }
+    .tag-chip { opacity: 1; transform: translate(-50%, -50%); transition: none; }
   }
 </style>
 
@@ -514,5 +701,8 @@ const WAVE = {
     .path::before { transform: none !important; }
     .path-wave path { stroke-dashoffset: 0 !important; }
     .path-step { opacity: 1 !important; transform: none !important; }
+    .tag-line { opacity: 0.92 !important; transform: none !important; }
+    .tag-dot { opacity: 1 !important; transform: translate(-50%, -50%) !important; }
+    .tag-chip { opacity: 1 !important; transform: translate(-50%, -50%) !important; }
   </style>
 </noscript>
