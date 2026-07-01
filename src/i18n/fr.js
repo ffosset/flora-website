@@ -100,7 +100,7 @@ export default {
       },
       {
         slug: 'minnow-collective',
-        image: '/images/projects/minnow-browser.png',
+        image: '/images/projects/minnow.png',
         url: 'https://www.minnowcollective.com/',
         category: 'product',
         tag: 'Nature Tech',
@@ -114,7 +114,7 @@ export default {
       },
       {
         slug: 'soy-de-temporada',
-        image: '/images/projects/soy-de-temporada.jpg',
+        image: '/images/projects/soydetemporada.png',
         url: 'https://soydetemporada.es/',
         category: 'landing',
         tag: 'Alimentation durable',
@@ -142,7 +142,7 @@ export default {
       },
       {
         slug: 'oyas-belgique',
-        image: '/images/projects/oyas.jpg',
+        image: '/images/projects/oyas-drohme.png',
         url: 'https://www.oyas-belgique.be/',
         category: 'storytelling',
         tag: 'durabilité',
@@ -155,7 +155,7 @@ export default {
       },
       {
         slug: 'investment-simulator',
-        image: '/images/projects/placeholder.svg', // TODO: real image from Flora
+        image: '/images/projects/simulator.png',
         url: 'https://www.accumin.com/es/intelligence/productos/pulse-asset',
         category: 'product',
         tag: 'Immobilier',
@@ -169,7 +169,7 @@ export default {
       },
       {
         slug: 'free-the-fish',
-        image: '/images/projects/placeholder.svg', // TODO: real image from Flora
+        image: '/images/projects/freethefish.png',
         url: 'https://github.com/CodingCarlos/freethefish-chrome',
         category: 'product',
         tag: 'Journalisme',
