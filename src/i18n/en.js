@@ -102,7 +102,7 @@ export default {
         year: '2025',
         did: 'Built a full Webflow platform with landing page, databases, and a member program around their magazine. Revamped their Facebook page and moved their files to a shared cloud workspace.',
         result: 'They are searched and found online +40 times per month.',
-        keywords: ['Webflow platform', 'Databases', 'Online publications'],
+        keywords: ['CMS', 'Accessibility', 'Branding'],
         awards: [],
       },
       {
@@ -116,7 +116,7 @@ export default {
         year: '2024–present',
         did: 'Co-founded the company and currently leading product strategy and design. We’re turning ecological data into tools that fit how procurement and sourcing teams really work.',
         result: 'Cofounded a platform to help companies map supply chains based on ecological context.',
-        keywords: ['Product strategy', 'Advanced B2B users', 'Complex data'],
+        keywords: ['Enterprise UX/UI', 'Strategy', 'PM'],
         awards: [],
       },
       {
@@ -125,12 +125,12 @@ export default {
         url: 'https://soydetemporada.es/',
         category: 'landing',
         tag: 'Food & Sustainability',
-        subtitle: 'Soy de temporada',
+        subtitle: 'Self-initiated',
         title: 'Find out what products are in season in two clicks',
         year: '2016–2018',
         did: 'Designed and launched a platform that shows which fruits and vegetables are in season. A personal project that became an everyday tool for many people.',
         result: '+500 daily users, six years after the platform launch.',
-        keywords: ['Platform design', 'Seasonal data', 'Personal project'],
+        keywords: ['Research', 'Accessibility'],
         awards: [], // pending — Flora to fill with 2 Spanish + 2 international award names + years
       },
       {
@@ -144,7 +144,7 @@ export default {
         year: '2022–2024',
         did: 'Design lead on Rosa eBilling (eAttest & eFact software) integrated with the Belgian mutuality system INAMI. Turned a compliance maze into a flow doctors run in a couple of minutes per consultation.',
         result: 'Used daily by 3 partner softwares for ophtalmologists.',
-        keywords: ['Design lead', 'eHealth billing', 'INAMI integration'],
+        keywords: ['Enterprise UX/UI', 'Integrations'],
         awards: [],
       },
       {
@@ -158,7 +158,7 @@ export default {
         year: '2026',
         did: 'Run social media and lead all communications around their September garden market — voice, calendar, visuals, event comms.',
         result: '+20% followers in four months, in a voice that sounds like them.',
-        keywords: ['Social media', 'Event comms', 'Brand voice'],
+        keywords: ['PR', 'Social media', 'Branding'],
         awards: [],
       },
       {
@@ -172,7 +172,7 @@ export default {
         year: '2020',
         did: 'Ran user research then designed a simulator that turns purchase price, rent and mortgage into a clear read on a deal. Led the sprints, functional acceptance, and the rollout to users.',
         result: 'Design still in use 6 years after implementation.',
-        keywords: ['User research', 'Interaction design & prototypes', 'Sprint organization', 'Functional acceptance', 'Deploy comms'],
+        keywords: ['Research', 'Design system', 'PM'],
         awards: [],
       },
       {
@@ -186,7 +186,7 @@ export default {
         year: '2019',
         did: 'A solo UX / product-design master’s project — an “adblock” for clickbait — later co-built into an open-source browser-extension beta with a developer team at Google Campus.',
         result: '',
-        keywords: ['Solo UX / product design', 'Master’s project', 'Open-source extension'],
+        keywords: ['Open-source', 'Integrations'],
         awards: [],
       },
       {
@@ -201,7 +201,7 @@ export default {
         did: 'Wrote and designed a long-form investigation on the métis children of Belgian colonization. Four interwoven testimonies, an interactive colonial-timeline map, and archival photographs.',
         result:
           'The most-read piece on 24h01 website by a wide margin, until the magazine closed.',
-        keywords: ['Long-form writing', 'Interactive map', 'Archival design'],
+        keywords: ['Investigation', 'Slow journalism'],
         awards: [],
       },
       {

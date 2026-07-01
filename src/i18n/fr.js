@@ -95,7 +95,7 @@ export default {
         year: '2025',
         did: 'J’ai construit une plateforme Webflow complète : landing page, bases de données et programme de membres autour de leur revue. J’ai refondu leur page Facebook et migré leurs fichiers vers un espace cloud partagé.',
         result: 'Ils sont cherchés et trouvés en ligne +40 fois par mois.',
-        keywords: ['Plateforme Webflow', 'Bases de données', 'Publications en ligne'],
+        keywords: ['CMS', 'Accessibilité', 'Branding'],
         awards: [],
       },
       {
@@ -109,7 +109,7 @@ export default {
         year: '2024–aujourd’hui',
         did: 'J’ai cofondé l’entreprise et je dirige aujourd’hui la stratégie produit et le design. Nous transformons des données écologiques en outils qui collent à la façon dont les équipes achats et sourcing travaillent vraiment.',
         result: 'Cofondatrice d’une plateforme qui aide les équipes achats à cartographier leurs chaînes d’approvisionnement selon leur contexte écologique.',
-        keywords: ['Stratégie produit', 'Utilisateurs B2B avancés', 'Données complexes'],
+        keywords: ['UX/UI entreprise', 'Stratégie', 'PM'],
         awards: [],
       },
       {
@@ -118,12 +118,12 @@ export default {
         url: 'https://soydetemporada.es/',
         category: 'landing',
         tag: 'Alimentation durable',
-        subtitle: 'Soy de temporada',
+        subtitle: 'Self-initiated',
         title: 'Savoir quels produits sont de saison en deux clics',
         year: '2016–2018',
         did: 'J’ai conçu et lancé une plateforme qui montre quels fruits et légumes sont de saison. Un projet personnel devenu un outil du quotidien pour beaucoup de gens.',
         result: '+500 utilisateurs quotidiens, six ans après le lancement de la plateforme.',
-        keywords: ['Design de plateforme', 'Données saisonnières', 'Projet personnel'],
+        keywords: ['Recherche', 'Accessibilité'],
         awards: [],
       },
       {
@@ -137,7 +137,7 @@ export default {
         year: '2022–2024',
         did: 'Design lead sur Rosa eBilling (logiciels eAttest & eFact), intégré à l’INAMI, le système des mutualités belges. J’ai transformé un labyrinthe réglementaire en un parcours que les médecins bouclent en quelques minutes par consultation.',
         result: 'Utilisé chaque jour par 3 logiciels partenaires pour ophtalmologues.',
-        keywords: ['Design lead', 'Facturation e-santé', 'Intégration INAMI'],
+        keywords: ['UX/UI entreprise', 'Intégrations'],
         awards: [],
       },
       {
@@ -151,7 +151,7 @@ export default {
         year: '2026',
         did: 'Je gère les réseaux sociaux et pilote toute la communication autour de leur marché du jardin de septembre : ton, calendrier, visuels, comm d’événement.',
         result: '+20 % d’abonnés en quatre mois, avec un ton qui leur ressemble.',
-        keywords: ['Réseaux sociaux', 'Comm événementielle', 'Ton de marque'],
+        keywords: ['RP', 'Réseaux sociaux', 'Branding'],
         awards: [],
       },
       {
@@ -165,7 +165,7 @@ export default {
         year: '2020',
         did: 'J’ai mené la recherche utilisateur, puis conçu un simulateur qui transforme prix d’achat, loyer et crédit en une lecture claire de l’opération. J’ai piloté les sprints, la recette fonctionnelle et le déploiement auprès des utilisateurs.',
         result: 'Design toujours utilisé 6 ans après sa mise en place.',
-        keywords: ['Recherche utilisateur', 'Design d’interaction & prototypes', 'Organisation des sprints', 'Recette fonctionnelle', 'Comm de déploiement'],
+        keywords: ['Recherche', 'Design system', 'PM'],
         awards: [],
       },
       {

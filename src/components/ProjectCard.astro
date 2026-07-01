@@ -216,6 +216,9 @@ const href = hasUrl ? (isExternal ? c.url : base + c.url) : undefined;
     background: color-mix(in srgb, var(--color-text) 10%, transparent);
     color: var(--color-muted);
   }
+  /* On teal / raspberry the muted grey is hard to read — flip tags to white. */
+  .card[data-cat='product'] .hover-tag,
+  .card[data-cat='storytelling'] .hover-tag { color: #ffffff; }
 
   /* CTA + client name, pinned to the bottom of the reveal. */
   .hover-foot {

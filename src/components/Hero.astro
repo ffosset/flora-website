@@ -6,7 +6,7 @@ const roles = t.hero.roles?.length ? t.hero.roles : [t.hero.roleWord];
 <section id="hero" class="hero" data-hero>
   <aside class="hero-aside">
     <a class="hero-photo" href="#about" aria-label={t.a11y.aboutMe}>
-      <img src={portrait.src} alt="Flora Fosset" width="203" height="203" loading="eager" />
+      <img src={portrait.src} alt="Flora Fosset" width="203" height="250" loading="eager" />
     </a>
     {t.hero.tagline && <p class="hero-tagline">{t.hero.tagline}</p>}
   </aside>
@@ -283,27 +283,23 @@ const roles = t.hero.roles?.length ? t.hero.roles : [t.hero.roleWord];
     /* Pulled in from the right edge so it sits a bit more toward the centre. */
     .hero-aside { right: clamp(4rem, 13vw, 15rem); }
   }
-  /* Same treatment as the About portrait: a solid primary-orange backdrop that
-     the luminosity-blended photo mixes with (that's the sepia), plus a hard
-     offset shadow in the same orange. On hover the photo lifts toward the
-     bottom-right while the shadow deepens — a parallax that signals it's a link. */
+  /* The photo shown as-is (no colour treatment), with a hard offset shadow in
+     the primary orange. On hover it lifts toward the bottom-right while the
+     shadow deepens — a parallax that signals it's a link. */
   .hero-photo {
-    --d: 203px;         /* portrait size (square) */
+    --w: 203px;         /* frame width */
+    --h: 250px;         /* taller than wide so the whole head fits (no crop) */
     --radius: 4px;      /* barely-there corners, matching About */
     --shadow-x: -14px;  /* hard-shadow offset — negative = up/left */
     --shadow-y: -14px;
     --lift: 0px;        /* photo shift on hover; grows the gap to the shadow */
     display: block;
     position: relative;
-    width: var(--d);
-    height: var(--d);
+    width: var(--w);
+    height: var(--h);
     border-radius: var(--radius);
-    /* Orange ground for the luminosity blend below → sepia portrait. */
-    background: var(--color-primary);
     /* Hard shadow: solid primary orange, no blur (0 blur, 0 spread). */
     box-shadow: var(--shadow-x) var(--shadow-y) 0 0 var(--color-primary);
-    /* Blend the photo only against this orange, not the page gradient. */
-    isolation: isolate;
     cursor: pointer;
     transition: box-shadow 0.3s var(--ease);
   }
@@ -318,10 +314,8 @@ const roles = t.hero.roles?.length ? t.hero.roles : [t.hero.roleWord];
     height: 100%;
     border-radius: var(--radius);
     object-fit: cover;
-    object-position: center;
+    object-position: center top; /* bias the crop to the top so the head stays in */
     display: block;
-    /* luminosity lets the orange ground tint the portrait sepia (matches About). */
-    mix-blend-mode: luminosity;
     /* Shifts toward the shadow on hover, widening the gap = a lift. */
     translate: var(--lift) var(--lift);
     transition: translate 0.3s var(--ease);
@@ -340,7 +334,7 @@ const roles = t.hero.roles?.length ? t.hero.roles : [t.hero.roleWord];
   @media (max-width: 600px) {
     /* Keep the portrait clear of the title on small screens. */
     .hero-aside { width: 11rem; top: clamp(6rem, 18vh, 9rem); }
-    .hero-photo { --d: 156px; --shadow-x: -13px; --shadow-y: -13px; }
+    .hero-photo { --w: 156px; --h: 192px; --shadow-x: -13px; --shadow-y: -13px; }
   }
 
   /* --- Rolling-slot word stack -------------------------------------------
