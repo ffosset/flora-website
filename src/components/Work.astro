@@ -95,21 +95,40 @@ const ordered = ORDER
 </script>
 
 <script>
-  // "Load more": reveal every hidden card at once (the grid gains .is-expanded);
-  // clicking again collapses back to the default row. WHICH cards are hidden by
-  // default is a CSS rule per breakpoint (3 desktop, 2 tablet / mobile).
+  // "Load more": reveal one more row per click — 3 cards on desktop, 2 on
+  // tablet / mobile. Which cards are hidden by default is a CSS rule per
+  // breakpoint; JS reveals the next batch by setting an inline display, and
+  // once every card is shown the button flips to "Load less" (collapse).
   const moreBtn = document.querySelector('[data-work-more]');
   if (moreBtn) {
     const grid = document.querySelector('.work-grid');
+    const cards = Array.from(grid.querySelectorAll('.card'));
     const moreLabel = moreBtn.getAttribute('data-more-label') || 'Load more';
     const lessLabel = moreBtn.getAttribute('data-less-label') || 'Load less';
 
+    // One row's worth of cards per click.
+    const rowStep = () => (window.matchMedia('(min-width: 1024px)').matches ? 3 : 2);
+    const hidden = () => cards.filter((c) => getComputedStyle(c).display === 'none');
+
+    const syncLabel = () => {
+      const allShown = hidden().length === 0;
+      moreBtn.textContent = allShown ? lessLabel : moreLabel;
+      moreBtn.setAttribute('aria-expanded', String(allShown));
+    };
+
     moreBtn.addEventListener('click', () => {
-      const expanded = grid.classList.toggle('is-expanded');
-      moreBtn.textContent = expanded ? lessLabel : moreLabel;
-      moreBtn.setAttribute('aria-expanded', String(expanded));
-      if (!expanded) moreBtn.scrollIntoView({ block: 'nearest' });
+      if (hidden().length === 0) {
+        // Collapse back to the default row.
+        cards.forEach((c) => { c.style.display = ''; });
+        moreBtn.scrollIntoView({ block: 'nearest' });
+      } else {
+        // Reveal the next row; inline display overrides the CSS default-hide.
+        hidden().slice(0, rowStep()).forEach((c) => { c.style.display = 'flex'; });
+      }
+      syncLabel();
     });
+
+    syncLabel();
   }
 </script>
 
@@ -151,11 +170,11 @@ const ordered = ORDER
     max-width: 34rem;
     margin-inline: auto;
   }
-  /* Default view shows one row per breakpoint; "Load more" (.is-expanded)
-     reveals the rest. Base = 2 cards (mobile + tablet); desktop lifts to 3.
-     .card is rendered by the ProjectCard child, so it needs :global() to escape
-     this component's style scope. */
-  .work-grid:not(.is-expanded) > :global(.card:nth-child(n + 3)) { display: none; }
+  /* Default view shows one row per breakpoint; "Load more" reveals the next row
+     (JS sets inline display on the next batch of cards). Base = 2 cards (mobile
+     + tablet); desktop lifts to 3. .card is rendered by the ProjectCard child,
+     so it needs :global() to escape this component's style scope. */
+  .work-grid > :global(.card:nth-child(n + 3)) { display: none; }
 
   /* "Load more" — reveals the remaining cards. */
   .work-more {
@@ -180,23 +199,19 @@ const ordered = ORDER
   .work-more:focus-visible { outline: 2px solid var(--color-primary); outline-offset: 2px; }
 
   /* Tablet: two equal columns (still 2 cards by default = one row). minmax(0,
-     1fr) forces them equal regardless of the image inside. Hovering one card
-     fades the others back so the eye goes to the hovered card; its detail
-     overlay reveals separately (ProjectCard). */
+     1fr) forces them equal regardless of the image inside. */
   @media (min-width: 721px) {
     .work-grid {
       grid-template-columns: repeat(2, minmax(0, 1fr));
       align-items: stretch;
       max-width: none;
     }
-    .work-grid > :global(.card) { min-width: 0; transition: opacity 0.45s var(--ease); }
-    .work-grid:hover > :global(.card) { opacity: 0.35; }
-    .work-grid > :global(.card:hover) { opacity: 1; }
+    .work-grid > :global(.card) { min-width: 0; }
   }
 
   /* Desktop: three equal columns, showing 3 cards by default (one row). */
   @media (min-width: 1024px) {
     .work-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
-    .work-grid:not(.is-expanded) > :global(.card:nth-child(3)) { display: flex; }
+    .work-grid > :global(.card:nth-child(3)) { display: flex; }
   }
 </style>
