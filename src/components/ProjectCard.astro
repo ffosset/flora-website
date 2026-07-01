@@ -1,6 +1,7 @@
 ---
-// A single project card: image on top with the hover detail laid over it,
-// and the title + company name + sector tag always visible below.
+// A single project card. Idle: image on top, then type + year pills, the
+// title, and the client name. Hover fills the whole card with the category
+// colour and reveals the result, keywords, a CTA and the client name.
 // `labels` carries the translated UI strings (with English fallbacks).
 const { c, d, base, labels = {}, service, extra = false } = Astro.props;
 const readMore = labels.readMore ?? 'Read more';
@@ -24,12 +25,12 @@ const href = hasUrl ? (isExternal ? c.url : base + c.url) : undefined;
   </div>
 
   <div class="card-body">
-    <h3 class="card-title">{c.title}</h3>
-    <p class="card-meta">
-      {/* Client name hidden for now — restore by re-adding the .card-client span here. */}
-      {service && <span class="card-service">{service}</span>}
-      {c.tag && <span class="card-tag">{c.tag}</span>}
+    <p class="card-pills">
+      {service && <span class="card-type">{service}</span>}
+      {c.year && <span class="card-year">{c.year}</span>}
     </p>
+    <h3 class="card-title">{c.title}</h3>
+    {c.subtitle && <p class="card-client">{c.subtitle}</p>}
     <button
       type="button"
       class="card-more"
@@ -43,22 +44,26 @@ const href = hasUrl ? (isExternal ? c.url : base + c.url) : undefined;
 
   <div class="card-hover" id={`hover-${c.slug}`}>
     {/* Result metric is optional — hide the slot entirely when absent so the
-        reveal lays out cleanly (no empty box). Same for the live link below. */}
+        reveal lays out cleanly (no empty box). */}
     {c.result && <p class="hover-result">{c.result}</p>}
     {c.keywords && c.keywords.length > 0 && (
       <p class="hover-keywords">{c.keywords.join(' · ')}</p>
     )}
-    {hasUrl && (
-      <a
-        class="hover-cta"
-        href={href}
-        target={isExternal ? '_blank' : undefined}
-        rel={isExternal ? 'noopener noreferrer' : undefined}
-      >
-        {d.cta}
-        {isExternal && <span class="sr-only"> ({newTab})</span>}
-      </a>
-    )}
+    <div class="hover-foot">
+      {hasUrl && (
+        <a
+          class="hover-cta"
+          href={href}
+          target={isExternal ? '_blank' : undefined}
+          rel={isExternal ? 'noopener noreferrer' : undefined}
+        >
+          {d.cta}
+          {isExternal && <span class="hover-cta-arrow" aria-hidden="true">↗</span>}
+          {isExternal && <span class="sr-only"> ({newTab})</span>}
+        </a>
+      )}
+      {c.subtitle && <p class="hover-client">{c.subtitle}</p>}
+    </div>
   </div>
 </article>
 
@@ -125,8 +130,8 @@ const href = hasUrl ? (isExternal ? c.url : base + c.url) : undefined;
     letter-spacing: -0.01em;
     color: var(--color-text);
   }
-  /* Company name + tag sit together (one sector per client). */
-  .card-meta { display: flex; align-items: center; gap: 0.75rem; flex-wrap: wrap; }
+  /* Type + year pills, above the title. */
+  .card-pills { display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap; }
   .card-client {
     font-family: var(--font-body); /* Fira Code */
     font-weight: 400;
@@ -151,46 +156,45 @@ const href = hasUrl ? (isExternal ? c.url : base + c.url) : undefined;
     cursor: pointer;
   }
 
-  /* Tags row: the service (filled with its category colour), then the client's
-     sector in muted grey. Both squared and monospace. */
-  .card-service,
-  .card-tag {
+  /* Pills: the category type (filled with its colour), then the year in muted
+     grey. Both squared and monospace, matching the card's hard corners. */
+  .card-type,
+  .card-year {
     font-family: var(--font-body);
-    font-size: 0.85rem;
+    font-size: 0.9rem;
     line-height: 1.3;
-    padding: 0.35rem 0.7rem;
-    border-radius: 4px;
+    padding: 0.3rem 0.7rem;
     white-space: nowrap;
   }
-  .card-service { background: var(--cat); color: #210f03; }
+  .card-type { background: var(--cat); color: #210f03; }
   /* Teal and raspberry are too dark for dark text — flip to white. */
-  .card[data-cat='product'] .card-service,
-  .card[data-cat='storytelling'] .card-service { color: #ffffff; }
-  .card-tag {
-    background: color-mix(in srgb, var(--color-text) 8%, transparent);
+  .card[data-cat='product'] .card-type,
+  .card[data-cat='storytelling'] .card-type { color: #ffffff; }
+  .card-year {
+    background: color-mix(in srgb, var(--color-text) 10%, transparent);
     color: var(--color-muted);
   }
 
-  /* --- Hover detail, over the media: the result big, then a keyword recap. */
+  /* --- Hover detail: fills the whole card in the category colour. Result big
+     at the top, keyword recap under it, then the CTA + client pinned bottom. */
   .card-hover {
     position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: 16rem; /* covers the image area on pointer devices */
+    inset: 0; /* covers the entire card on pointer devices */
     z-index: 2;
     display: flex;
     flex-direction: column;
-    justify-content: flex-start;
     gap: 1.1rem;
-    padding: var(--space-4) 2.5rem;
+    padding: 2rem;
     overflow: auto;
-    background: color-mix(in srgb, var(--cat) 93%, transparent);
+    background: var(--cat);
     color: #210f03;
     opacity: 0;
     pointer-events: none;
     transition: opacity 0.35s var(--ease);
   }
+  /* Teal and raspberry are too dark for dark text — flip the reveal to white. */
+  .card[data-cat='product'] .card-hover,
+  .card[data-cat='storytelling'] .card-hover { color: #ffffff; }
   .card:hover .card-hover,
   .card:focus-within .card-hover,
   .card.is-open .card-hover { opacity: 1; pointer-events: auto; }
@@ -208,16 +212,34 @@ const href = hasUrl ? (isExternal ? c.url : base + c.url) : undefined;
     letter-spacing: 0.06em;
     font-size: clamp(0.78rem, 0.72rem + 0.25vw, 0.95rem);
     line-height: 1.6;
-    color: color-mix(in srgb, #210f03 78%, transparent);
+    color: color-mix(in srgb, currentColor 78%, transparent);
+  }
+
+  /* CTA + client name, pinned to the bottom of the reveal. */
+  .hover-foot {
+    margin-top: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
   }
   .hover-cta {
     align-self: flex-start;
-    margin-top: auto;
+    display: inline-flex;
+    align-items: baseline;
+    gap: 0.3rem;
     font-family: var(--font-display);
     font-weight: 700;
-    color: #210f03;
+    color: inherit;
     text-decoration: underline;
     text-underline-offset: 3px;
+  }
+  .hover-cta-arrow { text-decoration: none; }
+  .hover-client {
+    font-family: var(--font-body);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    font-size: clamp(0.78rem, 0.72rem + 0.25vw, 0.95rem);
+    color: color-mix(in srgb, currentColor 78%, transparent);
   }
   .sr-only {
     position: absolute;
@@ -255,7 +277,7 @@ const href = hasUrl ? (isExternal ? c.url : base + c.url) : undefined;
       padding-top: var(--space-4);
       padding-bottom: var(--space-4);
     }
-    .hover-cta { margin-top: 0; }
+    .hover-foot { margin-top: var(--space-3); }
   }
   @media (prefers-reduced-motion: reduce) {
     .card-hover { transition: none; }
