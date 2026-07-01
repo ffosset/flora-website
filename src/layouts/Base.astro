@@ -48,7 +48,7 @@ const alternates =
     <link rel="icon" type="image/svg+xml" href={`${base}/favicon.svg`} />
   </head>
   <body>
-    <header class="site-header">
+    <header class="site-header at-top">
       <div class="container">
         <nav class="nav-bar" aria-label={t.a11y.mainNav}>
           <a href={home} class="wordmark" aria-label={t.a11y.homeLink}>fosset.co</a>
@@ -122,8 +122,16 @@ const alternates =
       // Hide the nav on scroll down, reveal it on scroll up (swipe in/out).
       const header = document.querySelector('.site-header');
       if (header) {
+        const hero = document.querySelector('[data-hero]');
         let lastY = window.scrollY;
         let ticking = false;
+        // Wear the borderless "default" nav while the hero still fills the top
+        // of the viewport; drop it (revealing the sticky pill) once scrolled
+        // past. Pages with no hero (subpages) always use the pill.
+        const syncTop = () => {
+          const atTop = !!hero && hero.getBoundingClientRect().bottom > 120;
+          header.classList.toggle('at-top', atTop);
+        };
         const update = () => {
           const y = window.scrollY;
           const delta = y - lastY;
@@ -138,8 +146,10 @@ const alternates =
             }
             lastY = y;
           }
+          syncTop();
           ticking = false;
         };
+        syncTop();
         window.addEventListener(
           'scroll',
           () => {
@@ -234,6 +244,23 @@ const alternates =
         backdrop-filter: blur(4.5px);
         box-shadow: 0 4px 16px 0 rgba(222, 220, 218, 0.15);
         border-radius: var(--radius-pill);
+        transition: background-color 0.3s var(--ease), box-shadow 0.3s var(--ease);
+      }
+
+      /* Default (landing) state: while the hero fills the top of the viewport,
+         the bar sheds its pill — no wrapper, no background — and spans the
+         hero's full width, aligned to the hero gutter like the rest of it.
+         Scrolling past the hero restores the sticky pill above. */
+      .site-header.at-top > .container {
+        max-width: var(--maxw-hero);
+      }
+      .site-header.at-top .nav-bar {
+        padding-inline: 0;
+        background-color: transparent;
+        box-shadow: none;
+        -webkit-backdrop-filter: none;
+        backdrop-filter: none;
+        border-radius: 0;
       }
 
       /* "fosset.co" wordmark — light weight, primary color. */

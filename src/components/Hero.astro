@@ -370,11 +370,17 @@ const roles = t.hero.roles?.length ? t.hero.roles : [t.hero.roleWord];
   /* mobile: flora· TOP-left, words stack DOWN — CSS flip only, no JS path */
   @media (max-width: 720px) {
     .hero-stack {
-      flex-direction: column;
+      flex-direction: column;                 /* newest on top, pushes older DOWN */
       justify-content: flex-start;
-      min-height: auto;
+      padding-left: 0;                         /* no side gutter — words align to the left edge */
+      padding-top: 1.35em;                     /* reserve one line at the top for flora· */
+      gap: 0.14em;
+      font-size: clamp(1.8rem, 9vw, 2.6rem);   /* sized so "product management" fits one line */
+      min-height: 8em;                         /* flora· line + 5 rows, so the portrait below doesn't jump */
     }
-    .flora-anchor { bottom: auto; top: 0; }
+    .flora-anchor {
+      top: 0; bottom: auto; left: 0;           /* own line, top-left */
+    }
   }
 
   /* Tagline, centered directly under the portrait (inside .hero-aside). */
