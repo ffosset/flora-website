@@ -18,7 +18,7 @@ export default {
   hero: {
     nameWord: 'flora',
     roleWord: 'designer',
-    roles: ['expérience utilisateur', 'investigation', 'gestion de produits', 'communication', 'design de produits'],
+    roles: ['expérience utilisateur', 'investigation', 'gestion d’équipes', 'communication', 'design de produits'],
     scroll: 'Défiler',
     subhead: 'on discute ?',
     tagline: 'je réalise vos projets web de A à Z',
@@ -243,7 +243,7 @@ export default {
         sub: 'Découverte du design de produits numériques et des méthodologies agiles. Passe de la rédaction du blog à l’équipe produit chez <a href="https://www.urbandataanalytics.com/" target="_blank" rel="noopener noreferrer">urbanData Analytics</a> et entame mon parcours de designer.',
       },
       {
-        label: 'gestion de produits',
+        label: 'product management',
         year: '2019',
         sub: 'Produits pilotés de bout en bout chez <a href="https://www.urbandataanalytics.com/" target="_blank" rel="noopener noreferrer">urbanData</a> et <a href="https://rosa.be" target="_blank" rel="noopener noreferrer">ROSA</a> : recherche, roadmap, design, QA.',
       },
