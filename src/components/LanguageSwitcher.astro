@@ -1,5 +1,5 @@
 ---
-import { defaultLang } from '../i18n';
+import { defaultLang, languages } from '../i18n';
 
 const { currentLocale } = Astro.props;
 
@@ -12,40 +12,102 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 function localePath(loc) {
   return loc === defaultLang ? `${base}/` : `${base}/${loc}/`;
 }
+
+const activeLabel = languages[currentLocale] ?? languages[defaultLang];
 ---
 
-<div class="lang-switch">
-  {
-    order.map((code, i) => (
-      <>
-        {i > 0 && <span class="sep" aria-hidden="true">·</span>}
-        <a
-          href={localePath(code)}
-          class={code === currentLocale ? 'active' : ''}
-          hreflang={code}
-          aria-current={code === currentLocale ? 'true' : undefined}
-        >
-          {code}
-        </a>
-      </>
-    ))
-  }
-</div>
+<details class="lang-switch" data-lang-switch>
+  <summary class="lang-toggle" aria-label="Select language">
+    <span class="lang-current">{activeLabel}</span>
+    <svg class="caret" width="10" height="6" viewBox="0 0 10 6" aria-hidden="true">
+      <path d="M1 1l4 4 4-4" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+    </svg>
+  </summary>
+  <ul class="lang-menu">
+    {
+      order.map((code) => (
+        <li>
+          <a
+            href={localePath(code)}
+            class={code === currentLocale ? 'active' : ''}
+            hreflang={code}
+            aria-current={code === currentLocale ? 'true' : undefined}
+          >
+            {languages[code]}
+          </a>
+        </li>
+      ))
+    }
+  </ul>
+</details>
 
 <style>
   .lang-switch {
-    display: flex;
-    align-items: center;
-    gap: 4px;
+    position: relative;
     font-size: 1rem;
   }
-  .lang-switch a {
+
+  /* Toggle button (the <summary>) */
+  .lang-toggle {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    cursor: pointer;
+    color: var(--color-primary);
+    font-weight: 300;
+    list-style: none;
+    user-select: none;
+    transition: color 0.2s var(--ease);
+  }
+  .lang-toggle::-webkit-details-marker { display: none; }
+  .lang-toggle:hover { color: var(--color-primary); }
+  .lang-current { text-transform: lowercase; }
+
+  .caret {
+    flex: none;
+    transition: transform 0.2s var(--ease);
+  }
+  .lang-switch[open] .caret { transform: rotate(180deg); }
+
+  /* Dropdown */
+  .lang-menu {
+    position: absolute;
+    top: calc(100% + 8px);
+    right: 0;
+    margin: 0;
+    padding: 6px;
+    list-style: none;
+    min-width: 100%;
+    background: var(--color-bg);
+    border: 1px solid var(--color-border);
+    border-radius: 8px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+    z-index: 20;
+  }
+  .lang-menu li { margin: 0; }
+  .lang-menu a {
+    display: block;
+    padding: 6px 12px;
+    border-radius: 5px;
     text-decoration: none;
     color: var(--color-muted-soft);
     font-weight: 300;
-    transition: color 0.2s var(--ease);
+    text-transform: lowercase;
+    white-space: nowrap;
+    transition: color 0.2s var(--ease), background 0.2s var(--ease);
   }
-  .lang-switch a.active { color: var(--color-primary); font-weight: 700; }
-  .lang-switch a:hover { color: var(--color-primary); }
-  .lang-switch .sep { color: var(--color-muted-soft); font-weight: 300; }
+  .lang-menu a:hover { color: var(--color-primary); background: var(--color-surface); }
+  .lang-menu a.active { color: var(--color-primary); font-weight: 700; }
 </style>
+
+<script>
+  // Close the dropdown on outside click or Escape.
+  document.querySelectorAll('[data-lang-switch]').forEach((el) => {
+    document.addEventListener('click', (e) => {
+      if (el.open && !el.contains(e.target as Node)) el.open = false;
+    });
+    el.addEventListener('keydown', (e) => {
+      if ((e as KeyboardEvent).key === 'Escape') el.open = false;
+    });
+  });
+</script>

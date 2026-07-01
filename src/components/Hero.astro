@@ -28,37 +28,6 @@ const roles = t.hero.roles?.length ? t.hero.roles : [t.hero.roleWord];
 </section>
 
 <script>
-  // Parallax on the portrait's hard shadow. As the pointer moves across the
-  // photo, the orange block behind it drifts the OPPOSITE way — that relative
-  // motion between photo and shadow reads as depth. Replaces the old grow-on-
-  // hover. Nudges --px/--py (added on top of the resting --shadow-x/y offset).
-  const photo = document.querySelector('.hero-photo');
-  const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
-  const coarse = matchMedia('(hover: none) and (pointer: coarse)').matches;
-  if (photo && !reduced && !coarse) {
-    const RANGE = 10; // max extra px the shadow travels from center
-    let rect = null;
-    photo.addEventListener('pointerenter', () => {
-      rect = photo.getBoundingClientRect();
-      photo.classList.add('is-parallax'); // drop the ease so it tracks live
-    });
-    photo.addEventListener('pointermove', (e) => {
-      if (!rect) rect = photo.getBoundingClientRect();
-      // -1..1 from center; shadow moves opposite the pointer.
-      const nx = (e.clientX - rect.left) / rect.width - 0.5;
-      const ny = (e.clientY - rect.top) / rect.height - 0.5;
-      photo.style.setProperty('--px', (-nx * RANGE).toFixed(1) + 'px');
-      photo.style.setProperty('--py', (-ny * RANGE).toFixed(1) + 'px');
-    });
-    photo.addEventListener('pointerleave', () => {
-      photo.classList.remove('is-parallax'); // ease back to rest
-      photo.style.setProperty('--px', '0px');
-      photo.style.setProperty('--py', '0px');
-    });
-  }
-</script>
-
-<script>
   // Lock the hero to the viewport height measured ON LOAD (mobile address bar
   // shown) and DON'T change it when the bar collapses on scroll — that height-
   // only resize is exactly what made the hero grow / the title drift on the
@@ -85,8 +54,8 @@ const roles = t.hero.roles?.length ? t.hero.roles : [t.hero.roleWord];
     let ORDER = [];
     try { ORDER = JSON.parse(stack.dataset.words || '[]'); } catch {}
     const SHADES = ['--w5', '--w4', '--w3', '--w2', '--w1']; // idx 0 = active (next to flora·) = darkest
-    const STEP = 550;   // word landing duration (≈ --dur)
-    const HOLD = 1600;  // still time between words — the pacing dial (doubled)
+    const STEP = 500;   // word landing duration (≈ --dur)
+    const HOLD = 1100;  // still time between words — the pacing dial
     const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
     const wait = (ms) => new Promise((r) => setTimeout(r, ms));
 
@@ -96,6 +65,12 @@ const roles = t.hero.roles?.length ? t.hero.roles : [t.hero.roleWord];
     const anchor = stack.querySelector('.flora-anchor');
     const fitGutter = () => {
       if (!anchor) return;
+      // Mobile (≤720px): flora· is on its own line above the words, so there is
+      // no side gutter — the words align to the left edge (the "f" of flora).
+      if (window.matchMedia('(max-width: 720px)').matches) {
+        stack.style.paddingLeft = '0px';
+        return;
+      }
       const gap = 0.16 * parseFloat(getComputedStyle(stack).fontSize); // small breathing gap
       stack.style.paddingLeft = anchor.getBoundingClientRect().width + gap + 'px';
     };
@@ -308,31 +283,35 @@ const roles = t.hero.roles?.length ? t.hero.roles : [t.hero.roleWord];
     /* Pulled in from the right edge so it sits a bit more toward the centre. */
     .hero-aside { right: clamp(4rem, 13vw, 15rem); }
   }
+  /* Same treatment as the About portrait: a solid primary-orange backdrop that
+     the luminosity-blended photo mixes with (that's the sepia), plus a hard
+     offset shadow in the same orange. On hover the photo lifts toward the
+     bottom-right while the shadow deepens — a parallax that signals it's a link. */
   .hero-photo {
-    --d: 203px;      /* portrait size (square) */
-    --radius: 6px;   /* rectangle with barely-there corners */
-    --shadow-x: -18px; /* hard-shadow offset — negative = up/left */
-    --shadow-y: -18px;
+    --d: 203px;         /* portrait size (square) */
+    --radius: 4px;      /* barely-there corners, matching About */
+    --shadow-x: -14px;  /* hard-shadow offset — negative = up/left */
+    --shadow-y: -14px;
+    --lift: 0px;        /* photo shift on hover; grows the gap to the shadow */
     display: block;
     position: relative;
     width: var(--d);
     height: var(--d);
-    cursor: pointer;
-  }
-  /* Hard shadow: a solid primary-orange block offset behind the photo (no blur).
-     It's its own element so the pointer parallax can shift it INDEPENDENTLY of
-     the photo — that relative motion is what reads as depth. */
-  .hero-photo::before {
-    content: '';
-    position: absolute;
-    inset: 0;
     border-radius: var(--radius);
+    /* Orange ground for the luminosity blend below → sepia portrait. */
     background: var(--color-primary);
-    z-index: -1;
-    /* Parallax offset lives on the translate channel (GPU-composited). The base
-       resting offset is --shadow-x/y; JS nudges --px/--py on top while hovering. */
-    translate: calc(var(--shadow-x) + var(--px, 0px)) calc(var(--shadow-y) + var(--py, 0px));
-    transition: translate 0.3s var(--ease);
+    /* Hard shadow: solid primary orange, no blur (0 blur, 0 spread). */
+    box-shadow: var(--shadow-x) var(--shadow-y) 0 0 var(--color-primary);
+    /* Blend the photo only against this orange, not the page gradient. */
+    isolation: isolate;
+    cursor: pointer;
+    transition: box-shadow 0.3s var(--ease);
+  }
+  .hero-photo:hover,
+  .hero-photo:focus-visible {
+    --shadow-x: -20px;
+    --shadow-y: -20px;
+    --lift: 5px;
   }
   .hero-photo img {
     width: 100%;
@@ -341,15 +320,15 @@ const roles = t.hero.roles?.length ? t.hero.roles : [t.hero.roleWord];
     object-fit: cover;
     object-position: center;
     display: block;
-    position: relative;
-    /* luminosity lets the warm background tint the portrait (matches Figma). */
+    /* luminosity lets the orange ground tint the portrait sepia (matches About). */
     mix-blend-mode: luminosity;
+    /* Shifts toward the shadow on hover, widening the gap = a lift. */
+    translate: var(--lift) var(--lift);
+    transition: translate 0.3s var(--ease);
   }
-  /* While the pointer moves the shadow, drop the transition so it tracks live;
-     restore it (see :not(.is-parallax)) so it eases back on leave. JS toggles it. */
-  .hero-photo.is-parallax::before { transition: none; }
   @media (prefers-reduced-motion: reduce) {
-    .hero-photo::before { transition: none; }
+    .hero-photo, .hero-photo img { transition: none; }
+    .hero-photo:hover, .hero-photo:focus-visible { --shadow-x: -14px; --shadow-y: -14px; --lift: 0px; }
   }
   .hero-subtitle {
     font-weight: 300; /* Inter Light */
@@ -379,7 +358,7 @@ const roles = t.hero.roles?.length ? t.hero.roles : [t.hero.roleWord];
     --w3: color-mix(in srgb, var(--color-primary) 56%, var(--color-secondary));
     --w2: color-mix(in srgb, var(--color-primary) 36%, var(--color-secondary));
     --w1: color-mix(in srgb, var(--color-primary) 20%, var(--color-secondary)); /* furthest */
-    --dur: 0.55s;                      /* STEP — word landing duration */
+    --dur: 0.5s;                       /* STEP — word landing duration */
 
     position: relative;
     display: flex;
@@ -408,8 +387,11 @@ const roles = t.hero.roles?.length ? t.hero.roles : [t.hero.roleWord];
   .hero-name { color: var(--color-text); font-weight: 800; } /* Extra Bold */
   .hero-dot { color: var(--color-primary); font-weight: 300; }
 
-  /* mobile: flora· TOP-left, words stack DOWN — CSS flip only, no JS path */
+  /* mobile: flora· TOP-left, words stack DOWN — CSS flip only, no JS path.
+     The text cluster moves to the TOP of the hero and the portrait drops to
+     the BOTTOM-RIGHT, so they sit in opposite corners. */
   @media (max-width: 720px) {
+    .hero-inner { justify-content: flex-start; } /* text cluster to the top */
     .hero-stack {
       flex-direction: column;                 /* newest on top, pushes older DOWN */
       justify-content: flex-start;
@@ -421,6 +403,14 @@ const roles = t.hero.roles?.length ? t.hero.roles : [t.hero.roleWord];
     }
     .flora-anchor {
       top: 0; bottom: auto; left: 0;           /* own line, top-left */
+    }
+    .hero-aside {
+      top: auto;                               /* unpin from the top … */
+      bottom: clamp(2rem, 7vh, 4rem);          /* … and drop toward the bottom */
+      left: 50%;                               /* horizontally centered */
+      right: auto;
+      transform: translateX(-50%);
+      z-index: 2;                              /* picture sits ON TOP of any overlapping words */
     }
   }
 
