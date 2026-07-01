@@ -131,7 +131,10 @@ export default {
         did: 'Designed and launched a platform that shows which fruits and vegetables are in season. A personal project that became an everyday tool for many people.',
         result: '+500 daily users, six years after the platform launch.',
         keywords: ['Research', 'Accessibility'],
-        awards: [], // pending — Flora to fill with 2 Spanish + 2 international award names + years
+        awards: [
+          { label: 'Shortlisted in the Information is Beautiful Awards', url: 'https://www.informationisbeautifulawards.com/showcase/2779-what-s-in-season' },
+          { label: "Winner of EJC's Contest, March 2018" },
+        ],
       },
       {
         slug: 'rosa-ebilling',

@@ -123,7 +123,10 @@ export default {
         did: 'Diseñé y lancé una plataforma que muestra qué frutas y verduras están de temporada. Un proyecto personal que se convirtió en una herramienta cotidiana para mucha gente.',
         result: '+500 usuarios diarios, seis años después del lanzamiento de la plataforma.',
         keywords: ['Investigación', 'Accesibilidad'],
-        awards: [],
+        awards: [
+          { label: 'Finalista en los Information is Beautiful Awards', url: 'https://www.informationisbeautifulawards.com/showcase/2779-what-s-in-season' },
+          { label: 'Ganador del concurso de EJC, marzo 2018' },
+        ],
       },
       {
         slug: 'rosa-ebilling',

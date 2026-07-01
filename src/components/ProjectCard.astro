@@ -28,6 +28,16 @@ const href = hasUrl ? (isExternal ? c.url : base + c.url) : undefined;
     <p class="card-pills">
       {service && <span class="card-type">{service}</span>}
       {c.year && <span class="card-year">{c.year}</span>}
+      {c.awards && c.awards.length > 0 && (
+        <span class="card-award" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M7 4h10v5a5 5 0 0 1-10 0V4z" />
+            <path d="M7 5H4v2a3 3 0 0 0 3 3" />
+            <path d="M17 5h3v2a3 3 0 0 1-3 3" />
+            <path d="M12 14v3M9 21h6M10 17h4" />
+          </svg>
+        </span>
+      )}
     </p>
     <h3 class="card-title">{c.title}</h3>
     {c.subtitle && <p class="card-client">{c.subtitle}</p>}
@@ -51,6 +61,21 @@ const href = hasUrl ? (isExternal ? c.url : base + c.url) : undefined;
       </p>
     )}
     {c.result && <p class="hover-result">{c.result}</p>}
+    {c.awards && c.awards.length > 0 && (
+      <p class="hover-awards">
+        {c.awards.map((a) => (
+          <span class="hover-award">
+            {a.url ? (
+              <a href={a.url} target="_blank" rel="noopener noreferrer">
+                {a.label}<span class="sr-only"> ({newTab})</span>
+              </a>
+            ) : (
+              a.label
+            )}{'. '}
+          </span>
+        ))}
+      </p>
+    )}
     <div class="hover-foot">
       {hasUrl && (
         <a
@@ -173,6 +198,9 @@ const href = hasUrl ? (isExternal ? c.url : base + c.url) : undefined;
     background: color-mix(in srgb, var(--color-text) 10%, transparent);
     color: var(--color-muted);
   }
+  /* Award icon — shown in the pills row when the project has awards. */
+  .card-award { display: inline-flex; align-items: center; color: var(--color-muted); }
+  .card-award svg { width: 1.15rem; height: 1.15rem; }
 
   /* --- Hover detail: fills the whole card in the category colour. Result big
      at the top, keyword recap under it, then the CTA + client pinned bottom. */
@@ -219,6 +247,19 @@ const href = hasUrl ? (isExternal ? c.url : base + c.url) : undefined;
   /* On teal / raspberry the muted grey is hard to read — flip tags to white. */
   .card[data-cat='product'] .hover-tag,
   .card[data-cat='storytelling'] .hover-tag { color: #ffffff; }
+
+  /* Awards line, just under the result. Inherits the reveal's text colour. */
+  .hover-awards {
+    font-family: var(--font-body);
+    font-size: clamp(0.78rem, 0.72rem + 0.25vw, 0.95rem);
+    line-height: 1.5;
+    color: color-mix(in srgb, currentColor 78%, transparent);
+  }
+  .hover-awards a {
+    color: inherit;
+    text-decoration: underline;
+    text-underline-offset: 2px;
+  }
 
   /* CTA + client name, pinned to the bottom of the reveal. */
   .hover-foot {
