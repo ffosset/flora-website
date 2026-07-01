@@ -404,6 +404,13 @@ const roles = t.hero.roles?.length ? t.hero.roles : [t.hero.roleWord];
       transform: translateX(-50%);
       z-index: 2;                              /* picture sits ON TOP of any overlapping words */
     }
+    /* Reserve a fixed height for the tagline so the portrait sits at the SAME
+       spot in EVERY language. The cluster is bottom-anchored and grows upward,
+       so without this a longer translation (FR/ES run ~2× the EN length) makes
+       the tagline taller and shoves the photo up. Sized to hold the longest
+       (≈3-line) tagline; the text stays top-aligned, so the photo-to-text gap
+       is identical and only invisible space below the text varies. */
+    .hero-tagline { min-height: 3.75em; }
   }
 
   /* Tagline, centered directly under the portrait (inside .hero-aside). */
