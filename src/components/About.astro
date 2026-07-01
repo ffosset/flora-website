@@ -17,7 +17,7 @@ const WAVE = {
     { x: 420, y: 540, side: 'right' },
     { x: 280, y: 740, side: 'left' },
   ],
-  d: 'M350,40 C350,90 420,90 420,140 C420,240 280,240 280,340 C280,440 420,440 420,540 C420,640 280,640 280,740',
+  d: 'M350,12 C350,72 420,80 420,140 C420,240 280,240 280,340 C280,440 420,440 420,540 C420,640 280,640 280,740',
 };
 ---
 
@@ -54,7 +54,7 @@ const WAVE = {
       <div class="path-track">
         <svg class="path-wave" width={WAVE.w} height={WAVE.h} viewBox={`0 0 ${WAVE.w} ${WAVE.h}`} aria-hidden="true">
           <path d={WAVE.d} />
-          <circle class="path-runner" r="7" cx="350" cy="40" />
+          <circle class="path-runner" r="7" cx="350" cy="12" />
         </svg>
         <ol class="path">
           {path.map((p, i) => {
@@ -135,8 +135,8 @@ const WAVE = {
         return { step: s, at: best };
       }).sort((a, b) => a.at - b.at);
 
-      const SPEED = 260;   // px / second the dot travels
-      const PAUSE = 2000;  // ms it lingers at each milestone
+      const SPEED = 312;   // px / second the dot travels
+      const PAUSE = 1600;  // ms it lingers at each milestone
 
       // The line reveals only as far as the dot has reached.
       wave.style.transition = 'none';
@@ -248,7 +248,7 @@ const WAVE = {
   @media (min-width: 900px) {
     /* align-items: center vertically centres the headline + facts against the
        (taller) portrait. */
-    .about-grid { grid-template-columns: 1fr 1fr; gap: var(--space-5); align-items: center; }
+    .about-grid { grid-template-columns: 1fr 1fr; gap: 40px; align-items: center; }
   }
 
   .about-portrait {
@@ -366,11 +366,11 @@ const WAVE = {
       transform-origin: top;
     }
     .about-path.is-revealed .path::before {
-      animation: line-grow 1s var(--ease) forwards;
+      animation: line-grow 0.75s var(--ease) forwards;
     }
     .about-path.is-revealed .path-step {
-      animation: step-in 0.5s var(--ease) forwards;
-      animation-delay: calc(0.3s + var(--i) * 0.18s);
+      animation: step-in 0.375s var(--ease) forwards;
+      animation-delay: calc(0.225s + var(--i) * 0.135s);
     }
   }
 
@@ -444,7 +444,7 @@ const WAVE = {
     .path-track {
       width: 700px;
       height: 940px;
-      margin: var(--space-5) auto 0;
+      margin: var(--space-3) auto 0;
     }
     .path-wave {
       display: block;

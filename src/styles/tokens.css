@@ -93,7 +93,7 @@
   --color-ink: var(--color-text);
   --color-ink-on-primary: #ffffff;            /* text on primary */
   --color-muted: #6b564a;                      /* secondary text on light */
-  --color-muted-soft: #b8aea4;                 /* faint warm grey — nav links */
+  --color-muted-soft: #9d8f84;                 /* warm grey — nav links (darkened for legibility) */
   --color-muted-on-primary: rgba(255, 255, 255, 0.72);
 
   /* Lines */

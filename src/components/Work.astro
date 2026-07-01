@@ -118,9 +118,9 @@ const ordered = ORDER
 
     moreBtn.addEventListener('click', () => {
       if (hidden().length === 0) {
-        // Collapse back to the default row.
+        // Collapse back to the default row, then scroll up to the section top.
         cards.forEach((c) => { c.style.display = ''; });
-        moreBtn.scrollIntoView({ block: 'nearest' });
+        document.getElementById('work').scrollIntoView({ behavior: 'smooth', block: 'start' });
       } else {
         // Reveal the next row; inline display overrides the CSS default-hide.
         hidden().slice(0, rowStep()).forEach((c) => { c.style.display = 'flex'; });
