@@ -284,30 +284,31 @@ const roles = t.hero.roles?.length ? t.hero.roles : [t.hero.roleWord];
     .hero-aside { right: clamp(4rem, 13vw, 15rem); }
   }
   /* The photo shown as-is (no colour treatment), with a hard offset shadow in
-     the primary orange. On hover it lifts toward the bottom-right while the
-     shadow deepens — a parallax that signals it's a link. */
+     the primary orange. On hover the orange slides further out from behind the
+     photo — a parallax on the fill. The photo itself stays put: moving it would
+     break its flush top/left edges against the orange and open a white gap. */
   .hero-photo {
     --w: 203px;         /* frame width */
     --h: 250px;         /* taller than wide so the whole head fits (no crop) */
     --radius: 4px;      /* barely-there corners, matching About */
     --shadow-x: -14px;  /* hard-shadow offset — negative = up/left */
     --shadow-y: -14px;
-    --lift: 0px;        /* photo shift on hover; grows the gap to the shadow */
     display: block;
     position: relative;
     width: var(--w);
     height: var(--h);
     border-radius: var(--radius);
-    /* Hard shadow: solid primary orange, no blur (0 blur, 0 spread). */
+    /* Hard shadow: solid primary orange, no blur (0 blur, 0 spread). Because it
+       stays flush against the photo's top/left edges, deepening it never opens
+       a gap — the orange just reads as a full fill sliding out behind. */
     box-shadow: var(--shadow-x) var(--shadow-y) 0 0 var(--color-primary);
     cursor: pointer;
     transition: box-shadow 0.3s var(--ease);
   }
   .hero-photo:hover,
   .hero-photo:focus-visible {
-    --shadow-x: -20px;
-    --shadow-y: -20px;
-    --lift: 5px;
+    --shadow-x: -24px;
+    --shadow-y: -24px;
   }
   .hero-photo img {
     width: 100%;
@@ -316,13 +317,10 @@ const roles = t.hero.roles?.length ? t.hero.roles : [t.hero.roleWord];
     object-fit: cover;
     object-position: center top; /* bias the crop to the top so the head stays in */
     display: block;
-    /* Shifts toward the shadow on hover, widening the gap = a lift. */
-    translate: var(--lift) var(--lift);
-    transition: translate 0.3s var(--ease);
   }
   @media (prefers-reduced-motion: reduce) {
-    .hero-photo, .hero-photo img { transition: none; }
-    .hero-photo:hover, .hero-photo:focus-visible { --shadow-x: -14px; --shadow-y: -14px; --lift: 0px; }
+    .hero-photo { transition: none; }
+    .hero-photo:hover, .hero-photo:focus-visible { --shadow-x: -14px; --shadow-y: -14px; }
   }
   .hero-subtitle {
     font-weight: 300; /* Inter Light */
