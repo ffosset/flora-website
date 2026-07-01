@@ -458,6 +458,11 @@ const roles = t.hero.roles?.length ? t.hero.roles : [t.hero.roleWord];
     display: block;
     overflow: hidden;
     min-height: 0;
+    /* line-height is a tight 1.02, so the clip box would otherwise cut the
+       descenders (g, p, y). Pad the bottom to give them room inside the
+       overflow; margin pulls it back so row spacing is unchanged. */
+    padding-bottom: 0.22em;
+    margin-bottom: -0.22em;
     transform: translateY(0.22em);
     transition: transform var(--dur) var(--ease);
   }

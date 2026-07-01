@@ -17,7 +17,7 @@ export default {
   hero: {
     nameWord: 'flora',
     roleWord: 'diseñadora',
-    roles: ['product design', 'experiencia UX', 'investigación UX', 'storytelling', 'diseño gráfico'],
+    roles: ['experiencia UX', 'investigación UX', 'product management', 'storytelling', 'product design'],
     scroll: 'Desplázate',
     subhead: '¿hablamos?',
     tagline: 'te acompaño y hago realidad tus proyectos web',
