@@ -55,7 +55,7 @@ const roles = t.hero.roles?.length ? t.hero.roles : [t.hero.roleWord];
     try { ORDER = JSON.parse(stack.dataset.words || '[]'); } catch {}
     const SHADES = ['--w5', '--w4', '--w3', '--w2', '--w1']; // idx 0 = active (next to flora·) = darkest
     const STEP = 550;   // word landing duration (≈ --dur)
-    const HOLD = 800;   // still time between words — the pacing dial
+    const HOLD = 1600;  // still time between words — the pacing dial (doubled)
     const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
     const wait = (ms) => new Promise((r) => setTimeout(r, ms));
 
@@ -314,10 +314,15 @@ const roles = t.hero.roles?.length ? t.hero.roles : [t.hero.roleWord];
      is always the one sitting at the pinned edge, so the fixed anchor naturally
      reads as paired with it. Bottom-anchored on desktop, grows UP. */
   .hero-stack {
-    /* Position-based shade ramp: darkest (active, next to flora·) → lightest.
-       The palette has no 5-step ramp token, so these are local, using the
-       tested reference values. Injected .word rows inherit them. */
-    --w5: #7c3d12; --w4: #a55f2d; --w3: #bd8058; --w2: #cba084; --w1: #dcbda6;
+    /* Position-based shade ramp: active (next to flora·) is the brand primary
+       #AE4905; each row further away lightens toward the peach secondary.
+       Built from the brand tokens with color-mix (already used elsewhere in
+       this hero). Injected .word rows inherit these. */
+    --w5: var(--color-primary);                                              /* active */
+    --w4: color-mix(in srgb, var(--color-primary) 78%, var(--color-secondary));
+    --w3: color-mix(in srgb, var(--color-primary) 56%, var(--color-secondary));
+    --w2: color-mix(in srgb, var(--color-primary) 36%, var(--color-secondary));
+    --w1: color-mix(in srgb, var(--color-primary) 20%, var(--color-secondary)); /* furthest */
     --dur: 0.55s;                      /* STEP — word landing duration */
 
     position: relative;
@@ -325,7 +330,7 @@ const roles = t.hero.roles?.length ? t.hero.roles : [t.hero.roleWord];
     flex-direction: column-reverse;    /* grows upward from the pinned edge */
     justify-content: flex-start;
     align-items: flex-start;
-    gap: 0.16em;
+    gap: 0.34em;                       /* vertical breathing room between rows */
     padding-left: 3.6em;               /* gutter that flora· hangs in */
     font-family: var(--font-display);
     font-size: var(--fs-mega);
@@ -384,7 +389,7 @@ const roles = t.hero.roles?.length ? t.hero.roles : [t.hero.roleWord];
     transition: grid-template-rows var(--dur) var(--ease),
                 opacity var(--dur) var(--ease),
                 color var(--dur) var(--ease);
-    font-weight: 500;
+    font-weight: 300;                  /* Inter Light */
     white-space: nowrap;
   }
   .hero-stack .word > .inner {
