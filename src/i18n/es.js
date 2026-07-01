@@ -73,6 +73,7 @@ export default {
     next: 'Proyectos siguientes',
     visit: 'Ver la página',
     readMore: 'Leer más',
+    readLess: 'Leer menos',
     otherCategories: 'Otras categorías',
     seeMore: 'Ver más',
     seeLess: 'Ver menos',
@@ -227,7 +228,7 @@ export default {
       'La mayoría de los equipos contrata a un diseñador, un redactor y un desarrollador, y luego trata de hacerlos encajar. Mi trayectoria pasó por todos esos oficios, lo que me permite ser autónoma pero también colaborar con eficacia.',
     valuesTitle: 'con quién trabajo',
     values:
-      'Elijo proyectos que trabajan por un mundo más verde, más justo e inclusivo. Soy entusiasta y curiosa por naturaleza.',
+      'Elijo proyectos que trabajan por un mundo más verde, más justo e inclusivo. Soy entusiasta y curiosa por naturaleza. Trabajo en remoto y puedo asistir a reuniones puntuales presenciales.',
     pathTitle: 'trayectoria profesional',
     path: [
       {
@@ -246,7 +247,7 @@ export default {
         sub: 'Productos gestionados de principio a fin en <a href="https://www.urbandataanalytics.com/" target="_blank" rel="noopener noreferrer">urbanData</a> y <a href="https://rosa.be" target="_blank" rel="noopener noreferrer">ROSA</a>: research, roadmap, diseño, QA.',
       },
       {
-        label: 'Empresaria',
+        label: 'empresaria',
         year: '2024',
         current: true,
         sub: 'Cofundadora de <a href="https://www.minnowcollective.com/" target="_blank" rel="noopener noreferrer">Minnow Collective</a> y fundadora de mi propia agencia de diseño.',

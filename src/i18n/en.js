@@ -80,6 +80,7 @@ export default {
     next: 'Next projects',
     visit: 'Visit page',
     readMore: 'Read more',
+    readLess: 'Read less',
     otherCategories: 'Other categories',
     seeMore: 'Load more',
     seeLess: 'Show less',
@@ -236,7 +237,7 @@ export default {
       'Most teams hire a designer, a writer, and a developer, then stitch them together. My path ran through all of it, so I work across the seams.',
     valuesTitle: 'who I work with',
     values:
-      "I take on work that supports a greener, fairer, more inclusive world. I'm enthusiastic and naturally curious.",
+      "I take on work that supports a greener, fairer, more inclusive world. I'm enthusiastic and naturally curious. I work fully remote and can attend ad-hoc meetings on site.",
     pathTitle: 'work path',
     // Career timeline, animated in order. `current` marks the latest step.
     path: [

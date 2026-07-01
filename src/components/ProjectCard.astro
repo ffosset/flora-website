@@ -5,6 +5,7 @@
 // `labels` carries the translated UI strings (with English fallbacks).
 const { c, d, base, labels = {}, service } = Astro.props;
 const readMore = labels.readMore ?? 'Read more';
+const readLess = labels.readLess ?? 'Read less';
 const newTab = labels.newTab ?? 'opens in new tab';
 const hasUrl = Boolean(c.url);
 const isExternal = hasUrl && c.url.startsWith('http');
@@ -45,6 +46,8 @@ const href = hasUrl ? (isExternal ? c.url : base + c.url) : undefined;
       type="button"
       class="card-more"
       data-more
+      data-more-label={readMore}
+      data-less-label={readLess}
       aria-expanded="false"
       aria-controls={`hover-${c.slug}`}
     >

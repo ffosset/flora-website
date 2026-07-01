@@ -74,6 +74,7 @@ export default {
     next: 'Projets suivants',
     visit: 'Voir la page',
     readMore: 'Voir plus',
+    readLess: 'Voir moins',
     otherCategories: 'Autres catégories',
     seeMore: 'Voir plus',
     seeLess: 'Voir moins',
@@ -228,7 +229,7 @@ export default {
       'La plupart des équipes recrutent designer, rédacteur et développeur, puis tentent de les faire tenir ensemble. Mon parcours est passé par tous ces métiers, ce qui me permet d’être indépendante mais aussi de collaborer avec efficacité.',
     valuesTitle: 'avec qui je travaille',
     values:
-      'Je choisis des projets qui œuvrent pour un monde plus vert, plus juste et plus inclusif. Je suis enthousiaste et curieuse de nature.',
+      'Je choisis des projets qui œuvrent pour un monde plus vert, plus juste et plus inclusif. Je suis enthousiaste et curieuse de nature. Je travaille en full remote et peux assister à des réunions ponctuelles sur site.',
     pathTitle: 'parcours professionnel',
     path: [
       {

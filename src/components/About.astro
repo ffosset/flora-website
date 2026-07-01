@@ -195,7 +195,7 @@ const WAVE = {
     if ('IntersectionObserver' in window) {
       const io = new IntersectionObserver(
         (entries) => entries.forEach((e) => { if (e.isIntersecting) { reveal(); io.disconnect(); } }),
-        { threshold: 0.25 }
+        { threshold: 0 }
       );
       io.observe(root);
     } else {
