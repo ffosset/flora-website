@@ -7,7 +7,7 @@ export default {
   meta: {
     title: 'Flora Fosset · Designer',
     description:
-      'Designer et stratège : je transforme les idées compliquées — produits, plateformes, récits — en quelque chose que l’on comprend immédiatement.',
+      'Profil senior à la croisée du design, de la technologie et de la stratégie.',
   },
   nav: {
     services: 'services',
@@ -239,7 +239,7 @@ export default {
       {
         label: 'design',
         year: '2017',
-        sub: 'Chez <a href="https://www.urbandataanalytics.com/" target="_blank" rel="noopener noreferrer">urbanData Analytics</a>, j’ai co-construit un design system couvrant trois produits, ainsi qu’un workflow agile entre design et technologie.',
+        sub: 'Découverte du design de produits numériques et des méthodologies agiles. Passe de la rédaction du blog à l’équipe produit chez <a href="https://www.urbandataanalytics.com/" target="_blank" rel="noopener noreferrer">urbanData Analytics</a> et entame mon parcours de designer.',
       },
       {
         label: 'gestion de produits',
@@ -251,6 +251,10 @@ export default {
         year: '2024',
         current: true,
         sub: 'Cofondatrice de <a href="https://www.minnowcollective.com/" target="_blank" rel="noopener noreferrer">Minnow Collective</a> et fondatrice de ma propre agence de design.',
+      },
+      {
+        label: 'un projet avec vous, peut-être ?',
+        year: 'AUJOURD’HUI',
       },
     ],
   },
@@ -265,7 +269,6 @@ export default {
   },
   footer: {
     rights: '© Flora Fosset',
-    location: 'Freelance belge',
   },
   a11y: {
     mainNav: 'Principale',

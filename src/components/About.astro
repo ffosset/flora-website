@@ -10,14 +10,15 @@ const path = t.about.path || [];
 // Mobile ignores this and falls back to a straight vertical rail (see styles).
 const WAVE = {
   w: 700,
-  h: 940,
+  h: 1140,
   nodes: [
     { x: 420, y: 140, side: 'right' },
     { x: 280, y: 340, side: 'left' },
     { x: 420, y: 540, side: 'right' },
     { x: 280, y: 740, side: 'left' },
+    { x: 420, y: 940, side: 'right' },
   ],
-  d: 'M350,12 C350,72 420,80 420,140 C420,240 280,240 280,340 C280,440 420,440 420,540 C420,640 280,640 280,740',
+  d: 'M350,12 C350,72 420,80 420,140 C420,240 280,240 280,340 C280,440 420,440 420,540 C420,640 280,640 280,740 C280,840 420,840 420,940',
 };
 ---
 
@@ -248,7 +249,12 @@ const WAVE = {
   @media (min-width: 900px) {
     /* align-items: center vertically centres the headline + facts against the
        (taller) portrait. */
-    .about-grid { grid-template-columns: 1fr 1fr; gap: 40px; align-items: center; }
+    .about-grid {
+      grid-template-columns: auto auto;
+      justify-content: center;
+      gap: 40px;
+      align-items: center;
+    }
   }
 
   .about-portrait {
@@ -443,7 +449,7 @@ const WAVE = {
   @media (min-width: 760px) {
     .path-track {
       width: 700px;
-      height: 940px;
+      height: 1140px;
       margin: var(--space-3) auto 0;
     }
     .path-wave {
@@ -458,7 +464,7 @@ const WAVE = {
       stroke-width: 2;
       stroke-linecap: round;
       /* Hidden by default; JS recomputes the exact length and draws it. The
-         dasharray comfortably exceeds the real path length (~1130px). */
+         dasharray comfortably exceeds the real path length (~1360px). */
       stroke-dasharray: 1600;
       stroke-dashoffset: 1600;
     }

@@ -1,7 +1,7 @@
 ---
 import { defaultLang, languages } from '../i18n';
 
-const { currentLocale } = Astro.props;
+const { currentLocale, variant = 'header' } = Astro.props;
 
 // Order shown in the design: en · es · fr.
 const order = ['en', 'es', 'fr'];
@@ -16,7 +16,7 @@ function localePath(loc) {
 const activeLabel = languages[currentLocale] ?? languages[defaultLang];
 ---
 
-<details class="lang-switch" data-lang-switch>
+<details class={`lang-switch lang-switch--${variant}`} data-lang-switch>
   <summary class="lang-toggle" aria-label="Select language">
     <span class="lang-current">{activeLabel}</span>
     <svg class="caret" width="10" height="6" viewBox="0 0 10 6" aria-hidden="true">
@@ -98,6 +98,15 @@ const activeLabel = languages[currentLocale] ?? languages[defaultLang];
   }
   .lang-menu a:hover { color: var(--color-primary); background: var(--color-surface); }
   .lang-menu a.active { color: var(--color-primary); font-weight: 700; }
+
+  /* Footer variant: sits on the purple drawer, so it wears the on-purple text
+     colors, and its menu opens upward (it lives at the very bottom edge). */
+  .lang-switch--footer .lang-toggle { color: var(--color-muted-on-purple); }
+  .lang-switch--footer .lang-toggle:hover { color: var(--color-ink-on-purple); }
+  .lang-switch--footer .lang-menu {
+    top: auto;
+    bottom: calc(100% + 8px);
+  }
 </style>
 
 <script>
