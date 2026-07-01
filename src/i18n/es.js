@@ -222,6 +222,7 @@ export default {
       'Alta capacidad para liderar y colaborar entre equipos',
       'Trilingüe: inglés, francés y español',
       'Entre Madrid y Bruselas',
+      'Trabajar desde mi jardín potencia mi creatividad',
     ],
     howIWorkTitle: 'cómo trabajo',
     howIWorkBody:

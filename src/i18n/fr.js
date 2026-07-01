@@ -223,6 +223,7 @@ export default {
       'Hautes capacités pour diriger et collaborer entre équipes',
       'Trilingue : anglais, français, espagnol',
       'Entre Bruxelles et Madrid',
+      'Travailler depuis mon jardin stimule ma créativité',
     ],
     howIWorkTitle: 'comment je travaille',
     howIWorkBody:

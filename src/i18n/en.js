@@ -231,6 +231,7 @@ export default {
       'Comfortable leading and collaborating across teams',
       'Fluent in English, French, and Spanish',
       'Splitting time between Brussels and Madrid',
+      'Working from my garden boosts my creativity',
     ],
     howIWorkTitle: 'how I work',
     howIWorkBody:
