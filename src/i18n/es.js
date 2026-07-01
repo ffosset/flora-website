@@ -159,7 +159,7 @@ export default {
         category: 'product',
         tag: 'Inmobiliario',
         subtitle: 'urbanData Analytics',
-        title: 'Simular si comprar una propiedad es una buena inversión, según el perfil inversor del usuario',
+        title: 'Simular la inversión de una compra inmobiliaria',
         year: '2020',
         did: 'Hice la investigación de usuarios y después diseñé un simulador que convierte precio de compra, alquiler e hipoteca en una lectura clara de la operación. Lideré los sprints, la aceptación funcional y el despliegue entre los usuarios.',
         result: 'Diseño aún en uso 6 años después de su implementación.',

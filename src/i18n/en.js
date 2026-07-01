@@ -167,7 +167,7 @@ export default {
         category: 'product',
         tag: 'Real estate',
         subtitle: 'urbanData Analytics',
-        title: 'Simulating whether a property purchase is a good investment, tailored to the user’s investor profile',
+        title: 'Simulate a property purchase investment',
         year: '2020',
         did: 'Ran user research then designed a simulator that turns purchase price, rent and mortgage into a clear read on a deal. Led the sprints, functional acceptance, and the rollout to users.',
         result: 'Design still in use 6 years after implementation.',

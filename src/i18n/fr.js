@@ -160,7 +160,7 @@ export default {
         category: 'product',
         tag: 'Immobilier',
         subtitle: 'urbanData Analytics',
-        title: 'Simuler si l’achat d’un bien est un bon investissement, adapté au profil d’investisseur de l’utilisateur',
+        title: 'Simuler l’investissement d’un achat immobilier',
         year: '2020',
         did: 'J’ai mené la recherche utilisateur, puis conçu un simulateur qui transforme prix d’achat, loyer et crédit en une lecture claire de l’opération. J’ai piloté les sprints, la recette fonctionnelle et le déploiement auprès des utilisateurs.',
         result: 'Design toujours utilisé 6 ans après sa mise en place.',
