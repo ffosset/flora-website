@@ -64,7 +64,7 @@ const WAVE = {
                 class:list={['tag-line', { 'tag-line--terra': tag.tint === 'terra' }]}
                 x1={tag.lx} y1={tag.ly} x2={tag.dx} y2={tag.dy}
                 vector-effect="non-scaling-stroke"
-                style={`--d:${(i * 0.16).toFixed(2)}s`}
+                style={`--d:${(i * 0.32).toFixed(2)}s`}
               />
             ))}
           </svg>
@@ -73,14 +73,14 @@ const WAVE = {
             <span
               class="tag-dot"
               aria-hidden="true"
-              style={`left:${tag.dx}%; top:${tag.dy}%; --d:${(i * 0.16).toFixed(2)}s`}
+              style={`left:${tag.dx}%; top:${tag.dy}%; --d:${(i * 0.32).toFixed(2)}s`}
             ></span>
           ))}
 
           {PHOTO_TAGS.map((tag, i) => (
             <span
               class="tag-chip"
-              style={`left:${tag.lx}%; top:${tag.ly}%; --d:${(i * 0.16).toFixed(2)}s`}
+              style={`left:${tag.lx}%; top:${tag.ly}%; --d:${(i * 0.32).toFixed(2)}s`}
             >{tag.label}</span>
           ))}
         </div>
@@ -165,10 +165,10 @@ const WAVE = {
       if (wave) wave.style.strokeDashoffset = '0';
     };
 
-    // A single orange dot travels down the wave, drawing the line behind it.
-    // It halts for 2s at each milestone — its text fades in and a permanent
-    // dot is dropped beside the date — then carries on to the next, stopping
-    // at the last one.
+    // A single orange dot travels down the wave at a constant speed, drawing
+    // the line behind it and never stopping. As it passes each milestone the
+    // text fades in and a permanent dot is dropped beside the date; those stay
+    // put while the runner carries on to the end.
     const animateWave = () => {
       if (!wave || !runner) { root.classList.add('is-revealed'); return; }
       const len = wave.getTotalLength();
@@ -187,7 +187,6 @@ const WAVE = {
       }).sort((a, b) => a.at - b.at);
 
       const SPEED = 312;   // px / second the dot travels
-      const PAUSE = 1000;  // ms it lingers at each milestone
 
       // The line reveals only as far as the dot has reached.
       wave.style.transition = 'none';
@@ -202,36 +201,22 @@ const WAVE = {
         wave.style.strokeDashoffset = String(len - l);
       };
 
-      let idx = 0;          // milestone we're heading toward
-      let phase = 'travel'; // 'travel' | 'pause'
-      let from = 0;         // arc-length we left from
-      let phaseStart = null;
+      let startTs = null;
+      let idx = 0; // next milestone still waiting to be revealed
 
       const tick = (ts) => {
-        if (phaseStart === null) phaseStart = ts;
-        if (idx >= stops.length) { place(stops[stops.length - 1].at); return; }
-        const target = stops[idx].at;
+        if (startTs === null) startTs = ts;
+        const l = Math.min(((ts - startTs) / 1000) * SPEED, len);
+        place(l);
 
-        if (phase === 'travel') {
-          const dist = target - from;
-          const dur = dist > 0 ? (dist / SPEED) * 1000 : 0;
-          const p = dur > 0 ? Math.min(1, (ts - phaseStart) / dur) : 1;
-          place(from + dist * p);
-          if (p >= 1) {
-            stops[idx].step.classList.add('is-shown'); // reveal text + drop dot
-            phase = 'pause';
-            phaseStart = ts;
-          }
-        } else {
-          place(target);
-          if (ts - phaseStart >= PAUSE) {
-            from = target;
-            idx += 1;
-            phase = 'travel';
-            phaseStart = ts;
-          }
+        // Reveal each milestone the moment the dot reaches its position; the
+        // dropped dot + text then stay fixed as the runner moves on.
+        while (idx < stops.length && l >= stops[idx].at) {
+          stops[idx].step.classList.add('is-shown');
+          idx += 1;
         }
-        requestAnimationFrame(tick);
+
+        if (l < len) requestAnimationFrame(tick);
       };
       requestAnimationFrame(tick);
     };
