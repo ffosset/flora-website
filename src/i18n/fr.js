@@ -109,7 +109,7 @@ export default {
         year: '2024–aujourd’hui',
         did: 'J’ai cofondé l’entreprise et je dirige aujourd’hui la stratégie produit et le design. Nous transformons des données écologiques en outils qui collent à la façon dont les équipes achats et sourcing travaillent vraiment.',
         result: 'Développement d’une plateforme de données complexe pour utilisateurs en entreprise.',
-        keywords: ['UX/UI entreprise', 'Stratégie', 'PM'],
+        keywords: ['UX/UI entreprise', 'Stratégie'],
         awards: [],
       },
       {
