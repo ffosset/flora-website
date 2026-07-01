@@ -80,6 +80,7 @@ export default {
       website: 'Visitar la web',
       platform: 'Ver la plataforma',
       read: 'Leer',
+      code: 'Ver el código',
     },
     projects: [
       {
@@ -152,16 +153,31 @@ export default {
         awards: [],
       },
       {
-        slug: 'neighborhood-map',
-        image: '/images/projects/neighborhood-map.jpg',
-        url: 'https://www.urbandataanalytics.com/pulse',
+        slug: 'investment-simulator',
+        image: '/images/projects/placeholder.svg', // TODO: real image from Flora
+        url: 'https://www.accumin.com/es/intelligence/productos/pulse-asset',
         category: 'product',
-        tag: 'Fintech',
+        tag: 'Inmobiliario',
         subtitle: 'urbanData Analytics',
-        title: '¿Este inmueble será rentable?',
-        year: '2018–2019',
+        title: 'Simular si comprar una propiedad es una buena inversión, según el perfil inversor del usuario',
+        year: '2020',
         did: 'Hice la investigación de usuarios y después diseñé un simulador que convierte precio de compra, alquiler e hipoteca en una lectura clara de la operación. Lideré los sprints, la aceptación funcional y el despliegue entre los usuarios.',
-        result: 'Lo usan +10 grandes inmobiliarias como Liberbank, ReMax, Centry 21…',
+        result: 'Diseño aún en uso 6 años después de su implementación.',
+        keywords: ['Investigación de usuarios', 'Diseño de interacción y prototipos', 'Organización de sprints', 'Aceptación funcional', 'Comunicación de despliegue'],
+        awards: [],
+      },
+      {
+        slug: 'free-the-fish',
+        image: '/images/projects/placeholder.svg', // TODO: real image from Flora
+        url: 'https://github.com/CodingCarlos/freethefish-chrome',
+        category: 'product',
+        tag: 'Periodismo',
+        subtitle: 'Self-initiated',
+        title: 'Proteger a los lectores del clickbait y los artículos escritos por bots mientras navegan',
+        year: '2019',
+        did: 'Proyecto de fin de máster en UX / diseño de producto hecho en solitario —un «adblock» para el clickbait— que después co-construí como beta de extensión de navegador open source con un equipo de desarrolladores en Google Campus.',
+        result: '',
+        keywords: ['UX / diseño de producto en solitario', 'Proyecto de máster', 'Extensión open source'],
         awards: [],
       },
       {

@@ -42,7 +42,9 @@ const href = hasUrl ? (isExternal ? c.url : base + c.url) : undefined;
   </div>
 
   <div class="card-hover" id={`hover-${c.slug}`}>
-    <p class="hover-result">{c.result}</p>
+    {/* Result metric is optional — hide the slot entirely when absent so the
+        reveal lays out cleanly (no empty box). Same for the live link below. */}
+    {c.result && <p class="hover-result">{c.result}</p>}
     {c.keywords && c.keywords.length > 0 && (
       <p class="hover-keywords">{c.keywords.join(' · ')}</p>
     )}

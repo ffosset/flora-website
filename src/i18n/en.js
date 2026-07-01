@@ -88,6 +88,7 @@ export default {
       website: 'Visit website',
       platform: 'Visit platform',
       read: 'Read',
+      code: 'View code',
     },
     projects: [
       {
@@ -160,16 +161,31 @@ export default {
         awards: [],
       },
       {
-        slug: 'neighborhood-map',
-        image: '/images/projects/neighborhood-map.jpg',
-        url: 'https://www.urbandataanalytics.com/pulse',
+        slug: 'investment-simulator',
+        image: '/images/projects/placeholder.svg', // TODO: real image from Flora
+        url: 'https://www.accumin.com/es/intelligence/productos/pulse-asset',
         category: 'product',
-        tag: 'Fintech',
+        tag: 'Real estate',
         subtitle: 'urbanData Analytics',
-        title: 'Will this property pay off?',
-        year: '2018–2019',
+        title: 'Simulating whether a property purchase is a good investment, tailored to the user’s investor profile',
+        year: '2020',
         did: 'Ran user research then designed a simulator that turns purchase price, rent and mortgage into a clear read on a deal. Led the sprints, functional acceptance, and the rollout to users.',
-        result: 'Used by +10 Real Estate corporations like Liberbank, ReMax, Centry 21…',
+        result: 'Design still in use 6 years after implementation.',
+        keywords: ['User research', 'Interaction design & prototypes', 'Sprint organization', 'Functional acceptance', 'Deploy comms'],
+        awards: [],
+      },
+      {
+        slug: 'free-the-fish',
+        image: '/images/projects/placeholder.svg', // TODO: real image from Flora
+        url: 'https://github.com/CodingCarlos/freethefish-chrome',
+        category: 'product',
+        tag: 'Journalism',
+        subtitle: 'Self-initiated',
+        title: 'Protecting readers from clickbait and bot-written articles while browsing',
+        year: '2019',
+        did: 'A solo UX / product-design master’s project — an “adblock” for clickbait — later co-built into an open-source browser-extension beta with a developer team at Google Campus.',
+        result: '',
+        keywords: ['Solo UX / product design', 'Master’s project', 'Open-source extension'],
         awards: [],
       },
       {
