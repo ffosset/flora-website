@@ -116,7 +116,7 @@ export default {
         year: '2024–present',
         did: 'Co-founded the company and currently leading product strategy and design. We’re turning ecological data into tools that fit how procurement and sourcing teams really work.',
         result: 'Bootstrapping a complex data platform for enterprise users.',
-        keywords: ['Enterprise UX/UI', 'Strategy', 'PM'],
+        keywords: ['Enterprise UX/UI', 'Strategy'],
         awards: [],
       },
       {

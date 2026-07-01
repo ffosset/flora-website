@@ -108,7 +108,7 @@ export default {
         year: '2024–actualidad',
         did: 'Cofundé la empresa y hoy dirijo la estrategia de producto y el diseño. Convertimos datos ecológicos en herramientas que encajan con cómo trabajan de verdad los equipos de compras y aprovisionamiento.',
         result: 'Arrancando una plataforma de datos compleja para usuarios corporativos.',
-        keywords: ['UX/UI empresarial', 'Estrategia', 'PM'],
+        keywords: ['UX/UI empresarial', 'Estrategia'],
         awards: [],
       },
       {
