@@ -43,12 +43,14 @@ const href = hasUrl ? (isExternal ? c.url : base + c.url) : undefined;
   </div>
 
   <div class="card-hover" id={`hover-${c.slug}`}>
-    {/* Result metric is optional — hide the slot entirely when absent so the
-        reveal lays out cleanly (no empty box). */}
-    {c.result && <p class="hover-result">{c.result}</p>}
+    {/* Keywords as tags on top, then the result metric below. Both optional —
+        hide the slot entirely when absent so the reveal lays out cleanly. */}
     {c.keywords && c.keywords.length > 0 && (
-      <p class="hover-keywords">{c.keywords.join(' · ')}</p>
+      <p class="hover-keywords">
+        {c.keywords.map((k) => <span class="hover-tag">{k}</span>)}
+      </p>
     )}
+    {c.result && <p class="hover-result">{c.result}</p>}
     <div class="hover-foot">
       {hasUrl && (
         <a
@@ -203,13 +205,16 @@ const href = hasUrl ? (isExternal ? c.url : base + c.url) : undefined;
     line-height: 1.18;
     letter-spacing: -0.01em;
   }
-  .hover-keywords {
-    font-family: var(--font-body); /* Fira Code, like the company name */
-    text-transform: uppercase;
-    letter-spacing: 0.06em;
-    font-size: clamp(0.78rem, 0.72rem + 0.25vw, 0.95rem);
-    line-height: 1.6;
-    color: color-mix(in srgb, currentColor 78%, transparent);
+  /* Keywords as tags, styled like the idle card's date pill (.card-year). */
+  .hover-keywords { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+  .hover-tag {
+    font-family: var(--font-body);
+    font-size: 0.9rem;
+    line-height: 1.3;
+    padding: 0.3rem 0.7rem;
+    white-space: nowrap;
+    background: color-mix(in srgb, var(--color-text) 10%, transparent);
+    color: var(--color-muted);
   }
 
   /* CTA + client name, pinned to the bottom of the reveal. */
