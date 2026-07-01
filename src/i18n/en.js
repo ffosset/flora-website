@@ -35,9 +35,9 @@ export default {
     sectionSubtitle: 'I help you realize your online projects and support you with the message and platform choice',
     viewProjects: 'View projects',
     items: [
-      { name: 'Landing pages', desc: 'for organisations and people who need a presence online' },
-      { name: 'Product design', desc: 'for product teams that need senior design and UX expertise' },
-      { name: 'Storytelling', desc: 'for companies who need to create visual content' },
+      { name: 'Landing pages', desc: 'The front door to your business: clear, fast, and built so the right people stay.' },
+      { name: 'Product design', desc: "Working out how a product should work before how it looks, so nothing gets in the user's way." },
+      { name: 'Storytelling', desc: 'Turning data and research into something people understand and remember.' },
     ],
   },
   whatIDo: {

@@ -13,10 +13,12 @@ const roles = t.hero.roles?.length ? t.hero.roles : [t.hero.roleWord];
 
   <div class="container hero-inner">
     <div class="hero-bottom">
-      <h1 class="hero-line">
-        <span class="hero-name">{t.hero.nameWord}</span>
-        <span class="hero-dot" aria-hidden="true">·</span>
-        <span class="hero-role" data-rotator data-words={JSON.stringify(roles)}>{roles[0]}</span>
+      <h1 class="hero-stack" data-hero-stack data-words={JSON.stringify(roles)}>
+        <span class="flora-anchor">
+          <span class="hero-name">{t.hero.nameWord}</span>
+          <span class="hero-dot" aria-hidden="true">·</span>
+        </span>
+        {/* word rows are injected by the stack script below */}
       </h1>
     </div>
   </div>
@@ -42,21 +44,48 @@ const roles = t.hero.roles?.length ? t.hero.roles : [t.hero.roleWord];
 </script>
 
 <script>
-  const el = document.querySelector('[data-rotator]');
-  if (el) {
-    let words = [];
-    try { words = JSON.parse(el.dataset.words || '[]'); } catch {}
-    if (words.length > 1) {
-      let i = 0;
-      setInterval(() => {
-        i = (i + 1) % words.length;
-        el.classList.add('is-out');
-        setTimeout(() => {
-          el.textContent = words[i];
-          el.classList.remove('is-out');
-        }, 320);
-      }, 2200);
-    }
+  // Rolling-slot word stack. Each word enters the pinned "flora ·" slot, becomes
+  // the active (nearest, darkest) row, and shoves the previous words away as they
+  // lighten. Runs ONCE on load and HOLDS on the full list forever — no loop, so a
+  // visitor who never watches the motion still sees every word. Order comes from
+  // i18n roles (data-words). Colour is by POSITION, recomputed on every step.
+  const stack = document.querySelector('[data-hero-stack]');
+  if (stack) {
+    let ORDER = [];
+    try { ORDER = JSON.parse(stack.dataset.words || '[]'); } catch {}
+    const SHADES = ['--w5', '--w4', '--w3', '--w2', '--w1']; // idx 0 = active (next to flora·) = darkest
+    const STEP = 550;   // word landing duration (≈ --dur)
+    const HOLD = 800;   // still time between words — the pacing dial
+    const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const wait = (ms) => new Promise((r) => setTimeout(r, ms));
+
+    const makeRow = (text) => {
+      const row = document.createElement('span');
+      row.className = 'word';
+      const inner = document.createElement('span');
+      inner.className = 'inner';
+      inner.textContent = text;
+      row.appendChild(inner);
+      return row;
+    };
+    const recolor = () => {
+      // firstChild in-flow = active row (bottom on desktop / top on mobile)
+      stack.querySelectorAll('.word').forEach((row, i) => {
+        row.style.color = `var(${SHADES[Math.min(i, SHADES.length - 1)]})`;
+      });
+    };
+    const build = async () => {
+      stack.querySelectorAll('.word').forEach((w) => w.remove());
+      for (let i = 0; i < ORDER.length; i++) {
+        const row = makeRow(ORDER[i]);
+        stack.insertBefore(row, stack.firstChild); // becomes active; shoves the rest away
+        recolor();
+        if (reduce) { row.classList.add('show'); continue; } // reduced motion: final frame instantly
+        requestAnimationFrame(() => requestAnimationFrame(() => row.classList.add('show')));
+        await wait(STEP + HOLD);
+      }
+    };
+    window.addEventListener('load', build);
   }
 </script>
 
@@ -277,35 +306,55 @@ const roles = t.hero.roles?.length ? t.hero.roles : [t.hero.roleWord];
     /* Keep the portrait clear of the title on small screens. */
     .hero-aside { width: 11rem; top: clamp(6rem, 18vh, 9rem); }
     .hero-photo { --d: 156px; --ring: 20px; }
-    /* Always stack the rotating role under "flora ·" so the line doesn't
-       reflow (and jolt the scroll) as the word changes width. */
-    .hero-role { flex-basis: 100%; }
   }
 
-  .hero-line {
-    font-family: var(--font-display);
-    font-weight: 800;
-    font-size: var(--fs-mega);
-    line-height: 1;
-    letter-spacing: -0.01em;
+  /* --- Rolling-slot word stack -------------------------------------------
+     "flora ·" is a single fixed gutter element (NOT re-parented between words);
+     word rows are injected by the script and stack next to it. The active word
+     is always the one sitting at the pinned edge, so the fixed anchor naturally
+     reads as paired with it. Bottom-anchored on desktop, grows UP. */
+  .hero-stack {
+    /* Position-based shade ramp: darkest (active, next to flora·) → lightest.
+       The palette has no 5-step ramp token, so these are local, using the
+       tested reference values. Injected .word rows inherit them. */
+    --w5: #7c3d12; --w4: #a55f2d; --w3: #bd8058; --w2: #cba084; --w1: #dcbda6;
+    --dur: 0.55s;                      /* STEP — word landing duration */
+
+    position: relative;
     display: flex;
+    flex-direction: column-reverse;    /* grows upward from the pinned edge */
+    justify-content: flex-start;
+    align-items: flex-start;
+    gap: 0.16em;
+    padding-left: 3.6em;               /* gutter that flora· hangs in */
+    font-family: var(--font-display);
+    font-size: var(--fs-mega);
+    font-weight: 800;
+    line-height: 1.02;
+    letter-spacing: -0.01em;
+    min-height: 5.8em;                 /* reserve space so layout never jumps */
+  }
+  .flora-anchor {
+    position: absolute;
+    left: 0;
+    bottom: 0;                         /* desktop: pinned bottom-left */
+    display: inline-flex;
     align-items: baseline;
     gap: 0.12em;
-    flex-wrap: wrap;
+    white-space: nowrap;
+    line-height: 1.02;
   }
   .hero-name { color: var(--color-text); font-weight: 800; } /* Extra Bold */
   .hero-dot { color: var(--color-primary); font-weight: 300; }
-  .hero-role {
-    color: var(--color-primary);
-    font-weight: 300;
-    transition: opacity 0.32s var(--ease), transform 0.32s var(--ease);
-  }
-  /* Word swaps: fade/slide out, change text, fade back in. */
-  .hero-role.is-out { opacity: 0; transform: translateY(0.22em); }
 
-  @media (prefers-reduced-motion: reduce) {
-    .hero-role { transition: none; }
-    .hero-role.is-out { opacity: 1; transform: none; }
+  /* mobile: flora· TOP-left, words stack DOWN — CSS flip only, no JS path */
+  @media (max-width: 720px) {
+    .hero-stack {
+      flex-direction: column;
+      justify-content: flex-start;
+      min-height: auto;
+    }
+    .flora-anchor { bottom: auto; top: 0; }
   }
 
   /* Tagline, centered directly under the portrait (inside .hero-aside). */
@@ -320,5 +369,38 @@ const roles = t.hero.roles?.length ? t.hero.roles : [t.hero.roleWord];
   }
   @media (max-width: 600px) {
     .hero-tagline { font-size: 0.95rem; }
+  }
+</style>
+
+<style is:global>
+  /* Rows are injected by JS, so they never receive Astro's build-time scope
+     attribute — their rules can't live in the scoped <style> above. They're
+     kept here, tightly namespaced under .hero-stack so nothing leaks globally.
+     --dur / --ease / the --wN ramp inherit from the scoped .hero-stack. */
+  .hero-stack .word {
+    display: grid;
+    grid-template-rows: 0fr;
+    opacity: 0;
+    transition: grid-template-rows var(--dur) var(--ease),
+                opacity var(--dur) var(--ease),
+                color var(--dur) var(--ease);
+    font-weight: 500;
+    white-space: nowrap;
+  }
+  .hero-stack .word > .inner {
+    display: block;
+    overflow: hidden;
+    min-height: 0;
+    transform: translateY(0.22em);
+    transition: transform var(--dur) var(--ease);
+  }
+  .hero-stack .word.show { grid-template-rows: 1fr; opacity: 1; }
+  .hero-stack .word.show > .inner { transform: none; }
+
+  /* Reduced motion: no build-up — JS adds .show synchronously, so kill the
+     transition and land on the final all-visible frame instantly. */
+  @media (prefers-reduced-motion: reduce) {
+    .hero-stack .word,
+    .hero-stack .word > .inner { transition: none; }
   }
 </style>

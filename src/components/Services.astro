@@ -1,8 +1,8 @@
 ---
 const { t } = Astro.props;
 const items = t.services.items || [];
-// Each service maps to a projects-grid filter, in card order.
-const FILTERS = ['landing', 'product', 'storytelling'];
+// Category colour per card, in card order (drives name colour + hard shadow).
+const CATS = ['landing', 'product', 'storytelling'];
 ---
 
 <section id="services" class="services">
@@ -14,122 +14,14 @@ const FILTERS = ['landing', 'product', 'storytelling'];
 
     <div class="services-list">
       {items.map((s, i) => (
-        <div
-          class="service"
-          role="button"
-          tabindex="0"
-          data-filter={FILTERS[i]}
-          style={`--cat: var(--cat-${FILTERS[i]})`}
-          aria-label={t.a11y.showProjects.replace('{name}', s.name)}
-        >
-          <div class="service-text">
-            <h3 class="service-name">{s.name}</h3>
-            <span class="service-go" aria-hidden="true">{t.services.viewProjects} →</span>
-          </div>
-          {i === 0 && (
-            <svg class="service-icon" viewBox="0 0 120 120" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="square" stroke-linejoin="miter" aria-hidden="true">
-              <rect class="s-draw" pathLength="1" x="14" y="24" width="92" height="72" />
-              <line class="s-draw" pathLength="1" x1="14" y1="42" x2="106" y2="42" />
-              <g fill="currentColor" stroke="none">
-                <circle class="s-pop" cx="22" cy="33" r="2.5" />
-                <circle class="s-pop" cx="30" cy="33" r="2.5" />
-                <circle class="s-pop" cx="38" cy="33" r="2.5" />
-              </g>
-              <rect class="s-draw" pathLength="1" x="24" y="50" width="72" height="22" />
-              <line class="s-draw" pathLength="1" x1="24" y1="80" x2="84" y2="80" />
-              <rect class="s-draw" pathLength="1" x="24" y="86" width="28" height="9" />
-            </svg>
-          )}
-          {i === 1 && (
-            <svg class="service-icon" viewBox="0 0 120 120" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="square" stroke-linejoin="miter" aria-hidden="true">
-              <defs>
-                <marker id="flow-arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
-                  <path d="M2 1 L8 5 L2 9" fill="none" stroke="context-stroke" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
-                </marker>
-              </defs>
-              <g>
-                <rect class="s-draw" pathLength="1" x="8" y="28" width="26" height="24" />
-                <line class="s-draw" pathLength="1" x1="12" y1="35" x2="30" y2="35" />
-                <line class="s-draw" pathLength="1" x1="12" y1="41" x2="24" y2="41" />
-              </g>
-              <g>
-                <rect class="s-draw" pathLength="1" x="46" y="28" width="26" height="24" />
-                <line class="s-draw" pathLength="1" x1="50" y1="35" x2="68" y2="35" />
-                <line class="s-draw" pathLength="1" x1="50" y1="41" x2="62" y2="41" />
-              </g>
-              <g>
-                <rect class="s-draw" pathLength="1" x="84" y="28" width="26" height="24" />
-                <line class="s-draw" pathLength="1" x1="88" y1="35" x2="106" y2="35" />
-                <line class="s-draw" pathLength="1" x1="88" y1="41" x2="100" y2="41" />
-              </g>
-              <g>
-                <rect class="s-draw" pathLength="1" x="46" y="74" width="26" height="24" />
-                <line class="s-draw" pathLength="1" x1="50" y1="81" x2="68" y2="81" />
-                <line class="s-draw" pathLength="1" x1="50" y1="87" x2="60" y2="87" />
-              </g>
-              <line class="s-pop" x1="34" y1="40" x2="44" y2="40" marker-end="url(#flow-arrow)" />
-              <line class="s-pop" x1="72" y1="40" x2="82" y2="40" marker-end="url(#flow-arrow)" />
-              <line class="s-pop" x1="59" y1="52" x2="59" y2="72" marker-end="url(#flow-arrow)" />
-            </svg>
-          )}
-          {i === 2 && (
-            <svg class="service-icon" viewBox="0 0 120 120" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="square" stroke-linejoin="miter" aria-hidden="true">
-              <g>
-                <path class="s-draw" pathLength="1" d="M40 26 L24 26 L24 40" />
-                <path class="s-draw" pathLength="1" d="M80 26 L96 26 L96 40" />
-                <path class="s-draw" pathLength="1" d="M24 80 L24 94 L40 94" />
-                <path class="s-draw" pathLength="1" d="M96 80 L96 94 L80 94" />
-              </g>
-              <path class="s-draw" pathLength="1" d="M40 52 L60 42 L80 52 L60 62 Z" />
-              <circle class="s-pop" cx="60" cy="52" r="4" fill="currentColor" stroke="none" />
-              <line class="s-draw" pathLength="1" x1="38" y1="74" x2="82" y2="74" />
-              <line class="s-draw" pathLength="1" x1="38" y1="82" x2="64" y2="82" />
-            </svg>
-          )}
+        <div class="service" data-cat={CATS[i]} style={`--cat: var(--cat-${CATS[i]})`}>
+          <h3 class="service-name">{s.name}</h3>
+          <p class="service-desc">{s.desc}</p>
         </div>
       ))}
     </div>
   </div>
 </section>
-
-<script>
-  // Clicking a service filters the projects grid and scrolls to it.
-  document.querySelectorAll('.services .service[data-filter]').forEach((card) => {
-    const go = () => {
-      document.dispatchEvent(
-        new CustomEvent('work:filter', { detail: card.dataset.filter })
-      );
-      const work = document.getElementById('work');
-      if (work) {
-        const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-        work.scrollIntoView({ behavior: reduce ? 'auto' : 'smooth', block: 'start' });
-      }
-    };
-    card.addEventListener('click', go);
-    card.addEventListener('keydown', (e) => {
-      if (e.key === 'Enter' || e.key === ' ') {
-        e.preventDefault();
-        go();
-      }
-    });
-  });
-
-  // Build the three icons (stroke-draw) the first time the section is in view.
-  // All three animate together; each draws itself.
-  const section = document.querySelector('.services');
-  if (section) {
-    const reveal = () => section.classList.add('is-drawn');
-    if ('IntersectionObserver' in window) {
-      const io = new IntersectionObserver(
-        (entries) => entries.forEach((e) => { if (e.isIntersecting) { reveal(); io.disconnect(); } }),
-        { threshold: 0.3 }
-      );
-      io.observe(section);
-    } else {
-      reveal();
-    }
-  }
-</script>
 
 <style>
   .services {
@@ -168,119 +60,44 @@ const FILTERS = ['landing', 'product', 'storytelling'];
     gap: var(--space-4);
   }
 
-  /* Card (also acts as a filter button). */
+  /* Static card: peach panel with an always-on hard offset shadow in the
+     category colour. Not interactive — no hover, no cursor change. */
   .service {
     display: flex;
-    align-items: center;
-    justify-content: space-between;
+    flex-direction: column;
     gap: var(--space-3);
     min-width: 0;
-    min-height: 11rem;
     padding: var(--space-4);
     border-radius: 18px;
     background: #faf0ea; /* soft peach */
-    cursor: pointer;
     text-align: left;
-    transition: transform 0.3s var(--ease), box-shadow 0.3s var(--ease);
-  }
-  /* Title (+ "View projects" on hover) on the left, icon on the right. */
-  .service-text { display: flex; flex-direction: column; gap: 0.4rem; min-width: 0; }
-  /* Hover: the card lifts toward the top-left and casts a hard offset shadow
-     in its category colour. */
-  .service:hover,
-  .service:focus-visible {
-    transform: translate(-6px, -6px);
-    box-shadow: 16px 16px 0 0 var(--cat);
-  }
-  .service:focus-visible { outline: 2px solid var(--color-text); outline-offset: 3px; }
-
-  /* "View projects →" hint — under the title, in the category colour;
-     revealed on hover (shown by default on mobile). */
-  .service-go {
-    font-family: var(--font-body);
-    font-size: var(--fs-small);
-    letter-spacing: 0.04em;
-    color: var(--cat);
-    opacity: 0;
-    transform: translateX(-4px);
-    transition: opacity 0.3s var(--ease), transform 0.3s var(--ease);
-  }
-  .service[data-filter='landing'] .service-go { color: #c2890c; }
-  .service:hover .service-go,
-  .service:focus-visible .service-go {
-    opacity: 1;
-    transform: translateX(0);
-  }
-  @media (prefers-reduced-motion: reduce) {
-    .service-go { opacity: 1; transform: none; }
+    box-shadow: 8px 8px 0 0 var(--cat);
   }
 
-  /* Line-art icon, pinned where the number used to be. */
-  .service-icon {
-    flex: 0 0 auto;
-    width: 100px;
-    height: 100px;
-    display: block;
-    color: var(--color-muted); /* dark grey line-art */
-    overflow: visible;
-  }
-  /* Self-building animation: strokes draw on, filled bits (dots, arrows) pop in.
-     pathLength="1" normalises every shape so they all draw at the same rate. */
-  .service-icon .s-draw {
-    stroke-dasharray: 1;
-    stroke-dashoffset: 1;
-  }
-  .service-icon .s-pop {
-    opacity: 0;
-    transform: scale(0.3);
-    transform-box: fill-box;
-    transform-origin: center;
-  }
-  /* The focal "pop" bits carry the category colour — the visual mention. */
-  .service-icon circle.s-pop { fill: var(--cat); }
-  .service-icon line.s-pop { stroke: var(--cat); }
-  .services.is-drawn .service-icon .s-draw {
-    animation: icon-draw 1.8s linear forwards;
-  }
-  .services.is-drawn .service-icon .s-pop {
-    animation: icon-pop 0.4s var(--ease) 1.6s forwards;
-  }
-  @keyframes icon-draw { to { stroke-dashoffset: 0; } }
-  @keyframes icon-pop { to { opacity: 1; transform: scale(1); } }
-
-  .service-body { display: flex; flex-direction: column; align-items: center; gap: var(--space-2); }
+  /* Name in the category colour, lowercase, with a trailing bullet. */
   .service-name {
     font-family: var(--font-display);
-    font-weight: 300;
+    font-weight: 700;
     text-transform: lowercase;
     font-size: clamp(1.2rem, 1.05rem + 0.6vw, 1.6rem);
     line-height: 1.1;
     letter-spacing: -0.01em;
     overflow-wrap: anywhere;
-    color: var(--color-text);
-    transition: color 0.3s var(--ease);
-  }
-  /* Hover: the title takes the category colour and goes bold. */
-  .service:hover .service-name,
-  .service:focus-visible .service-name {
     color: var(--cat);
-    font-weight: 700;
   }
-  /* Landing's bright yellow is illegible as text, so use a deeper amber. */
-  .service[data-filter='landing']:hover .service-name,
-  .service[data-filter='landing']:focus-visible .service-name {
-    color: #c2890c;
-  }
+  .service-name::after { content: ' ·'; }
+  /* Landing's bright yellow is illegible as text, so use a deeper amber for
+     the name + bullet (the shadow stays bright yellow). */
+  .service[data-cat='landing'] .service-name { color: #c2890c; }
+
   .service-desc {
-    color: var(--color-muted);
+    color: var(--color-text);
     font-size: 1.0625rem;
     line-height: 1.5;
   }
 
-  /* Mobile: same horizontal card, single column. No hover on touch, so the
-     hard shadow and the hint show by default to read as tappable. */
-  /* Below ~1150px the three horizontal cards no longer fit side by side —
-     stack them into one centred column. */
+  /* Below ~1150px the three cards no longer fit side by side — stack them
+     into one centred column. */
   @media (max-width: 1150px) {
     .services-list {
       grid-template-columns: 1fr;
@@ -288,29 +105,4 @@ const FILTERS = ['landing', 'product', 'storytelling'];
       margin-inline: auto;
     }
   }
-
-  /* Touch devices (no hover): show the shadow + hint by default so the cards
-     read as tappable. */
-  @media (hover: none) {
-    .service { box-shadow: 8px 8px 0 0 var(--cat); }
-    .service:hover,
-    .service:focus-visible { transform: none; box-shadow: 8px 8px 0 0 var(--cat); }
-    .service-go { opacity: 1; transform: none; }
-  }
-
-  @media (prefers-reduced-motion: reduce) {
-    .service { transition: none; }
-    .service:hover { transform: none; }
-    /* No build animation — show the icons fully drawn. */
-    .service-icon .s-draw { stroke-dashoffset: 0; animation: none; }
-    .service-icon .s-pop { opacity: 1; transform: none; animation: none; }
-  }
 </style>
-
-<!-- Without JS the reveal class is never added; show the icons drawn. -->
-<noscript>
-  <style>
-    .service-icon .s-draw { stroke-dashoffset: 0 !important; }
-    .service-icon .s-pop { opacity: 1 !important; transform: none !important; }
-  </style>
-</noscript>

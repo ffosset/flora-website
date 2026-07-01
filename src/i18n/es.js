@@ -29,9 +29,9 @@ export default {
     sectionSubtitle: 'Te ayudo a hacer realidad tus proyectos online y te acompaño en la elección del mensaje y la plataforma',
     viewProjects: 'Ver proyectos',
     items: [
-      { name: 'Landing pages', desc: 'para organizaciones y personas que necesitan presencia online' },
-      { name: 'Product design', desc: 'para equipos de producto que necesitan experiencia senior en diseño y UX' },
-      { name: 'Storytelling', desc: 'para empresas que necesitan crear contenido visual' },
+      { name: 'Landing pages', desc: 'La puerta de entrada a tu negocio: clara, rápida y construida para que se queden las personas adecuadas.' },
+      { name: 'Product design', desc: 'Definir cómo debe funcionar un producto antes que su aspecto, para que nada estorbe al usuario.' },
+      { name: 'Storytelling', desc: 'Convertir datos e investigación en algo que la gente entienda y recuerde.' },
     ],
   },
   whatIDo: {

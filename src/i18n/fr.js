@@ -30,9 +30,9 @@ export default {
     sectionSubtitle: 'Je vous aide à concrétiser vos projets en ligne et vous accompagne dans le choix du message et de la plateforme',
     viewProjects: 'Voir les projets',
     items: [
-      { name: 'Sites web', desc: 'pour les organisations et les personnes qui ont besoin d’une présence en ligne' },
-      { name: 'Plateformes', desc: 'pour les équipes produit qui ont besoin d’une expertise senior en design et en UX' },
-      { name: 'Communication', desc: 'pour les entreprises qui ont besoin de créer du contenu visuel' },
+      { name: 'Sites web', desc: 'La porte d’entrée de votre activité : claire, rapide, et pensée pour retenir les bonnes personnes.' },
+      { name: 'Plateformes', desc: 'Définir comment un produit doit fonctionner avant son apparence, pour que rien ne gêne l’utilisateur.' },
+      { name: 'Communication', desc: 'Transformer données et recherches en contenu que les gens comprennent et retiennent.' },
     ],
   },
   whatIDo: {

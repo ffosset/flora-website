@@ -187,12 +187,12 @@ const ordered = ORDER
   }
   .work-more:focus-visible { outline: 2px solid var(--color-primary); outline-offset: 2px; }
 
-  /* Desktop: two equal columns. minmax(0, 1fr) forces them equal regardless of
-     the image inside. Hovering one card fades the others back so the eye goes
+  /* Desktop: three equal columns. minmax(0, 1fr) forces them equal regardless
+     of the image inside. Hovering one card fades the others back so the eye goes
      to the hovered card; its detail overlay reveals separately (ProjectCard). */
   @media (min-width: 721px) {
     .work-grid {
-      grid-template-columns: repeat(2, minmax(0, 1fr));
+      grid-template-columns: repeat(3, minmax(0, 1fr));
       align-items: stretch;
       max-width: none;
     }
