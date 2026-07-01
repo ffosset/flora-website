@@ -28,6 +28,37 @@ const roles = t.hero.roles?.length ? t.hero.roles : [t.hero.roleWord];
 </section>
 
 <script>
+  // Parallax on the portrait's hard shadow. As the pointer moves across the
+  // photo, the orange block behind it drifts the OPPOSITE way — that relative
+  // motion between photo and shadow reads as depth. Replaces the old grow-on-
+  // hover. Nudges --px/--py (added on top of the resting --shadow-x/y offset).
+  const photo = document.querySelector('.hero-photo');
+  const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const coarse = matchMedia('(hover: none) and (pointer: coarse)').matches;
+  if (photo && !reduced && !coarse) {
+    const RANGE = 10; // max extra px the shadow travels from center
+    let rect = null;
+    photo.addEventListener('pointerenter', () => {
+      rect = photo.getBoundingClientRect();
+      photo.classList.add('is-parallax'); // drop the ease so it tracks live
+    });
+    photo.addEventListener('pointermove', (e) => {
+      if (!rect) rect = photo.getBoundingClientRect();
+      // -1..1 from center; shadow moves opposite the pointer.
+      const nx = (e.clientX - rect.left) / rect.width - 0.5;
+      const ny = (e.clientY - rect.top) / rect.height - 0.5;
+      photo.style.setProperty('--px', (-nx * RANGE).toFixed(1) + 'px');
+      photo.style.setProperty('--py', (-ny * RANGE).toFixed(1) + 'px');
+    });
+    photo.addEventListener('pointerleave', () => {
+      photo.classList.remove('is-parallax'); // ease back to rest
+      photo.style.setProperty('--px', '0px');
+      photo.style.setProperty('--py', '0px');
+    });
+  }
+</script>
+
+<script>
   // Lock the hero to the viewport height measured ON LOAD (mobile address bar
   // shown) and DON'T change it when the bar collapses on scroll — that height-
   // only resize is exactly what made the hero grow / the title drift on the
@@ -278,37 +309,47 @@ const roles = t.hero.roles?.length ? t.hero.roles : [t.hero.roleWord];
     .hero-aside { right: clamp(4rem, 13vw, 15rem); }
   }
   .hero-photo {
-    --d: 203px;   /* 30% larger than before */
-    --ring: 26px;
+    --d: 203px;      /* portrait size (square) */
+    --radius: 6px;   /* rectangle with barely-there corners */
+    --shadow-x: -18px; /* hard-shadow offset — negative = up/left */
+    --shadow-y: -18px;
     display: block;
     position: relative;
-    box-sizing: border-box; /* total stays --d; the border eats into it */
     width: var(--d);
     height: var(--d);
-    border-radius: 50%;
-    /* Soft primary ring — rgba(174,73,5,0.1) is --color-primary at 10%. */
-    border: var(--ring) solid rgba(174, 73, 5, 0.1);
-    overflow: hidden;
     cursor: pointer;
-    /* Hover: the ring thins so the picture grows to fill it — total unchanged. */
-    transition: border-width 0.45s var(--ease);
   }
-  .hero-photo:hover,
-  .hero-photo:focus-visible { border-width: 6px; }
-  @media (prefers-reduced-motion: reduce) {
-    .hero-photo { transition: none; }
-    .hero-photo:hover,
-    .hero-photo:focus-visible { border-width: var(--ring); }
+  /* Hard shadow: a solid primary-orange block offset behind the photo (no blur).
+     It's its own element so the pointer parallax can shift it INDEPENDENTLY of
+     the photo — that relative motion is what reads as depth. */
+  .hero-photo::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: var(--radius);
+    background: var(--color-primary);
+    z-index: -1;
+    /* Parallax offset lives on the translate channel (GPU-composited). The base
+       resting offset is --shadow-x/y; JS nudges --px/--py on top while hovering. */
+    translate: calc(var(--shadow-x) + var(--px, 0px)) calc(var(--shadow-y) + var(--py, 0px));
+    transition: translate 0.3s var(--ease);
   }
   .hero-photo img {
     width: 100%;
     height: 100%;
-    border-radius: 50%;
+    border-radius: var(--radius);
     object-fit: cover;
     object-position: center;
     display: block;
+    position: relative;
     /* luminosity lets the warm background tint the portrait (matches Figma). */
     mix-blend-mode: luminosity;
+  }
+  /* While the pointer moves the shadow, drop the transition so it tracks live;
+     restore it (see :not(.is-parallax)) so it eases back on leave. JS toggles it. */
+  .hero-photo.is-parallax::before { transition: none; }
+  @media (prefers-reduced-motion: reduce) {
+    .hero-photo::before { transition: none; }
   }
   .hero-subtitle {
     font-weight: 300; /* Inter Light */
@@ -320,7 +361,7 @@ const roles = t.hero.roles?.length ? t.hero.roles : [t.hero.roleWord];
   @media (max-width: 600px) {
     /* Keep the portrait clear of the title on small screens. */
     .hero-aside { width: 11rem; top: clamp(6rem, 18vh, 9rem); }
-    .hero-photo { --d: 156px; --ring: 20px; }
+    .hero-photo { --d: 156px; --shadow-x: -13px; --shadow-y: -13px; }
   }
 
   /* --- Rolling-slot word stack -------------------------------------------
@@ -388,7 +429,7 @@ const roles = t.hero.roles?.length ? t.hero.roles : [t.hero.roleWord];
     margin: 0;
     text-align: center;
     font-family: var(--font-display);
-    font-weight: 700;
+    font-weight: 500; /* Inter Medium */
     font-size: clamp(1rem, 0.85rem + 0.7vw, 1.25rem);
     line-height: 1.25;
     color: var(--color-primary);
