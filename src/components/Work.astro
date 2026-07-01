@@ -152,8 +152,10 @@ const ordered = ORDER
     margin-inline: auto;
   }
   /* Default view shows one row per breakpoint; "Load more" (.is-expanded)
-     reveals the rest. Base = 2 cards (mobile + tablet); desktop lifts to 3. */
-  .work-grid:not(.is-expanded) > .card:nth-child(n + 3) { display: none; }
+     reveals the rest. Base = 2 cards (mobile + tablet); desktop lifts to 3.
+     .card is rendered by the ProjectCard child, so it needs :global() to escape
+     this component's style scope. */
+  .work-grid:not(.is-expanded) > :global(.card:nth-child(n + 3)) { display: none; }
 
   /* "Load more" — reveals the remaining cards. */
   .work-more {
@@ -187,14 +189,14 @@ const ordered = ORDER
       align-items: stretch;
       max-width: none;
     }
-    .work-grid > .card { min-width: 0; transition: opacity 0.45s var(--ease); }
-    .work-grid:hover > .card { opacity: 0.35; }
-    .work-grid > .card:hover { opacity: 1; }
+    .work-grid > :global(.card) { min-width: 0; transition: opacity 0.45s var(--ease); }
+    .work-grid:hover > :global(.card) { opacity: 0.35; }
+    .work-grid > :global(.card:hover) { opacity: 1; }
   }
 
   /* Desktop: three equal columns, showing 3 cards by default (one row). */
   @media (min-width: 1024px) {
     .work-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
-    .work-grid:not(.is-expanded) > .card:nth-child(3) { display: flex; }
+    .work-grid:not(.is-expanded) > :global(.card:nth-child(3)) { display: flex; }
   }
 </style>
