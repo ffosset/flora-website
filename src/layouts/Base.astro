@@ -126,7 +126,7 @@ const personLd = {
               <li><a href="#services" data-nav-link>{t.nav.services}</a></li>
               <li><a href="#work" data-nav-link>{t.nav.work}</a></li>
               <li><a href="#about" data-nav-link>{t.nav.about}</a></li>
-              <li><a href="#contact" class="nav-cta" data-nav-link>{t.nav.contact}</a></li>
+              <li><a href="#contact" data-nav-link>{t.nav.contact}</a></li>
             </ul>
             <LanguageSwitcher currentLocale={locale} />
           </div>
@@ -413,9 +413,6 @@ const personLd = {
       .nav-links a.is-active::after {
         transform: scaleX(1);
       }
-      /* "let's chat" — the heavier CTA (underline now comes from the wipe). */
-      .nav-cta { font-weight: 600; }
-
       @media (prefers-reduced-motion: reduce) {
         .nav-links a::after { transition: none; }
       }
