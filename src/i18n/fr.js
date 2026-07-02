@@ -126,8 +126,7 @@ export default {
         result: '500 utilisateurs par jour, six ans après son lancement.',
         keywords: ['Recherche', 'Accessibilité'],
         awards: [
-          { label: 'Finaliste des Information is Beautiful Awards', url: 'https://www.informationisbeautifulawards.com/showcase/2779-what-s-in-season' },
-          { label: 'Lauréat du concours de l’EJC, mars 2018' },
+          { label: 'Finaliste des Information is Beautiful Awards en 2018', url: 'https://www.informationisbeautifulawards.com/showcase/2779-what-s-in-season' },
         ],
       },
       {
@@ -223,9 +222,9 @@ export default {
         title: 'Pouvez-vous payer votre loyer ?',
         year: '2017',
         did: 'Réalisé lors d’un atelier de journalisme de données au Medialab-Prado, à Madrid — une carte interactive croisant les loyers de la ville avec les salaires locaux.',
-        result: 'Premier prix aux prix de journalisme de données de la Ville de Madrid, et publié dans El País.',
+        result: '+10K visites le mois de son lancement. Repris ensuite par le journal espagnol El País.',
         keywords: ['Enquête de données', 'Carte interactive'],
-        awards: [{ label: 'Premier prix · journalisme de données, Ville de Madrid' }],
+        awards: [{ label: 'Premier prix du concours de journalisme de données de Madrid en 2017' }],
       },
     ],
   },
@@ -250,7 +249,8 @@ export default {
         body: 'Curieuse et enthousiaste de nature, je m’investis dans des projets qui construisent un monde meilleur : plus vert, plus juste, plus inclusif.',
       },
     ],
-    pathTitle: 'parcours professionnel',
+    pathTitle: 'parcours',
+    pathHeadline: 'Plusieurs cordes à mon arc',
     path: [
       {
         label: 'journalisme de données',

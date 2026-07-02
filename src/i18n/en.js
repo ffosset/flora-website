@@ -133,8 +133,7 @@ export default {
         result: '500 daily users, six years after launch.',
         keywords: ['Research', 'Accessibility'],
         awards: [
-          { label: 'Shortlisted in the Information is Beautiful Awards', url: 'https://www.informationisbeautifulawards.com/showcase/2779-what-s-in-season' },
-          { label: "Winner of EJC's Contest, March 2018" },
+          { label: 'Shortlisted in the Information is Beautiful Awards in 2018', url: 'https://www.informationisbeautifulawards.com/showcase/2779-what-s-in-season' },
         ],
       },
       {
@@ -231,9 +230,9 @@ export default {
         title: 'Can you afford your rent?',
         year: '2017',
         did: 'Built at a Medialab-Prado data-journalism workshop in Madrid — an interactive map cross-referencing rents across the city against local salaries.',
-        result: 'Won first prize at the City of Madrid data journalism awards, and published in El País.',
+        result: 'Visited +10K times the month it was launched. Later published by the Spanish newspaper El País.',
         keywords: ['Data investigation', 'Interactive map'],
-        awards: [{ label: 'First prize · City of Madrid data journalism awards' }],
+        awards: [{ label: 'First prize of the data journalism contest of Madrid in 2017' }],
       },
     ],
   },
@@ -258,7 +257,8 @@ export default {
         body: 'Curious and enthusiastic by nature, I like to take on projects working toward a better world: greener, fairer, more inclusive.',
       },
     ],
-    pathTitle: 'work path',
+    pathTitle: 'journey',
+    pathHeadline: 'More than one string to my bow',
     // Career timeline, animated in order. `current` marks the latest step.
     path: [
       {

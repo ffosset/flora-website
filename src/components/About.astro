@@ -102,7 +102,8 @@ const WAVE = {
     </div>
 
     <div class="about-path" data-path>
-      <h2 class="about-subhead"><span class="slash">·</span>{t.about.pathTitle}</h2>
+      <p class="about-subhead"><span class="slash">·</span>{t.about.pathTitle}</p>
+      <h2 class="about-subhead-title">{t.about.pathHeadline}</h2>
       <div class="path-track">
         <svg class="path-wave" width={WAVE.w} height={WAVE.h} viewBox={`0 0 ${WAVE.w} ${WAVE.h}`} aria-hidden="true">
           <path d={WAVE.d} />
@@ -295,6 +296,18 @@ const WAVE = {
     color: var(--color-primary);
   }
   .about-subhead .slash { color: var(--color-primary); margin-right: 0.4em; }
+
+  /* Headline under the "· journey" eyebrow — same large bold statement as the
+     section header. */
+  .about-subhead-title {
+    text-align: center;
+    font-size: var(--fs-h2);
+    font-weight: 700;
+    line-height: 1.15;
+    letter-spacing: -0.02em;
+    color: var(--color-text);
+    margin-top: var(--space-2);
+  }
 
   .about-grid {
     display: grid;

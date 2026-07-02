@@ -125,8 +125,7 @@ export default {
         result: '500 usuarios diarios, seis años después de su lanzamiento.',
         keywords: ['Investigación', 'Accesibilidad'],
         awards: [
-          { label: 'Finalista en los Information is Beautiful Awards', url: 'https://www.informationisbeautifulawards.com/showcase/2779-what-s-in-season' },
-          { label: 'Ganador del concurso de EJC, marzo 2018' },
+          { label: 'Finalista en los Information is Beautiful Awards en 2018', url: 'https://www.informationisbeautifulawards.com/showcase/2779-what-s-in-season' },
         ],
       },
       {
@@ -222,9 +221,9 @@ export default {
         title: '¿Puedes pagar tu alquiler?',
         year: '2017',
         did: 'Creado en un taller de periodismo de datos en Medialab-Prado, Madrid — un mapa interactivo que cruza los alquileres de la ciudad con los salarios locales.',
-        result: 'Primer premio en los Premios de Periodismo de Datos del Ayuntamiento de Madrid, y publicado en El País.',
+        result: '+10K visitas el mes de su lanzamiento. Más tarde, publicada en El País.',
         keywords: ['Investigación de datos', 'Mapa interactivo'],
-        awards: [{ label: 'Primer premio · periodismo de datos, Ayuntamiento de Madrid' }],
+        awards: [{ label: 'Primer premio del concurso de periodismo de datos de Madrid en 2017' }],
       },
     ],
   },
@@ -249,7 +248,8 @@ export default {
         body: 'Curiosa y entusiasta por naturaleza, me mueven los proyectos que construyen un mundo mejor: más verde, más justo, más inclusivo.',
       },
     ],
-    pathTitle: 'trayectoria profesional',
+    pathTitle: 'trayectoria',
+    pathHeadline: 'Más de una cuerda en mi arco',
     path: [
       {
         label: 'periodismo de datos',
