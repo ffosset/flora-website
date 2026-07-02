@@ -230,7 +230,7 @@ export default {
   },
   about: {
     sectionTitle: 'acerca',
-    headline: 'Perfil sénior en el cruce entre diseño, tecnología y estrategia.',
+    headline: 'Perfil sénior en el cruce entre diseño, <br class="ttl-br" />tecnología y estrategia.',
     // Photo annotation callouts (desktop/tablet) + mobile summary chip.
     tags: { me: 'yo', cat1: 'gato 1', cat2: 'gato 2', cat3: 'gato 3', cast: 'encuentra los 3 gatos en la foto' },
     photoCaption: 'Fotografiada en casa, en Bruselas — conmigo y tres gatos.',

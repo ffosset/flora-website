@@ -239,7 +239,7 @@ export default {
   },
   about: {
     sectionTitle: 'about',
-    headline: 'Product leader and expert in bridging design, technology, and business strategy.',
+    headline: 'Product leader and expert in bridging design, <br class="ttl-br" />technology, and business strategy.',
     // Photo annotation callouts (desktop/tablet) + mobile summary chip.
     tags: { me: 'me', cat1: 'cat 1', cat2: 'cat 2', cat3: 'cat 3', cast: 'find the 3 cats in the picture' },
     photoCaption: 'Photographed at home in Brussels — with me and three cats.',

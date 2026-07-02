@@ -231,7 +231,7 @@ export default {
   },
   about: {
     sectionTitle: 'à propos',
-    headline: 'Profil senior à la croisée du design, de la technologie et de la stratégie.',
+    headline: 'Profil senior à la croisée du design, <br class="ttl-br" />de la technologie et de la stratégie.',
     // Photo annotation callouts (desktop/tablet) + mobile summary chip.
     tags: { me: 'moi', cat1: 'chat 1', cat2: 'chat 2', cat3: 'chat 3', cast: 'trouvez les 3 chats sur la photo' },
     photoCaption: 'Photographiée chez moi à Bruxelles — avec moi et mes trois chats.',

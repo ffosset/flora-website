@@ -41,7 +41,7 @@ const WAVE = {
   <div class="container">
     <header class="about-head">
       <p class="about-eyebrow"><span class="slash">·</span>{t.about.sectionTitle}</p>
-      <h2 class="about-title">{t.about.headline}</h2>
+      <h2 class="about-title" set:html={t.about.headline}></h2>
     </header>
 
     <div class="about-grid">
@@ -277,6 +277,11 @@ const WAVE = {
     line-height: 1.15;
     letter-spacing: -0.02em;
     color: var(--color-text);
+  }
+  /* Forced line break before the "technology" clause — desktop/tablet only;
+     on phones the title wraps naturally so we suppress the break. */
+  @media (max-width: 767.98px) {
+    .about-title .ttl-br { display: none; }
   }
 
   /* Timeline heading ("· my path") — centred small orange eyebrow, matching
