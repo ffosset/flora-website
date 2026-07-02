@@ -231,7 +231,7 @@ export default {
         title: 'Can you afford your rent?',
         year: '2017',
         did: 'Built at a Medialab-Prado data-journalism workshop in Madrid — an interactive map cross-referencing rents across the city against local salaries.',
-        result: 'Won first prize at the City of Madrid data journalism awards, and published in El País and Naciò Digital.',
+        result: 'Won first prize at the City of Madrid data journalism awards, and published in El País.',
         keywords: ['Data investigation', 'Interactive map'],
         awards: [{ label: 'First prize · City of Madrid data journalism awards' }],
       },

@@ -223,7 +223,7 @@ export default {
         title: 'Pouvez-vous payer votre loyer ?',
         year: '2017',
         did: 'Réalisé lors d’un atelier de journalisme de données au Medialab-Prado, à Madrid — une carte interactive croisant les loyers de la ville avec les salaires locaux.',
-        result: 'Premier prix aux prix de journalisme de données de la Ville de Madrid, et publié dans El País et Naciò Digital.',
+        result: 'Premier prix aux prix de journalisme de données de la Ville de Madrid, et publié dans El País.',
         keywords: ['Enquête de données', 'Carte interactive'],
         awards: [{ label: 'Premier prix · journalisme de données, Ville de Madrid' }],
       },

@@ -222,7 +222,7 @@ export default {
         title: '¿Puedes pagar tu alquiler?',
         year: '2017',
         did: 'Creado en un taller de periodismo de datos en Medialab-Prado, Madrid — un mapa interactivo que cruza los alquileres de la ciudad con los salarios locales.',
-        result: 'Primer premio en los Premios de Periodismo de Datos del Ayuntamiento de Madrid, y publicado en El País y Naciò Digital.',
+        result: 'Primer premio en los Premios de Periodismo de Datos del Ayuntamiento de Madrid, y publicado en El País.',
         keywords: ['Investigación de datos', 'Mapa interactivo'],
         awards: [{ label: 'Primer premio · periodismo de datos, Ayuntamiento de Madrid' }],
       },
