@@ -1,26 +1,18 @@
 ---
-// A single project card. Idle: image on top, then type + year pills, the
-// title, and the client name. Hover fills the whole card with the category
-// colour and reveals the result, keywords, a CTA and the client name.
+// A single project card. At rest the card shows the problem (title) AND the
+// result together — both always visible. Hover is purely additive: it fades in
+// a bottom strip with the role tags and the link. Nothing swaps or moves, so
+// the reveal can't disorient, and because the essentials never depend on hover
+// the card works the same on touch (the strip is simply always shown there).
 // `labels` carries the translated UI strings (with English fallbacks).
 const { c, d, base, labels = {}, service } = Astro.props;
-const readMore = labels.readMore ?? 'Read more';
-const readLess = labels.readLess ?? 'Read less';
 const newTab = labels.newTab ?? 'opens in new tab';
 const hasUrl = Boolean(c.url);
 const isExternal = hasUrl && c.url.startsWith('http');
 const href = hasUrl ? (isExternal ? c.url : base + c.url) : undefined;
 ---
 
-<article
-  class="card"
-  style={`--cat: var(--cat-${c.category})`}
-  data-cat={c.category}
-  role={!hasUrl ? 'button' : undefined}
-  tabindex={!hasUrl ? '0' : undefined}
-  aria-expanded={!hasUrl ? 'false' : undefined}
-  aria-controls={!hasUrl ? `hover-${c.slug}` : undefined}
->
+<article class="card" style={`--cat: var(--cat-${c.category})`} data-cat={c.category}>
   <div class="card-media">
     <img src={base + c.image} alt={c.subtitle} loading="lazy" />
   </div>
@@ -40,59 +32,48 @@ const href = hasUrl ? (isExternal ? c.url : base + c.url) : undefined;
         </span>
       )}
     </p>
-    <h3 class="card-title">{c.title}</h3>
-    {c.subtitle && <p class="card-client">{c.subtitle}</p>}
-    <button
-      type="button"
-      class="card-more"
-      data-more
-      data-more-label={readMore}
-      data-less-label={readLess}
-      aria-expanded="false"
-      aria-controls={`hover-${c.slug}`}
-    >
-      {readMore}
-    </button>
-  </div>
 
-  <div class="card-hover" id={`hover-${c.slug}`}>
-    {/* Keywords as tags on top, then the result metric below. Both optional —
-        hide the slot entirely when absent so the reveal lays out cleanly. */}
-    {c.keywords && c.keywords.length > 0 && (
-      <p class="hover-keywords">
-        {c.keywords.map((k) => <span class="hover-tag">{k}</span>)}
-      </p>
-    )}
-    {c.result && <p class="hover-result">{c.result}</p>}
-    {c.awards && c.awards.length > 0 && (
-      <p class="hover-awards">
-        {c.awards.map((a) => (
-          <span class="hover-award">
-            {a.url ? (
-              <a href={a.url} target="_blank" rel="noopener noreferrer">
-                {a.label}<span class="sr-only"> ({newTab})</span>
-              </a>
-            ) : (
-              a.label
-            )}{'. '}
-          </span>
-        ))}
-      </p>
-    )}
-    <div class="hover-foot">
+    {/* Problem + result: both always visible, at rest. */}
+    <h3 class="card-title">{c.title}</h3>
+    {c.result && <p class="card-result">{c.result}</p>}
+    {c.subtitle && <p class="card-client">{c.subtitle}</p>}
+
+    {/* Bottom strip — role tags, awards and the link. Space is always reserved
+        (only opacity/transform animate), so revealing it never shifts anything
+        above. On touch it's shown permanently (see the media query). */}
+    <div class="card-reveal">
+      {c.keywords && c.keywords.length > 0 && (
+        <p class="card-tags">
+          {c.keywords.map((k) => <span class="card-tag">{k}</span>)}
+        </p>
+      )}
+      {c.awards && c.awards.length > 0 && (
+        <p class="card-awards">
+          {c.awards.map((a) => (
+            <span class="card-award-item">
+              {a.url ? (
+                <a href={a.url} target="_blank" rel="noopener noreferrer">
+                  {a.label}<span class="sr-only"> ({newTab})</span>
+                </a>
+              ) : (
+                a.label
+              )}{'. '}
+            </span>
+          ))}
+        </p>
+      )}
       {hasUrl && (
         <a
-          class="hover-cta"
+          class="card-cta"
           href={href}
           target={isExternal ? '_blank' : undefined}
           rel={isExternal ? 'noopener noreferrer' : undefined}
         >
           {d.cta}
-          {isExternal && <span class="hover-cta-arrow" aria-hidden="true">↗</span>}
+          {isExternal && <span class="card-cta-arrow" aria-hidden="true">↗</span>}
           {isExternal && <span class="sr-only"> ({newTab})</span>}
         </a>
       )}
-      {c.subtitle && <p class="hover-client">{c.subtitle}</p>}
     </div>
   </div>
 </article>
@@ -103,10 +84,10 @@ const href = hasUrl ? (isExternal ? c.url : base + c.url) : undefined;
     display: flex;
     flex-direction: column;
     min-width: 0;
-    height: 27rem; /* every card the same height */
+    height: 31rem; /* every card the same height */
     border-radius: 4px;
     overflow: hidden;
-    /* Soft tint of the category colour. */
+    /* Soft tint of the category colour — kept the same at rest and on hover. */
     background: linear-gradient(
       160deg,
       color-mix(in srgb, var(--cat) 13%, #ffffff),
@@ -115,18 +96,23 @@ const href = hasUrl ? (isExternal ? c.url : base + c.url) : undefined;
     color: var(--color-text);
     text-decoration: none;
     box-shadow: 0 4px 10px rgba(196, 196, 196, 0.12);
+    transition: box-shadow 0.35s var(--ease), transform 0.35s var(--ease);
   }
-  .card[role='button'] { cursor: pointer; }
-  .card[role='button']:focus-visible,
-  .hover-cta:focus-visible {
+  /* Hover / keyboard focus lifts the card a touch — the only whole-card change. */
+  .card:hover,
+  .card:focus-within {
+    transform: translateY(-3px);
+    box-shadow: 0 12px 26px rgba(120, 120, 120, 0.18);
+  }
+  .card-cta:focus-visible {
     outline: 2px solid var(--color-primary);
     outline-offset: 2px;
   }
 
-  /* --- Media (top): fills the space above the body; hover detail overlays it. */
+  /* --- Media (top): fills the space above the body. */
   .card-media {
     position: relative;
-    flex: 0 0 40%; /* ~40% image / 60% content; card has a fixed height */
+    flex: 0 0 32%;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -140,47 +126,50 @@ const href = hasUrl ? (isExternal ? c.url : base + c.url) : undefined;
     object-fit: cover;
   }
 
-  /* --- Body: title + company name + sector tag, always visible. */
+  /* --- Body: everything below the image lives in one continuous flow. */
   .card-body {
-    flex: 1 1 auto; /* fills the remaining height — same text area on every card */
+    flex: 1 1 auto;
     overflow: hidden;
     display: flex;
     flex-direction: column;
-    gap: 0.85rem;
+    gap: 0.6rem;
     padding: 2rem;
-  }
-  .card-title {
-    font-family: var(--font-display);
-    font-weight: 800;
-    font-size: clamp(1.3rem, 1.05rem + 0.9vw, 1.85rem);
-    line-height: 1.12;
-    letter-spacing: -0.01em;
-    color: var(--color-text);
   }
   /* Type + year pills, above the title. */
   .card-pills { display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap; }
+  .card-title {
+    font-family: var(--font-display);
+    font-weight: 800;
+    font-size: clamp(1.2rem, 1rem + 0.7vw, 1.5rem);
+    line-height: 1.12;
+    letter-spacing: -0.01em;
+    color: var(--color-text);
+    /* Bound the longest titles so the bottom strip can never be clipped. */
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+  /* Result: the payoff, sitting right under the problem — medium display weight
+     so it reads as a distinct beat without competing with the title. */
+  .card-result {
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: clamp(0.95rem, 0.88rem + 0.3vw, 1.1rem);
+    line-height: 1.3;
+    color: color-mix(in srgb, var(--color-text) 85%, transparent);
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
   .card-client {
     font-family: var(--font-body); /* Fira Code */
     font-weight: 400;
     text-transform: uppercase;
     letter-spacing: 0.06em;
-    font-size: clamp(0.8rem, 0.72rem + 0.3vw, 1rem);
+    font-size: clamp(0.8rem, 0.72rem + 0.3vw, 0.95rem);
     color: var(--color-text);
-  }
-  /* "Read more" — only on touch / narrow screens (see media query). */
-  .card-more {
-    display: none;
-    align-self: flex-start;
-    margin-top: 0.4rem;
-    font-family: var(--font-body);
-    font-size: 0.85rem;
-    font-weight: 500;
-    color: var(--color-text);
-    background: none;
-    border: 1px solid color-mix(in srgb, var(--color-text) 25%, transparent);
-    border-radius: 3px;
-    padding: 0.35rem 0.8rem;
-    cursor: pointer;
   }
 
   /* Pills: the category type (filled with its colour), then the year in muted
@@ -205,91 +194,67 @@ const href = hasUrl ? (isExternal ? c.url : base + c.url) : undefined;
   .card-award { display: inline-flex; align-items: center; color: var(--color-muted); }
   .card-award svg { width: 1.15rem; height: 1.15rem; }
 
-  /* --- Hover detail: fills the whole card in the category colour. Result big
-     at the top, keyword recap under it, then the CTA + client pinned bottom. */
-  .card-hover {
-    position: absolute;
-    inset: 0; /* covers the entire card on pointer devices */
-    z-index: 2;
+  /* --- Bottom strip: role tags, awards and the link. Pinned to the bottom of
+     the body; hidden at rest (opacity/transform only — its height is always
+     reserved), faded in on hover / focus. A hairline top rule reads as a strip
+     and appears with the rest of the content. */
+  .card-reveal {
+    margin-top: auto;
     display: flex;
     flex-direction: column;
-    gap: 1.1rem;
-    padding: 2rem;
-    overflow: auto;
-    background: var(--cat);
-    color: #210f03;
+    gap: 0.7rem;
+    padding-top: 0.9rem;
+    border-top: 1px solid color-mix(in srgb, var(--color-text) 12%, transparent);
     opacity: 0;
-    pointer-events: none;
-    transition: opacity 0.35s var(--ease);
+    transform: translateY(6px);
+    pointer-events: none; /* invisible at rest — don't let a stray click hit the link */
+    transition: opacity 0.35s var(--ease), transform 0.35s var(--ease);
   }
-  /* Teal and raspberry are too dark for dark text — flip the reveal to white. */
-  .card[data-cat='product'] .card-hover,
-  .card[data-cat='storytelling'] .card-hover { color: #ffffff; }
-  .card:hover .card-hover,
-  .card:focus-within .card-hover,
-  .card.is-open .card-hover { opacity: 1; pointer-events: auto; }
+  .card:hover .card-reveal,
+  .card:focus-within .card-reveal {
+    opacity: 1;
+    transform: none;
+    pointer-events: auto;
+  }
 
-  .hover-result {
-    font-family: var(--font-display);
-    font-weight: 700;
-    font-size: clamp(1.35rem, 1.05rem + 1.1vw, 1.9rem);
-    line-height: 1.18;
-    letter-spacing: -0.01em;
-  }
-  /* Keywords as tags, styled like the idle card's date pill (.card-year). */
-  .hover-keywords { display: flex; flex-wrap: wrap; gap: 0.5rem; }
-  .hover-tag {
+  /* Role tags, styled like the idle card's year pill. */
+  .card-tags { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+  .card-tag {
     font-family: var(--font-body);
-    font-size: 0.9rem;
+    font-size: 0.85rem;
     line-height: 1.3;
     padding: 0.3rem 0.7rem;
     white-space: nowrap;
     background: color-mix(in srgb, var(--color-text) 10%, transparent);
     color: var(--color-muted);
   }
-  /* On teal / raspberry the muted grey is hard to read — flip tags to white. */
-  .card[data-cat='product'] .hover-tag,
-  .card[data-cat='storytelling'] .hover-tag { color: #ffffff; }
 
-  /* Awards line, just under the result. Inherits the reveal's text colour. */
-  .hover-awards {
+  /* Awards line, under the tags. */
+  .card-awards {
     font-family: var(--font-body);
-    font-size: clamp(0.78rem, 0.72rem + 0.25vw, 0.95rem);
+    font-size: clamp(0.78rem, 0.72rem + 0.25vw, 0.9rem);
     line-height: 1.5;
-    color: color-mix(in srgb, currentColor 78%, transparent);
+    color: var(--color-muted);
   }
-  .hover-awards a {
+  .card-awards a {
     color: inherit;
     text-decoration: underline;
     text-underline-offset: 2px;
   }
 
-  /* CTA + client name, pinned to the bottom of the reveal. */
-  .hover-foot {
-    margin-top: auto;
-    display: flex;
-    flex-direction: column;
-    gap: 0.6rem;
-  }
-  .hover-cta {
+  /* The link. */
+  .card-cta {
     align-self: flex-start;
     display: inline-flex;
     align-items: baseline;
     gap: 0.3rem;
     font-family: var(--font-display);
     font-weight: 700;
-    color: inherit;
+    color: var(--color-text);
     text-decoration: underline;
     text-underline-offset: 3px;
   }
-  .hover-cta-arrow { text-decoration: none; }
-  .hover-client {
-    font-family: var(--font-body);
-    text-transform: uppercase;
-    letter-spacing: 0.06em;
-    font-size: clamp(0.78rem, 0.72rem + 0.25vw, 0.95rem);
-    color: color-mix(in srgb, currentColor 78%, transparent);
-  }
+  .card-cta-arrow { text-decoration: none; }
   .sr-only {
     position: absolute;
     width: 1px;
@@ -302,35 +267,22 @@ const href = hasUrl ? (isExternal ? c.url : base + c.url) : undefined;
     border: 0;
   }
 
-  /* Phones: the detail is no longer an overlay — a "read more" button expands
-     it inline below the title / company name. */
+  /* Phones: no hover, so the strip is shown permanently and the card grows to
+     fit. Nothing here depends on a pointer. */
   @media (max-width: 720px) {
     .card { height: auto; }
     /* Card height is auto here, so a % basis has nothing to resolve against. */
     .card-media { flex-basis: 12rem; }
-    .card-more { display: inline-flex; }
-
-    .card-hover {
-      position: static;
-      height: auto;
-      max-height: 0;
-      padding-top: 0;
-      padding-bottom: 0;
-      overflow: hidden;
+    .card-reveal {
       opacity: 1;
+      transform: none;
       pointer-events: auto;
-      flex-direction: column;
-      gap: var(--space-3);
-      transition: max-height 0.4s var(--ease), padding 0.4s var(--ease);
     }
-    .card.is-open .card-hover {
-      max-height: 45rem;
-      padding-top: var(--space-4);
-      padding-bottom: var(--space-4);
-    }
-    .hover-foot { margin-top: var(--space-3); }
   }
   @media (prefers-reduced-motion: reduce) {
-    .card-hover { transition: none; }
+    .card,
+    .card-reveal { transition: opacity 0.35s var(--ease); }
+    .card:hover,
+    .card:focus-within { transform: none; }
   }
 </style>

@@ -20,7 +20,7 @@ const DESIGN = {
 };
 
 // Labels ProjectCard needs (it doesn't receive the whole dictionary).
-const cardLabels = { readMore: t.work.readMore, readLess: t.work.readLess, newTab: t.a11y.newTab };
+const cardLabels = { newTab: t.a11y.newTab };
 
 // Display order for the projects grid. The first row shows by default; the
 // rest reveal via the "Load more" button. Edit this list to change which
@@ -78,23 +78,6 @@ const ordered = ORDER
 
   <noscript set:html={'<style>.work-grid > .card{display:flex !important}.work-more{display:none !important}</style>'} />
 </section>
-
-<script>
-  // Desktop: the detail reveals on hover/focus (CSS).
-  // Mobile: a "read more" button expands it inline below the card body.
-  document.querySelectorAll('.work .card').forEach((card) => {
-    const moreBtn = card.querySelector('[data-more]');
-    if (!moreBtn) return;
-    const moreLabel = moreBtn.getAttribute('data-more-label') || 'Read more';
-    const lessLabel = moreBtn.getAttribute('data-less-label') || 'Read less';
-    moreBtn.addEventListener('click', () => {
-      const open = !card.classList.contains('is-open');
-      card.classList.toggle('is-open', open);
-      moreBtn.setAttribute('aria-expanded', String(open));
-      moreBtn.textContent = open ? lessLabel : moreLabel;
-    });
-  });
-</script>
 
 <script>
   // "Load more": reveal one more row per click — 3 cards on desktop, 2 on
