@@ -31,7 +31,7 @@ export default {
     viewProjects: 'Voir les projets',
     items: [
       { name: 'Sites web', desc: 'D’un scroll unique à un CMS complet, on décide ensemble ce qui vous convient, puis je m’occupe du design et de la réalisation.' },
-      { name: 'Design de produits', desc: 'Ma force, ce sont les parcours complexes pour les utilisateurs B2B et la collaboration avec l’équipe technique.' },
+      { name: 'Plateformes numériques', desc: 'Ma force, ce sont les parcours complexes pour les utilisateurs B2B et la collaboration avec l’équipe technique.' },
       { name: 'Communication', desc: 'Raconter des histoires, c’est mon dada. Dites-moi votre besoin et on lui donne forme ensemble (réseaux sociaux, un blog, courtes vidéos…).' },
     ],
   },

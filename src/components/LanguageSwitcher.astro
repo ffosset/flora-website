@@ -49,18 +49,24 @@ const activeLabel = languages[currentLocale] ?? languages[defaultLang];
 
   /* Toggle button (the <summary>) */
   .lang-toggle {
-    display: flex;
+    display: inline-flex;
     align-items: center;
     gap: 6px;
+    /* A visible rounded border makes the selector read as a control (users
+       were missing that it's clickable). `currentColor` lets the same rule
+       serve both the orange header and the on-purple footer. */
+    padding: 4px 12px;
+    border: 1px solid currentColor;
+    border-radius: var(--radius-pill);
     cursor: pointer;
     color: var(--color-primary);
     font-weight: 300;
     list-style: none;
     user-select: none;
-    transition: color 0.2s var(--ease);
+    transition: color 0.2s var(--ease), background 0.2s var(--ease);
   }
   .lang-toggle::-webkit-details-marker { display: none; }
-  .lang-toggle:hover { color: var(--color-primary); }
+  .lang-toggle:hover { background: color-mix(in srgb, currentColor 10%, transparent); }
   .lang-current { text-transform: lowercase; }
 
   .caret {

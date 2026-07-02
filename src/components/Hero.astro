@@ -399,9 +399,9 @@ const roles = t.hero.roles?.length ? t.hero.roles : [t.hero.roleWord];
     .hero-aside {
       top: auto;                               /* unpin from the top … */
       bottom: clamp(2rem, 7vh, 4rem);          /* … and drop toward the bottom */
-      left: 50%;                               /* horizontally centered */
-      right: auto;
-      transform: translateX(-50%);
+      right: var(--gutter);                    /* … and over to the right edge */
+      left: auto;
+      transform: none;
       z-index: 2;                              /* picture sits ON TOP of any overlapping words */
     }
     /* Reserve a fixed height for the tagline so the portrait sits at the SAME

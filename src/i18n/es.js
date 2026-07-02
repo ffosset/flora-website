@@ -30,7 +30,7 @@ export default {
     viewProjects: 'Ver proyectos',
     items: [
       { name: 'Páginas web', desc: 'Desde un scroll único hasta un CMS completo, decidimos juntos qué te conviene. Luego me encargo del diseño y del desarrollo.' },
-      { name: 'Diseño de productos', desc: 'Mi especialidad son los flujos complejos para usuarios B2B, así cómo la colaboración con equipos técnicos.' },
+      { name: 'Plataformas digitales', desc: 'Mi especialidad son los flujos complejos para usuarios B2B, así cómo la colaboración con equipos técnicos.' },
       { name: 'Comunicación', desc: 'Contar historias es lo mío. Me dices qué necesitas y le damos forma juntos (redes sociales, un blog, vídeos cortos…).' },
     ],
   },
