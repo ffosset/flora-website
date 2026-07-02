@@ -198,12 +198,12 @@ const href = hasUrl ? (isExternal ? c.url : base + c.url) : undefined;
      so it reads as a distinct beat without competing with the title. */
   .card-result {
     font-family: var(--font-display);
-    font-weight: 600;
+    font-weight: 400;
     font-size: clamp(0.95rem, 0.88rem + 0.3vw, 1.1rem);
     line-height: 1.3;
     color: color-mix(in srgb, var(--color-text) 85%, transparent);
     display: -webkit-box;
-    -webkit-line-clamp: 2;
+    -webkit-line-clamp: 3;
     -webkit-box-orient: vertical;
     overflow: hidden;
   }
@@ -256,7 +256,6 @@ const href = hasUrl ? (isExternal ? c.url : base + c.url) : undefined;
     padding: 0.3rem 0.7rem;
     white-space: nowrap;
     background: color-mix(in srgb, #ffffff 85%, transparent);
-    border: 1px solid color-mix(in srgb, var(--color-text) 14%, transparent);
     color: var(--color-text);
   }
 
@@ -299,20 +298,28 @@ const href = hasUrl ? (isExternal ? c.url : base + c.url) : undefined;
     border: 0;
   }
 
-  /* Phones: no hover. The reveal leaves its absolute overlay and drops into the
-     flow as a colour strip below the body, so both the image and the tags/link
-     stay visible without a pointer. */
+  /* Phones: no hover. The reveal leaves its absolute overlay and joins the body
+     as one continuous block — no coloured fill (the card tint shows through),
+     dark text, and padding aligned with the body — so the tags and link read as
+     part of the card's main content. */
   @media (max-width: 720px) {
     .card { height: auto; }
     /* Card height is auto here, so a % basis has nothing to resolve against. */
     .card-media { flex-basis: 12rem; }
+    .card-body { padding-bottom: 0; }
     .card-overlay {
       position: static;
       height: auto;
       opacity: 1;
       pointer-events: auto;
-      padding: var(--space-4, 1.5rem) 2rem;
+      background: transparent;
+      padding: 0.6rem 2rem 2rem;
     }
+    /* Keep the text dark on the light tint for every category (overrides the
+       white-flip used over the coloured fill on desktop). */
+    .card-overlay,
+    .card[data-cat='product'] .card-overlay,
+    .card[data-cat='storytelling'] .card-overlay { color: var(--color-text); }
   }
   @media (prefers-reduced-motion: reduce) {
     .card { transition: opacity 0.35s var(--ease); }
