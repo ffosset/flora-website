@@ -448,7 +448,9 @@ const personLd = {
         .nav-collapse {
           display: none;
           position: absolute;
-          top: calc(100% + 8px);
+          /* Joins directly onto the bottom of the (now white) bar — no gap,
+             so the wordmark + close button read as part of the same sheet. */
+          top: 100%;
           /* Break out of the pill + container gutter to span the full screen
              width; the height is whatever the links + language picker need. */
           left: 50%;
@@ -457,8 +459,8 @@ const personLd = {
           transform: translateX(-50%);
           flex-direction: column;
           align-items: flex-start;
-          gap: var(--space-3);
-          padding: var(--space-3) var(--gutter);
+          gap: var(--space-4);
+          padding: var(--space-4) var(--gutter);
           background: rgba(255, 255, 255, 0.98);
           -webkit-backdrop-filter: blur(4.5px);
           backdrop-filter: blur(4.5px);
@@ -466,6 +468,19 @@ const personLd = {
           border-radius: 0;
         }
         .nav-collapse.is-open { display: flex; }
+
+        /* When the menu is open, pull the wordmark + close button onto the same
+           white sheet: the bar sheds its pill, breaks out to the full screen
+           width, and butts up against the dropdown below it. */
+        .nav-bar:has(.nav-collapse.is-open) {
+          margin-inline: calc(var(--gutter) * -1);
+          padding: 16px var(--gutter);
+          background: rgba(255, 255, 255, 0.98);
+          -webkit-backdrop-filter: blur(4.5px);
+          backdrop-filter: blur(4.5px);
+          border-radius: 0;
+          box-shadow: none;
+        }
 
         /* Dark-orange translucent layer over the page below the open menu.
            Sits above the page (main z-index 1) but below the header (20), so
@@ -475,7 +490,7 @@ const personLd = {
           flex: none;
           flex-direction: column;
           align-items: flex-start;
-          gap: var(--space-2);
+          gap: var(--space-3);
           justify-content: flex-start;
         }
       }
