@@ -306,14 +306,19 @@ const href = hasUrl ? (isExternal ? c.url : base + c.url) : undefined;
     .card { height: auto; }
     /* Card height is auto here, so a % basis has nothing to resolve against. */
     .card-media { flex-basis: 12rem; }
-    .card-body { padding-bottom: 0; }
+    /* Tighter inner padding on phones; the pills and the tags/link block share
+       the same inset so the category tag lines up with the body text. */
+    .card-body { padding: 1.25rem 1.25rem 0; }
+    .card-pills { top: 1.25rem; left: 1.25rem; right: 1.25rem; }
     .card-overlay {
       position: static;
       height: auto;
       opacity: 1;
       pointer-events: auto;
       background: transparent;
-      padding: 0.6rem 2rem 2rem;
+      margin: 0 1.25rem;
+      padding: 1.25rem 0;
+      border-top: 1px solid var(--color-line);
     }
     /* Keep the text dark on the light tint for every category (overrides the
        white-flip used over the coloured fill on desktop). */
