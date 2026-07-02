@@ -234,7 +234,7 @@ export default {
       'Working from my garden boosts my creativity',
     ],
     // Photo annotation callouts (desktop/tablet) + mobile summary chip.
-    tags: { me: 'me', cat1: 'cat 1', cat2: 'cat 2', cat3: 'cat 3', cast: 'cast: me + 3 cats' },
+    tags: { me: 'me', cat1: 'cat 1', cat2: 'cat 2', cat3: 'cat 3', cast: 'find the 3 cats in the picture' },
     photoCaption: 'Photographed at home in Brussels — with me and three cats.',
     howIWorkTitle: 'how I work',
     howIWorkBody:
