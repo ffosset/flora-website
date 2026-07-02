@@ -1,9 +1,10 @@
 ---
-// A single project card. At rest the card shows the problem (title) AND the
-// result together — both always visible. Hover is purely additive: it fades in
-// a bottom strip with the role tags and the link. Nothing swaps or moves, so
-// the reveal can't disorient, and because the essentials never depend on hover
-// the card works the same on touch (the strip is simply always shown there).
+// A single project card. At rest the image carries the category + year pills,
+// and the body below shows the problem (title) and the result — both always
+// visible. On hover the image fills with the category colour and reveals the
+// role tags and the link, overlaying only the image; the title/result never
+// move, so the reveal can't disorient. On touch (no hover) that same colour
+// strip is shown permanently under the image.
 // `labels` carries the translated UI strings (with English fallbacks).
 const { c, d, base, labels = {}, service } = Astro.props;
 const newTab = labels.newTab ?? 'opens in new tab';
@@ -15,9 +16,7 @@ const href = hasUrl ? (isExternal ? c.url : base + c.url) : undefined;
 <article class="card" style={`--cat: var(--cat-${c.category})`} data-cat={c.category}>
   <div class="card-media">
     <img src={base + c.image} alt={c.subtitle} loading="lazy" />
-  </div>
-
-  <div class="card-body">
+    {/* Category + year pills, over the image. */}
     <p class="card-pills">
       {service && <span class="card-type">{service}</span>}
       {c.year && <span class="card-year">{c.year}</span>}
@@ -32,49 +31,52 @@ const href = hasUrl ? (isExternal ? c.url : base + c.url) : undefined;
         </span>
       )}
     </p>
+  </div>
 
+  <div class="card-body">
     {/* Problem + result: both always visible, at rest. */}
     <h3 class="card-title">{c.title}</h3>
     {c.result && <p class="card-result">{c.result}</p>}
     {c.subtitle && <p class="card-client">{c.subtitle}</p>}
+  </div>
 
-    {/* Bottom strip — role tags, awards and the link. Space is always reserved
-        (only opacity/transform animate), so revealing it never shifts anything
-        above. On touch it's shown permanently (see the media query). */}
-    <div class="card-reveal">
-      {c.keywords && c.keywords.length > 0 && (
-        <p class="card-tags">
-          {c.keywords.map((k) => <span class="card-tag">{k}</span>)}
-        </p>
-      )}
-      {c.awards && c.awards.length > 0 && (
-        <p class="card-awards">
-          {c.awards.map((a) => (
-            <span class="card-award-item">
-              {a.url ? (
-                <a href={a.url} target="_blank" rel="noopener noreferrer">
-                  {a.label}<span class="sr-only"> ({newTab})</span>
-                </a>
-              ) : (
-                a.label
-              )}{'. '}
-            </span>
-          ))}
-        </p>
-      )}
-      {hasUrl && (
-        <a
-          class="card-cta"
-          href={href}
-          target={isExternal ? '_blank' : undefined}
-          rel={isExternal ? 'noopener noreferrer' : undefined}
-        >
-          {d.cta}
-          {isExternal && <span class="card-cta-arrow" aria-hidden="true">↗</span>}
-          {isExternal && <span class="sr-only"> ({newTab})</span>}
-        </a>
-      )}
-    </div>
+  {/* Reveal — role tags, awards and the link. Desktop: absolutely positioned
+      over the image, category colour, faded in on hover / focus. Touch: falls
+      into normal flow as a colour strip under the image (see the media query).
+      Placed last in the DOM so that on touch it reads after the body. */}
+  <div class="card-overlay">
+    {c.keywords && c.keywords.length > 0 && (
+      <p class="card-tags">
+        {c.keywords.map((k) => <span class="card-tag">{k}</span>)}
+      </p>
+    )}
+    {c.awards && c.awards.length > 0 && (
+      <p class="card-awards">
+        {c.awards.map((a) => (
+          <span class="card-award-item">
+            {a.url ? (
+              <a href={a.url} target="_blank" rel="noopener noreferrer">
+                {a.label}<span class="sr-only"> ({newTab})</span>
+              </a>
+            ) : (
+              a.label
+            )}{'. '}
+          </span>
+        ))}
+      </p>
+    )}
+    {hasUrl && (
+      <a
+        class="card-cta"
+        href={href}
+        target={isExternal ? '_blank' : undefined}
+        rel={isExternal ? 'noopener noreferrer' : undefined}
+      >
+        {d.cta}
+        {isExternal && <span class="card-cta-arrow" aria-hidden="true">↗</span>}
+        {isExternal && <span class="sr-only"> ({newTab})</span>}
+      </a>
+    )}
   </div>
 </article>
 
@@ -84,7 +86,7 @@ const href = hasUrl ? (isExternal ? c.url : base + c.url) : undefined;
     display: flex;
     flex-direction: column;
     min-width: 0;
-    height: 31rem; /* every card the same height */
+    height: 28rem; /* every card the same height */
     border-radius: 4px;
     overflow: hidden;
     /* Soft tint of the category colour — kept the same at rest and on hover. */
@@ -98,7 +100,7 @@ const href = hasUrl ? (isExternal ? c.url : base + c.url) : undefined;
     box-shadow: 0 4px 10px rgba(196, 196, 196, 0.12);
     transition: box-shadow 0.35s var(--ease), transform 0.35s var(--ease);
   }
-  /* Hover / keyboard focus lifts the card a touch — the only whole-card change. */
+  /* Hover / keyboard focus lifts the card a touch. */
   .card:hover,
   .card:focus-within {
     transform: translateY(-3px);
@@ -109,10 +111,11 @@ const href = hasUrl ? (isExternal ? c.url : base + c.url) : undefined;
     outline-offset: 2px;
   }
 
-  /* --- Media (top): fills the space above the body. */
+  /* --- Media (top): the image, with the pills overlaid and the colour reveal
+     covering it on hover. Its height (42%) is mirrored by .card-overlay. */
   .card-media {
     position: relative;
-    flex: 0 0 32%;
+    flex: 0 0 42%;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -126,7 +129,50 @@ const href = hasUrl ? (isExternal ? c.url : base + c.url) : undefined;
     object-fit: cover;
   }
 
-  /* --- Body: everything below the image lives in one continuous flow. */
+  /* Pills, over the image: the category type (filled with its colour), then the
+     year on a frosted chip so it stays legible over any photo. */
+  .card-pills {
+    position: absolute;
+    top: 1.5rem;
+    left: 2rem; /* aligns with the title + hover tags below */
+    right: 2rem;
+    z-index: 1;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+  }
+  .card-type,
+  .card-year {
+    font-family: var(--font-body);
+    font-size: 0.9rem;
+    line-height: 1.3;
+    padding: 0.3rem 0.7rem;
+    white-space: nowrap;
+  }
+  .card-type { background: var(--cat); color: #210f03; }
+  /* Teal and raspberry are too dark for dark text — flip to white. */
+  .card[data-cat='product'] .card-type,
+  .card[data-cat='storytelling'] .card-type { color: #ffffff; }
+  .card-year {
+    background: color-mix(in srgb, #ffffff 82%, transparent);
+    color: var(--color-text);
+    backdrop-filter: blur(3px);
+  }
+  /* Award icon — a frosted chip in the pills row when the project has awards. */
+  .card-award {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.2rem;
+    border-radius: 50%;
+    background: color-mix(in srgb, #ffffff 82%, transparent);
+    backdrop-filter: blur(3px);
+    color: var(--color-muted);
+  }
+  .card-award svg { width: 1.15rem; height: 1.15rem; }
+
+  /* --- Body: problem, result, client. Title/result pinned to the top; the
+     client name sits at the bottom. */
   .card-body {
     flex: 1 1 auto;
     overflow: hidden;
@@ -135,8 +181,6 @@ const href = hasUrl ? (isExternal ? c.url : base + c.url) : undefined;
     gap: 0.6rem;
     padding: 2rem;
   }
-  /* Type + year pills, above the title. */
-  .card-pills { display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap; }
   .card-title {
     font-family: var(--font-display);
     font-weight: 800;
@@ -144,7 +188,7 @@ const href = hasUrl ? (isExternal ? c.url : base + c.url) : undefined;
     line-height: 1.12;
     letter-spacing: -0.01em;
     color: var(--color-text);
-    /* Bound the longest titles so the bottom strip can never be clipped. */
+    /* Bound the longest titles so the body can't overflow its fixed height. */
     display: -webkit-box;
     -webkit-line-clamp: 3;
     -webkit-box-orient: vertical;
@@ -164,6 +208,7 @@ const href = hasUrl ? (isExternal ? c.url : base + c.url) : undefined;
     overflow: hidden;
   }
   .card-client {
+    margin-top: auto;
     font-family: var(--font-body); /* Fira Code */
     font-weight: 400;
     text-transform: uppercase;
@@ -172,69 +217,55 @@ const href = hasUrl ? (isExternal ? c.url : base + c.url) : undefined;
     color: var(--color-text);
   }
 
-  /* Pills: the category type (filled with its colour), then the year in muted
-     grey. Both squared and monospace, matching the card's hard corners. */
-  .card-type,
-  .card-year {
+  /* --- Reveal: covers the image on hover, filled with the category colour. */
+  .card-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 42%; /* mirrors .card-media's flex-basis so it covers just the image */
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between; /* tags at top, link at bottom */
+    gap: 0.75rem;
+    padding: 1.5rem 2rem; /* aligns with the pills + body text */
+    overflow: hidden;
+    background: var(--cat);
+    color: #210f03;
+    opacity: 0;
+    pointer-events: none; /* invisible at rest — don't let a stray click hit the link */
+    transition: opacity 0.35s var(--ease);
+  }
+  /* Teal and raspberry are too dark for dark text — flip the reveal to white. */
+  .card[data-cat='product'] .card-overlay,
+  .card[data-cat='storytelling'] .card-overlay { color: #ffffff; }
+  .card:hover .card-overlay,
+  .card:focus-within .card-overlay {
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  /* Role tags — light frosted chips with dark text, matching the idle year
+     chip, so they read the same on every category fill. */
+  .card-tags { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+  .card-tag {
     font-family: var(--font-body);
     font-size: 0.9rem;
     line-height: 1.3;
     padding: 0.3rem 0.7rem;
     white-space: nowrap;
-  }
-  .card-type { background: var(--cat); color: #210f03; }
-  /* Teal and raspberry are too dark for dark text — flip to white. */
-  .card[data-cat='product'] .card-type,
-  .card[data-cat='storytelling'] .card-type { color: #ffffff; }
-  .card-year {
-    background: color-mix(in srgb, var(--color-text) 10%, transparent);
-    color: var(--color-muted);
-  }
-  /* Award icon — shown in the pills row when the project has awards. */
-  .card-award { display: inline-flex; align-items: center; color: var(--color-muted); }
-  .card-award svg { width: 1.15rem; height: 1.15rem; }
-
-  /* --- Bottom strip: role tags, awards and the link. Pinned to the bottom of
-     the body; hidden at rest (opacity/transform only — its height is always
-     reserved), faded in on hover / focus. A hairline top rule reads as a strip
-     and appears with the rest of the content. */
-  .card-reveal {
-    margin-top: auto;
-    display: flex;
-    flex-direction: column;
-    gap: 0.7rem;
-    padding-top: 0.9rem;
-    border-top: 1px solid color-mix(in srgb, var(--color-text) 12%, transparent);
-    opacity: 0;
-    transform: translateY(6px);
-    pointer-events: none; /* invisible at rest — don't let a stray click hit the link */
-    transition: opacity 0.35s var(--ease), transform 0.35s var(--ease);
-  }
-  .card:hover .card-reveal,
-  .card:focus-within .card-reveal {
-    opacity: 1;
-    transform: none;
-    pointer-events: auto;
-  }
-
-  /* Role tags, styled like the idle card's year pill. */
-  .card-tags { display: flex; flex-wrap: wrap; gap: 0.5rem; }
-  .card-tag {
-    font-family: var(--font-body);
-    font-size: 0.85rem;
-    line-height: 1.3;
-    padding: 0.3rem 0.7rem;
-    white-space: nowrap;
-    background: color-mix(in srgb, var(--color-text) 10%, transparent);
-    color: var(--color-muted);
+    background: color-mix(in srgb, #ffffff 85%, transparent);
+    border: 1px solid color-mix(in srgb, var(--color-text) 14%, transparent);
+    color: var(--color-text);
   }
 
   /* Awards line, under the tags. */
   .card-awards {
     font-family: var(--font-body);
-    font-size: clamp(0.78rem, 0.72rem + 0.25vw, 0.9rem);
-    line-height: 1.5;
-    color: var(--color-muted);
+    font-size: clamp(0.75rem, 0.7rem + 0.2vw, 0.85rem);
+    line-height: 1.45;
+    color: color-mix(in srgb, currentColor 82%, transparent);
   }
   .card-awards a {
     color: inherit;
@@ -250,7 +281,8 @@ const href = hasUrl ? (isExternal ? c.url : base + c.url) : undefined;
     gap: 0.3rem;
     font-family: var(--font-display);
     font-weight: 700;
-    color: var(--color-text);
+    font-size: clamp(1.05rem, 0.95rem + 0.4vw, 1.25rem);
+    color: inherit;
     text-decoration: underline;
     text-underline-offset: 3px;
   }
@@ -267,21 +299,23 @@ const href = hasUrl ? (isExternal ? c.url : base + c.url) : undefined;
     border: 0;
   }
 
-  /* Phones: no hover, so the strip is shown permanently and the card grows to
-     fit. Nothing here depends on a pointer. */
+  /* Phones: no hover. The reveal leaves its absolute overlay and drops into the
+     flow as a colour strip below the body, so both the image and the tags/link
+     stay visible without a pointer. */
   @media (max-width: 720px) {
     .card { height: auto; }
     /* Card height is auto here, so a % basis has nothing to resolve against. */
     .card-media { flex-basis: 12rem; }
-    .card-reveal {
+    .card-overlay {
+      position: static;
+      height: auto;
       opacity: 1;
-      transform: none;
       pointer-events: auto;
+      padding: var(--space-4, 1.5rem) 2rem;
     }
   }
   @media (prefers-reduced-motion: reduce) {
-    .card,
-    .card-reveal { transition: opacity 0.35s var(--ease); }
+    .card { transition: opacity 0.35s var(--ease); }
     .card:hover,
     .card:focus-within { transform: none; }
   }
