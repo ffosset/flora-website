@@ -13,7 +13,7 @@ export default {
     services: 'services',
     work: 'projets',
     about: 'à propos',
-    contact: 'on discute ?',
+    contact: 'contact',
   },
   hero: {
     nameWord: 'flora',
@@ -30,7 +30,7 @@ export default {
     sectionSubtitle: 'Je transforme vos idées en projets web aboutis',
     viewProjects: 'Voir les projets',
     items: [
-      { name: 'Sites web', desc: 'D’un scroll unique à un CMS complet, on décide ensemble ce qui vous convient, puis je m’occupe du design et de la réalisation.' },
+      { name: 'Sites web', desc: 'D’un site simple à un site que vous faites évoluer vous-même à mesure que vous grandissez, on décide ensemble de ce qui vous convient puis je m’occupe du design et de la réalisation.' },
       { name: 'Plateformes numériques', desc: 'Ma force, ce sont les parcours complexes pour les utilisateurs B2B et la collaboration avec l’équipe technique.' },
       { name: 'Communication', desc: 'Raconter des histoires, c’est mon dada. Dites-moi votre besoin et on lui donne forme ensemble (réseaux sociaux, un blog, courtes vidéos…).' },
     ],
@@ -233,7 +233,7 @@ export default {
       'La plupart des équipes recrutent designer, rédacteur et développeur, puis tentent de les faire tenir ensemble. Mon parcours est passé par tous ces métiers, ce qui me permet d’être indépendante mais aussi de collaborer avec efficacité.',
     valuesTitle: 'avec qui je travaille',
     values:
-      'Je choisis des projets qui œuvrent pour un monde plus vert, plus juste et plus inclusif. Je suis enthousiaste et curieuse de nature. Je travaille en full remote et peux assister à des réunions ponctuelles sur site.',
+      'Je choisis des projets qui œuvrent pour un monde plus vert, plus juste et plus inclusif. Je suis enthousiaste et curieuse de nature. Je travaille à distance et peux faire des réunions stratégiques dans vos bureaux.',
     pathTitle: 'parcours professionnel',
     path: [
       {

@@ -398,7 +398,7 @@ const roles = t.hero.roles?.length ? t.hero.roles : [t.hero.roleWord];
     }
     .hero-aside {
       top: auto;                               /* unpin from the top … */
-      bottom: clamp(2rem, 7vh, 4rem);          /* … and drop toward the bottom */
+      bottom: var(--gutter);                   /* … and drop to the bottom, matching the right gutter */
       right: var(--gutter);                    /* … and over to the right edge */
       left: auto;
       transform: none;

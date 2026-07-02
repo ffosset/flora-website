@@ -12,7 +12,7 @@ export default {
     services: 'servicios',
     work: 'proyectos',
     about: 'acerca de',
-    contact: '¿hablamos?',
+    contact: 'contacto',
   },
   hero: {
     nameWord: 'flora',
@@ -29,7 +29,7 @@ export default {
     sectionSubtitle: 'Convierto tus ideas en proyectos web terminados',
     viewProjects: 'Ver proyectos',
     items: [
-      { name: 'Páginas web', desc: 'Desde un scroll único hasta un CMS completo, decidimos juntos qué te conviene. Luego me encargo del diseño y del desarrollo.' },
+      { name: 'Páginas web', desc: 'Desde una web sencilla hasta una que puedes ir cambiando tú a medida que creces, decidimos juntos qué necesitas. Luego me encargo del diseño y del desarrollo.' },
       { name: 'Plataformas digitales', desc: 'Mi especialidad son los flujos complejos para usuarios B2B, así cómo la colaboración con equipos técnicos.' },
       { name: 'Comunicación', desc: 'Contar historias es lo mío. Me dices qué necesitas y le damos forma juntos (redes sociales, un blog, vídeos cortos…).' },
     ],
@@ -232,7 +232,7 @@ export default {
       'La mayoría de los equipos contrata a un diseñador, un redactor y un desarrollador, y luego trata de hacerlos encajar. Mi trayectoria pasó por todos esos oficios, lo que me permite ser autónoma pero también colaborar con eficacia.',
     valuesTitle: 'con quién trabajo',
     values:
-      'Elijo proyectos que trabajan por un mundo más verde, más justo e inclusivo. Soy entusiasta y curiosa por naturaleza. Trabajo en remoto y puedo asistir a reuniones puntuales presenciales.',
+      'Elijo proyectos que trabajan por un mundo más verde, más justo e inclusivo. Soy entusiasta y curiosa por naturaleza. Trabajo a distancia, puedo acercarme a tu oficina para las reuniones estratégicas.',
     pathTitle: 'trayectoria profesional',
     path: [
       {

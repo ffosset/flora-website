@@ -12,7 +12,7 @@ export default {
     services: 'services',
     work: 'projects',
     about: 'about me',
-    contact: "let's chat",
+    contact: 'contact',
   },
   hero: {
     nameWord: 'flora',
