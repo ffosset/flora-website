@@ -82,9 +82,9 @@
   /* --- Work category accents (one per category) ---
      Used by the filter chips (when selected), the project cards (soft tint
      at rest, full colour on hover) and the service-icon accents. */
-  --cat-landing: #ffec3c;       /* yellow */
-  --cat-product: #10a08c;       /* teal */
-  --cat-storytelling: #d23e84;  /* raspberry */
+  --cat-landing: #FCD0A1;       /* yellow */
+  --cat-product: #B1B695;       /* turquoise */
+  --cat-storytelling: #53917E;  /* pink */
 
   /* Hero spotlight cursor glow (radial gradient + blur, multiply blend). */
   --color-cursor-glow: #ae4905;
