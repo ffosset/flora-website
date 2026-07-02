@@ -2,7 +2,7 @@
 import { Image } from 'astro:assets';
 import portrait from '../assets/flora-house.png';
 const { t } = Astro.props;
-const facts = t.about.facts || [];
+const blocks = t.about.blocks || [];
 const path = t.about.path || [];
 const tags = t.about.tags || {};
 
@@ -92,22 +92,12 @@ const WAVE = {
       </figure>
 
       <div class="about-right">
-        <ul class="about-facts">
-          {facts.map((f) => (
-            <li><span class="slash" aria-hidden="true">·</span>{f}</li>
-          ))}
-        </ul>
-      </div>
-    </div>
-
-    <div class="about-blocks">
-      <div class="about-block">
-        <h3>{t.about.howIWorkTitle}</h3>
-        <p>{t.about.howIWorkBody}</p>
-      </div>
-      <div class="about-block">
-        <h3>{t.about.valuesTitle}</h3>
-        <p>{t.about.values}</p>
+        {blocks.map((b) => (
+          <div class="about-block">
+            <h3>{b.title}</h3>
+            <p>{b.body}</p>
+          </div>
+        ))}
       </div>
     </div>
 
@@ -440,38 +430,13 @@ const WAVE = {
     white-space: nowrap;
   }
 
-  /* Quick facts: a small orange dot before each line. */
-  .about-facts {
-    list-style: none;
+  /* Three stacked text blocks beside the photo: a burnt-orange heading (with a
+     trailing ·) over an Inter body paragraph. Left-aligned, no card. */
+  .about-right {
     display: flex;
     flex-direction: column;
-    gap: var(--space-2);
-  }
-  .about-facts li {
-    font-family: var(--font-display);
-    font-size: clamp(1.05rem, 0.95rem + 0.5vw, 1.3rem);
-    line-height: 1.3;
-    color: var(--color-text);
-  }
-  .about-facts .slash { color: var(--color-primary); margin-right: 0.5em; font-weight: 700; }
-
-  /* "how I work" / "value driven" — two cards below the timeline. Same box +
-     text styling as the services cards: peach panel, always-on hard shadow and
-     matching-colour title (burnt orange), left-aligned, text in Inter. */
-  .about-blocks {
-    display: grid;
-    gap: var(--space-4);
-    margin-top: var(--space-6);
-  }
-  @media (min-width: 760px) {
-    .about-blocks { grid-template-columns: 1fr 1fr; }
-  }
-  .about-block {
-    background: #faf0ea;
-    border-radius: 4px;
-    padding: var(--space-4) var(--space-5);
-    text-align: left;
-    box-shadow: 8px 8px 0 0 var(--color-primary);
+    gap: var(--space-5);
+    max-width: 34rem;
   }
   .about-block h3 {
     font-family: var(--font-display);
@@ -484,7 +449,10 @@ const WAVE = {
   .about-block h3::after { content: ' ·'; }
   .about-block p {
     font-family: var(--font-display);
+    font-size: clamp(1rem, 0.95rem + 0.3vw, 1.125rem);
+    line-height: 1.5;
     color: var(--color-text);
+    max-width: 42ch;
   }
 
   /* --- Timeline ---

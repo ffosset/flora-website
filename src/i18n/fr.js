@@ -218,22 +218,24 @@ export default {
   about: {
     sectionTitle: 'à propos',
     headline: 'Profil senior à la croisée du design, de la technologie et de la stratégie.',
-    facts: [
-      '9+ ans d’expérience en design',
-      'Hautes capacités pour diriger et collaborer entre équipes',
-      'Trilingue : anglais, français, espagnol',
-      'Entre Bruxelles et Madrid',
-      'Travailler depuis mon jardin stimule ma créativité',
-    ],
     // Photo annotation callouts (desktop/tablet) + mobile summary chip.
     tags: { me: 'moi', cat1: 'chat 1', cat2: 'chat 2', cat3: 'chat 3', cast: 'trouvez les 3 chats sur la photo' },
     photoCaption: 'Photographiée chez moi à Bruxelles — avec moi et mes trois chats.',
-    howIWorkTitle: 'comment je travaille',
-    howIWorkBody:
-      'La plupart des équipes recrutent designer, rédacteur et développeur, puis tentent de les faire tenir ensemble. Mon parcours est passé par tous ces métiers, ce qui me permet d’être indépendante mais aussi de collaborer avec efficacité.',
-    valuesTitle: 'avec qui je travaille',
-    values:
-      'Je choisis des projets qui œuvrent pour un monde plus vert, plus juste et plus inclusif. Je suis enthousiaste et curieuse de nature. Je travaille à distance et peux faire des réunions stratégiques dans vos bureaux.',
+    // Three text blocks beside the photo.
+    blocks: [
+      {
+        title: 'comment je travaille',
+        body: 'Basée entre Bruxelles et Madrid, je travaille en français, anglais et espagnol. Je travaille à distance et peux me déplacer dans vos bureaux pour des réunions ponctuelles.',
+      },
+      {
+        title: 'ce que j’amène',
+        body: 'Neuf ans dans le design et la stratégie numérique : vous avez une seule personne qui gère tout, de la première idée au site en ligne.',
+      },
+      {
+        title: 'qui je suis',
+        body: 'Curieuse et enthousiaste de nature, je m’investis dans des projets qui construisent un monde meilleur : plus vert, plus juste, plus inclusif.',
+      },
+    ],
     pathTitle: 'parcours professionnel',
     path: [
       {

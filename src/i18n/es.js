@@ -217,22 +217,24 @@ export default {
   about: {
     sectionTitle: 'acerca de',
     headline: 'Perfil sénior en el cruce entre diseño, tecnología y estrategia.',
-    facts: [
-      '9+ años de experiencia en diseño',
-      'Alta capacidad para liderar y colaborar entre equipos',
-      'Trilingüe: inglés, francés y español',
-      'Entre Madrid y Bruselas',
-      'Trabajar desde mi jardín potencia mi creatividad',
-    ],
     // Photo annotation callouts (desktop/tablet) + mobile summary chip.
     tags: { me: 'yo', cat1: 'gato 1', cat2: 'gato 2', cat3: 'gato 3', cast: 'encuentra los 3 gatos en la foto' },
     photoCaption: 'Fotografiada en casa, en Bruselas — conmigo y tres gatos.',
-    howIWorkTitle: 'cómo trabajo',
-    howIWorkBody:
-      'La mayoría de los equipos contrata a un diseñador, un redactor y un desarrollador, y luego trata de hacerlos encajar. Mi trayectoria pasó por todos esos oficios, lo que me permite ser autónoma pero también colaborar con eficacia.',
-    valuesTitle: 'con quién trabajo',
-    values:
-      'Elijo proyectos que trabajan por un mundo más verde, más justo e inclusivo. Soy entusiasta y curiosa por naturaleza. Trabajo a distancia, puedo acercarme a tu oficina para las reuniones estratégicas.',
+    // Three text blocks beside the photo.
+    blocks: [
+      {
+        title: 'cómo trabajo',
+        body: 'Con base entre Bruselas y Madrid, trabajo en español, francés e inglés. Trabajo a distancia y puedo acercarme a tu oficina para reuniones puntuales.',
+      },
+      {
+        title: 'qué traigo',
+        body: 'Nueve años en diseño y estrategia digital: una sola persona que se encarga de todo, desde la primera idea hasta el sitio publicado.',
+      },
+      {
+        title: 'quién soy',
+        body: 'Curiosa y entusiasta por naturaleza, me mueven los proyectos que construyen un mundo mejor: más verde, más justo, más inclusivo.',
+      },
+    ],
     pathTitle: 'trayectoria profesional',
     path: [
       {

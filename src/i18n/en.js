@@ -226,22 +226,24 @@ export default {
   about: {
     sectionTitle: 'about',
     headline: 'Product leader and expert in bridging design, technology, and business strategy.',
-    facts: [
-      '9+ years experience as a designer',
-      'Comfortable leading and collaborating across teams',
-      'Fluent in English, French, and Spanish',
-      'Splitting time between Brussels and Madrid',
-      'Working from my garden boosts my creativity',
-    ],
     // Photo annotation callouts (desktop/tablet) + mobile summary chip.
     tags: { me: 'me', cat1: 'cat 1', cat2: 'cat 2', cat3: 'cat 3', cast: 'find the 3 cats in the picture' },
     photoCaption: 'Photographed at home in Brussels — with me and three cats.',
-    howIWorkTitle: 'how I work',
-    howIWorkBody:
-      'Most teams hire a designer, a writer, and a developer, then stitch them together. My path ran through all of it, so I work across the seams.',
-    valuesTitle: 'who I work with',
-    values:
-      "I take on work that supports a greener, fairer, more inclusive world. I'm enthusiastic and naturally curious. I work fully remote and can attend ad-hoc meetings on site.",
+    // Three text blocks beside the photo.
+    blocks: [
+      {
+        title: 'how I work',
+        body: 'Based between Brussels and Madrid, I am fluent in English, French, and Spanish. I work remotely and can come to your office for ad-hoc meetings.',
+      },
+      {
+        title: 'what I bring',
+        body: 'Nine years across design, product, and strategy means you get one person who handles the whole thing, from the first idea to the finished site.',
+      },
+      {
+        title: 'who I am',
+        body: 'Curious and enthusiastic by nature, I like to take on projects working toward a better world: greener, fairer, more inclusive.',
+      },
+    ],
     pathTitle: 'work path',
     // Career timeline, animated in order. `current` marks the latest step.
     path: [
