@@ -60,8 +60,9 @@ const CATS = ['landing', 'product', 'storytelling'];
     gap: var(--space-4);
   }
 
-  /* Static card: peach panel with an always-on hard offset shadow in the
-     category colour. Not interactive — no hover, no cursor change. */
+  /* Static card: soft tint of the category colour (matching the project cards
+     at rest) with an always-on hard offset shadow in the category colour. Not
+     interactive — no hover, no cursor change. */
   .service {
     display: flex;
     flex-direction: column;
@@ -69,12 +70,17 @@ const CATS = ['landing', 'product', 'storytelling'];
     min-width: 0;
     padding: var(--space-4);
     border-radius: 4px;
-    background: #faf0ea; /* soft peach */
+    background: linear-gradient(
+      160deg,
+      color-mix(in srgb, var(--cat) 13%, #ffffff),
+      color-mix(in srgb, var(--cat) 30%, #ffffff)
+    );
     text-align: left;
     box-shadow: 8px 8px 0 0 var(--cat);
   }
 
-  /* Name in the category colour, lowercase, with a trailing bullet. */
+  /* Name in the dark text colour, lowercase, with a trailing bullet in the
+     category colour. */
   .service-name {
     font-family: var(--font-display);
     font-weight: 700;
@@ -83,12 +89,12 @@ const CATS = ['landing', 'product', 'storytelling'];
     line-height: 1.1;
     letter-spacing: -0.01em;
     overflow-wrap: anywhere;
-    color: var(--cat);
+    color: var(--color-text);
   }
-  .service-name::after { content: ' ·'; }
+  .service-name::after { content: ' ·'; color: var(--cat); }
   /* Landing's bright yellow is illegible as text, so use a deeper amber for
-     the name + bullet (the shadow stays bright yellow). */
-  .service[data-cat='landing'] .service-name { color: #c2890c; }
+     its bullet. */
+  .service[data-cat='landing'] .service-name::after { color: #c2890c; }
 
   .service-desc {
     font-family: var(--font-display);
