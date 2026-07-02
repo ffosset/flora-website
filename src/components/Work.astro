@@ -13,7 +13,8 @@ const DESIGN = {
   'soy-de-temporada':       { cta: 'platform' },
   'rosa-ebilling':          { cta: 'website' },
   'investment-simulator':   { cta: 'website' },
-  'free-the-fish':          { cta: 'code' },
+  'dime-cuanto-cobras':     { cta: 'opensource' },
+  'free-the-fish':          { cta: 'opensource' },
   'couleur-du-peche':       { cta: 'read' },
   'oyas-belgique':          { cta: 'website' },
   'rosen':                  { cta: 'read' },
@@ -32,8 +33,9 @@ const ORDER = [
   'soy-de-temporada',       // 4
   'rosa-ebilling',          // 5
   'investment-simulator',   // 6
-  'free-the-fish',          // 7
-  'couleur-du-peche',       // 8 (métis investigation)
+  'dime-cuanto-cobras',     // 7 (rent data investigation)
+  'free-the-fish',          // 8
+  'couleur-du-peche',       // 9 (métis investigation)
 ];
 // How many show before "Load more" is a per-breakpoint rule handled in CSS:
 // 3 on desktop, 2 on tablet and mobile. "Load more" reveals the rest.
@@ -151,7 +153,7 @@ const ordered = ORDER
   .work-grid {
     display: grid;
     grid-template-columns: 1fr;
-    gap: 2rem;
+    gap: 2rem 1.25rem;
     max-width: 34rem;
     margin-inline: auto;
   }
