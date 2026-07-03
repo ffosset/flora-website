@@ -23,13 +23,14 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
       - name: Install, build, and upload your site
-        uses: withastro/action@v3
-        # Defaults work for this project (npm, repo root). Uncomment to override:
+        uses: withastro/action@v6
+        # Defaults work for this project (npm auto-detected, repo root, Node 24).
+        # Uncomment to override:
         # with:
         #   path: .
-        #   node-version: 20
+        #   node-version: 24
         #   package-manager: npm
 
   deploy:
@@ -41,4 +42,4 @@ jobs:
     steps:
       - name: Deploy to GitHub Pages
         id: deployment
-        uses: actions/deploy-pages@v4
+        uses: actions/deploy-pages@v5
