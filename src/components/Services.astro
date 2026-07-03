@@ -94,9 +94,6 @@ const CATS = ['landing', 'product', 'storytelling'];
     color: var(--color-text);
   }
   .service-name::after { content: ' ·'; color: var(--cat); }
-  /* Landing's bright yellow is illegible as text, so use a deeper amber for
-     its bullet. */
-  .service[data-cat='landing'] .service-name::after { color: #c2890c; }
 
   .service-desc {
     font-family: var(--font-display);

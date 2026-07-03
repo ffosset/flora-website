@@ -93,9 +93,9 @@
   --cat-storytelling-clear: #CBDED8;
 
   /* Consumed names — the full-colour fill each category paints with (same
-     footprint as before). Landing paints with its mid (the deep amber is
-     illegible as a large fill); product and storytelling paint with their deep. */
-  --cat-landing:      var(--cat-landing-mid);
+     footprint as before): the hard shadow, the idle card tag and the hover
+     background. Every category paints with its deep. */
+  --cat-landing:      var(--cat-landing-deep);
   --cat-product:      var(--cat-product-deep);
   --cat-storytelling: var(--cat-storytelling-deep);
 

@@ -145,14 +145,16 @@ const href = hasUrl ? (isExternal ? c.url : base + c.url) : undefined;
   }
   .card-type {
     font-family: var(--font-body);
-    font-size: 0.9rem;
+    font-size: 0.82rem;
     line-height: 1.3;
-    padding: 0.3rem 0.7rem;
+    text-transform: lowercase;
+    padding: 0.2rem 0.55rem;
     white-space: nowrap;
     background: var(--cat);
     color: var(--color-text);
   }
-  /* Teal and raspberry are too dark for dark text — flip to white. */
+  /* The category fills are all too dark for dark text — flip to white. */
+  .card[data-cat='landing'] .card-type,
   .card[data-cat='product'] .card-type,
   .card[data-cat='storytelling'] .card-type { color: #ffffff; }
   /* Award icon — a frosted chip in the pills row when the project has awards. */
@@ -233,7 +235,8 @@ const href = hasUrl ? (isExternal ? c.url : base + c.url) : undefined;
     pointer-events: none; /* invisible at rest — don't let a stray click hit the link */
     transition: opacity 0.35s var(--ease);
   }
-  /* Teal and raspberry are too dark for dark text — flip the reveal to white. */
+  /* The category fills are all too dark for dark text — flip the reveal to white. */
+  .card[data-cat='landing'] .card-overlay,
   .card[data-cat='product'] .card-overlay,
   .card[data-cat='storytelling'] .card-overlay { color: #ffffff; }
   .card:hover .card-overlay,
@@ -309,7 +312,7 @@ const href = hasUrl ? (isExternal ? c.url : base + c.url) : undefined;
     .card-media { flex-basis: 12rem; }
     /* Tighter inner padding on phones; the pills and the tags/link block share
        the same inset so the category tag lines up with the body text. */
-    .card-body { padding: 1.25rem 1.25rem 0; }
+    .card-body { padding: 1.25rem 1.25rem 1.75rem; }
     .card-pills { top: 1.25rem; left: 1.25rem; right: 1.25rem; }
     .card-overlay {
       position: static;
@@ -318,12 +321,14 @@ const href = hasUrl ? (isExternal ? c.url : base + c.url) : undefined;
       pointer-events: auto;
       background: transparent;
       margin: 0 1.25rem;
-      padding: 1.25rem 0;
-      border-top: 1px solid var(--color-line);
+      padding: 1.75rem 0;
+      /* Tinted hairline that adapts to the card's category colour. */
+      border-top: 1px solid color-mix(in srgb, var(--cat) 35%, transparent);
     }
     /* Keep the text dark on the light tint for every category (overrides the
        white-flip used over the coloured fill on desktop). */
     .card-overlay,
+    .card[data-cat='landing'] .card-overlay,
     .card[data-cat='product'] .card-overlay,
     .card[data-cat='storytelling'] .card-overlay { color: var(--color-text); }
   }
