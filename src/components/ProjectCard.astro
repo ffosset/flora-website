@@ -150,7 +150,7 @@ const href = hasUrl ? (isExternal ? c.url : base + c.url) : undefined;
     padding: 0.3rem 0.7rem;
     white-space: nowrap;
     background: var(--cat);
-    color: #210f03;
+    color: var(--color-text);
   }
   /* Teal and raspberry are too dark for dark text — flip to white. */
   .card[data-cat='product'] .card-type,
@@ -228,7 +228,7 @@ const href = hasUrl ? (isExternal ? c.url : base + c.url) : undefined;
     padding: 1.5rem 2rem; /* aligns with the pills + body text */
     overflow: hidden;
     background: var(--cat);
-    color: #210f03;
+    color: var(--color-text);
     opacity: 0;
     pointer-events: none; /* invisible at rest — don't let a stray click hit the link */
     transition: opacity 0.35s var(--ease);

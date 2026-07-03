@@ -70,7 +70,7 @@
   /* --- Brand palette (the four canonical colors) --- */
   --color-primary: #ae4905;        /* burnt orange */
   --color-secondary: #fddcc6;      /* pale peach */
-  --color-text: #210f03;           /* near-black warm brown */
+  --color-text: #210F03;           /* near-black warm brown */
   --color-bg: #f7f2f0;             /* warm off-white ground */
 
   /* Derived shades */
@@ -79,12 +79,25 @@
   --color-bg-soft: var(--color-secondary); /* tinted section ground */
   --color-section-bg: #fffcfa;     /* shared ground for services / work / about */
 
-  /* --- Work category accents (one per category) ---
-     Used by the filter chips (when selected), the project cards (soft tint
-     at rest, full colour on hover) and the service-icon accents. */
-  --cat-landing: #FCD0A1;       /* yellow */
-  --cat-product: #B1B695;       /* turquoise */
-  --cat-storytelling: #53917E;  /* pink */
+  /* --- Work category accents — three families, each with a deep / clear pair
+     (landing also keeps a mid). deep drives the hard shadow, the idle card tag
+     and the hover-fill background; clear is the box-content tint. */
+  --cat-landing-deep:  #C1741A;  /* defined for the family; currently unused */
+  --cat-landing-mid:   #FCD0A1;  /* landing's fill (was --cat-landing) */
+  --cat-landing-clear: #FEF1E3;
+
+  --cat-product-deep:  #6E7A44;
+  --cat-product-clear: #E8E9DF;
+
+  --cat-storytelling-deep:  #2F6E58;
+  --cat-storytelling-clear: #CBDED8;
+
+  /* Consumed names — the full-colour fill each category paints with (same
+     footprint as before). Landing paints with its mid (the deep amber is
+     illegible as a large fill); product and storytelling paint with their deep. */
+  --cat-landing:      var(--cat-landing-mid);
+  --cat-product:      var(--cat-product-deep);
+  --cat-storytelling: var(--cat-storytelling-deep);
 
   /* Hero spotlight cursor glow (radial gradient + blur, multiply blend). */
   --color-cursor-glow: #ae4905;
