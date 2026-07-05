@@ -538,7 +538,9 @@ const personLd = {
         display: flex;
         flex-direction: column;
         justify-content: center;
-        padding-block: clamp(3rem, 8vw, 6rem) var(--space-5);
+        /* Top: this section's half of the About -> footer seam (matches every
+           other boundary). Bottom: block-tier breathing above the footer meta. */
+        padding-block: calc(var(--space-section) / 2) var(--space-block);
       }
       .footer-cta h2 {
         font-size: var(--fs-hero);

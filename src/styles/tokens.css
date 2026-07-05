@@ -78,6 +78,7 @@
   --color-card: #ffffff;           /* lifted surfaces */
   --color-bg-soft: var(--color-secondary); /* tinted section ground */
   --color-section-bg: #fffcfa;     /* shared ground for services / work / about */
+  --color-section-bg-alt: #FAF7F2; /* warmer ground for the projects + journey sections */
 
   /* --- Work category accents — three families, each with a deep / clear pair
      (landing also keeps a mid). deep drives the hard shadow, the idle card tag
@@ -143,13 +144,45 @@
   --lh-snug: 1.2;     /* small headings */
   --lh-body: 1.65;    /* monospace body needs generous leading */
 
-  /* Spacing scale */
+  /* Spacing scale (legacy — kept for horizontal padding/gutters and a few
+     component insets; the vertical rhythm below supersedes these for stacking). */
   --space-1: 0.5rem;
   --space-2: 1rem;
   --space-3: 1.5rem;
   --space-4: 2.5rem;
   --space-5: 4rem;
   --space-6: 7rem;
+
+  /* --- Vertical rhythm (base-8) --------------------------------------------
+     ONE scale governs every vertical gap on the page. Two tiers are fixed
+     (identical at all widths); two are fluid via clamp(), so the page breathes
+     wider as the viewport approaches the max content width (1280px) and tightens
+     toward the smallest supported screen (~360px). No component defines its own
+     vertical-spacing media query — the clamp()s do the responding.
+
+       line     16px  fixed   line / list gaps inside a text block
+       element  32px  fixed   label -> title
+       block    40->64px      title -> content, gaps between sub-blocks
+       section  72->128px     between top-level sections
+
+     Fluid tuning (vw terms), against the bounds the site already uses (360->1280):
+      - --space-section: 20vw reaches the 128px cap by ~640px, so the cap governs
+        every tablet / desktop breakpoint (721 / 900 / 1024). That is what makes
+        the section gap switchable from ONE line (--space-section-max): the cap is
+        the binding value across those widths. It eases to the 72px floor by 360px.
+        A gentler term (e.g. 10vw, hitting 128 only at 1280) would leave every
+        sub-1280 width sitting on the vw slope, where editing the cap changes
+        nothing -- so it would NOT be switchable.
+      - --space-block: 10vw reaches 64px by ~640px and eases to 40px by ~360px.
+
+     Section boundaries apply calc(var(--space-section) / 2) per edge, so any two
+     adjacent sections sum to exactly one --space-section. */
+  --space-line: 16px;               /* fixed */
+  --space-element: 32px;            /* fixed */
+  --space-block-max: 64px;
+  --space-section-max: 128px;       /* the ONE knob for the between-section gap */
+  --space-block: clamp(40px, 10vw, var(--space-block-max));
+  --space-section: clamp(72px, 20vw, var(--space-section-max));
 
   /* Layout */
   /* Centering kicks in only above this width; below it, content stays
@@ -202,7 +235,9 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
 
 .container { max-width: var(--maxw); margin-inline: auto; padding-inline: var(--gutter); }
 
-section { padding-block: var(--space-6); }
+/* Every top-level section owns half the between-section gap on each block edge,
+   so two stacked sections sum to exactly one --space-section. */
+section { padding-block: calc(var(--space-section) / 2); }
 
 /* Re-usable: the primary "/" prefix used across headings and titles. */
 .slash { color: var(--color-primary); font-weight: 700; }

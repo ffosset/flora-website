@@ -6,18 +6,14 @@ const blocks = t.about.blocks || [];
 const path = t.about.path || [];
 const tags = t.about.tags || {};
 
-// Annotation callouts over the About photo. Coordinates are percentages of the
-// displayed photo box: `l` = chip centre, `d` = leader-line endpoint, nudged to
-// sit *beside* each subject (never on top). Array order = reveal order, which
-// climbs the house: table → staircase → window (left → right). Verified against
-// the full-resolution photo. Desktop/tablet only; mobile shows the cast chip.
-const PHOTO_TAGS = [
-  { key: 'me',   label: tags.me,   lx: 30, ly: 89, dx: 52, dy: 84 }, // Flora at the table
-  // cat1's leader runs over the bright white-painted soffit — cream would
-  // vanish there, so this one line switches to terracotta (see spec).
-  { key: 'cat1', label: tags.cat1, lx: 84, ly: 50, dx: 58, dy: 52, tint: 'terra' }, // cat on the spiral staircase
-  { key: 'cat2', label: tags.cat2, lx: 18, ly: 9,  dx: 51, dy: 15 }, // white cat, left of the window
-  { key: 'cat3', label: tags.cat3, lx: 82, ly: 5,  dx: 80, dy: 15 }, // tabby cat, right of the window
+// Answer markers for the "find the 3 cats" game. A ring pops in beside each cat
+// 3s after the photo scrolls into view (see the <script>). Coordinates are
+// percentages of the displayed photo box, nudged to sit *beside* each cat
+// (never on top). Verified against the full-resolution photo.
+const CAT_MARKERS = [
+  { key: 'cat1', x: 58, y: 52 }, // cat on the spiral staircase
+  { key: 'cat2', x: 51, y: 15 }, // white cat, left of the window
+  { key: 'cat3', x: 80, y: 15 }, // tabby cat, right of the window
 ];
 
 // Desktop "vertical wave" geometry (px, in a 660×760 box). Each milestone sits
@@ -56,36 +52,18 @@ const WAVE = {
             loading="lazy"
           />
 
-          {/* Leader lines (decorative): one <line> per tag, drawn in the
-              stretched 0–100 viewBox so its %s match the chips/dots exactly. */}
-          <svg class="tag-lines" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
-            {PHOTO_TAGS.map((tag, i) => (
-              <line
-                class:list={['tag-line', { 'tag-line--terra': tag.tint === 'terra' }]}
-                x1={tag.lx} y1={tag.ly} x2={tag.dx} y2={tag.dy}
-                vector-effect="non-scaling-stroke"
-                style={`--d:${(i * 0.32).toFixed(2)}s`}
-              />
-            ))}
-          </svg>
-
-          {PHOTO_TAGS.map((tag, i) => (
+          {/* Answer markers: a ring pops in beside each cat 3s after the photo
+              scrolls into view (the reveal is driven by the <script> below). */}
+          {CAT_MARKERS.map((cat, i) => (
             <span
-              class="tag-dot"
+              class="cat-marker"
               aria-hidden="true"
-              style={`left:${tag.dx}%; top:${tag.dy}%; --d:${(i * 0.32).toFixed(2)}s`}
+              style={`left:${cat.x}%; top:${cat.y}%; --d:${(i * 0.18).toFixed(2)}s`}
             ></span>
-          ))}
-
-          {PHOTO_TAGS.map((tag, i) => (
-            <span
-              class="tag-chip"
-              style={`left:${tag.lx}%; top:${tag.ly}%; --d:${(i * 0.32).toFixed(2)}s`}
-            >{tag.label}</span>
           ))}
         </div>
 
-        {/* Mobile-only summary (the positional callouts don't survive the crop). */}
+        {/* "find the 3 cats" prompt, shown under the photo on every viewport. */}
         <p class="tag-cast">{tags.cast}</p>
         {/* Always present for screen readers; visually hidden. */}
         <figcaption class="tag-caption">{t.about.photoCaption}</figcaption>
@@ -100,8 +78,10 @@ const WAVE = {
         ))}
       </div>
     </div>
+  </div>
 
-    <div class="about-path" data-path>
+  <div class="about-path" data-path>
+    <div class="container">
       <p class="about-subhead"><span class="slash">·</span>{t.about.pathTitle}</p>
       <h2 class="about-subhead-title">{t.about.pathHeadline}</h2>
       <div class="path-track">
@@ -231,25 +211,23 @@ const WAVE = {
 </script>
 
 <script>
-  // Reveal the photo annotation tags the first time the photo scrolls into view.
-  // The stagger/cascade is pure CSS (per-tag `--d` delays); we only toggle the
-  // `is-revealed` class. Under reduced motion the CSS already paints the final
-  // state, so we don't need to wait for the observer.
+  // "Find the 3 cats": once the photo scrolls into view, give the reader 3s to
+  // spot the cats, then reveal a marker beside each one. The stagger between the
+  // three markers is pure CSS (per-marker `--d` delays); we only toggle the
+  // `is-revealed` class after the delay.
   const photo = document.querySelector('[data-tags]');
   if (photo) {
-    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)');
-    if (reduce.matches) {
-      photo.classList.add('is-revealed');
-    } else if ('IntersectionObserver' in window) {
+    const reveal = () => setTimeout(() => photo.classList.add('is-revealed'), 3000);
+    if ('IntersectionObserver' in window) {
       const io = new IntersectionObserver(
         (entries) => entries.forEach((e) => {
-          if (e.isIntersecting) { photo.classList.add('is-revealed'); io.disconnect(); }
+          if (e.isIntersecting) { reveal(); io.disconnect(); }
         }),
         { threshold: 0.35 }
       );
       io.observe(photo);
     } else {
-      photo.classList.add('is-revealed');
+      reveal();
     }
   }
 </script>
@@ -262,14 +240,14 @@ const WAVE = {
   .about-head {
     text-align: center;
     max-width: 56rem;
-    margin: 0 auto var(--space-5);
+    margin: 0 auto var(--space-block);
   }
   .about-eyebrow {
     font-family: var(--font-body);
     font-size: var(--fs-h4);
     letter-spacing: 0.04em;
     color: var(--color-primary);
-    margin-bottom: var(--space-2);
+    margin-bottom: var(--space-element);
   }
   .about-eyebrow .slash { color: var(--color-primary); margin-right: 0.4em; }
   .about-title {
@@ -306,12 +284,12 @@ const WAVE = {
     line-height: 1.15;
     letter-spacing: -0.02em;
     color: var(--color-text);
-    margin-top: var(--space-2);
+    margin-top: var(--space-element); /* path eyebrow -> path title (label -> title) */
   }
 
   .about-grid {
     display: grid;
-    gap: var(--space-4);
+    gap: var(--space-block); /* photo <-> bio column when stacked (vertical) */
   }
   @media (min-width: 900px) {
     /* align-items: center vertically centres the headline + facts against the
@@ -354,53 +332,52 @@ const WAVE = {
     .about-photo { max-width: 16rem; }
   }
 
-  /* --- Photo annotation tags ---------------------------------------------
-     A label chip is joined by a thin leader line to a dot that sits *beside*
-     each subject. Stacking: photo < lines < dots < chips. Tags reveal in a
-     staggered cascade (per-tag `--d`) when the photo scrolls into view.
-     Desktop/tablet only; below 760px a single "cast" chip stands in. */
-  .tag-lines {
-    position: absolute;
-    inset: 0;
-    width: 100%;
-    height: 100%;
-    z-index: 1;
-    overflow: visible;
-    pointer-events: none;
-  }
-  .tag-line {
-    stroke: var(--color-bg);          /* cream reads cleanly over the sepia */
-    stroke-width: 1.5;
-    stroke-linecap: round;
-    opacity: 0;
-    transform: scale(0.55);
-    transform-box: fill-box;
-    transform-origin: center;
-    transition: opacity 0.3s var(--ease), transform 0.35s var(--ease);
-    transition-delay: var(--d);
-  }
-  /* Terracotta stroke for any leader that would fade into a light patch. */
-  .tag-line--terra { stroke: var(--color-primary); }
-
-  .tag-dot {
+  /* --- "Find the 3 cats" markers -----------------------------------------
+     A terracotta ring sits *beside* each cat, hidden until the reveal. 3s after
+     the photo scrolls into view the JS adds `is-revealed`; the rings then pop in
+     one after another (per-marker `--d`) and give a gentle pulse to draw the eye.
+     Shown on every viewport — the prompt below the photo stands in for a caption. */
+  .cat-marker {
     position: absolute;
     z-index: 2;
-    width: 9px;
-    height: 9px;
+    width: 26px;
+    height: 26px;
     border-radius: 50%;
-    background: var(--color-primary);
-    border: 2px solid var(--color-bg);
+    border: 2.5px solid var(--color-primary);
+    background: color-mix(in srgb, var(--color-primary) 16%, transparent);
     opacity: 0;
-    transform: translate(-50%, -50%) scale(0.5);
-    transition: opacity 0.3s var(--ease), transform 0.3s var(--ease);
+    transform: translate(-50%, -50%) scale(0.4);
+    transition: opacity 0.4s var(--ease), transform 0.4s var(--ease-overshoot);
     transition-delay: var(--d);
     pointer-events: none;
   }
+  /* Expanding halo, echoed once each marker lands. */
+  .cat-marker::after {
+    content: '';
+    position: absolute;
+    inset: -2.5px;
+    border-radius: 50%;
+    border: 2px solid var(--color-primary);
+    opacity: 0;
+  }
 
-  .tag-chip,
+  .about-photo.is-revealed .cat-marker {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+  }
+  .about-photo.is-revealed .cat-marker::after {
+    animation: marker-pulse 1.6s var(--ease) 2;
+    animation-delay: calc(var(--d) + 0.35s);
+  }
+  @keyframes marker-pulse {
+    0% { transform: scale(1); opacity: 0.7; }
+    100% { transform: scale(2.2); opacity: 0; }
+  }
+
   .tag-cast {
-    /* Terracotta chip, cream mono text. Sized and shaped to match the project
-       card pills (0.82rem, 2px corners). Cream-on-terracotta ≈ 5:1 → passes AA. */
+    /* Terracotta pill under the photo, cream text. Sized and shaped to match the
+       project card pills (0.82rem, 2px corners). Cream-on-terracotta ≈ 5:1 → AA. */
+    display: inline-block;
     font-family: var(--font-body);
     font-size: 0.82rem;
     line-height: 1.3;
@@ -410,27 +387,6 @@ const WAVE = {
     border-radius: 2px;
     box-shadow: 0 1px 0 rgba(0, 0, 0, 0.18);
     white-space: nowrap;
-  }
-  .tag-chip {
-    position: absolute;
-    z-index: 3;
-    opacity: 0;
-    transform: translate(-50%, -50%) scale(0.8);
-    transition: opacity 0.36s var(--ease), transform 0.36s var(--ease-overshoot);
-    transition-delay: calc(var(--d) + 0.07s);
-    pointer-events: none;
-  }
-
-  .about-photo.is-revealed .tag-line { opacity: 0.92; transform: scale(1); }
-  .about-photo.is-revealed .tag-dot { opacity: 1; transform: translate(-50%, -50%) scale(1); }
-  .about-photo.is-revealed .tag-chip { opacity: 1; transform: translate(-50%, -50%) scale(1); }
-
-  /* Mobile summary chip: the callouts are hidden (they'd point at nothing on
-     the reflowed photo); this stands in below the image. */
-  .tag-cast { display: none; }
-  @media (max-width: 759.98px) {
-    .tag-lines, .tag-dot, .tag-chip { display: none; }
-    .tag-cast { display: inline-block; }
   }
 
   /* Descriptive caption for screen readers — the annotation makes sense
@@ -453,7 +409,7 @@ const WAVE = {
   .about-right {
     display: flex;
     flex-direction: column;
-    gap: var(--space-5);
+    gap: var(--space-block); /* between the three bio sub-blocks */
     max-width: 34rem;
   }
   .about-block h3 {
@@ -463,7 +419,7 @@ const WAVE = {
     line-height: 1.2;
     letter-spacing: -0.01em;
     color: var(--color-primary);
-    margin-bottom: var(--space-2);
+    margin-bottom: var(--space-line); /* heading -> its body paragraph */
   }
   .about-block h3::after { content: ' ·'; }
   .about-block p {
@@ -480,7 +436,21 @@ const WAVE = {
      Desktop (≥760px): a centred "vertical wave" — the SVG path is the line and
      each milestone is positioned at its wave extreme, revealed as the line is
      drawn (see the <script> and the min-width block below). */
-  .about-path { margin-top: var(--space-6); }
+  /* Journey: a full-width tinted band (spans the section; content is re-centred
+     by its own inner .container). Gaps above/below come from the margin + the
+     section's own bottom padding. */
+  .about-path {
+    /* A distinct full-bleed band inside About: its seam behaves like a section
+       boundary. The pre-band margin + the band's own top padding sum to one
+       --space-section between the bio and the journey content. The negative
+       bottom margin absorbs the section's own bottom seam so the tint runs flush
+       into the footer; the band's bottom padding + the footer's top padding then
+       make up the journey -> footer --space-section. */
+    margin-top: calc(var(--space-section) / 2);
+    margin-bottom: calc(var(--space-section) / -2);
+    padding-block: calc(var(--space-section) / 2);
+    background: var(--color-section-bg-alt);
+  }
   .path-track { position: relative; }
   .path-wave { display: none; } /* mobile uses the straight CSS rail instead */
   /* The dot that travels down the wave (desktop only, shown via JS). */
@@ -494,9 +464,9 @@ const WAVE = {
     position: relative;
     display: flex;
     flex-direction: column;
-    gap: var(--space-5);
+    gap: var(--space-block); /* between timeline steps (mobile rail) */
     max-width: 46rem;
-    margin: var(--space-5) auto 0;
+    margin: var(--space-block) auto 0; /* path title -> timeline */
     padding-left: 0.25rem;
   }
 
@@ -662,10 +632,11 @@ const WAVE = {
     .path-step { opacity: 1; transform: none; animation: none; transition: none; }
     .path-step.is-current .path-dot::after { animation: none; opacity: 0; }
 
-    /* Photo tags: render in their final state immediately, no animation. */
-    .tag-line { opacity: 0.92; transform: none; transition: none; }
-    .tag-dot { opacity: 1; transform: translate(-50%, -50%); transition: none; }
-    .tag-chip { opacity: 1; transform: translate(-50%, -50%); transition: none; }
+    /* Cat markers: still gated behind the 3s reveal, but pop in without
+       motion — no scale/pulse, just a fade handled by the base transition. */
+    .cat-marker { transform: translate(-50%, -50%); transition: opacity 0.3s var(--ease); }
+    .about-photo.is-revealed .cat-marker { transform: translate(-50%, -50%); }
+    .about-photo.is-revealed .cat-marker::after { animation: none; }
   }
 </style>
 
@@ -674,8 +645,7 @@ const WAVE = {
     .path::before { transform: none !important; }
     .path-wave path { stroke-dashoffset: 0 !important; }
     .path-step { opacity: 1 !important; transform: none !important; }
-    .tag-line { opacity: 0.92 !important; transform: none !important; }
-    .tag-dot { opacity: 1 !important; transform: translate(-50%, -50%) !important; }
-    .tag-chip { opacity: 1 !important; transform: translate(-50%, -50%) !important; }
+    /* No JS to run the 3s timer, so reveal the markers immediately. */
+    .cat-marker { opacity: 1 !important; transform: translate(-50%, -50%) !important; }
   </style>
 </noscript>
