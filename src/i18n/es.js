@@ -1,6 +1,6 @@
 // Spanish — first draft, mirrors en.js keys exactly.
-// Register: tú. Kept-English terms (UX/UI, Landing pages, Product design,
-// Storytelling) stay verbatim. Empty strings fall back to English via t().
+// Register: tú. Kept-English terms (UX/UI, Landing pages, Storytelling) stay
+// verbatim. Empty strings fall back to English via t().
 
 export default {
   meta: {
@@ -30,7 +30,7 @@ export default {
     viewProjects: 'Ver proyectos',
     items: [
       { name: 'Páginas web', desc: 'Desde una web sencilla hasta una que puedes ir cambiando tú a medida que creces, decidimos juntos qué necesitas. Luego me encargo del diseño y del desarrollo.' },
-      { name: 'Plataformas digitales', desc: 'Mi especialidad son los flujos complejos para usuarios B2B, así cómo la colaboración con equipos técnicos.' },
+      { name: 'Apps y plataformas', desc: '¿Ya tienes una app o una herramienta que no funciona como debería? Desde una auditoría UX hasta un rediseño completo, encuentro qué frena a tus usuarios y lo soluciono.' },
       { name: 'Comunicación', desc: 'Contar historias es lo mío. Me dices qué necesitas y le damos forma juntos (redes sociales, un blog, vídeos cortos…).' },
     ],
   },
@@ -66,7 +66,7 @@ export default {
     counterSeparator: '/',
     filters: {
       landing: 'Landing page',
-      product: 'Product design',
+      product: 'Apps y plataformas',
       storytelling: 'Storytelling',
     },
     prev: 'Proyectos anteriores',

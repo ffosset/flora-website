@@ -36,7 +36,7 @@ export default {
     viewProjects: 'View projects',
     items: [
       { name: 'Landing pages', desc: 'From a simple one-pager to a full CMS, we decide together what fits. Then I handle both the design and the build.' },
-      { name: 'Product design', desc: 'My strength is designing complex flows for enterprise users and collaborating with tech teams.' },
+      { name: 'Apps & platforms', desc: 'Already have a site, app, or tool that isn’t working the way it should? From a usability audit to redesigning the whole thing, I find what’s tripping your users up and fix it.' },
       { name: 'Storytelling', desc: 'Telling stories is what I love. You bring the need and we shape it together (social content, a blog, videos...)' },
     ],
   },
@@ -73,7 +73,7 @@ export default {
     counterSeparator: '/',
     filters: {
       landing: 'Landing page',
-      product: 'Product design',
+      product: 'Apps & platforms',
       storytelling: 'Storytelling',
     },
     prev: 'Previous projects',

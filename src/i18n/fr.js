@@ -1,6 +1,6 @@
 // French — first draft, mirrors en.js keys exactly.
 // Register: vous. Kept-English terms (UX/UI) stay verbatim; 'storytelling' → 'communication' in FR.
-// FR-specific: Landing pages → Sites web, Product design → Plateformes.
+// FR-specific: Landing pages → Sites web, Apps & platforms → Apps & plateformes.
 // Empty strings fall back to English via t().
 
 export default {
@@ -31,7 +31,7 @@ export default {
     viewProjects: 'Voir les projets',
     items: [
       { name: 'Sites web', desc: 'D’un site simple à un site que vous faites évoluer vous-même à mesure que vous grandissez, on décide ensemble de ce qui vous convient puis je m’occupe du design et de la réalisation.' },
-      { name: 'Plateformes numériques', desc: 'Ma force, ce sont les parcours complexes pour les utilisateurs B2B et la collaboration avec l’équipe technique.' },
+      { name: 'Apps & plateformes', desc: 'Vous avez déjà une app ou un outil qui ne fonctionne pas comme il devrait ? D’un audit d’utilisabilité à une refonte complète, je repère ce qui coince vos utilisateurs et je le corrige.' },
       { name: 'Communication', desc: 'Raconter des histoires, c’est mon dada. Dites-moi votre besoin et on lui donne forme ensemble (réseaux sociaux, un blog, courtes vidéos…).' },
     ],
   },
@@ -67,7 +67,7 @@ export default {
     counterSeparator: '/',
     filters: {
       landing: 'Site web',
-      product: 'Plateformes',
+      product: 'Apps & plateformes',
       storytelling: 'Communication',
     },
     prev: 'Projets précédents',
