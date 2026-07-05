@@ -178,7 +178,7 @@ export default {
         category: 'product',
         tag: 'Journalisme',
         subtitle: 'Self-initiated',
-        title: 'Protéger les lecteurs des pièges à clics et des articles écrits par des bots.',
+        title: 'Protéger les lecteurs des pièges à clics et des articles écrits par des bots',
         year: '2019',
         did: 'Projet de fin de master en UX / design produit mené en solo — un « adblock » pour le clickbait — puis co-construit en beta d’extension navigateur open source avec une équipe de développeurs au Google Campus.',
         result: 'Développé plus tard par une équipe du Google Campus Madrid',
