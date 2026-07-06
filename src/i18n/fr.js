@@ -21,7 +21,7 @@ export default {
     roles: ['expérience utilisateur', 'investigation', 'gestion d’équipes', 'communication', 'design de produits'],
     scroll: 'Défiler',
     subhead: 'on discute ?',
-    tagline: 'je réalise vos projets web de A à Z',
+    tagline: 'Je réalise vos projets web de A à Z',
     headline: 'La clarté, dessinée.',
     cta: 'Parlons-en',
   },

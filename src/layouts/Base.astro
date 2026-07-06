@@ -566,12 +566,17 @@ const personLd = {
         flex-wrap: wrap;
       }
       .footer-cta-btn {
-        background: var(--color-ink-on-purple);
+        background: var(--color-section-bg-alt); /* warm cream, not pure white */
         color: var(--color-purple);
         text-decoration: none;
         padding: 0.8rem 1.6rem;
         border-radius: var(--radius-pill);
         font-weight: 600;
+        transition: background-color 0.2s var(--ease), transform 0.2s var(--ease);
+      }
+      .footer-cta-btn:hover {
+        background: #fff; /* lift to white on the purple ground */
+        transform: translateY(-1px);
       }
       .footer-meta {
         display: flex;

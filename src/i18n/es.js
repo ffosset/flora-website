@@ -11,7 +11,7 @@ export default {
   nav: {
     services: 'servicios',
     work: 'proyectos',
-    about: 'acerca',
+    about: 'sobre mí',
     contact: 'contacto',
   },
   hero: {
@@ -20,7 +20,7 @@ export default {
     roles: ['experiencia de usuario', 'investigación', 'product management', 'comunicación', 'diseño de productos'],
     scroll: 'Desplázate',
     subhead: '¿hablamos?',
-    tagline: 'hago realidad tus proyectos web',
+    tagline: 'Hago realidad tus proyectos web',
     headline: 'Claridad, diseñada.',
     cta: 'Hablemos',
   },
@@ -29,7 +29,7 @@ export default {
     sectionSubtitle: 'Convierto tus ideas en proyectos web terminados',
     viewProjects: 'Ver proyectos',
     items: [
-      { name: 'Páginas web', desc: 'Desde una web sencilla hasta una que puedes ir cambiando tú a medida que creces, decidimos juntos qué necesitas. Luego me encargo del diseño y del desarrollo.' },
+      { name: 'Páginas web', desc: 'Desde una web sencilla hasta un sitio que puedes actualizar a medida que creces, decidimos juntos qué necesitas. Luego me encargo del diseño y del desarrollo.' },
       { name: 'Apps y plataformas', desc: '¿Ya tienes una app o una herramienta que no funciona como debería? Desde una auditoría UX hasta un rediseño completo, encuentro qué frena a tus usuarios y lo soluciono.' },
       { name: 'Comunicación', desc: 'Contar historias es lo mío. Me dices qué necesitas y le damos forma juntos (redes sociales, un blog, vídeos cortos…).' },
     ],
@@ -91,7 +91,7 @@ export default {
         category: 'landing',
         tag: 'Cultura y patrimonio',
         subtitle: "Cercle d'Histoire de Forest",
-        title: 'Dar a una asociación de larga trayectoria la presencia online que merece',
+        title: 'Dar a una asociación veterana la presencia online que merece',
         year: '2025',
         did: 'Construí una plataforma completa en Webflow: landing page, bases de datos y un programa de socios en torno a su revista. Renové su página de Facebook y llevé sus archivos a un espacio compartido en la nube.',
         result: 'Ahora se encuentra online más de 40 veces al mes.',
@@ -149,7 +149,7 @@ export default {
         category: 'storytelling',
         tag: 'sostenibilidad',
         subtitle: 'Oyas Belgique & Drohme Park',
-        title: 'Hacer crecer la audiencia de una nueva feria de jardinería sostenible en Bruselas',
+        title: 'Atraer visitantes a una nueva feria de plantas en Bruselas',
         year: '2026',
         did: 'Llevo las redes sociales y toda la comunicación en torno a su mercado de jardinería de septiembre: voz, calendario, visuales y comunicación del evento.',
         result: 'Objetivo: 5000 visitantes en su primer año (septiembre de 2026).',
@@ -218,7 +218,7 @@ export default {
         category: 'landing',
         tag: 'Periodismo de datos',
         subtitle: 'Self-initiated',
-        title: '¿Puedes pagar tu alquiler?',
+        title: 'Dime cuánto cobras y te diré dónde vivir',
         year: '2017',
         did: 'Creado en un taller de periodismo de datos en Medialab-Prado, Madrid — un mapa interactivo que cruza los alquileres de la ciudad con los salarios locales.',
         result: '+10K visitas el mes de su lanzamiento. Más tarde, publicada en El País.',
@@ -228,7 +228,7 @@ export default {
     ],
   },
   about: {
-    sectionTitle: 'acerca',
+    sectionTitle: 'sobre mí',
     headline: 'Perfil sénior en el cruce entre diseño, <br class="ttl-br" />tecnología y estrategia.',
     // Photo annotation callouts (desktop/tablet) + mobile summary chip.
     tags: { me: 'yo', cat1: 'gato 1', cat2: 'gato 2', cat3: 'gato 3', cast: 'encuentra los 3 gatos en la foto' },
@@ -237,7 +237,7 @@ export default {
     blocks: [
       {
         title: 'cómo trabajo',
-        body: 'Con base entre Bruselas y Madrid, trabajo en español, francés e inglés. Trabajo a distancia y puedo acercarme a tu oficina para reuniones puntuales.',
+        body: 'Con base entre Bruselas y Madrid, hablo español, francés e inglés. Trabajo a distancia y puedo acercarme a tu oficina para reuniones puntuales.',
       },
       {
         title: 'qué traigo',
