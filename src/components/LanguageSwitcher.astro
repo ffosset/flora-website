@@ -5,7 +5,7 @@ const { currentLocale, variant = 'header' } = Astro.props;
 
 // Order shown in the design: en · es · fr.
 const order = ['en', 'es', 'fr'];
-// BASE_URL has no trailing slash (config base is '/flora-website'); strip
+// Config base is '/', so BASE_URL is '/'; strip the trailing slash
 // defensively so the join below is correct either way.
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 
@@ -17,7 +17,7 @@ const activeLabel = languages[currentLocale] ?? languages[defaultLang];
 ---
 
 <details class={`lang-switch lang-switch--${variant}`} data-lang-switch>
-  <summary class="lang-toggle" aria-label="Select language">
+  <summary class="lang-toggle btn-outline" aria-label="Select language">
     <span class="lang-current">{activeLabel}</span>
     <svg class="caret" width="10" height="6" viewBox="0 0 10 6" aria-hidden="true">
       <path d="M1 1l4 4 4-4" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
@@ -47,26 +47,20 @@ const activeLabel = languages[currentLocale] ?? languages[defaultLang];
     font-size: 1rem;
   }
 
-  /* Toggle button (the <summary>) */
+  /* Toggle button (the <summary>). Shares the unified `.btn-outline` recipe
+     (Inter Thin, colored pill border, hover fill) — only layout + colour live
+     here. `color` drives the border via currentColor, so the same control
+     serves both the orange header and the cream-on-footer variant. */
   .lang-toggle {
     display: inline-flex;
     align-items: center;
     gap: 6px;
-    /* A visible rounded border makes the selector read as a control (users
-       were missing that it's clickable). `currentColor` lets the same rule
-       serve both the orange header and the on-purple footer. */
     padding: 4px 12px;
-    border: 1px solid currentColor;
-    border-radius: var(--radius-pill);
-    cursor: pointer;
     color: var(--color-primary);
-    font-weight: 300;
     list-style: none;
     user-select: none;
-    transition: color 0.2s var(--ease), background 0.2s var(--ease);
   }
   .lang-toggle::-webkit-details-marker { display: none; }
-  .lang-toggle:hover { background: color-mix(in srgb, currentColor 10%, transparent); }
   .lang-current { text-transform: lowercase; }
 
   .caret {

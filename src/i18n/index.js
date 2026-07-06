@@ -43,9 +43,9 @@ export function useTranslations(locale) {
 }
 
 // Get the locale from an Astro URL pathname (/fr/... or /es/...).
-// Accounts for a configured base path (e.g. /flora-website/fr/ on GitHub Pages).
+// Accounts for a configured base path (none now: the site is served at '/').
 export function getLocaleFromUrl(url) {
-  // BASE_URL has no trailing slash (e.g. '/flora-website'); strip defensively
+  // Config base is '/', so BASE_URL is '/'; strip the trailing slash defensively
   // so this works whether or not one is present. '' for a root deploy.
   const base = import.meta.env.BASE_URL.replace(/\/$/, '');
   let path = url.pathname;

@@ -2,9 +2,9 @@ import { defineConfig } from 'astro/config';
 
 // https://astro.build/config
 export default defineConfig({
-  // Deployed to GitHub Pages as a project site: ffosset.github.io/flora-website
-  site: 'https://ffosset.github.io',
-  base: '/flora-website',
+  // Deployed to GitHub Pages on the custom apex domain, served at the root.
+  site: 'https://fosset.co',
+  base: '/',
   i18n: {
     // English is the source of truth. French and Spanish are translation stubs.
     defaultLocale: 'en',

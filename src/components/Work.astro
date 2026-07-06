@@ -67,7 +67,7 @@ const ordered = ORDER
     {ordered.length > 2 && (
       <button
         type="button"
-        class="work-more"
+        class="work-more btn-outline"
         data-work-more
         aria-expanded="false"
         data-more-label={t.work.seeMore}
@@ -164,24 +164,13 @@ const ordered = ORDER
   .work-grid > :global(.card:nth-child(n + 3)) { display: none; }
 
   /* "Load more" — reveals the remaining cards. */
+  /* Shares the unified `.btn-outline` recipe; only layout + colour here. */
   .work-more {
     display: block;
     margin: var(--space-block) auto 0;
     padding: 0.7rem 1.7rem;
-    font-family: var(--font-display);
     font-size: 1rem;
-    font-weight: 500;
-    color: var(--color-text);
-    background: transparent;
-    border: 1px solid var(--color-line);
-    border-radius: var(--radius-pill);
-    cursor: pointer;
-    transition: color 0.25s var(--ease), background 0.25s var(--ease),
-      border-color 0.25s var(--ease);
-  }
-  .work-more:hover {
-    border-color: var(--color-muted);
-    background: color-mix(in srgb, var(--color-text) 5%, transparent);
+    color: var(--color-primary);
   }
   .work-more:focus-visible { outline: 2px solid var(--color-primary); outline-offset: 2px; }
 

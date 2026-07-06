@@ -6,7 +6,7 @@ import { useTranslations, getLocaleFromUrl, languages } from '../i18n';
 const locale = getLocaleFromUrl(Astro.url);
 const t = useTranslations(locale);
 // Strip any trailing slash so `${base}/path` is correct regardless (config
-// base is '/flora-website', without a trailing slash).
+// base is '/', so BASE_URL is '/' and this yields '').
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 const home = locale === 'en' ? `${base}/` : `${base}/${locale}/`;
 const year = new Date().getFullYear(); // SSR fallback; a client script keeps it live
@@ -159,7 +159,7 @@ const personLd = {
         <h2>{t.contact.sectionTitle}</h2>
         <p class="footer-sub">{t.contact.subhead}{t.contact.note && ` ${t.contact.note}`}</p>
         <div class="footer-links">
-          <a href={`mailto:${t.contact.email}`} class="footer-cta-btn">{t.contact.email}</a>
+          <a href={`mailto:${t.contact.email}`} class="footer-cta-btn btn-outline">{t.contact.email}</a>
         </div>
       </div>
       <div class="container footer-meta">
@@ -565,18 +565,12 @@ const personLd = {
         margin-top: var(--space-4);
         flex-wrap: wrap;
       }
+      /* Shares the unified `.btn-outline` recipe; cream text drives the border
+         and hover fill against the orange footer ground. */
       .footer-cta-btn {
-        background: var(--color-section-bg-alt); /* warm cream, not pure white */
-        color: var(--color-purple);
+        color: var(--color-ink-on-purple);
         text-decoration: none;
         padding: 0.8rem 1.6rem;
-        border-radius: var(--radius-pill);
-        font-weight: 600;
-        transition: background-color 0.2s var(--ease), transform 0.2s var(--ease);
-      }
-      .footer-cta-btn:hover {
-        background: #fff; /* lift to white on the purple ground */
-        transform: translateY(-1px);
       }
       .footer-meta {
         display: flex;
