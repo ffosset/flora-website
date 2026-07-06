@@ -6,15 +6,7 @@ export default defineConfig({
   // Deployed to GitHub Pages on the custom apex domain, served at the root.
   site: 'https://fosset.co',
   base: '/',
-  integrations: [
-    sitemap({
-      // Emit hreflang alternates so search engines pair the localized pages.
-      i18n: {
-        defaultLocale: 'en',
-        locales: { en: 'en', fr: 'fr', es: 'es' },
-      },
-    }),
-  ],
+  integrations: [sitemap()],
   i18n: {
     // English is the source of truth. French and Spanish are translation stubs.
     defaultLocale: 'en',
