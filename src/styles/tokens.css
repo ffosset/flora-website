@@ -25,13 +25,6 @@
 @font-face {
   font-family: 'Inter';
   font-style: normal;
-  font-weight: 100;
-  font-display: swap;
-  src: url('./fonts/Inter-100.woff2') format('woff2');
-}
-@font-face {
-  font-family: 'Inter';
-  font-style: normal;
   font-weight: 300;
   font-display: swap;
   src: url('./fonts/Inter-300.woff2') format('woff2');
@@ -242,13 +235,13 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
 .container { max-width: var(--maxw); margin-inline: auto; padding-inline: var(--gutter); }
 
 /* Unified outline pill — language switch, "see more", the main CTA. One recipe:
-   Inter Thin, a colored 1px border, fully rounded, no idle fill. Colour is
+   Inter Regular, a colored 1px border, fully rounded, no idle fill. Colour is
    driven by each element's own `color`, so `currentColor` adapts the border and
    the hover fill to every background (burnt orange on light, cream on the
    footer). On hover: a low-opacity fill plus the border deepens to full colour. */
 .btn-outline {
   font-family: var(--font-display);
-  font-weight: 100; /* Inter Thin */
+  font-weight: 400; /* Inter Regular */
   background: transparent;
   border: 1px solid color-mix(in srgb, currentColor 40%, transparent);
   border-radius: var(--radius-pill);
