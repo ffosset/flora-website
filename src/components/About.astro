@@ -6,14 +6,14 @@ const blocks = t.about.blocks || [];
 const path = t.about.path || [];
 const tags = t.about.tags || {};
 
-// Answer markers for the "find the 3 cats" game. A ring pops in beside each cat
-// 3s after the photo scrolls into view (see the <script>). Coordinates are
-// percentages of the displayed photo box, nudged to sit *beside* each cat
-// (never on top). Verified against the full-resolution photo.
+// Answer markers for the "find the 3 cats" game. A ring pops in over each cat
+// 5s after the photo scrolls into view (see the <script>). Coordinates are
+// percentages of the displayed photo box, centered *on* each cat. Verified
+// against the full-resolution photo.
 const CAT_MARKERS = [
-  { key: 'cat1', x: 58, y: 52 }, // cat on the spiral staircase
-  { key: 'cat2', x: 51, y: 15 }, // white cat, left of the window
-  { key: 'cat3', x: 80, y: 15 }, // tabby cat, right of the window
+  { key: 'cat1', x: 53, y: 54 }, // cat on the spiral staircase
+  { key: 'cat2', x: 56, y: 15 }, // white cat, left of the window
+  { key: 'cat3', x: 73, y: 15 }, // tabby cat, right of the window
 ];
 
 // Desktop "vertical wave" geometry (px, in a 660×760 box). Each milestone sits
@@ -52,7 +52,7 @@ const WAVE = {
             loading="lazy"
           />
 
-          {/* Answer markers: a ring pops in beside each cat 3s after the photo
+          {/* Answer markers: a ring pops in over each cat 5s after the photo
               scrolls into view (the reveal is driven by the <script> below). */}
           {CAT_MARKERS.map((cat, i) => (
             <span
@@ -211,13 +211,13 @@ const WAVE = {
 </script>
 
 <script>
-  // "Find the 3 cats": once the photo scrolls into view, give the reader 3s to
-  // spot the cats, then reveal a marker beside each one. The stagger between the
+  // "Find the 3 cats": once the photo scrolls into view, give the reader 5s to
+  // spot the cats, then reveal a marker over each one. The stagger between the
   // three markers is pure CSS (per-marker `--d` delays); we only toggle the
   // `is-revealed` class after the delay.
   const photo = document.querySelector('[data-tags]');
   if (photo) {
-    const reveal = () => setTimeout(() => photo.classList.add('is-revealed'), 3000);
+    const reveal = () => setTimeout(() => photo.classList.add('is-revealed'), 5000);
     if ('IntersectionObserver' in window) {
       const io = new IntersectionObserver(
         (entries) => entries.forEach((e) => {
@@ -340,8 +340,8 @@ const WAVE = {
   .cat-marker {
     position: absolute;
     z-index: 2;
-    width: 26px;
-    height: 26px;
+    width: 34px;
+    height: 34px;
     border-radius: 50%;
     border: 2.5px solid var(--color-primary);
     background: color-mix(in srgb, var(--color-primary) 16%, transparent);
