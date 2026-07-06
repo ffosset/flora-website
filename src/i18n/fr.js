@@ -88,6 +88,7 @@ export default {
       {
         slug: 'cercle-histoire-forest',
         image: '/images/projects/cercle.jpg',
+        alt: 'Gravure ancienne de l’abbaye de Forest vue d’en haut, avec son église, ses jardins clos et les maisons alentour',
         url: 'https://www.histoiredeforest.be/',
         category: 'landing',
         tag: 'Culture & patrimoine',
@@ -102,6 +103,7 @@ export default {
       {
         slug: 'minnow-collective',
         image: '/images/projects/minnow.png',
+        alt: 'Capture d’écran de la plateforme Minnow : une carte du relief avec une zone d’étude circulaire et des repères annotés',
         url: 'https://www.minnowcollective.com/',
         category: 'product',
         tag: 'Nature Tech',
@@ -116,6 +118,7 @@ export default {
       {
         slug: 'soy-de-temporada',
         image: '/images/projects/soydetemporada.png',
+        alt: 'Diagramme circulaire des fruits et légumes de saison, à côté d’illustrations dessinées d’une pêche, d’un poivron et d’une carotte',
         url: 'https://soydetemporada.es/',
         category: 'landing',
         tag: 'Alimentation durable',
@@ -132,6 +135,7 @@ export default {
       {
         slug: 'rosa-ebilling',
         image: '/images/projects/rosa-browser.gif',
+        alt: 'Capture d’écran du tableau de bord Rosa eBilling : un tableau de comptabilité des factures patients avec un récapitulatif des revenus',
         url: 'https://pro.rosa.be/en/solutions/rosa-ebilling',
         category: 'product',
         tag: 'Healthtech',
@@ -146,6 +150,7 @@ export default {
       {
         slug: 'oyas-belgique',
         image: '/images/projects/oyas-drohme.png',
+        alt: 'Bannière promotionnelle du festival des plantes de Bruxelles, sur une halle vitrée baignée de soleil',
         url: 'https://www.oyas-belgique.be/',
         category: 'storytelling',
         tag: 'durabilité',
@@ -160,6 +165,7 @@ export default {
       {
         slug: 'investment-simulator',
         image: '/images/projects/simulator.png',
+        alt: 'Capture d’écran du simulateur d’investissement immobilier : un panneau avec prix et rendement, des curseurs et un graphique de trésorerie',
         url: 'https://www.accumin.com/es/intelligence/productos/pulse-asset',
         category: 'product',
         tag: 'Immobilier',
@@ -174,6 +180,7 @@ export default {
       {
         slug: 'free-the-fish',
         image: '/images/projects/freethefish.png',
+        alt: 'Illustration d’un poisson criant dans un mégaphone, à côté d’un faux titre putaclic estampillé « Clickbait ! »',
         url: 'https://github.com/CodingCarlos/freethefish-chrome',
         category: 'product',
         tag: 'Journalisme',
@@ -188,6 +195,7 @@ export default {
       {
         slug: 'couleur-du-peche',
         image: '/images/projects/couleur-du-peche.jpg',
+        alt: 'Deux hommes âgés assis côte à côte près d’une fenêtre, l’un en pull bleu, l’autre en polo jaune',
         url: '/work/couleur-du-peche',
         category: 'storytelling',
         tag: 'Slow journalism',
@@ -202,6 +210,7 @@ export default {
       {
         slug: 'rosen',
         image: '/images/projects/placeholder.svg',
+        alt: 'Image provisoire pour un projet à venir',
         url: '',
         category: 'landing',
         tag: 'À venir',
@@ -215,6 +224,7 @@ export default {
       {
         slug: 'dime-cuanto-cobras',
         image: '/images/projects/alquilarenelcentro.png',
+        alt: 'Un homme allongé sur un rebord de pierre sous deux panneaux d’agence « à louer » sur une façade madrilène, avec un histogramme en surimpression',
         url: 'https://github.com/ffosset/dime-cuanto-cobras',
         category: 'landing',
         tag: 'Journalisme de données',

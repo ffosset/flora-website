@@ -106,8 +106,8 @@
   --color-ink: var(--color-text);
   --color-ink-on-primary: #ffffff;            /* text on primary */
   --color-muted: #6b564a;                      /* secondary text on light */
-  --color-muted-soft: #9d8f84;                 /* warm grey — nav links (darkened for legibility) */
-  --color-muted-on-primary: rgba(255, 255, 255, 0.72);
+  --color-muted-soft: #78685b;                 /* warm grey — nav links (darkened to clear 4.5:1 AA on the light bar) */
+  --color-muted-on-primary: rgba(255, 255, 255, 0.88); /* raised from .72 so footer meta clears 4.5:1 AA on orange */
 
   /* Lines */
   --color-line: #e7d8cd;                        /* hairline on light */

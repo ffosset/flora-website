@@ -15,7 +15,7 @@ const href = hasUrl ? (isExternal ? c.url : base + c.url) : undefined;
 
 <article class="card" style={`--cat: var(--cat-${c.category})`} data-cat={c.category}>
   <div class="card-media">
-    <img src={base + c.image} alt={c.subtitle} loading="lazy" />
+    <img src={base + c.image} alt={c.alt ?? c.subtitle} loading="lazy" />
     {/* Category pill (+ award), over the image. The year moved down to the
         tags row so it sits with the role tags. */}
     <p class="card-pills">

@@ -95,6 +95,7 @@ export default {
       {
         slug: 'cercle-histoire-forest',
         image: '/images/projects/cercle.jpg',
+        alt: 'Antique engraving of the Abbey of Forest seen from above, with its church, walled gardens and surrounding houses',
         url: 'https://www.histoiredeforest.be/',
         category: 'landing',
         tag: 'Culture & Heritage',
@@ -109,6 +110,7 @@ export default {
       {
         slug: 'minnow-collective',
         image: '/images/projects/minnow.png',
+        alt: 'Screenshot of the Minnow platform: a terrain map with a circular study area and labelled location markers',
         url: 'https://www.minnowcollective.com/',
         category: 'product',
         tag: 'Nature Tech',
@@ -123,6 +125,7 @@ export default {
       {
         slug: 'soy-de-temporada',
         image: '/images/projects/soydetemporada.png',
+        alt: 'Circular chart of what fruit and vegetables are in season, beside hand-drawn illustrations of a peach, a pepper and a carrot',
         url: 'https://soydetemporada.es/',
         category: 'landing',
         tag: 'Food & Sustainability',
@@ -139,6 +142,7 @@ export default {
       {
         slug: 'rosa-ebilling',
         image: '/images/projects/rosa-browser.gif',
+        alt: 'Screenshot of the Rosa eBilling dashboard: an accounting table of patient invoices with an income summary above',
         url: 'https://pro.rosa.be/en/solutions/rosa-ebilling',
         category: 'product',
         tag: 'Healthtech',
@@ -153,6 +157,7 @@ export default {
       {
         slug: 'oyas-belgique',
         image: '/images/projects/oyas-drohme.png',
+        alt: 'Promotional banner for the Brussels plant festival, over a sunlit glass-roofed pavilion',
         url: 'https://www.oyas-belgique.be/',
         category: 'storytelling',
         tag: 'sustainability',
@@ -167,6 +172,7 @@ export default {
       {
         slug: 'investment-simulator',
         image: '/images/projects/simulator.png',
+        alt: 'Screenshot of the property investment simulator: a panel with asking price and gross-yield sliders beside a cashflow chart',
         url: 'https://www.accumin.com/es/intelligence/productos/pulse-asset',
         category: 'product',
         tag: 'Real estate',
@@ -181,6 +187,7 @@ export default {
       {
         slug: 'free-the-fish',
         image: '/images/projects/freethefish.png',
+        alt: 'Illustration of a fish shouting through a megaphone beside a mock headline stamped “Clickbait!”',
         url: 'https://github.com/CodingCarlos/freethefish-chrome',
         category: 'product',
         tag: 'Journalism',
@@ -195,6 +202,7 @@ export default {
       {
         slug: 'couleur-du-peche',
         image: '/images/projects/couleur-du-peche.jpg',
+        alt: 'Two older men sitting side by side by a window, one in a blue sweater and one in a yellow polo shirt',
         url: '/work/couleur-du-peche', // INTERNAL link — opens dedicated page on this site
         category: 'storytelling',
         tag: 'Slow journalism',
@@ -210,6 +218,7 @@ export default {
       {
         slug: 'rosen',
         image: '/images/projects/placeholder.svg', // TODO: real project image
+        alt: 'Placeholder image for a project coming soon',
         url: '',
         category: 'landing',
         tag: 'Coming soon',
@@ -223,6 +232,7 @@ export default {
       {
         slug: 'dime-cuanto-cobras',
         image: '/images/projects/alquilarenelcentro.png',
+        alt: 'A man lying on a stone ledge beneath two “for rent” estate-agent signs on a Madrid façade, with a bar chart overlaid',
         url: 'https://github.com/ffosset/dime-cuanto-cobras',
         category: 'landing',
         tag: 'Data journalism',
