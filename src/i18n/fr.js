@@ -1,4 +1,4 @@
-// French — first draft, mirrors en.js keys exactly.
+// French - first draft, mirrors en.js keys exactly.
 // Register: vous. Kept-English terms (UX/UI) stay verbatim; 'storytelling' → 'communication' in FR.
 // FR-specific: Landing pages → Sites web, Apps & platforms → Apps & plateformes.
 // Empty strings fall back to English via t().
@@ -57,7 +57,7 @@ export default {
     ],
     howIWorkTitle: 'Comment je travaille',
     howIWorkBody:
-      'La plupart des équipes engagent un designer, un rédacteur et un développeur, puis essaient de recoudre le tout. Je vois l’ensemble d’un seul regard — le récit, le design et le produit qui marche — parce que mon parcours est passé par le journalisme, la data, le design et la création d’entreprises.',
+      'La plupart des équipes engagent un designer, un rédacteur et un développeur, puis essaient de recoudre le tout. Je vois l’ensemble d’un seul regard (le récit, le design et le produit qui marche) parce que mon parcours est passé par le journalisme, la data, le design et la création d’entreprises.',
   },
   work: {
     sectionTitle: 'projets',
@@ -187,7 +187,7 @@ export default {
         subtitle: 'Self-initiated',
         title: 'Protéger les lecteurs des pièges à clics et des articles écrits par des bots',
         year: '2019',
-        did: 'Projet de fin de master en UX / design produit mené en solo — un « adblock » pour le clickbait — puis co-construit en beta d’extension navigateur open source avec une équipe de développeurs au Google Campus.',
+        did: 'Projet de fin de master en UX / design produit mené en solo (un « adblock » pour le clickbait) puis co-construit en beta d’extension navigateur open source avec une équipe de développeurs au Google Campus.',
         result: 'Développé plus tard par une équipe du Google Campus Madrid',
         keywords: ['Open-source', 'Intégrations'],
         awards: [],
@@ -218,7 +218,7 @@ export default {
         title: 'Nouvelle landing page en chantier',
         year: '',
         did: '',
-        result: 'En cours — bientôt en ligne.',
+        result: 'En cours, bientôt en ligne.',
         awards: [],
       },
       {
@@ -231,7 +231,7 @@ export default {
         subtitle: 'Self-initiated',
         title: 'Pouvez-vous payer votre loyer ?',
         year: '2017',
-        did: 'Réalisé lors d’un atelier de journalisme de données au Medialab-Prado, à Madrid — une carte interactive croisant les loyers de la ville avec les salaires locaux.',
+        did: 'Réalisé lors d’un atelier de journalisme de données au Medialab-Prado, à Madrid, une carte interactive croisant les loyers de la ville avec les salaires locaux.',
         result: '+10K visites le mois de son lancement. Repris ensuite par le journal espagnol El País.',
         keywords: ['Enquête de données', 'Carte interactive'],
         awards: [{ label: 'Premier prix du concours de journalisme de données de Madrid en 2017' }],
@@ -243,7 +243,7 @@ export default {
     headline: 'Profil senior à la croisée du design, <br class="ttl-br" />de la technologie et de la stratégie.',
     // Photo annotation callouts (desktop/tablet) + mobile summary chip.
     tags: { me: 'moi', cat1: 'chat 1', cat2: 'chat 2', cat3: 'chat 3', cast: 'trouvez les 3 chats sur la photo' },
-    photoCaption: 'Photographiée chez moi à Bruxelles — avec moi et mes trois chats.',
+    photoCaption: 'Photographiée chez moi à Bruxelles, avec moi et mes trois chats.',
     // Three text blocks beside the photo.
     blocks: [
       {
@@ -351,7 +351,7 @@ export default {
   },
   a11y: {
     mainNav: 'Principale',
-    homeLink: 'Flora Fosset — accueil',
+    homeLink: 'Flora Fosset · accueil',
     openMenu: 'Ouvrir le menu',
     getInTouch: 'Me contacter',
     aboutMe: 'À propos de moi',

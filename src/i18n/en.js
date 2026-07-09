@@ -1,4 +1,4 @@
-// English — source of truth.
+// English - source of truth.
 // All UI text lives here. Components must never hardcode strings.
 // fr.js and es.js mirror these keys exactly (empty strings fall back to English).
 
@@ -164,7 +164,7 @@ export default {
         subtitle: 'Oyas Belgique & Drohme Park',
         title: 'Grow the audience for a new sustainable garden fair in Brussels',
         year: '2026',
-        did: 'Run social media and lead all communications around their September garden market — voice, calendar, visuals, event comms.',
+        did: 'Run social media and lead all communications around their September garden market: voice, calendar, visuals, event comms.',
         result: 'Targeting 5,000 visitors in its first year (September 2026).',
         keywords: ['PR', 'Social media', 'Branding'],
         awards: [],
@@ -194,7 +194,7 @@ export default {
         subtitle: 'Self-initiated',
         title: 'Protect readers from clickbait and bot-written articles',
         year: '2019',
-        did: 'A solo UX / product-design master’s project — an “adblock” for clickbait — later co-built into an open-source browser-extension beta with a developer team at Google Campus.',
+        did: 'A solo UX / product-design master’s project (an “adblock” for clickbait) later co-built into an open-source browser-extension beta with a developer team at Google Campus.',
         result: 'Later developed by a team at Google Campus Madrid.',
         keywords: ['Open-source', 'Integrations'],
         awards: [],
@@ -203,7 +203,7 @@ export default {
         slug: 'couleur-du-peche',
         image: '/images/projects/couleur-du-peche.jpg',
         alt: 'Two older men sitting side by side by a window, one in a blue sweater and one in a yellow polo shirt',
-        url: '/work/couleur-du-peche', // INTERNAL link — opens dedicated page on this site
+        url: '/work/couleur-du-peche', // INTERNAL link - opens dedicated page on this site
         category: 'storytelling',
         tag: 'Slow journalism',
         subtitle: '24h01 · revue belge',
@@ -226,7 +226,7 @@ export default {
         title: 'A new landing page in the works',
         year: '',
         did: '',
-        result: 'In progress — coming soon.',
+        result: 'In progress, coming soon.',
         awards: [],
       },
       {
@@ -239,7 +239,7 @@ export default {
         subtitle: 'Self-initiated',
         title: 'Can you afford your rent?',
         year: '2017',
-        did: 'Built at a Medialab-Prado data-journalism workshop in Madrid — an interactive map cross-referencing rents across the city against local salaries.',
+        did: 'Built at a Medialab-Prado data-journalism workshop in Madrid: an interactive map cross-referencing rents across the city against local salaries.',
         result: 'Visited +10K times the month it was launched. Later published by the Spanish newspaper El País.',
         keywords: ['Data investigation', 'Interactive map'],
         awards: [{ label: 'First prize of the data journalism contest of Madrid in 2017' }],
@@ -251,7 +251,7 @@ export default {
     headline: 'Product leader and expert in bridging design, <br class="ttl-br" />technology, and business strategy.',
     // Photo annotation callouts (desktop/tablet) + mobile summary chip.
     tags: { me: 'me', cat1: 'cat 1', cat2: 'cat 2', cat3: 'cat 3', cast: 'find the 3 cats in the picture' },
-    photoCaption: 'Photographed at home in Brussels — with me and three cats.',
+    photoCaption: 'Photographed at home in Brussels, with me and three cats.',
     // Three text blocks beside the photo.
     blocks: [
       {
@@ -363,7 +363,7 @@ export default {
   // Screen-reader-only labels (aria-label / sr-only text).
   a11y: {
     mainNav: 'Main',
-    homeLink: 'Flora Fosset — home',
+    homeLink: 'Flora Fosset · home',
     openMenu: 'Open menu',
     getInTouch: 'Get in touch',
     aboutMe: 'About me',

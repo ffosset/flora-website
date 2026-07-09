@@ -1,4 +1,4 @@
-// Spanish — first draft, mirrors en.js keys exactly.
+// Spanish - first draft, mirrors en.js keys exactly.
 // Register: tú. Kept-English terms (UX/UI, Landing pages, Storytelling) stay
 // verbatim. Empty strings fall back to English via t().
 
@@ -56,7 +56,7 @@ export default {
     ],
     howIWorkTitle: 'Cómo trabajo',
     howIWorkBody:
-      'La mayoría de los equipos contratan a un diseñador, un redactor y un desarrollador, y luego intentan coser las piezas. Yo veo el conjunto de una vez —la historia, el diseño y el producto funcionando— porque mi camino pasó por el periodismo, los datos, el diseño y la creación de empresas.',
+      'La mayoría de los equipos contratan a un diseñador, un redactor y un desarrollador, y luego intentan coser las piezas. Yo veo el conjunto de una vez (la historia, el diseño y el producto funcionando) porque mi camino pasó por el periodismo, los datos, el diseño y la creación de empresas.',
   },
   work: {
     sectionTitle: 'proyectos',
@@ -186,7 +186,7 @@ export default {
         subtitle: 'Self-initiated',
         title: 'Proteger a los lectores del clickbait y de los artículos escritos por bots',
         year: '2019',
-        did: 'Proyecto de fin de máster en UX / diseño de producto hecho en solitario —un «adblock» para el clickbait— que después co-construí como beta de extensión de navegador open source con un equipo de desarrolladores en Google Campus.',
+        did: 'Proyecto de fin de máster en UX / diseño de producto hecho en solitario (un «adblock» para el clickbait) que después co-construí como beta de extensión de navegador open source con un equipo de desarrolladores en Google Campus.',
         result: 'Desarrollado luego por un equipo en el Google Campus Madrid.',
         keywords: ['Open-source', 'Integraciones'],
         awards: [],
@@ -217,7 +217,7 @@ export default {
         title: 'Una nueva landing page en camino',
         year: '',
         did: '',
-        result: 'En marcha — muy pronto.',
+        result: 'En marcha, muy pronto.',
         awards: [],
       },
       {
@@ -230,7 +230,7 @@ export default {
         subtitle: 'Self-initiated',
         title: 'Dime cuánto cobras y te diré dónde vivir',
         year: '2017',
-        did: 'Creado en un taller de periodismo de datos en Medialab-Prado, Madrid — un mapa interactivo que cruza los alquileres de la ciudad con los salarios locales.',
+        did: 'Creado en un taller de periodismo de datos en Medialab-Prado, Madrid, un mapa interactivo que cruza los alquileres de la ciudad con los salarios locales.',
         result: '+10K visitas el mes de su lanzamiento. Más tarde, publicada en El País.',
         keywords: ['Investigación de datos', 'Mapa interactivo'],
         awards: [{ label: 'Primer premio del concurso de periodismo de datos de Madrid en 2017' }],
@@ -242,7 +242,7 @@ export default {
     headline: 'Perfil sénior en el cruce entre diseño, <br class="ttl-br" />tecnología y estrategia.',
     // Photo annotation callouts (desktop/tablet) + mobile summary chip.
     tags: { me: 'yo', cat1: 'gato 1', cat2: 'gato 2', cat3: 'gato 3', cast: 'encuentra los 3 gatos en la foto' },
-    photoCaption: 'Fotografiada en casa, en Bruselas — conmigo y tres gatos.',
+    photoCaption: 'Fotografiada en casa, en Bruselas, conmigo y tres gatos.',
     // Three text blocks beside the photo.
     blocks: [
       {
@@ -350,7 +350,7 @@ export default {
   },
   a11y: {
     mainNav: 'Principal',
-    homeLink: 'Flora Fosset — inicio',
+    homeLink: 'Flora Fosset · inicio',
     openMenu: 'Abrir el menú',
     getInTouch: 'Escríbeme',
     aboutMe: 'Sobre mí',

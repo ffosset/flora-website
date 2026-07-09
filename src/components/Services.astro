@@ -40,7 +40,7 @@ const CATS = ['landing', 'product', 'storytelling'];
     font-size: var(--fs-h4);
     letter-spacing: 0.04em;
     color: var(--color-primary);
-    margin-bottom: var(--space-element);
+    margin-bottom: var(--space-line); /* eyebrow -> title, tightened from element */
   }
   .services-eyebrow .slash { color: var(--color-primary); margin-right: 0.4em; }
   .services-title {
@@ -64,7 +64,7 @@ const CATS = ['landing', 'product', 'storytelling'];
 
   /* Static card: soft tint of the category colour (matching the project cards
      at rest) with an always-on hard offset shadow in the category colour. Not
-     interactive — no hover, no cursor change. */
+     interactive - no hover, no cursor change. */
   .service {
     display: flex;
     flex-direction: column;

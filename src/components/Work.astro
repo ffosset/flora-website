@@ -82,7 +82,7 @@ const ordered = ORDER
 </section>
 
 <script>
-  // "Load more": reveal one more row per click — 3 cards on desktop, 2 on
+  // "Load more": reveal one more row per click - 3 cards on desktop, 2 on
   // tablet / mobile. Which cards are hidden by default is a CSS rule per
   // breakpoint; JS reveals the next batch by setting an inline display, and
   // once every card is shown the button flips to "Load less" (collapse).
@@ -122,7 +122,7 @@ const ordered = ORDER
 <style>
   .work {
     background: var(--color-section-bg-alt);
-    padding-block: calc(var(--space-section) / 2); /* symmetric — was the odd 112/64 that broke the rhythm */
+    padding-block: calc(var(--space-section) / 2); /* symmetric - was the odd 112/64 that broke the rhythm */
     scroll-margin-top: 5rem; /* clear the fixed nav when scrolling to #work */
   }
 
@@ -138,7 +138,7 @@ const ordered = ORDER
     font-size: var(--fs-h4);
     letter-spacing: 0.04em;
     color: var(--color-primary);
-    margin-bottom: var(--space-element);
+    margin-bottom: var(--space-line); /* eyebrow -> title, tightened from element */
   }
   .work-eyebrow .slash { color: var(--color-primary); margin-right: 0.4em; }
   .work-title {
@@ -163,7 +163,7 @@ const ordered = ORDER
      so it needs :global() to escape this component's style scope. */
   .work-grid > :global(.card:nth-child(n + 3)) { display: none; }
 
-  /* "Load more" — reveals the remaining cards. */
+  /* "Load more" - reveals the remaining cards. */
   /* Shares the unified `.btn-outline` recipe; only layout + colour here. */
   .work-more {
     display: block;

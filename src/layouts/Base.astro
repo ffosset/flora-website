@@ -74,10 +74,10 @@ const switchPath = translatedPaths.has(pagePath) ? pagePath : '';
 
 // Prefix for the nav section links. On a subpage they must jump back to the
 // home page's sections ('/#services'); on the home page they stay in-page
-// ('#services'). Contact is always in-page — the footer CTA is on every page.
+// ('#services'). Contact is always in-page - the footer CTA is on every page.
 const navBase = subpage ? home : '';
 
-// schema.org Person — one JSON-LD block per page. jobTitle is the descriptor
+// schema.org Person - one JSON-LD block per page. jobTitle is the descriptor
 // after "·" in the locale title. sameAs left empty for social links.
 const jobTitle = (t.meta.title.split('·')[1] ?? t.meta.title).trim();
 const personLd = {
@@ -368,7 +368,7 @@ const personLd = {
       }
 
       /* Default (landing) state: while the hero fills the top of the viewport,
-         the bar sheds its pill — no wrapper, no background — and spans the
+         the bar sheds its pill - no wrapper, no background - and spans the
          hero's full width, aligned to the hero gutter like the rest of it.
          Scrolling past the hero restores the sticky pill above. */
       .site-header.at-top > .container {
@@ -383,7 +383,7 @@ const personLd = {
         border-radius: 0;
       }
 
-      /* "fosset.co" wordmark — light weight, primary color. */
+      /* "fosset.co" wordmark - light weight, primary color. */
       .wordmark {
         flex-shrink: 0;
         text-decoration: none;
@@ -439,7 +439,7 @@ const personLd = {
         .nav-links a::after { transition: none; }
       }
 
-      /* Hamburger — hidden on desktop. */
+      /* Hamburger - hidden on desktop. */
       .menu-toggle {
         display: none;
         width: 28px;
@@ -468,7 +468,7 @@ const personLd = {
         .nav-collapse {
           display: none;
           position: absolute;
-          /* Joins directly onto the bottom of the (now white) bar — no gap,
+          /* Joins directly onto the bottom of the (now white) bar - no gap,
              so the wordmark + close button read as part of the same sheet. */
           top: 100%;
           /* Break out of the pill + container gutter to span the full screen
@@ -543,7 +543,7 @@ const personLd = {
         text-align: center;
       }
 
-      /* Mobile: drop the fixed "drawer" reveal — it scrolls janky on touch.
+      /* Mobile: drop the fixed "drawer" reveal - it scrolls janky on touch.
          The footer just flows normally after the page content. */
       @media (max-width: 768px) {
         main { margin-bottom: 0; }

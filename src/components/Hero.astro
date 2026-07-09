@@ -23,13 +23,13 @@ const roles = t.hero.roles?.length ? t.hero.roles : [t.hero.roleWord];
     </div>
   </div>
 
-  <!-- Spotlight cursor follower — additive, scoped to the hero. -->
+  <!-- Spotlight cursor follower - additive, scoped to the hero. -->
   <div class="hero-cursor" data-hero-cursor aria-hidden="true"></div>
 </section>
 
 <script>
   // Lock the hero to the viewport height measured ON LOAD (mobile address bar
-  // shown) and DON'T change it when the bar collapses on scroll — that height-
+  // shown) and DON'T change it when the bar collapses on scroll - that height-
   // only resize is exactly what made the hero grow / the title drift on the
   // first scroll. We only re-measure when the width changes (orientation).
   const heroEl = document.querySelector('[data-hero]');
@@ -46,7 +46,7 @@ const roles = t.hero.roles?.length ? t.hero.roles : [t.hero.roleWord];
 <script>
   // Rolling-slot word stack. Each word enters the pinned "flora ·" slot, becomes
   // the active (nearest, darkest) row, and shoves the previous words away as they
-  // lighten. Runs ONCE on load and HOLDS on the full list forever — no loop, so a
+  // lighten. Runs ONCE on load and HOLDS on the full list forever - no loop, so a
   // visitor who never watches the motion still sees every word. Order comes from
   // i18n roles (data-words). Colour is by POSITION, recomputed on every step.
   const stack = document.querySelector('[data-hero-stack]');
@@ -55,7 +55,7 @@ const roles = t.hero.roles?.length ? t.hero.roles : [t.hero.roleWord];
     try { ORDER = JSON.parse(stack.dataset.words || '[]'); } catch {}
     const SHADES = ['--w5', '--w4', '--w3', '--w2', '--w1']; // idx 0 = active (next to flora·) = darkest
     const STEP = 500;   // word landing duration (≈ --dur)
-    const HOLD = 1100;  // still time between words — the pacing dial
+    const HOLD = 1100;  // still time between words - the pacing dial
     const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
     const wait = (ms) => new Promise((r) => setTimeout(r, ms));
 
@@ -66,7 +66,7 @@ const roles = t.hero.roles?.length ? t.hero.roles : [t.hero.roleWord];
     const fitGutter = () => {
       if (!anchor) return;
       // Mobile (≤720px): flora· is on its own line above the words, so there is
-      // no side gutter — the words align to the left edge (the "f" of flora).
+      // no side gutter - the words align to the left edge (the "f" of flora).
       if (window.matchMedia('(max-width: 720px)').matches) {
         stack.style.paddingLeft = '0px';
         return;
@@ -111,7 +111,7 @@ const roles = t.hero.roles?.length ? t.hero.roles : [t.hero.roleWord];
 </script>
 
 <script>
-  // Spotlight cursor follower, scoped to the hero. This is ADDITIVE — the
+  // Spotlight cursor follower, scoped to the hero. This is ADDITIVE - the
   // native cursor stays visible; the follower is a decorative blend-mode disc.
   // SSR-safe: Astro only runs this on the client, but guard matchMedia anyway.
   const supportsMM = typeof window !== 'undefined' && 'matchMedia' in window;
@@ -220,7 +220,7 @@ const roles = t.hero.roles?.length ? t.hero.roles : [t.hero.roleWord];
     left: 0;
     width: var(--cursor-size);
     height: var(--cursor-size);
-    /* Soft radial glow that fades to nothing — no hard edge, no flat circle.
+    /* Soft radial glow that fades to nothing - no hard edge, no flat circle.
        The inner stop is already softened to 60% so the glow stays a hint of
        warmth rather than a solid orange core. */
     background: radial-gradient(
@@ -232,7 +232,7 @@ const roles = t.hero.roles?.length ? t.hero.roles : [t.hero.roleWord];
     filter: blur(40px);
     /* multiply keeps the orange truthful: it warmly tints the cream ground
        instead of inverting it. (difference turned the orange blue; plain
-       opacity with no blend sat flat and grey-ish on top — multiply gives the
+       opacity with no blend sat flat and grey-ish on top - multiply gives the
        warmest, most natural glow against this palette.) */
     mix-blend-mode: multiply;
     pointer-events: none;
@@ -240,7 +240,7 @@ const roles = t.hero.roles?.length ? t.hero.roles : [t.hero.roleWord];
     opacity: 0;
     /* Position on the `translate` channel (GPU-composited, never top/left).
        -50% is exactly --cursor-size / 2, so the glow stays centered on the
-       pointer at any size — the larger 500px box is accounted for automatically. */
+       pointer at any size - the larger 500px box is accounted for automatically. */
     translate: calc(var(--cx, 0px) - 50%) calc(var(--cy, 0px) - 50%);
     /* Promote to its own layer: a 500px blurred element is costly to repaint. */
     will-change: transform;
@@ -285,13 +285,13 @@ const roles = t.hero.roles?.length ? t.hero.roles : [t.hero.roleWord];
   }
   /* The photo shown as-is (no colour treatment), with a hard offset shadow in
      the primary orange. On hover the orange slides further out from behind the
-     photo — a parallax on the fill. The photo itself stays put: moving it would
+     photo - a parallax on the fill. The photo itself stays put: moving it would
      break its flush top/left edges against the orange and open a white gap. */
   .hero-photo {
     --w: 203px;         /* frame width */
     --h: 250px;         /* taller than wide so the whole head fits (no crop) */
     --radius: 4px;      /* barely-there corners, matching About */
-    --shadow-x: -14px;  /* hard-shadow offset — negative = up/left */
+    --shadow-x: -14px;  /* hard-shadow offset - negative = up/left */
     --shadow-y: -14px;
     display: block;
     position: relative;
@@ -300,7 +300,7 @@ const roles = t.hero.roles?.length ? t.hero.roles : [t.hero.roleWord];
     border-radius: var(--radius);
     /* Hard shadow: solid primary orange, no blur (0 blur, 0 spread). Because it
        stays flush against the photo's top/left edges, deepening it never opens
-       a gap — the orange just reads as a full fill sliding out behind. */
+       a gap - the orange just reads as a full fill sliding out behind. */
     box-shadow: var(--shadow-x) var(--shadow-y) 0 0 var(--color-primary);
     cursor: pointer;
     transition: box-shadow 0.3s var(--ease);
@@ -350,7 +350,7 @@ const roles = t.hero.roles?.length ? t.hero.roles : [t.hero.roleWord];
     --w3: color-mix(in srgb, var(--color-primary) 56%, var(--color-secondary));
     --w2: color-mix(in srgb, var(--color-primary) 36%, var(--color-secondary));
     --w1: color-mix(in srgb, var(--color-primary) 20%, var(--color-secondary)); /* furthest */
-    --dur: 0.5s;                       /* STEP — word landing duration */
+    --dur: 0.5s;                       /* STEP - word landing duration */
 
     position: relative;
     display: flex;
@@ -379,7 +379,7 @@ const roles = t.hero.roles?.length ? t.hero.roles : [t.hero.roleWord];
   .hero-name { color: var(--color-text); font-weight: 800; } /* Extra Bold */
   .hero-dot { color: var(--color-primary); font-weight: 300; }
 
-  /* mobile: flora· TOP-left, words stack DOWN — CSS flip only, no JS path.
+  /* mobile: flora· TOP-left, words stack DOWN - CSS flip only, no JS path.
      The text cluster moves to the TOP of the hero and the portrait drops to
      the BOTTOM-RIGHT, so they sit in opposite corners. */
   @media (max-width: 720px) {
@@ -387,7 +387,7 @@ const roles = t.hero.roles?.length ? t.hero.roles : [t.hero.roleWord];
     .hero-stack {
       flex-direction: column;                 /* newest on top, pushes older DOWN */
       justify-content: flex-start;
-      padding-left: 0;                         /* no side gutter — words align to the left edge */
+      padding-left: 0;                         /* no side gutter - words align to the left edge */
       padding-top: 1.35em;                     /* reserve one line at the top for flora· */
       gap: 0.14em;
       font-size: clamp(1.8rem, 9vw, 2.6rem);   /* sized so "product management" fits one line */
@@ -430,7 +430,7 @@ const roles = t.hero.roles?.length ? t.hero.roles : [t.hero.roleWord];
 
 <style is:global>
   /* Rows are injected by JS, so they never receive Astro's build-time scope
-     attribute — their rules can't live in the scoped <style> above. They're
+     attribute - their rules can't live in the scoped <style> above. They're
      kept here, tightly namespaced under .hero-stack so nothing leaks globally.
      --dur / --ease / the --wN ramp inherit from the scoped .hero-stack. */
   .hero-stack .word {
@@ -458,7 +458,7 @@ const roles = t.hero.roles?.length ? t.hero.roles : [t.hero.roleWord];
   .hero-stack .word.show { grid-template-rows: 1fr; opacity: 1; }
   .hero-stack .word.show > .inner { transform: none; }
 
-  /* Reduced motion: no build-up — JS adds .show synchronously, so kill the
+  /* Reduced motion: no build-up - JS adds .show synchronously, so kill the
      transition and land on the final all-visible frame instantly. */
   @media (prefers-reduced-motion: reduce) {
     .hero-stack .word,

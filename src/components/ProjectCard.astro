@@ -1,6 +1,6 @@
 ---
 // A single project card. At rest the image carries the category pill, and the
-// body below shows the problem (title) and the result — both always visible.
+// body below shows the problem (title) and the result - both always visible.
 // On hover the image fills with the category colour and reveals the year +
 // role tags and the link, overlaying only the image; the title/result never
 // move, so the reveal can't disorient. On touch (no hover) that same colour
@@ -40,7 +40,7 @@ const href = hasUrl ? (isExternal ? c.url : base + c.url) : undefined;
     {c.subtitle && <p class="card-client">{c.subtitle}</p>}
   </div>
 
-  {/* Reveal — role tags, awards and the link. Desktop: absolutely positioned
+  {/* Reveal - role tags, awards and the link. Desktop: absolutely positioned
       over the image, category colour, faded in on hover / focus. Touch: falls
       into normal flow as a colour strip under the image (see the media query).
       Placed last in the DOM so that on touch it reads after the body. */}
@@ -90,7 +90,7 @@ const href = hasUrl ? (isExternal ? c.url : base + c.url) : undefined;
     height: 28rem; /* every card the same height */
     border-radius: 4px;
     overflow: hidden;
-    /* Soft tint of the category colour — kept the same at rest and on hover. */
+    /* Soft tint of the category colour - kept the same at rest and on hover. */
     background: linear-gradient(
       160deg,
       color-mix(in srgb, var(--cat) 13%, #ffffff),
@@ -154,11 +154,11 @@ const href = hasUrl ? (isExternal ? c.url : base + c.url) : undefined;
     background: var(--cat);
     color: var(--color-text);
   }
-  /* The category fills are all too dark for dark text — flip to white. */
+  /* The category fills are all too dark for dark text - flip to white. */
   .card[data-cat='landing'] .card-type,
   .card[data-cat='product'] .card-type,
   .card[data-cat='storytelling'] .card-type { color: #ffffff; }
-  /* Award icon — a frosted chip in the pills row when the project has awards. */
+  /* Award icon - a frosted chip in the pills row when the project has awards. */
   .card-award {
     display: inline-flex;
     align-items: center;
@@ -193,7 +193,7 @@ const href = hasUrl ? (isExternal ? c.url : base + c.url) : undefined;
     -webkit-box-orient: vertical;
     overflow: hidden;
   }
-  /* Result: the payoff, sitting right under the problem — medium display weight
+  /* Result: the payoff, sitting right under the problem - medium display weight
      so it reads as a distinct beat without competing with the title. */
   .card-result {
     font-family: var(--font-display);
@@ -233,10 +233,10 @@ const href = hasUrl ? (isExternal ? c.url : base + c.url) : undefined;
     background: var(--cat);
     color: var(--color-text);
     opacity: 0;
-    pointer-events: none; /* invisible at rest — don't let a stray click hit the link */
+    pointer-events: none; /* invisible at rest - don't let a stray click hit the link */
     transition: opacity 0.35s var(--ease);
   }
-  /* The category fills are all too dark for dark text — flip the reveal to white. */
+  /* The category fills are all too dark for dark text - flip the reveal to white. */
   .card[data-cat='landing'] .card-overlay,
   .card[data-cat='product'] .card-overlay,
   .card[data-cat='storytelling'] .card-overlay { color: #ffffff; }
@@ -246,7 +246,7 @@ const href = hasUrl ? (isExternal ? c.url : base + c.url) : undefined;
     pointer-events: auto;
   }
 
-  /* Role tags — light frosted chips with dark text, matching the idle year
+  /* Role tags - light frosted chips with dark text, matching the idle year
      chip, so they read the same on every category fill. */
   .card-tags { display: flex; flex-wrap: wrap; gap: 0.5rem; }
   .card-tag {
@@ -305,8 +305,8 @@ const href = hasUrl ? (isExternal ? c.url : base + c.url) : undefined;
   }
 
   /* Phones: no hover. The reveal leaves its absolute overlay and joins the body
-     as one continuous block — no coloured fill (the card tint shows through),
-     dark text, and padding aligned with the body — so the tags and link read as
+     as one continuous block - no coloured fill (the card tint shows through),
+     dark text, and padding aligned with the body - so the tags and link read as
      part of the card's main content. */
   @media (max-width: 720px) {
     .card { height: auto; }

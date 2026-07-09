@@ -247,7 +247,7 @@ const WAVE = {
     font-size: var(--fs-h4);
     letter-spacing: 0.04em;
     color: var(--color-primary);
-    margin-bottom: var(--space-element);
+    margin-bottom: var(--space-line); /* eyebrow -> title, tightened from element */
   }
   .about-eyebrow .slash { color: var(--color-primary); margin-right: 0.4em; }
   .about-title {
@@ -257,13 +257,13 @@ const WAVE = {
     letter-spacing: -0.02em;
     color: var(--color-text);
   }
-  /* Forced line break before the "technology" clause — desktop/tablet only;
+  /* Forced line break before the "technology" clause - desktop/tablet only;
      on phones the title wraps naturally so we suppress the break. */
   @media (max-width: 767.98px) {
     .about-title .ttl-br { display: none; }
   }
 
-  /* Timeline heading ("· my path") — centred small orange eyebrow, matching
+  /* Timeline heading ("· my path") - centred small orange eyebrow, matching
      the section labels (· about, · services, · projects). */
   .about-subhead {
     text-align: center;
@@ -275,7 +275,7 @@ const WAVE = {
   }
   .about-subhead .slash { color: var(--color-primary); margin-right: 0.4em; }
 
-  /* Headline under the "· journey" eyebrow — same large bold statement as the
+  /* Headline under the "· journey" eyebrow - same large bold statement as the
      section header. */
   .about-subhead-title {
     text-align: center;
@@ -284,7 +284,7 @@ const WAVE = {
     line-height: 1.15;
     letter-spacing: -0.02em;
     color: var(--color-text);
-    margin-top: var(--space-element); /* path eyebrow -> path title (label -> title) */
+    margin-top: var(--space-line); /* path eyebrow -> path title, tightened from element */
   }
 
   .about-grid {
@@ -336,7 +336,7 @@ const WAVE = {
      A terracotta ring sits *beside* each cat, hidden until the reveal. 3s after
      the photo scrolls into view the JS adds `is-revealed`; the rings then pop in
      one after another (per-marker `--d`) and give a gentle pulse to draw the eye.
-     Shown on every viewport — the prompt below the photo stands in for a caption. */
+     Shown on every viewport - the prompt below the photo stands in for a caption. */
   .cat-marker {
     position: absolute;
     z-index: 2;
@@ -389,7 +389,7 @@ const WAVE = {
     white-space: nowrap;
   }
 
-  /* Descriptive caption for screen readers — the annotation makes sense
+  /* Descriptive caption for screen readers - the annotation makes sense
      without the visuals. Visually hidden on every viewport. */
   .tag-caption {
     position: absolute;
@@ -433,7 +433,7 @@ const WAVE = {
   /* --- Timeline ---
      Mobile (<760px): a straight vertical rail with the dots down the left and
      left-aligned content; the rail grows and the steps fade in on reveal.
-     Desktop (≥760px): a centred "vertical wave" — the SVG path is the line and
+     Desktop (≥760px): a centred "vertical wave" - the SVG path is the line and
      each milestone is positioned at its wave extreme, revealed as the line is
      drawn (see the <script> and the min-width block below). */
   /* Journey: a full-width tinted band (spans the section; content is re-centred
@@ -633,7 +633,7 @@ const WAVE = {
     .path-step.is-current .path-dot::after { animation: none; opacity: 0; }
 
     /* Cat markers: still gated behind the 3s reveal, but pop in without
-       motion — no scale/pulse, just a fade handled by the base transition. */
+       motion - no scale/pulse, just a fade handled by the base transition. */
     .cat-marker { transform: translate(-50%, -50%); transition: opacity 0.3s var(--ease); }
     .about-photo.is-revealed .cat-marker { transform: translate(-50%, -50%); }
     .about-photo.is-revealed .cat-marker::after { animation: none; }
