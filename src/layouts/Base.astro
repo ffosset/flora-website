@@ -10,7 +10,10 @@ const t = useTranslations(locale);
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 const home = locale === 'en' ? `${base}/` : `${base}/${locale}/`;
 const year = new Date().getFullYear(); // SSR fallback; a client script keeps it live
-const { title, description } = Astro.props; // optional per-page <title>/meta overrides
+// `subpage` drops the scroll-page floating nav (its links point at #services
+// etc., which don't exist off the home page). Standalone routes provide their
+// own in-page back link instead. Home + the work article omit it (default).
+const { title, description, subpage = false } = Astro.props;
 const pageTitle = title ?? t.meta.title; // used for <title> and og:/twitter: titles
 const pageDescription = description ?? t.meta.description; // used for meta + og/twitter
 
@@ -42,21 +45,30 @@ const ogImageAlts = {
 };
 const ogImageAlt = ogImageAlts[locale] ?? ogImageAlts.en;
 
-// hreflang: the home page exists in all three locales (reciprocal set +
-// x-default). Single-locale pages (e.g. the work article) only self-reference
-// by their own locale, plus x-default → default homepage. No fake fr/es URLs.
-const alternates =
-  pagePath === ''
-    ? [
-        { hreflang: 'en', href: abs('') },
-        { hreflang: 'fr', href: abs('fr/') },
-        { hreflang: 'es', href: abs('es/') },
-        { hreflang: 'x-default', href: siteHome },
-      ]
-    : [
-        { hreflang: locale, href: canonical },
-        { hreflang: 'x-default', href: siteHome },
-      ];
+// hreflang: pages that exist in all three locales (home + privacy) emit the
+// full reciprocal set + x-default → the default-locale copy. Single-locale
+// pages (e.g. the work article) only self-reference by their own locale, plus
+// x-default → default homepage. No fake fr/es URLs.
+const translatedPaths = new Set(['', 'privacy/']);
+const alternates = translatedPaths.has(pagePath)
+  ? [
+      { hreflang: 'en', href: abs(pagePath) },
+      { hreflang: 'fr', href: abs(`fr/${pagePath}`) },
+      { hreflang: 'es', href: abs(`es/${pagePath}`) },
+      { hreflang: 'x-default', href: abs(pagePath) },
+    ]
+  : [
+      { hreflang: locale, href: canonical },
+      { hreflang: 'x-default', href: siteHome },
+    ];
+
+// Footer "Privacy" link → the current locale's privacy page.
+const privacyHref = locale === 'en' ? `${base}/privacy/` : `${base}/${locale}/privacy/`;
+
+// Language switcher target: for pages that exist in every locale, keep the
+// visitor on the same page in the new language; otherwise ('' → locale home)
+// fall back gracefully for single-locale pages with no translated equivalent.
+const switchPath = translatedPaths.has(pagePath) ? pagePath : '';
 
 // schema.org Person — one JSON-LD block per page. jobTitle is the descriptor
 // after "·" in the locale title. sameAs left empty for social links.
@@ -116,6 +128,8 @@ const personLd = {
     <link rel="apple-touch-icon" href={`${base}/apple-touch-icon.png`} />
   </head>
   <body>
+    {!subpage && (
+    <Fragment>
     <header class="site-header at-top">
       <div class="container">
         <nav class="nav-bar" aria-label={t.a11y.mainNav}>
@@ -128,7 +142,7 @@ const personLd = {
               <li><a href="#about" data-nav-link>{t.nav.about}</a></li>
               <li><a href="#contact" data-nav-link>{t.nav.contact}</a></li>
             </ul>
-            <LanguageSwitcher currentLocale={locale} />
+            <LanguageSwitcher currentLocale={locale} path={switchPath} />
           </div>
 
           <button
@@ -149,6 +163,8 @@ const personLd = {
 
     {/* Mobile menu scrim: darkens the page beneath the open full-width menu. */}
     <div class="nav-scrim" data-nav-scrim aria-hidden="true"></div>
+    </Fragment>
+    )}
 
     <main>
       <slot />
@@ -163,12 +179,15 @@ const personLd = {
         </div>
       </div>
       <div class="container footer-meta">
-        <span>{t.footer.rights} <span data-year>{year}</span></span>
+        <span class="footer-meta-start">
+          {t.footer.rights} <span data-year>{year}</span>
+          <a href={privacyHref} class="footer-privacy">{t.footer.privacy}</a>
+        </span>
         <span class="footer-meta-end">
           <a href={t.contact.linkedin} target="_blank" rel="noopener" class="footer-linkedin">
             {t.contact.linkedinLabel}
           </a>
-          <LanguageSwitcher currentLocale={locale} variant="footer" />
+          <LanguageSwitcher currentLocale={locale} variant="footer" path={switchPath} />
         </span>
       </div>
     </footer>
@@ -583,19 +602,38 @@ const personLd = {
         font-size: var(--fs-small);
         color: var(--color-muted-on-purple);
       }
+      .footer-meta-start {
+        display: flex;
+        align-items: center;
+        gap: var(--space-2) var(--space-3);
+        flex-wrap: wrap;
+      }
       .footer-meta-end {
         display: flex;
         align-items: center;
         gap: var(--space-3);
         flex-wrap: wrap;
       }
+      /* Privacy link sits beside the copyright, styled like the LinkedIn link
+         but a step quieter to stay subordinate to the © line. */
+      .footer-privacy,
       .footer-linkedin {
         color: var(--color-muted-on-purple);
         text-decoration: underline;
         text-underline-position: from-font;
         transition: color 0.2s var(--ease);
       }
+      .footer-privacy:hover,
       .footer-linkedin:hover { color: var(--color-ink-on-purple); }
+      /* Site focus recipe (2px / offset 2px), recoloured to the on-orange ink
+         so the ring is visible against the footer ground. */
+      .footer-privacy:focus-visible,
+      .footer-linkedin:focus-visible,
+      .footer-cta-btn:focus-visible {
+        outline: 2px solid var(--color-ink-on-purple);
+        outline-offset: 2px;
+        border-radius: 2px;
+      }
     </style>
   </body>
 </html>

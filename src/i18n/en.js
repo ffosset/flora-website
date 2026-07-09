@@ -309,6 +309,57 @@ export default {
   },
   footer: {
     rights: '© Flora Fosset',
+    privacy: 'Privacy',
+  },
+  // Standalone privacy page (/privacy/). Paragraphs may carry inline <a> and
+  // are rendered with set:html, mirroring the About section's pattern.
+  privacy: {
+    title: 'Privacy',
+    updated: 'Last updated: 9 July 2026',
+    back: '← Flora Fosset',
+    intro:
+      "This site doesn't track you. No cookies, no analytics, no advertising. Here's the full picture.",
+    sections: [
+      {
+        heading: "Who's responsible",
+        paras: [
+          'This site is run by Flora Fosset. Any question about this page, or about your data: <a href="mailto:flora@fosset.co">flora@fosset.co</a>.',
+        ],
+      },
+      {
+        heading: 'What this site stores on your device',
+        paras: [
+          "One thing, and only if you ask for it. If you use the language switcher, that choice is saved in your browser's local storage so the site remembers it next time. It stays in your browser and is never sent anywhere. You can clear it at any time in your browser settings.",
+          'Nothing else. No cookies are set.',
+        ],
+      },
+      {
+        heading: 'What happens when you visit',
+        paras: [
+          'This site is hosted on GitHub Pages, run by GitHub, Inc. (United States). Like any web host, GitHub receives your IP address in order to send you the page and keeps it in server logs for security. I have no access to those logs and no way to identify you from them.',
+          "I use no analytics. I don't know who visits this site, which sections they read, or where they came from.",
+        ],
+      },
+      {
+        heading: 'When you write to me',
+        paras: [
+          'If you email <a href="mailto:flora@fosset.co">flora@fosset.co</a>, I keep your message and your address for as long as it takes to reply and to keep a record of our exchange. My email is hosted by Namecheap, Inc. (United States). The legal basis is my legitimate interest in answering people who contact me, and, where relevant, taking steps before a contract.',
+        ],
+      },
+      {
+        heading: 'Links to other sites',
+        paras: [
+          "The project links on this site lead to pages I don't control. Once you're there, their own rules apply.",
+        ],
+      },
+      {
+        heading: 'Your rights',
+        paras: [
+          'Under the GDPR you can ask to see, correct, or delete the data I hold about you, or object to my holding it. Since that data amounts to your emails and nothing else, these are usually short conversations. Write to <a href="mailto:flora@fosset.co">flora@fosset.co</a>.',
+          'If you think I\'ve handled your data badly, you can complain to the Belgian Data Protection Authority: <a href="https://autoriteprotectiondonnees.be" target="_blank" rel="noopener">autoriteprotectiondonnees.be</a>.',
+        ],
+      },
+    ],
   },
   // Screen-reader-only labels (aria-label / sr-only text).
   a11y: {

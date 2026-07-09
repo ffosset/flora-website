@@ -1,7 +1,10 @@
 ---
 import { defaultLang, languages } from '../i18n';
 
-const { currentLocale, variant = 'header' } = Astro.props;
+// `path` is the current page's locale-stripped path (e.g. '' for home,
+// 'privacy/' for the privacy page). It keeps the switcher on the same page in
+// the new language; callers pass '' for pages with no translated equivalent.
+const { currentLocale, variant = 'header', path = '' } = Astro.props;
 
 // Order shown in the design: en · es · fr.
 const order = ['en', 'es', 'fr'];
@@ -10,7 +13,7 @@ const order = ['en', 'es', 'fr'];
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 
 function localePath(loc) {
-  return loc === defaultLang ? `${base}/` : `${base}/${loc}/`;
+  return loc === defaultLang ? `${base}/${path}` : `${base}/${loc}/${path}`;
 }
 
 const activeLabel = languages[currentLocale] ?? languages[defaultLang];

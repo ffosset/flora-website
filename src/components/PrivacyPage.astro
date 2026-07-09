@@ -1,0 +1,92 @@
+---
+// Standalone legal/transparency page body. Single centred reading column,
+// existing tokens only, no new colours/fonts/spacing values, no JavaScript.
+// Paragraphs may carry inline <a> (email + authority link) and are rendered
+// with set:html, mirroring the About section's pattern.
+import { defaultLang } from '../i18n';
+
+const { t, locale } = Astro.props;
+const p = t.privacy;
+// Config base is '/', so BASE_URL is '/'; strip the trailing slash defensively.
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+const home = locale === defaultLang ? `${base}/` : `${base}/${locale}/`;
+---
+
+<article class="legal">
+  <a class="back" href={home}>{p.back}</a>
+  <h1 class="legal-title">{p.title}</h1>
+  <p class="updated">{p.updated}</p>
+  <p class="intro">{p.intro}</p>
+
+  {p.sections.map((s) => (
+    <Fragment>
+      <h2>{s.heading}</h2>
+      {s.paras.map((para) => <p set:html={para} />)}
+    </Fragment>
+  ))}
+</article>
+
+<style>
+  /* Single centred column on the cream ground, comfortable line-height. */
+  .legal {
+    font-family: var(--font-body);
+    color: var(--color-text);
+    max-width: 46rem;
+    margin-inline: auto;
+    padding-inline: var(--gutter);
+    padding-block: var(--space-5) var(--space-6);
+    line-height: 1.6;
+  }
+
+  /* Back link at the top — not a nav, just a return to the locale root. */
+  .back {
+    display: inline-block;
+    margin-bottom: var(--space-4);
+    font-family: var(--font-display);
+    font-size: var(--fs-small);
+    color: var(--color-muted);
+    text-decoration: none;
+  }
+  .back:hover { color: var(--color-primary); }
+  .back:focus-visible {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 2px;
+    border-radius: 2px;
+  }
+
+  /* h1 with the terracotta rule. */
+  .legal-title {
+    font-size: var(--fs-h1);
+    padding-bottom: var(--space-3);
+    border-bottom: 2px solid var(--color-primary);
+  }
+
+  /* "Last updated" — muted secondary text, a smaller step of the scale. */
+  .updated {
+    margin-top: var(--space-3);
+    font-size: var(--fs-small);
+    color: var(--color-muted);
+  }
+
+  .legal h2 {
+    font-size: var(--fs-h2);
+    margin-top: var(--space-5);
+    margin-bottom: var(--space-2);
+  }
+
+  .legal p { margin-top: var(--space-3); }
+
+  /* In-copy links: terracotta + underlined, so they're distinguishable from
+     body text by more than colour alone. The back link is excluded (it's a
+     direct child of .legal, not inside a paragraph). */
+  .legal p a {
+    color: var(--color-primary);
+    text-decoration: underline;
+    text-underline-position: from-font;
+  }
+  .legal p a:focus-visible {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 2px;
+    border-radius: 2px;
+  }
+</style>

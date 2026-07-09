@@ -299,6 +299,55 @@ export default {
   },
   footer: {
     rights: '© Flora Fosset',
+    privacy: 'Privacidad',
+  },
+  privacy: {
+    title: 'Privacidad',
+    updated: 'Última actualización: 9 de julio de 2026',
+    back: '← Flora Fosset',
+    intro:
+      'Este sitio no te rastrea. Sin cookies, sin analítica, sin publicidad. Aquí tienes el panorama completo.',
+    sections: [
+      {
+        heading: 'Quién es responsable',
+        paras: [
+          'Este sitio lo gestiona Flora Fosset. Para cualquier pregunta sobre esta página o sobre tus datos: <a href="mailto:flora@fosset.co">flora@fosset.co</a>.',
+        ],
+      },
+      {
+        heading: 'Qué guarda este sitio en tu dispositivo',
+        paras: [
+          'Una sola cosa, y solo si la pides. Si usas el selector de idioma, esa elección se guarda en el almacenamiento local de tu navegador para que el sitio la recuerde la próxima vez. Se queda en tu navegador y nunca se envía a ningún sitio. Puedes borrarla cuando quieras desde los ajustes de tu navegador.',
+          'Nada más. No se instala ninguna cookie.',
+        ],
+      },
+      {
+        heading: 'Qué ocurre cuando visitas el sitio',
+        paras: [
+          'Este sitio está alojado en GitHub Pages, gestionado por GitHub, Inc. (Estados Unidos). Como cualquier alojamiento web, GitHub recibe tu dirección IP para enviarte la página y la conserva en sus registros de servidor por seguridad. Yo no tengo acceso a esos registros ni forma de identificarte a partir de ellos.',
+          'No uso ninguna herramienta de analítica. No sé quién visita este sitio, qué secciones lee ni de dónde viene.',
+        ],
+      },
+      {
+        heading: 'Cuando me escribes',
+        paras: [
+          'Si escribes a <a href="mailto:flora@fosset.co">flora@fosset.co</a>, conservo tu mensaje y tu dirección el tiempo necesario para responderte y para guardar constancia de nuestro intercambio. Mi correo está alojado en Namecheap, Inc. (Estados Unidos). La base jurídica es mi interés legítimo en responder a quienes me escriben y, cuando corresponda, dar los pasos previos a un contrato.',
+        ],
+      },
+      {
+        heading: 'Enlaces a otros sitios',
+        paras: [
+          'Los enlaces a los proyectos de este sitio llevan a páginas que no controlo. Una vez allí, se aplican sus propias reglas.',
+        ],
+      },
+      {
+        heading: 'Tus derechos',
+        paras: [
+          'Con el RGPD puedes pedir ver, corregir o borrar los datos que tengo sobre ti, u oponerte a que los conserve. Como esos datos se reducen a tus correos y nada más, suelen ser conversaciones breves. Escribe a <a href="mailto:flora@fosset.co">flora@fosset.co</a>.',
+          'Si crees que he tratado mal tus datos, puedes reclamar ante la Autoridad belga de protección de datos: <a href="https://autoriteprotectiondonnees.be" target="_blank" rel="noopener">autoriteprotectiondonnees.be</a>.',
+        ],
+      },
+    ],
   },
   a11y: {
     mainNav: 'Principal',

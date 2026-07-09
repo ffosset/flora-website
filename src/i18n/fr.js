@@ -300,6 +300,55 @@ export default {
   },
   footer: {
     rights: '© Flora Fosset',
+    privacy: 'Confidentialité',
+  },
+  privacy: {
+    title: 'Confidentialité',
+    updated: 'Dernière mise à jour : 9 juillet 2026',
+    back: '← Flora Fosset',
+    intro:
+      "Ce site ne vous piste pas. Aucun cookie, aucune mesure d'audience, aucune publicité. Voici le tableau complet.",
+    sections: [
+      {
+        heading: 'Qui est responsable',
+        paras: [
+          'Ce site est géré par Flora Fosset. Pour toute question sur cette page ou sur vos données : <a href="mailto:flora@fosset.co">flora@fosset.co</a>.',
+        ],
+      },
+      {
+        heading: 'Ce que ce site enregistre sur votre appareil',
+        paras: [
+          "Une seule chose, et seulement si vous le demandez. Si vous utilisez le sélecteur de langue, ce choix est enregistré dans le stockage local de votre navigateur pour que le site s'en souvienne la prochaine fois. Il reste dans votre navigateur et n'est jamais envoyé ailleurs. Vous pouvez l'effacer à tout moment dans les réglages de votre navigateur.",
+          "Rien d'autre. Aucun cookie n'est déposé.",
+        ],
+      },
+      {
+        heading: 'Ce qui se passe quand vous visitez le site',
+        paras: [
+          "Ce site est hébergé sur GitHub Pages, géré par GitHub, Inc. (États-Unis). Comme tout hébergeur web, GitHub reçoit votre adresse IP pour vous envoyer la page et la conserve dans ses journaux de serveur à des fins de sécurité. Je n'ai pas accès à ces journaux et aucun moyen de vous identifier à partir d'eux.",
+          "Je n'utilise aucune mesure d'audience. Je ne sais pas qui visite ce site, quelles sections sont lues, ni d'où viennent les visiteurs.",
+        ],
+      },
+      {
+        heading: 'Quand vous m’écrivez',
+        paras: [
+          'Si vous écrivez à <a href="mailto:flora@fosset.co">flora@fosset.co</a>, je conserve votre message et votre adresse le temps de vous répondre et de garder une trace de notre échange. Ma messagerie est hébergée par Namecheap, Inc. (États-Unis). La base légale est mon intérêt légitime à répondre aux personnes qui me contactent et, le cas échéant, à prendre des mesures avant un éventuel contrat.',
+        ],
+      },
+      {
+        heading: 'Liens vers d’autres sites',
+        paras: [
+          "Les liens vers les projets présentés sur ce site mènent à des pages que je ne contrôle pas. Une fois sur place, ce sont leurs propres règles qui s'appliquent.",
+        ],
+      },
+      {
+        heading: 'Vos droits',
+        paras: [
+          'Le RGPD vous permet de demander à consulter, corriger ou supprimer les données que je détiens sur vous, ou de vous opposer à ce que je les conserve. Comme ces données se résument à vos e-mails et à rien d’autre, ce sont en général de courtes conversations. Écrivez à <a href="mailto:flora@fosset.co">flora@fosset.co</a>.',
+          'Si vous estimez que j’ai mal traité vos données, vous pouvez saisir l’Autorité de protection des données (Belgique) : <a href="https://autoriteprotectiondonnees.be" target="_blank" rel="noopener">autoriteprotectiondonnees.be</a>.',
+        ],
+      },
+    ],
   },
   a11y: {
     mainNav: 'Principale',
