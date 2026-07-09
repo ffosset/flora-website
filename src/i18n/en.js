@@ -316,7 +316,7 @@ export default {
   privacy: {
     title: 'Privacy',
     updated: 'Last updated: 9 July 2026',
-    back: '← Flora Fosset',
+    back: '← Back',
     intro:
       "This site doesn't track you. No cookies, no analytics, no advertising. Here's the full picture.",
     sections: [
@@ -329,8 +329,7 @@ export default {
       {
         heading: 'What this site stores on your device',
         paras: [
-          "One thing, and only if you ask for it. If you use the language switcher, that choice is saved in your browser's local storage so the site remembers it next time. It stays in your browser and is never sent anywhere. You can clear it at any time in your browser settings.",
-          'Nothing else. No cookies are set.',
+          "If you use the language switcher, that choice is saved in your browser's local storage so the site remembers it next time. It stays in your browser and is never sent anywhere. You can clear it at any time in your browser settings.",
         ],
       },
       {

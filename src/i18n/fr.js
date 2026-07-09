@@ -305,9 +305,9 @@ export default {
   privacy: {
     title: 'Confidentialité',
     updated: 'Dernière mise à jour : 9 juillet 2026',
-    back: '← Flora Fosset',
+    back: '← Retour',
     intro:
-      "Ce site ne vous piste pas. Aucun cookie, aucune mesure d'audience, aucune publicité. Voici le tableau complet.",
+      "Ce site ne garde pas vos données. J'ai sciemment choisi de ne pas faire de mesure d'audience ou de publicité.",
     sections: [
       {
         heading: 'Qui est responsable',
@@ -318,8 +318,7 @@ export default {
       {
         heading: 'Ce que ce site enregistre sur votre appareil',
         paras: [
-          "Une seule chose, et seulement si vous le demandez. Si vous utilisez le sélecteur de langue, ce choix est enregistré dans le stockage local de votre navigateur pour que le site s'en souvienne la prochaine fois. Il reste dans votre navigateur et n'est jamais envoyé ailleurs. Vous pouvez l'effacer à tout moment dans les réglages de votre navigateur.",
-          "Rien d'autre. Aucun cookie n'est déposé.",
+          "Si vous utilisez le sélecteur de langue, ce choix est enregistré dans le stockage local de votre navigateur pour que le site s'en souvienne la prochaine fois. Il reste dans votre navigateur et n'est jamais envoyé ailleurs. Vous pouvez l'effacer à tout moment dans les réglages de votre navigateur.",
         ],
       },
       {

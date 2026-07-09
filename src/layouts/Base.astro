@@ -10,9 +10,11 @@ const t = useTranslations(locale);
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 const home = locale === 'en' ? `${base}/` : `${base}/${locale}/`;
 const year = new Date().getFullYear(); // SSR fallback; a client script keeps it live
-// `subpage` drops the scroll-page floating nav (its links point at #services
-// etc., which don't exist off the home page). Standalone routes provide their
-// own in-page back link instead. Home + the work article omit it (default).
+// `subpage` marks a standalone route (e.g. /privacy/): the floating nav still
+// renders, but its section links resolve against the home page (they'd point at
+// #services etc., which don't exist off the home page), and the bar starts as
+// the pill since there's no hero to sit borderless over. Home + the work
+// article omit it (default).
 const { title, description, subpage = false } = Astro.props;
 const pageTitle = title ?? t.meta.title; // used for <title> and og:/twitter: titles
 const pageDescription = description ?? t.meta.description; // used for meta + og/twitter
@@ -69,6 +71,11 @@ const privacyHref = locale === 'en' ? `${base}/privacy/` : `${base}/${locale}/pr
 // visitor on the same page in the new language; otherwise ('' → locale home)
 // fall back gracefully for single-locale pages with no translated equivalent.
 const switchPath = translatedPaths.has(pagePath) ? pagePath : '';
+
+// Prefix for the nav section links. On a subpage they must jump back to the
+// home page's sections ('/#services'); on the home page they stay in-page
+// ('#services'). Contact is always in-page — the footer CTA is on every page.
+const navBase = subpage ? home : '';
 
 // schema.org Person — one JSON-LD block per page. jobTitle is the descriptor
 // after "·" in the locale title. sameAs left empty for social links.
@@ -128,18 +135,16 @@ const personLd = {
     <link rel="apple-touch-icon" href={`${base}/apple-touch-icon.png`} />
   </head>
   <body>
-    {!subpage && (
-    <Fragment>
-    <header class="site-header at-top">
+    <header class={subpage ? 'site-header' : 'site-header at-top'}>
       <div class="container">
         <nav class="nav-bar" aria-label={t.a11y.mainNav}>
           <a href={home} class="wordmark" aria-label={t.a11y.homeLink}>fosset.co</a>
 
           <div class="nav-collapse" id="site-nav" data-nav-menu>
             <ul class="nav-links">
-              <li><a href="#services" data-nav-link>{t.nav.services}</a></li>
-              <li><a href="#work" data-nav-link>{t.nav.work}</a></li>
-              <li><a href="#about" data-nav-link>{t.nav.about}</a></li>
+              <li><a href={`${navBase}#services`} data-nav-link>{t.nav.services}</a></li>
+              <li><a href={`${navBase}#work`} data-nav-link>{t.nav.work}</a></li>
+              <li><a href={`${navBase}#about`} data-nav-link>{t.nav.about}</a></li>
               <li><a href="#contact" data-nav-link>{t.nav.contact}</a></li>
             </ul>
             <LanguageSwitcher currentLocale={locale} path={switchPath} />
@@ -163,8 +168,6 @@ const personLd = {
 
     {/* Mobile menu scrim: darkens the page beneath the open full-width menu. */}
     <div class="nav-scrim" data-nav-scrim aria-hidden="true"></div>
-    </Fragment>
-    )}
 
     <main>
       <slot />

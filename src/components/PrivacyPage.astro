@@ -34,7 +34,8 @@ const home = locale === defaultLang ? `${base}/` : `${base}/${locale}/`;
     max-width: 46rem;
     margin-inline: auto;
     padding-inline: var(--gutter);
-    padding-block: var(--space-5) var(--space-6);
+    /* Top clears the fixed floating nav; bottom gives the footer drawer room. */
+    padding-block: var(--space-6);
     line-height: 1.6;
   }
 
