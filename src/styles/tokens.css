@@ -162,14 +162,14 @@
        line     16px  fixed   line / list gaps inside a text block
        element  32px  fixed   label -> title
        block    40->64px      title -> content, gaps between sub-blocks
-       section  72->128px     between top-level sections
+       section  72->160px     between top-level sections
 
      Fluid tuning (vw terms), against the bounds the site already uses (360->1280):
-      - --space-section: 20vw reaches the 128px cap by ~640px, so the cap governs
-        every tablet / desktop breakpoint (721 / 900 / 1024). That is what makes
-        the section gap switchable from ONE line (--space-section-max): the cap is
-        the binding value across those widths. It eases to the 72px floor by 360px.
-        A gentler term (e.g. 10vw, hitting 128 only at 1280) would leave every
+      - --space-section: 20vw reaches the 160px cap by ~800px, so the cap governs
+        the desktop breakpoints (900 / 1024 / 1280); the 721 tablet sits just under
+        it on the vw slope (~144px). --space-section-max is the ONE knob for the
+        cap value. It eases to the 72px floor by 360px (mobile is unchanged). A
+        gentler term (e.g. 10vw, hitting 160 only past 1280) would leave every
         sub-1280 width sitting on the vw slope, where editing the cap changes
         nothing -- so it would NOT be switchable.
       - --space-block: 10vw reaches 64px by ~640px and eases to 40px by ~360px.
@@ -179,7 +179,7 @@
   --space-line: 16px;               /* fixed */
   --space-element: 32px;            /* fixed */
   --space-block-max: 64px;
-  --space-section-max: 128px;       /* the ONE knob for the between-section gap */
+  --space-section-max: 160px;       /* the ONE knob for the between-section gap */
   --space-block: clamp(40px, 10vw, var(--space-block-max));
   --space-section: clamp(72px, 20vw, var(--space-section-max));
 
