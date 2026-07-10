@@ -328,7 +328,11 @@ const href = hasUrl ? (isExternal ? c.url : base + c.url) : undefined;
     /* Card height is auto here, so a % basis has nothing to resolve against. */
     .card-media { flex-basis: 12rem; }
     /* Tighter inner padding on phones. */
-    .card-body { padding: 1.25rem 1.25rem 1.75rem; }
+    .card-body { padding: 1.25rem 1.25rem 1.25rem; }
+    /* Vertical rhythm below the body, top -> bottom: a small gap to the tags
+       (body's own bottom padding), a wider gap from tags to the divider (this
+       gap), then divider -> button (the CTA's padding-top) and button -> card
+       edge (this bottom padding), so the block reads evenly balanced. */
     .card-overlay {
       position: static;
       height: auto;
@@ -336,7 +340,8 @@ const href = hasUrl ? (isExternal ? c.url : base + c.url) : undefined;
       pointer-events: auto;
       background: transparent;
       margin: 0 1.25rem;
-      padding: 1rem 0 0;
+      padding: 0 0 1.75rem;
+      gap: 1.5rem;
     }
     /* Keep the text dark on the light tint for every category (overrides the
        white-flip used over the coloured fill on desktop). */
@@ -352,7 +357,7 @@ const href = hasUrl ? (isExternal ? c.url : base + c.url) : undefined;
        above the link), not above the whole tags/link block. */
     .card-cta {
       align-self: stretch;
-      padding-top: 1.25rem;
+      padding-top: 1.5rem;
       border-top: 1px solid color-mix(in srgb, var(--cat) 35%, transparent);
       font-weight: 700;
       color: var(--cat);
