@@ -17,19 +17,6 @@ const href = hasUrl ? (isExternal ? c.url : base + c.url) : undefined;
 <article class="card" style={`--cat: var(--cat-${c.category})`} data-cat={c.category}>
   <div class="card-media">
     <img src={base + c.image} alt={c.alt ?? c.subtitle} loading="lazy" />
-    {/* Award icon over the image (the category tag moved down to the body). */}
-    {c.awards && c.awards.length > 0 && (
-      <p class="card-pills">
-        <span class="card-award" aria-hidden="true">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M7 4h10v5a5 5 0 0 1-10 0V4z" />
-            <path d="M7 5H4v2a3 3 0 0 0 3 3" />
-            <path d="M17 5h3v2a3 3 0 0 1-3 3" />
-            <path d="M12 14v3M9 21h6M10 17h4" />
-          </svg>
-        </span>
-      </p>
-    )}
   </div>
 
   <div class="card-body">
@@ -37,33 +24,44 @@ const href = hasUrl ? (isExternal ? c.url : base + c.url) : undefined;
     {service && <p class="card-meta"><span class="card-type">{service}</span></p>}
     <h3 class="card-title">{c.title}</h3>
     {c.result && <p class="card-result">{c.result}</p>}
+    {/* Award callout: always visible here in the body (not hidden in the hover
+        reveal), so the accolade reads clearly - a trophy icon on a warm panel
+        with an accent bar. */}
+    {c.awards && c.awards.length > 0 && (
+      <ul class="card-awards">
+        {c.awards.map((a) => (
+          <li class="card-award">
+            <svg class="card-award-icon" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M7 4h10v5a5 5 0 0 1-10 0V4z" />
+              <path d="M7 5H4v2a3 3 0 0 0 3 3" />
+              <path d="M17 5h3v2a3 3 0 0 1-3 3" />
+              <path d="M12 14v3M9 21h6M10 17h4" />
+            </svg>
+            <span class="card-award-text">
+              {a.url ? (
+                <a href={a.url} target="_blank" rel="noopener noreferrer">
+                  {a.label}<span class="sr-only"> ({newTab})</span>
+                </a>
+              ) : (
+                a.label
+              )}
+            </span>
+          </li>
+        ))}
+      </ul>
+    )}
     {c.subtitle && <p class="card-client">{c.subtitle}</p>}
   </div>
 
-  {/* Reveal - role tags, awards and the link. Desktop: absolutely positioned
-      over the image, category colour, faded in on hover / focus. Touch: falls
-      into normal flow as a colour strip under the image (see the media query).
-      Placed last in the DOM so that on touch it reads after the body. */}
+  {/* Reveal - role tags and the link. Desktop: absolutely positioned over the
+      image, category colour, faded in on hover / focus. Touch: falls into normal
+      flow as a colour strip under the image (see the media query). Placed last in
+      the DOM so that on touch it reads after the body. */}
   <div class="card-overlay">
     {(c.year || (c.keywords && c.keywords.length > 0)) && (
       <p class="card-tags">
         {c.year && <span class="card-tag card-tag-year">{c.year}</span>}
         {c.keywords && c.keywords.map((k) => <span class="card-tag">{k}</span>)}
-      </p>
-    )}
-    {c.awards && c.awards.length > 0 && (
-      <p class="card-awards">
-        {c.awards.map((a) => (
-          <span class="card-award-item">
-            {a.url ? (
-              <a href={a.url} target="_blank" rel="noopener noreferrer">
-                {a.label}<span class="sr-only"> ({newTab})</span>
-              </a>
-            ) : (
-              a.label
-            )}{'. '}
-          </span>
-        ))}
       </p>
     )}
     {hasUrl && (
@@ -136,19 +134,8 @@ const href = hasUrl ? (isExternal ? c.url : base + c.url) : undefined;
     object-fit: cover;
   }
 
-  /* Pills, over the image: the category type (filled with its colour), then the
-     year on a frosted chip so it stays legible over any photo. */
-  .card-pills {
-    position: absolute;
-    top: 1.5rem;
-    left: 2rem; /* aligns with the title + hover tags below */
-    right: 2rem;
-    z-index: 1;
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    flex-wrap: wrap;
-  }
+  /* Category tag (in the body, above the title): a solid pill in the category
+     colour, so it stays visible both at rest and under the hover reveal. */
   .card-type {
     font-family: var(--font-body);
     font-size: 0.82rem;
@@ -164,17 +151,6 @@ const href = hasUrl ? (isExternal ? c.url : base + c.url) : undefined;
   .card[data-cat='landing'] .card-type,
   .card[data-cat='product'] .card-type,
   .card[data-cat='storytelling'] .card-type { color: #ffffff; }
-  /* Award icon - a frosted chip in the pills row when the project has awards. */
-  .card-award {
-    display: inline-flex;
-    align-items: center;
-    padding: 0.2rem;
-    border-radius: 50%;
-    background: color-mix(in srgb, #ffffff 82%, transparent);
-    backdrop-filter: blur(3px);
-    color: var(--color-muted);
-  }
-  .card-award svg { width: 1.15rem; height: 1.15rem; }
 
   /* --- Body: problem, result, client. Title/result pinned to the top; the
      client name sits at the bottom. */
@@ -273,17 +249,37 @@ const href = hasUrl ? (isExternal ? c.url : base + c.url) : undefined;
     background: color-mix(in srgb, #ffffff 45%, transparent);
   }
 
-  /* Awards line, under the tags. */
+  /* Award callout (in the body): a legible warm panel with a trophy icon and an
+     accent bar, so the accolade stands out at rest instead of hiding in the
+     hover reveal as faint text. */
   .card-awards {
-    font-family: var(--font-body);
-    font-size: clamp(0.75rem, 0.7rem + 0.2vw, 0.85rem);
-    line-height: 1.45;
-    color: color-mix(in srgb, currentColor 82%, transparent);
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
   }
-  .card-awards a {
-    /* Sit above the CTA's stretched click target so awards stay clickable. */
-    position: relative;
-    z-index: 1;
+  .card-award {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.45rem;
+    padding: 0.45rem 0.6rem;
+    border-radius: 4px;
+    border-left: 3px solid var(--color-primary);
+    background: #ffffff;
+    font-family: var(--font-body);
+    font-size: 0.8125rem;
+    line-height: 1.35;
+    font-weight: 500;
+    color: var(--color-text);
+  }
+  .card-award-icon {
+    width: 1rem;
+    height: 1rem;
+    flex-shrink: 0;
+    margin-top: 0.1rem;
+    color: var(--color-primary);
+  }
+  .card-award-text a {
     color: inherit;
     text-decoration: underline;
     text-underline-offset: 2px;
@@ -331,10 +327,8 @@ const href = hasUrl ? (isExternal ? c.url : base + c.url) : undefined;
     .card { height: auto; }
     /* Card height is auto here, so a % basis has nothing to resolve against. */
     .card-media { flex-basis: 12rem; }
-    /* Tighter inner padding on phones; the pills and the tags/link block share
-       the same inset so the category tag lines up with the body text. */
+    /* Tighter inner padding on phones. */
     .card-body { padding: 1.25rem 1.25rem 1.75rem; }
-    .card-pills { top: 1.25rem; left: 1.25rem; right: 1.25rem; }
     .card-overlay {
       position: static;
       height: auto;
