@@ -353,14 +353,23 @@ const href = hasUrl ? (isExternal ? c.url : base + c.url) : undefined;
        :focus-within sticks after a tap. */
     .card:hover,
     .card:focus-within { box-shadow: 0 0 0 0 var(--cat-shadow, transparent); }
-    /* The divider now sits between the tags and the button (a full-width rule
-       above the link), not above the whole tags/link block. */
+    /* Divider between the tags and the button (a hairline under the tags). */
+    .card-tags {
+      border-bottom: 1px solid color-mix(in srgb, var(--cat) 35%, transparent);
+      padding-bottom: 1.5rem;
+    }
+    /* Turn the link into a proper, thumb-friendly button: full-width, a comfy
+       ~48px tap height, filled in the category colour with a centred label. */
     .card-cta {
       align-self: stretch;
-      padding-top: 1.5rem;
-      border-top: 1px solid color-mix(in srgb, var(--cat) 35%, transparent);
+      justify-content: center;
+      align-items: center;
+      min-height: 3rem;
+      padding: 0.85rem 1rem;
+      border-radius: 4px;
+      background: var(--cat);
+      color: #ffffff;
       font-weight: 700;
-      color: var(--cat);
     }
     /* No hover fill to click on touch - drop the full-area link target so it
        can't stretch across the whole (statically laid out) card. */
