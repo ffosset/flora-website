@@ -279,7 +279,7 @@ export default {
       {
         label: 'design',
         year: '2017',
-        sub: 'Discovered product design and lean methodologies. Switched from blog writing to the product team at <a href="https://www.urbandataanalytics.com/" target="_blank" rel="noopener noreferrer">urbanData Analytics</a>, and started my designer path.',
+        sub: 'Discovered product design and lean methodologies. Switched from blog writing and data visualization to designing complex user flows at <a href="https://www.urbandataanalytics.com/" target="_blank" rel="noopener noreferrer">urbanData Analytics</a>, and started my designer path.',
       },
       {
         label: 'product management',

@@ -269,7 +269,7 @@ export default {
       {
         label: 'diseño',
         year: '2017',
-        sub: 'Descubrí el diseño de producto y las metodologías ágiles. Pasé de escribir en el blog al equipo de producto en <a href="https://www.urbandataanalytics.com/" target="_blank" rel="noopener noreferrer">urbanData Analytics</a>, y así empezó mi camino como diseñadora.',
+        sub: 'Descubrí el diseño de producto y las metodologías ágiles. Pasé de escribir en el blog y visualizar datos a diseñar flujos de usuario complejos en <a href="https://www.urbandataanalytics.com/" target="_blank" rel="noopener noreferrer">urbanData Analytics</a>, y así empezó mi camino como diseñadora.',
       },
       {
         label: 'product management',

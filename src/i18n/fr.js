@@ -30,8 +30,8 @@ export default {
     sectionSubtitle: 'Je transforme vos idées en projets web aboutis',
     viewProjects: 'Voir les projets',
     items: [
-      { name: 'Sites web', desc: 'D’un site simple à un site que vous faites évoluer vous-même à mesure que vous grandissez, on décide ensemble de ce qui vous convient puis je m’occupe du design et de la réalisation.' },
-      { name: 'Apps & plateformes', desc: 'Vous avez déjà une app ou un outil qui ne fonctionne pas comme il devrait ? D’un audit d’utilisabilité à une refonte complète, je repère ce qui coince vos utilisateurs et je le corrige.' },
+      { name: 'Sites web', desc: 'D’un site simple à un site que vous faites évoluer vous-même, on décide ensemble de ce qui vous convient puis je m’occupe du design et de la réalisation.' },
+      { name: 'Apps & plateformes', desc: 'Vous avez déjà une app ou un outil qui ne fonctionne pas comme il devrait ? D’un audit d’usabilité à une refonte complète, je repère ce qui coince vos utilisateurs et je le corrige.' },
       { name: 'Communication', desc: 'Raconter des histoires, c’est mon dada. Dites-moi votre besoin et on lui donne forme ensemble (réseaux sociaux, un blog, courtes vidéos…).' },
     ],
   },
@@ -270,7 +270,7 @@ export default {
       {
         label: 'design',
         year: '2017',
-        sub: 'Découverte du design de produits numériques et des méthodologies agiles. Passe de la rédaction du blog à l’équipe produit chez <a href="https://www.urbandataanalytics.com/" target="_blank" rel="noopener noreferrer">urbanData Analytics</a> et entame mon parcours de designer.',
+        sub: 'Découverte du design de produits numériques et des méthodologies agiles. Passe de la rédaction du blog et de la visualisation de données à la conception de flux utilisateurs complexes chez <a href="https://www.urbandataanalytics.com/" target="_blank" rel="noopener noreferrer">urbanData Analytics</a> et entame mon parcours de designer.',
       },
       {
         label: 'product management',
