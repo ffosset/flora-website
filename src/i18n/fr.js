@@ -151,7 +151,7 @@ export default {
         slug: 'oyas-belgique',
         image: '/images/projects/oyas-drohme.png',
         alt: 'Bannière promotionnelle du festival des plantes de Bruxelles, sur une halle vitrée baignée de soleil',
-        url: 'https://www.oyas-belgique.be/',
+        url: 'https://www.fetedesplantes.be/',
         category: 'storytelling',
         tag: 'durabilité',
         subtitle: 'Oyas Belgique & Drohme Park',

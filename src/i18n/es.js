@@ -150,7 +150,7 @@ export default {
         slug: 'oyas-belgique',
         image: '/images/projects/oyas-drohme.png',
         alt: 'Banner promocional de la feria de plantas de Bruselas, sobre un pabellón acristalado bañado por el sol',
-        url: 'https://www.oyas-belgique.be/',
+        url: 'https://www.fetedesplantes.be/',
         category: 'storytelling',
         tag: 'sostenibilidad',
         subtitle: 'Oyas Belgique & Drohme Park',

@@ -158,7 +158,7 @@ export default {
         slug: 'oyas-belgique',
         image: '/images/projects/oyas-drohme.png',
         alt: 'Promotional banner for the Brussels plant festival, over a sunlit glass-roofed pavilion',
-        url: 'https://www.oyas-belgique.be/',
+        url: 'https://www.fetedesplantes.be/',
         category: 'storytelling',
         tag: 'sustainability',
         subtitle: 'Oyas Belgique & Drohme Park',
