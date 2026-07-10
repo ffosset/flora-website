@@ -1,6 +1,7 @@
 ---
-// A single project card. At rest the image carries the category pill, and the
-// body below shows the problem (title) and the result - both always visible.
+// A single project card. The category tag sits above the title - in the body,
+// not over the image - so it stays visible at rest AND on hover. The body then
+// shows the problem (title) and the result - both always visible.
 // On hover the image fills with the category colour and reveals the year +
 // role tags and the link, overlaying only the image; the title/result never
 // move, so the reveal can't disorient. On touch (no hover) that same colour
@@ -16,11 +17,9 @@ const href = hasUrl ? (isExternal ? c.url : base + c.url) : undefined;
 <article class="card" style={`--cat: var(--cat-${c.category})`} data-cat={c.category}>
   <div class="card-media">
     <img src={base + c.image} alt={c.alt ?? c.subtitle} loading="lazy" />
-    {/* Category pill (+ award), over the image. The year moved down to the
-        tags row so it sits with the role tags. */}
-    <p class="card-pills">
-      {service && <span class="card-type">{service}</span>}
-      {c.awards && c.awards.length > 0 && (
+    {/* Award icon over the image (the category tag moved down to the body). */}
+    {c.awards && c.awards.length > 0 && (
+      <p class="card-pills">
         <span class="card-award" aria-hidden="true">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
             <path d="M7 4h10v5a5 5 0 0 1-10 0V4z" />
@@ -29,12 +28,13 @@ const href = hasUrl ? (isExternal ? c.url : base + c.url) : undefined;
             <path d="M12 14v3M9 21h6M10 17h4" />
           </svg>
         </span>
-      )}
-    </p>
+      </p>
+    )}
   </div>
 
   <div class="card-body">
-    {/* Problem + result: both always visible, at rest. */}
+    {/* Category tag on top of the title, then problem + result. */}
+    {service && <p class="card-meta"><span class="card-type">{service}</span></p>}
     <h3 class="card-title">{c.title}</h3>
     {c.result && <p class="card-result">{c.result}</p>}
     {c.subtitle && <p class="card-client">{c.subtitle}</p>}
@@ -87,7 +87,7 @@ const href = hasUrl ? (isExternal ? c.url : base + c.url) : undefined;
     display: flex;
     flex-direction: column;
     min-width: 0;
-    height: 28rem; /* every card the same height */
+    height: 30rem; /* every card the same height */
     border-radius: 4px;
     overflow: hidden;
     /* Soft tint of the category colour - kept the same at rest and on hover. */
@@ -119,10 +119,10 @@ const href = hasUrl ? (isExternal ? c.url : base + c.url) : undefined;
   }
 
   /* --- Media (top): the image, with the pills overlaid and the colour reveal
-     covering it on hover. Its height (42%) is mirrored by .card-overlay. */
+     covering it on hover. Its height (36%) is mirrored by .card-overlay. */
   .card-media {
     position: relative;
-    flex: 0 0 42%;
+    flex: 0 0 36%;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -186,6 +186,8 @@ const href = hasUrl ? (isExternal ? c.url : base + c.url) : undefined;
     gap: 0.6rem;
     padding: 2rem;
   }
+  /* Category tag row above the title (flex so the pill hugs its content). */
+  .card-meta { display: flex; }
   .card-title {
     font-family: var(--font-display);
     font-weight: 700;
@@ -228,7 +230,7 @@ const href = hasUrl ? (isExternal ? c.url : base + c.url) : undefined;
     top: 0;
     left: 0;
     right: 0;
-    height: 42%; /* mirrors .card-media's flex-basis so it covers just the image */
+    height: 36%; /* mirrors .card-media's flex-basis so it covers just the image */
     z-index: 2;
     display: flex;
     flex-direction: column;
@@ -279,22 +281,34 @@ const href = hasUrl ? (isExternal ? c.url : base + c.url) : undefined;
     color: color-mix(in srgb, currentColor 82%, transparent);
   }
   .card-awards a {
+    /* Sit above the CTA's stretched click target so awards stay clickable. */
+    position: relative;
+    z-index: 1;
     color: inherit;
     text-decoration: underline;
     text-underline-offset: 2px;
   }
 
-  /* The link. */
+  /* The link - typeset like the client name (Fira Code, uppercase, spaced). */
   .card-cta {
     align-self: flex-start;
     display: inline-flex;
     align-items: baseline;
     gap: 0.3rem;
-    font-family: var(--font-display);
-    font-weight: 700;
-    font-size: clamp(1.05rem, 0.95rem + 0.4vw, 1.25rem);
+    font-family: var(--font-body);
+    font-weight: 400;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    font-size: clamp(0.8rem, 0.72rem + 0.3vw, 0.95rem);
     color: inherit;
     text-decoration: none;
+  }
+  /* Stretch the link across the whole reveal so the entire image area (the
+     colour fill on hover) is clickable and leads to the project. */
+  .card-cta::after {
+    content: '';
+    position: absolute;
+    inset: 0;
   }
   .card-cta-arrow { text-decoration: none; }
   .sr-only {
@@ -338,6 +352,9 @@ const href = hasUrl ? (isExternal ? c.url : base + c.url) : undefined;
     .card[data-cat='landing'] .card-overlay,
     .card[data-cat='product'] .card-overlay,
     .card[data-cat='storytelling'] .card-overlay { color: var(--color-text); }
+    /* No hover fill to click on touch - drop the full-area link target so it
+       can't stretch across the whole (statically laid out) card. */
+    .card-cta::after { content: none; }
   }
   @media (prefers-reduced-motion: reduce) {
     /* Shadow still appears on hover, but snaps in rather than sliding. */
