@@ -336,9 +336,7 @@ const href = hasUrl ? (isExternal ? c.url : base + c.url) : undefined;
       pointer-events: auto;
       background: transparent;
       margin: 0 1.25rem;
-      padding: 1.75rem 0;
-      /* Tinted hairline that adapts to the card's category colour. */
-      border-top: 1px solid color-mix(in srgb, var(--cat) 35%, transparent);
+      padding: 1rem 0 0;
     }
     /* Keep the text dark on the light tint for every category (overrides the
        white-flip used over the coloured fill on desktop). */
@@ -346,6 +344,19 @@ const href = hasUrl ? (isExternal ? c.url : base + c.url) : undefined;
     .card[data-cat='landing'] .card-overlay,
     .card[data-cat='product'] .card-overlay,
     .card[data-cat='storytelling'] .card-overlay { color: var(--color-text); }
+    /* No hover on touch: keep the hard offset shadow hidden even if :hover or
+       :focus-within sticks after a tap. */
+    .card:hover,
+    .card:focus-within { box-shadow: 0 0 0 0 var(--cat-shadow, transparent); }
+    /* The divider now sits between the tags and the button (a full-width rule
+       above the link), not above the whole tags/link block. */
+    .card-cta {
+      align-self: stretch;
+      padding-top: 1.25rem;
+      border-top: 1px solid color-mix(in srgb, var(--cat) 35%, transparent);
+      font-weight: 700;
+      color: var(--cat);
+    }
     /* No hover fill to click on touch - drop the full-area link target so it
        can't stretch across the whole (statically laid out) card. */
     .card-cta::after { content: none; }
