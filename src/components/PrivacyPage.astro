@@ -3,13 +3,11 @@
 // existing tokens only, no new colours/fonts/spacing values, no JavaScript.
 // Paragraphs may carry inline <a> (email + authority link) and are rendered
 // with set:html, mirroring the About section's pattern.
-import { defaultLang } from '../i18n';
+import { localizedPath } from '../i18n';
 
 const { t, locale } = Astro.props;
 const p = t.privacy;
-// Config base is '/', so BASE_URL is '/'; strip the trailing slash defensively.
-const base = import.meta.env.BASE_URL.replace(/\/$/, '');
-const home = locale === defaultLang ? `${base}/` : `${base}/${locale}/`;
+const home = localizedPath(locale);
 ---
 
 <article class="legal">

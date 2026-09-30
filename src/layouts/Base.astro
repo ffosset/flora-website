@@ -1,14 +1,14 @@
 ---
 import '../styles/tokens.css';
 import LanguageSwitcher from '../components/LanguageSwitcher.astro';
-import { useTranslations, getLocaleFromUrl, languages } from '../i18n';
+import { useTranslations, getLocaleFromUrl, languages, defaultLang, localizedPath } from '../i18n';
 
 const locale = getLocaleFromUrl(Astro.url);
 const t = useTranslations(locale);
 // Strip any trailing slash so `${base}/path` is correct regardless (config
 // base is '/', so BASE_URL is '/' and this yields '').
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
-const home = locale === 'en' ? `${base}/` : `${base}/${locale}/`;
+const home = localizedPath(locale);
 const year = new Date().getFullYear(); // SSR fallback; a client script keeps it live
 // `subpage` marks a standalone route (e.g. /privacy/): the floating nav still
 // renders, but its section links resolve against the home page (they'd point at
@@ -27,14 +27,17 @@ pagePath = pagePath.replace(/^\//, '');
 const [maybeLocale, ...restPath] = pagePath.split('/');
 if (maybeLocale in languages) pagePath = restPath.join('/');
 if (pagePath && !pagePath.endsWith('/')) pagePath += '/';
-const abs = (p) => (Astro.site ? new URL(`${base}/${p}`, Astro.site).href : `${base}/${p}`);
-const canonical = abs((locale === 'en' ? '' : `${locale}/`) + pagePath);
+const absPath = (p) => (Astro.site ? new URL(p, Astro.site).href : p);
+const abs = (p) => absPath(`${base}/${p}`);
+// Absolute URL of `path` in locale `loc` (default locale unprefixed).
+const absIn = (loc, p) => absPath(localizedPath(loc, p));
+const canonical = absIn(locale, pagePath);
 const ogImage = abs('og-img.png');
 const siteHome = abs(''); // absolute default-locale homepage (JSON-LD url + x-default)
 
 // Per-locale OG locale codes (regional variants) + the alternates for the other two.
 const ogLocales = { en: 'en_GB', fr: 'fr_BE', es: 'es_ES' };
-const ogLocale = ogLocales[locale] ?? ogLocales.en;
+const ogLocale = ogLocales[locale] ?? ogLocales[defaultLang];
 const ogLocaleAlternates = Object.keys(ogLocales)
   .filter((l) => l !== locale)
   .map((l) => ogLocales[l]);
@@ -45,7 +48,7 @@ const ogImageAlts = {
   fr: 'Flora Fosset · profil senior en design, Bruxelles et Madrid',
   es: 'Flora Fosset · perfil sénior en diseño, Bruselas y Madrid',
 };
-const ogImageAlt = ogImageAlts[locale] ?? ogImageAlts.en;
+const ogImageAlt = ogImageAlts[locale] ?? ogImageAlts[defaultLang];
 
 // hreflang: pages that exist in all three locales (home + privacy) emit the
 // full reciprocal set + x-default → the default-locale copy. Single-locale
@@ -54,10 +57,8 @@ const ogImageAlt = ogImageAlts[locale] ?? ogImageAlts.en;
 const translatedPaths = new Set(['', 'privacy/']);
 const alternates = translatedPaths.has(pagePath)
   ? [
-      { hreflang: 'en', href: abs(pagePath) },
-      { hreflang: 'fr', href: abs(`fr/${pagePath}`) },
-      { hreflang: 'es', href: abs(`es/${pagePath}`) },
-      { hreflang: 'x-default', href: abs(pagePath) },
+      ...Object.keys(languages).map((l) => ({ hreflang: l, href: absIn(l, pagePath) })),
+      { hreflang: 'x-default', href: absIn(defaultLang, pagePath) },
     ]
   : [
       { hreflang: locale, href: canonical },
@@ -65,7 +66,7 @@ const alternates = translatedPaths.has(pagePath)
     ];
 
 // Footer "Privacy" link → the current locale's privacy page.
-const privacyHref = locale === 'en' ? `${base}/privacy/` : `${base}/${locale}/privacy/`;
+const privacyHref = localizedPath(locale, 'privacy/');
 
 // Language switcher target: for pages that exist in every locale, keep the
 // visitor on the same page in the new language; otherwise ('' → locale home)
