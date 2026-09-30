@@ -18,7 +18,7 @@ export default {
   hero: {
     nameWord: 'flora',
     roleWord: 'designer',
-    roles: ['expérience utilisateur', 'investigation', 'gestion d’équipes', 'communication', 'design de produits'],
+    roles: ['direction de projets', 'présence numérique', 'rédaction', 'graphisme', 'identité visuelle'],
     scroll: 'Défiler',
     subhead: 'on discute ?',
     tagline: 'Je réalise vos projets web de A à Z',

@@ -17,8 +17,8 @@ export default {
   hero: {
     nameWord: 'flora',
     roleWord: 'designer',
-    // Rotating role word: cycles user experience → user research → product management → storytelling → product design → …
-    roles: ['user experience', 'user research', 'product management', 'storytelling', 'product design'],
+    // Rotating role word: cycles project management → digital presence → copywriting → graphic design → visual identity → …
+    roles: ['project management', 'digital presence', 'copywriting', 'graphic design', 'visual identity'],
     scroll: 'Scroll',
     // Right-aligned subtitle beside the portrait.
     subhead: "let's chat",
