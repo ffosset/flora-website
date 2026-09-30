@@ -17,7 +17,7 @@ export default {
   hero: {
     nameWord: 'flora',
     roleWord: 'diseñadora',
-    roles: ['dirección de proyectos', 'presencia digital', 'redacción', 'diseño gráfico', 'identidad visual'],
+    roles: ['dirección de proyectos', 'presencia digital', 'redacción y maquetación', 'identidad visual'],
     scroll: 'Desplázate',
     subhead: '¿hablamos?',
     tagline: 'Hago realidad tus proyectos web',

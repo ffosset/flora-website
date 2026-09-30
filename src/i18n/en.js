@@ -18,7 +18,7 @@ export default {
     nameWord: 'flora',
     roleWord: 'designer',
     // Rotating role word: cycles project management → digital presence → copywriting → graphic design → visual identity → …
-    roles: ['project management', 'digital presence', 'copywriting', 'graphic design', 'visual identity'],
+    roles: ['project management', 'digital presence', 'copywriting & layout', 'visual identity'],
     scroll: 'Scroll',
     // Right-aligned subtitle beside the portrait.
     subhead: "let's chat",
