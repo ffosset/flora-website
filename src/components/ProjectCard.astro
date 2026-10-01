@@ -21,7 +21,12 @@ const href = hasUrl ? (isExternal ? c.url : base + c.url) : undefined;
 
   <div class="card-body">
     {/* Category tag on top of the title, then problem + result. */}
-    {service && <p class="card-meta"><span class="card-type">{service}</span></p>}
+    {(service || c.date) && (
+      <p class="card-meta">
+        {service && <span class="card-type">{service}</span>}
+        {c.date && <time class="card-date" datetime={c.date}>{c.dateLabel ?? c.date}</time>}
+      </p>
+    )}
     <h3 class="card-title">{c.title}</h3>
     {c.result && <p class="card-result">{c.result}</p>}
     {/* Award callout: always visible here in the body (not hidden in the hover
@@ -182,7 +187,14 @@ const href = hasUrl ? (isExternal ? c.url : base + c.url) : undefined;
     padding: 2rem;
   }
   /* Category tag row above the title (flex so the pill hugs its content). */
-  .card-meta { display: flex; }
+  .card-meta { display: flex; flex-wrap: wrap; align-items: center; gap: 0.4rem 0.6rem; }
+  /* Optional date beside the pill (used by the press cards on project pages). */
+  .card-date {
+    font-family: var(--font-body);
+    font-size: 0.82rem;
+    color: var(--color-text);
+    opacity: 0.75;
+  }
   .card-title {
     font-family: var(--font-display);
     font-weight: 700;
@@ -307,6 +319,7 @@ const href = hasUrl ? (isExternal ? c.url : base + c.url) : undefined;
   /* The link - typeset like the client name (Fira Code, uppercase, spaced). */
   .card-cta {
     align-self: flex-start;
+    margin-top: auto; /* bottom of the reveal even when there are no tags */
     display: inline-flex;
     align-items: baseline;
     gap: 0.3rem;
