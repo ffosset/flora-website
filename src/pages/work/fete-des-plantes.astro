@@ -39,7 +39,8 @@ const stats = [
 ];
 
 const facts = [
-  { term: 'Client', value: 'Oyas Belgique & DROHME Park' },
+  { term: 'Événement', value: 'Les Jardins de l’HippoDrohme' },
+  { term: 'Site web', value: 'fetedesplantes.be', url: 'https://www.fetedesplantes.be' },
   { term: 'Mon rôle', value: 'Relations presse, direction artistique et identité visuelle, réseaux sociaux, relation exposants, coordination sur place' },
   { term: 'Quand, où', value: '26–27 septembre 2026, Hippodrome de Boitsfort' },
   { term: 'Soutiens', value: 'Bruxelles Environnement, commune de Watermael-Boitsfort' },
@@ -95,13 +96,6 @@ const newTab = '(s’ouvre dans un nouvel onglet)';
       <!-- 2. Intro -->
       <div class="intro">
         <a class="back" href={`${base}/#work`}>← Tous les projets</a>
-        <p class="tags">
-          <span class="tag">événement</span>
-          <span class="tag">stratégie de com</span>
-        </p>
-        <p class="lede">
-          Une première édition avec un budget pub à trois chiffres. Résultat : 4 600 entrées et une couverture presse que beaucoup d’événements installés n’obtiennent pas.
-        </p>
       </div>
 
       <!-- 3. Key figures -->
@@ -120,7 +114,11 @@ const newTab = '(s’ouvre dans un nouvel onglet)';
           {facts.map((f) => (
             <div>
               <dt>{f.term}</dt>
-              <dd>{f.value}</dd>
+              <dd>
+                {f.url
+                  ? <a href={f.url} target="_blank" rel="noopener noreferrer">{f.value}<span class="sr-only"> {newTab}</span></a>
+                  : f.value}
+              </dd>
             </div>
           ))}
         </dl>
@@ -321,39 +319,16 @@ const newTab = '(s’ouvre dans un nouvel onglet)';
   .intro { max-width: 56rem; }
   .back {
     display: inline-block;
-    margin-bottom: var(--space-3);
     font-size: var(--fs-small);
     color: var(--color-muted);
     text-decoration: none;
   }
   .back:hover { color: var(--color-primary); }
-  .tags {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.5rem;
-    margin-bottom: var(--space-2);
-  }
-  /* Same pill as the project cards, in the communication category colour. */
-  .tag {
-    font-family: var(--font-body);
-    font-size: 0.82rem;
-    line-height: 1.3;
-    text-transform: lowercase;
-    padding: 0.2rem 0.55rem;
-    border-radius: 2px;
-    background: var(--cat-storytelling);
-    color: #ffffff;
-  }
   .title {
     font-size: clamp(2.25rem, 1.4rem + 3.4vw, 3.5rem);
     font-weight: 800;
     line-height: 1.08;
     letter-spacing: -0.02em;
-  }
-  .lede {
-    font-size: 1.25rem;
-    line-height: 1.6;
-    color: var(--color-muted);
   }
 
   /* --- Images and their placeholder frames */
@@ -462,6 +437,8 @@ const newTab = '(s’ouvre dans un nouvel onglet)';
     font-size: var(--fs-body);
     line-height: 1.5;
   }
+  .facts dd a { color: var(--color-primary); font-weight: 600; }
+  .facts dd a:hover { color: var(--color-primary-deep); }
 
   /* --- 5. Press wall: featured outlets (with the pitched angle) three across,
      the other outlets as compact tiles four across. 12-column grid so both
