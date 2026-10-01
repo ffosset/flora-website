@@ -8,6 +8,7 @@ const projects = t.work.projects || [];
 // card now shares one identical visual structure, so the CTA wording is the
 // only per-project treatment left.
 const DESIGN = {
+  'egidia-avocates':        { cta: 'website' },
   'cercle-histoire-forest': { cta: 'website' },
   'minnow-collective':      { cta: 'website' },
   'soy-de-temporada':       { cta: 'website' },
@@ -27,15 +28,16 @@ const cardLabels = { newTab: t.a11y.newTab };
 // rest reveal via the "Load more" button. Edit this list to change which
 // projects show and in what order.
 const ORDER = [
-  'oyas-belgique',          // 1 (Jardins de l'Hippodrome, dedicated page)
-  'cercle-histoire-forest', // 2
-  'minnow-collective',      // 3
-  'soy-de-temporada',       // 4
-  'rosa-ebilling',          // 5
-  'investment-simulator',   // 6
-  'dime-cuanto-cobras',     // 7 (rent data investigation)
-  'free-the-fish',          // 8
-  'couleur-du-peche',       // 9 (métis investigation)
+  'oyas-belgique',          // 1 (fête des plantes, dedicated page)
+  'egidia-avocates',        // 2
+  'cercle-histoire-forest', // 3
+  'minnow-collective',      // 4
+  'soy-de-temporada',       // 5
+  'rosa-ebilling',          // 6
+  'investment-simulator',   // 7
+  'dime-cuanto-cobras',     // 8 (rent data investigation)
+  'free-the-fish',          // 9
+  'couleur-du-peche',       // 10 (métis investigation)
 ];
 // How many show before "Load more" is a per-breakpoint rule handled in CSS:
 // 3 on desktop, 2 on tablet and mobile. "Load more" reveals the rest.
@@ -59,7 +61,7 @@ const ordered = ORDER
           d={{ ...DESIGN[p.slug], cta: t.work.ctas[DESIGN[p.slug].cta] }}
           base={base}
           labels={cardLabels}
-          service={t.work.filters[p.category]}
+          service={p.label ?? t.work.filters[p.category]}
         />
       ))}
     </div>
