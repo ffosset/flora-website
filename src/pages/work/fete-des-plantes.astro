@@ -40,27 +40,27 @@ const stats = [
 
 const facts = [
   { term: 'Client', value: 'Oyas Belgique & DROHME Park' },
+  { term: 'Mon rôle', value: 'Relations presse, direction artistique et identité visuelle, réseaux sociaux, relation exposants, coordination sur place' },
   { term: 'Quand, où', value: '26–27 septembre 2026, Hippodrome de Boitsfort' },
   { term: 'Soutiens', value: 'Bruxelles Environnement, commune de Watermael-Boitsfort' },
-  { term: 'Mon rôle', value: 'Relations presse, direction artistique et identité visuelle, réseaux sociaux, relation exposants, coordination sur place' },
-  { term: 'Équipe', value: 'Marie et moi' },
 ];
 
-const angles = [
-  { media: 'RTBF', angle: 'La biodiversité ramenée en ville' },
-  { media: 'RTBF', angle: 'Reconnecter les citadins à la nature' },
-  { media: 'So Soir', angle: 'L’ampleur : 1 000 m² de jardinage' },
-  { media: 'Le Bonbon', angle: 'La sortie gratuite du week-end' },
-];
-
-const coverage = [
-  { name: 'RTBF', url: 'https://www.rtbf.be/article/a-bruxelles-une-nouvelle-fete-des-plantes-veut-reconnecter-les-citadins-a-la-nature-11772180' },
-  { name: 'So Soir', url: 'https://sosoir.lesoir.be/768814/article/2026-09-03/1-000-m2-de-jardinage-la-toute-premiere-foire-aux-plantes-debarque-bruxelles' },
-  { name: 'Le Bonbon', url: 'https://www.lebonbon.be/bruxelles/loisirs/premiere-grande-fete-plantes-bruxelles-gratuit/' },
-  { name: 'Bruxelles Secrète', url: 'https://bruxellessecrete.com/fete-des-plantes-hippodrome-de-boitsfort/' },
-  { name: 'Bruxelles Today', url: 'https://www.bruxellestoday.be/que-faire/la-premiere-grande-fete-des-plantes-de-bruxelles-26-27-sept-15192854.html' },
-  { name: 'BXFM', url: 'https://open.spotify.com/episode/6mrJmU7kOdV7mA8d3pIw5f' },
-  { name: 'BX1', url: 'https://youtu.be/nSaFr2Hc_Ko' },
+// Press wall: one card per outlet. Outlets with an `angles` entry (the angle
+// I pitched them) get a wide featured card; the rest a compact tile. Each card
+// shows the outlet's own preview image (its og:image), saved under press/.
+const formats = {
+  article: { label: 'article', action: 'Lire' },
+  radio: { label: 'radio', action: 'Écouter' },
+  tv: { label: 'télévision', action: 'Regarder' },
+};
+const press = [
+  { name: 'RTBF', image: 'rtbf.jpg', format: 'article', angles: ['La biodiversité ramenée en ville', 'Reconnecter les citadins à la nature'], url: 'https://www.rtbf.be/article/a-bruxelles-une-nouvelle-fete-des-plantes-veut-reconnecter-les-citadins-a-la-nature-11772180' },
+  { name: 'So Soir', image: 'sosoir.jpg', format: 'article', angles: ['L’ampleur : 1 000 m² de jardinage'], url: 'https://sosoir.lesoir.be/768814/article/2026-09-03/1-000-m2-de-jardinage-la-toute-premiere-foire-aux-plantes-debarque-bruxelles' },
+  { name: 'Le Bonbon', image: 'le-bonbon.jpg', format: 'article', angles: ['La sortie gratuite du week-end'], url: 'https://www.lebonbon.be/bruxelles/loisirs/premiere-grande-fete-plantes-bruxelles-gratuit/' },
+  { name: 'Bruxelles Secrète', image: 'bruxelles-secrete.jpg', format: 'article', url: 'https://bruxellessecrete.com/fete-des-plantes-hippodrome-de-boitsfort/' },
+  { name: 'Bruxelles Today', image: 'bruxelles-today.jpg', format: 'article', url: 'https://www.bruxellestoday.be/que-faire/la-premiere-grande-fete-des-plantes-de-bruxelles-26-27-sept-15192854.html' },
+  { name: 'BXFM', image: 'bxfm.jpg', format: 'radio', url: 'https://open.spotify.com/episode/6mrJmU7kOdV7mA8d3pIw5f' },
+  { name: 'BX1', image: 'bx1.jpg', format: 'tv', url: 'https://youtu.be/nSaFr2Hc_Ko' },
 ];
 
 const testimonials = [
@@ -79,26 +79,30 @@ const newTab = '(s’ouvre dans un nouvel onglet)';
   description="4 600 visiteurs et 16 retombées presse pour une première édition au budget pub à trois chiffres : relations presse, identité visuelle et coordination."
 >
   <article class="project" lang="fr">
+    <!-- 1. Hero: full-bleed photo with the title overlaid (same treatment as
+         the Métis page) -->
+    <header class="hero">
+      {images.hero.exists
+        ? <img src={images.hero.src} alt={images.hero.alt} width="1600" height="900" loading="eager" />
+        : <div class="slot" role="img" aria-label={images.hero.alt}><span>Image · {images.hero.label}</span></div>}
+      <div class="hero-inner">
+        <h1 class="title">La fête des plantes de Bruxelles</h1>
+        <p class="hero-meta">Oyas Belgique &amp; DROHME Park · septembre 2026</p>
+      </div>
+    </header>
+
     <div class="container">
-      <!-- 1. Intro -->
-      <header class="intro">
+      <!-- 2. Intro -->
+      <div class="intro">
         <a class="back" href={`${base}/#work`}>← Tous les projets</a>
         <p class="tags">
           <span class="tag">événement</span>
           <span class="tag">stratégie de com</span>
         </p>
-        <h1 class="title">La fête des plantes de Bruxelles</h1>
         <p class="lede">
           Une première édition avec un budget pub à trois chiffres. Résultat : 4 600 entrées et une couverture presse que beaucoup d’événements installés n’obtiennent pas.
         </p>
-      </header>
-
-      <!-- 2. Hero image -->
-      <figure class="media media--hero">
-        {images.hero.exists
-          ? <img src={images.hero.src} alt={images.hero.alt} loading="eager" />
-          : <div class="slot" role="img" aria-label={images.hero.alt}><span>Image · {images.hero.label}</span></div>}
-      </figure>
+      </div>
 
       <!-- 3. Key figures -->
       <dl class="stats">
@@ -142,29 +146,29 @@ const newTab = '(s’ouvre dans un nouvel onglet)';
           </div>
         </div>
 
-        <table class="angles">
-          <thead>
-            <tr><th scope="col">Média</th><th scope="col">Angle retenu</th></tr>
-          </thead>
-          <tbody>
-            {angles.map((a) => (
-              <tr><th scope="row">{a.media}</th><td>{a.angle}</td></tr>
-            ))}
-          </tbody>
-        </table>
-
-        <div class="coverage">
-          <h3 class="coverage-title">Ils en ont parlé</h3>
-          <ul class="coverage-list">
-            {coverage.map((c) => (
-              <li>
-                <a href={c.url} target="_blank" rel="noopener noreferrer">
-                  {c.name}<span class="sr-only"> {newTab}</span>
-                </a>
-              </li>
-            ))}
-          </ul>
-        </div>
+        <h3 class="press-title">Ils en ont parlé</h3>
+        <ul class="press">
+          {press.map((m) => (
+            <li class={m.angles ? 'press-item press-item--featured' : 'press-item'}>
+              <a class="press-card" href={m.url} target="_blank" rel="noopener noreferrer">
+                <img class="press-img" src={`${base}/${imgDir}/press/${m.image}`} alt="" loading="lazy" width="800" height="450" />
+                <span class="press-body">
+                <span class="press-format">{formats[m.format].label}</span>
+                <span class="press-name">{m.name}</span>
+                {m.angles && (
+                  <span class="press-angles">
+                    <span class="press-angles-label">Angle proposé</span>
+                    {m.angles.map((a) => <span class="press-angle">« {a} »</span>)}
+                  </span>
+                )}
+                <span class="press-action">
+                  {formats[m.format].action}<span aria-hidden="true"> ↗</span><span class="sr-only"> {newTab}</span>
+                </span>
+                </span>
+              </a>
+            </li>
+          ))}
+        </ul>
       </section>
 
       <!-- 6. Brand identity -->
@@ -255,8 +259,7 @@ const newTab = '(s’ouvre dans un nouvel onglet)';
   .project {
     font-family: var(--font-display);
     color: var(--color-text);
-    /* Top padding clears the floating nav. */
-    padding-top: var(--space-6);
+    /* No top padding: the hero image runs to the top, under the floating nav. */
     padding-bottom: var(--space-6);
   }
   /* The global `section` rule adds big section gaps; chapters use their own. */
@@ -271,7 +274,50 @@ const newTab = '(s’ouvre dans un nouvel onglet)';
     white-space: nowrap;
   }
 
-  /* --- 1. Intro */
+  /* --- 1. Full-bleed hero: the event photo with the title overlaid at the
+     bottom. Same recipe as the Métis page (couleur-du-peche.astro). */
+  .hero {
+    position: relative;
+    isolation: isolate;
+    margin-bottom: var(--space-5);
+  }
+  .hero img,
+  .hero .slot {
+    display: block;
+    width: 100%;
+    height: clamp(20rem, 60vh, 36rem);
+    object-fit: cover;
+    object-position: center;
+    border-radius: 0;
+  }
+  .hero::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    background: linear-gradient(to bottom, rgba(20, 12, 6, 0.05) 40%, rgba(20, 12, 6, 0.62) 100%);
+  }
+  .hero-inner {
+    position: absolute;
+    inset: auto 0 0 0;
+    z-index: 2;
+    max-width: var(--maxw);
+    margin-inline: auto;
+    padding-inline: var(--gutter);
+    padding-bottom: clamp(2rem, 5vh, 3.5rem);
+    color: #ffffff;
+  }
+  .hero .title { color: #ffffff; }
+  .hero-meta {
+    margin-top: var(--space-2);
+    font-family: var(--font-body);
+    font-size: var(--fs-small);
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: rgba(255, 255, 255, 0.85);
+  }
+
+  /* --- 2. Intro */
   .intro { max-width: 56rem; }
   .back {
     display: inline-block;
@@ -299,13 +345,12 @@ const newTab = '(s’ouvre dans un nouvel onglet)';
     color: #ffffff;
   }
   .title {
-    font-size: var(--fs-h1);
+    font-size: clamp(2.25rem, 1.4rem + 3.4vw, 3.5rem);
     font-weight: 800;
-    line-height: var(--lh-tight);
+    line-height: 1.08;
     letter-spacing: -0.02em;
   }
   .lede {
-    margin-top: var(--space-3);
     font-size: 1.25rem;
     line-height: 1.6;
     color: var(--color-muted);
@@ -335,37 +380,36 @@ const newTab = '(s’ouvre dans un nouvel onglet)';
     font-size: var(--fs-small);
     color: var(--color-muted);
   }
-  .media--hero {
-    margin-top: var(--space-5);
-    aspect-ratio: 16 / 9;
-  }
 
-  /* --- 3. Key figures: 4 across, 2 x 2 on phones */
+  /* --- 3. Key figures: one dark-orange card per value, 4 across, 2 x 2 on
+     phones */
   .stats {
     display: grid;
     grid-template-columns: repeat(4, minmax(0, 1fr));
-    gap: var(--space-3);
+    gap: var(--space-2);
     margin: var(--space-4) 0 0;
-    padding: var(--space-4) var(--space-3);
-    border: 1px solid var(--color-line);
-    border-radius: var(--radius-card);
-    background: var(--color-card);
   }
   /* Value reads first visually, label underneath. */
-  .stat { display: flex; flex-direction: column-reverse; }
+  .stat {
+    display: flex;
+    flex-direction: column-reverse;
+    justify-content: flex-end;
+    padding: var(--space-3);
+    border-radius: var(--radius-card);
+    background: var(--color-primary);
+    color: #ffffff;
+  }
   .stat-value {
     margin: 0;
     font-size: var(--fs-h1);
     font-weight: 800;
     line-height: 1;
     letter-spacing: -0.02em;
-    color: var(--color-primary);
   }
   .stat-label {
     margin-top: var(--space-1);
     font-family: var(--font-body);
     font-size: var(--fs-small);
-    color: var(--color-muted);
   }
 
   /* --- Two-column grid (1/3 + 2/3) shared by the text chapters */
@@ -419,58 +463,109 @@ const newTab = '(s’ouvre dans un nouvel onglet)';
     line-height: 1.5;
   }
 
-  /* --- 5. Media angles table + coverage links */
-  .angles {
-    width: 100%;
+  /* --- 5. Press wall: featured outlets (with the pitched angle) three across,
+     the other outlets as compact tiles four across. 12-column grid so both
+     rows fill the width. */
+  .press-title {
     margin-top: var(--space-4);
-    border-collapse: collapse;
-    font-size: var(--fs-body);
-  }
-  .angles th,
-  .angles td {
-    padding: 0.85rem 0;
-    text-align: left;
-    vertical-align: top;
-    border-bottom: 1px solid var(--color-line);
-  }
-  .angles thead th {
+    margin-bottom: var(--space-2);
     font-family: var(--font-body);
     font-size: var(--fs-eyebrow);
     font-weight: 400;
     text-transform: uppercase;
     letter-spacing: 0.12em;
     color: var(--color-muted);
-    border-bottom-color: var(--color-text);
   }
-  .angles tbody th {
-    width: 33%;
-    padding-right: var(--space-2);
-    font-weight: 700;
-  }
-  .coverage { margin-top: var(--space-3); }
-  .coverage-title {
-    font-family: var(--font-body);
-    font-size: var(--fs-eyebrow);
-    font-weight: 400;
-    text-transform: uppercase;
-    letter-spacing: 0.12em;
-    color: var(--color-muted);
-    margin-bottom: var(--space-1);
-  }
-  .coverage-list {
+  .press {
     list-style: none;
     margin: 0;
     padding: 0;
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.5rem 1.5rem;
+    display: grid;
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+    gap: var(--space-2);
   }
-  .coverage-list a,
+  .press-item { grid-column: span 3; display: flex; }
+  .press-item--featured { grid-column: span 4; }
+  .press-card {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    border: 1px solid var(--color-line);
+    border-radius: var(--radius-card);
+    background: var(--color-card);
+    color: var(--color-text);
+    text-decoration: none;
+    transition: border-color 0.2s var(--ease), transform 0.2s var(--ease);
+  }
+  .press-card:hover {
+    border-color: var(--color-primary);
+    transform: translateY(-2px);
+  }
+  /* The outlet's preview image, full-bleed across the top of the card. */
+  .press-img {
+    display: block;
+    width: 100%;
+    height: auto;
+    aspect-ratio: 16 / 9;
+    object-fit: cover;
+    border-bottom: 1px solid var(--color-line);
+  }
+  .press-body {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--space-1);
+    padding: var(--space-3);
+  }
+  .press-card:focus-visible { outline: 2px solid var(--color-primary); outline-offset: 2px; }
+  .press-format {
+    font-family: var(--font-body);
+    font-size: 0.82rem;
+    line-height: 1.3;
+    padding: 0.2rem 0.55rem;
+    border-radius: 2px;
+    background: var(--cat-storytelling-clear);
+    color: var(--color-text);
+  }
+  .press-name {
+    font-size: var(--fs-h3);
+    font-weight: 800;
+    line-height: 1.15;
+    letter-spacing: -0.01em;
+  }
+  .press-angles {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+    margin-top: var(--space-1);
+  }
+  .press-angles-label {
+    font-family: var(--font-body);
+    font-size: var(--fs-eyebrow);
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--color-muted);
+  }
+  .press-angle {
+    font-size: 1.125rem;
+    font-weight: 600;
+    line-height: 1.35;
+    color: var(--color-primary);
+  }
+  .press-action {
+    margin-top: auto;
+    padding-top: var(--space-2);
+    font-family: var(--font-body);
+    font-size: var(--fs-small);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+  }
   .quote figcaption a {
     color: var(--color-primary);
     font-weight: 600;
   }
-  .coverage-list a:hover,
   .quote figcaption a:hover { color: var(--color-primary-deep); }
 
   /* --- 6. Identity gallery: the A3 poster then three Instagram posts in one
@@ -536,13 +631,22 @@ const newTab = '(s’ouvre dans un nouvel onglet)';
     /* The empty spacer column only exists to offset text on wide screens. */
     .split > [aria-hidden='true'] { display: none; }
     .quotes { grid-template-columns: 1fr; }
+    .press-item,
+    .press-item--featured { grid-column: span 6; }
+    .press-item--featured:first-child { grid-column: 1 / -1; }
     .chapter { margin-top: var(--space-5); }
-    .media--team { aspect-ratio: 4 / 3; }
+    /* One column: the team photo drops below its text, just before the quotes. */
+    .media--team { aspect-ratio: 4 / 3; order: 1; }
   }
   @media (max-width: 640px) {
-    .stats { grid-template-columns: repeat(2, minmax(0, 1fr)); padding: var(--space-3) var(--space-2); }
+    .stats { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--space-1); }
+    .stat { padding: var(--space-2); }
     /* Phones: poster full width, the three posts in a row underneath. */
     .gallery { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--space-1); }
     .media--poster { grid-column: 1 / -1; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .press-card { transition: none; }
+    .press-card:hover { transform: none; }
   }
 </style>
