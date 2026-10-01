@@ -1,0 +1,181 @@
+---
+// English version of the Métis article, mirroring the French one at
+// /work/couleur-du-peche. Layout, tabs and styles live in
+// CouleurDuPeche.astro; this file only holds the copy.
+import CouleurDuPeche from '../../../components/work/CouleurDuPeche.astro';
+import { localizedPath } from '../../../i18n';
+
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+
+const copy = {
+  title: 'Métis: the colour of sin · Flora Fosset',
+  description: 'A web documentary on the Métis children born of Belgian colonisation in Africa, taken from their mothers and placed in institutions. Three accounts of a story long kept silent.',
+  heroAlt: 'The White Sisters of Africa posing with Métis boarders at the Save institute in Rwanda.',
+  heroTitle: 'Métis: the colour of sin',
+  heroMeta: '24H01 · June 2016',
+  back: 'Back to projects',
+  tabsLabel: 'Testimonies',
+  stories: [
+    { id: 'eveline', tab: 'Eveline' },
+    { id: 'luc-charles', tab: 'Luc and Charles' },
+    { id: 'francois', tab: 'François' },
+  ],
+};
+---
+
+<CouleurDuPeche copy={copy} home={localizedPath('en')}>
+  <Fragment slot="intro">
+    <p class="article-sub">
+      Belgian colonisation in Africa? What springs to mind straight away is a
+      missionary in white clothes and a white helmet, posing beside half-naked
+      Black natives. It is a widespread image that leaves out a third category,
+      one that is almost never mentioned: the Métis. These children, born of
+      often adulterous relationships between European colonists and African
+      women, troubled the Belgian authorities: neither Black nor white, they
+      upset the social order of the colony. Torn from their mothers and
+      disowned by their fathers, they were hidden, isolated and moved around
+      throughout their childhood, then gathered onto charter flights to Belgium
+      in 1959, on the eve of Congolese independence. Today, still bearing the
+      scars of their youth and weary of the silence that surrounds their story,
+      Belgium’s Métis have decided to speak out. One association will even meet
+      Brussels parliamentarians next October<sup>1</sup> to plead their cause.
+      Life stories from Luc, Eveline, Charles and François, who bear “the colour
+      of sin”.
+    </p>
+    <ol class="footnotes footnotes--intro">
+      <li><sup>1</sup> 20 October 2016, Les jeudis de l’hémicycle.</li>
+    </ol>
+  </Fragment>
+
+  <Fragment slot="eveline">
+    <div class="wrap">
+      <h2 class="story-title">“There are white people, Black people, and then me, in between…”</h2>
+      <p class="story-lead">From early childhood, Métis children were taught that they were worth more than Africans but remained inferior to Europeans. Discriminated against by both groups, they struggled to find their place. A journey into the past of Eveline Schmit, a Métis woman who never really found her way.</p>
+    </div>
+
+    <figure class="figure">
+      <img src={`${base}/images/projects/couleur/eveline.jpg`} alt="Eveline Schmit." width="605" height="403" loading="lazy" />
+      <figcaption>Eveline Schmit.</figcaption>
+    </figure>
+
+    <div class="wrap">
+      <p>“My father worked for the Belgian state as a territorial agent in the colonies. He met my mother during a posting in Rwanda, and they married according to local custom. I was born in 1952.” Eveline Schmit, like many children born in territories under colonial rule, is the product of an encounter between a European coloniser and an African woman. Around 10,000<sup>1</sup> Métis children were born in the Belgian colonies of Congo, Rwanda and Burundi (then known as Ruanda-Urundi) between 1908 and 1959. These children troubled the Belgian authorities, who saw them as a threat to the social order of the region. Half white, half Black, they blurred a racial distinction that was the very foundation of how the colony worked. They also raised the question of colonial prestige: with European blood running through their veins, they could not be regarded as “mere natives”. The words of Pierre Nolf, a Belgian scientist of the first half of the 20th century, illustrate the concern stirred up by the Métis Question: “These unions [between a white man and a Black woman, Ed.] are generally not happy for those who enter into them. They produce Métis who, belonging to neither of the two races, form an unstable and discontented social element. They are a serious threat to the future of the white race, which will remain capable of fulfilling its civilising mission only on condition that it preserves the quality of its blood.”<sup>2</sup></p>
+
+      <h3>“My father took me away by force”</h3>
+      <p>“When I was two and a half, Pierre Schmit, my father, came and tore me from my mother’s arms,” Eveline recalls bitterly. “He had waited until I was toilet-trained so that he could place me in a special boarding school for Métis children. He had to try several times to find me, because my mother hid me every time he came. In the end he took me away by force. Most white fathers did not want their Métis child to grow up in African culture. They wanted us to have a Western upbringing: to dress, eat and speak like white people.” The boarding school her father took her to in 1955 was in Ndoluma, near Goma in the Congolese region of North Kivu, 200 km from her homeland. Her mother lived near a boarding school for Métis children in Butare, Rwanda, yet her father preferred to send her far away to make sure her African family would not come looking for her. She ended up at a North American Protestant mission with some thirty children, all of them Métis. Most had been brought there by their fathers or by colonial administrators who had found them in the countryside. At the time, when a white man saw a little Métis child in a village, custom had it that he would take the child away and leave them at a religious mission, sometimes without even bothering to tell the mother. Sarah Heynssens, a Belgian historian, explains the reasoning behind this policy: “Colonial officials were instructed to follow a set of very strict rules concerning children with European ‘blood’. The Recueil à l’usage des fonctionnaires et des agents du Service territorial, a practical handbook for colonial officials, asked agents in the field to persuade African mothers to send their Métis children to the missions.”<sup>3</sup></p>
+
+      <h3>Life at the institute</h3>
+      <p>At the Protestant boarding school, Eveline learned English and quickly forgot her mother tongue, Kinyarwanda. The missionaries did not allow any native language to be spoken at the school. It is a recurring problem among the Métis: when they reconnect with their African families years later, they cannot rebuild ties because they cannot understand one another.</p>
+      <blockquote class="pullquote">“Most white fathers did not want their child to grow up in African culture. They wanted us to dress, eat and speak like white people.”</blockquote>
+      <p>“I prefer to call it an orphanage rather than a boarding school because, even though we were not orphans, that is what it amounted to. We were unwanted children. Neither my father nor my mother ever visited me. In fact, no parents came to see the children; we were left entirely to the missionaries. Years later, I asked my dad why he had never come. He apologised and told me that ‘it was too far’.”</p>
+      <p>The religious missions gave the children board and lodging along with a rudimentary religious education. They dressed them in second-hand clothes from the United States and made them live in the Western manner. The children had to wear shoes, for example: an ordeal for those who were not used to them. “The missionaries taught us to read and write. In the end we saw little of them; we young Métis were always among ourselves. We played, we comforted one another: we were like one big family. I remember we often wondered why we were so far from our parents. What had we done to be set apart? We concluded that it was because of the colour of our skin. There were white people, Black people, and then there was us.” The Métis did not reach this conclusion on their own: the missionaries often reminded them that their skin bore “the colour of sin”. Later, Eveline’s American adoptive mother would tell her over and over that she must repent and devote her life to atoning for her parents’ sin.</p>
+
+      <h3>A change of hemisphere</h3>
+      <p>In 1959, the excitement in the Belgian Congo became palpable. Groups of young people danced in the streets, the atmosphere grew heated and one word was on everyone’s lips: independence. Missionaries, colonial administrators and other muzungus (white people, in Kinyarwanda) hurried to pack their bags and go home. As the Congolese Métis children were considered the “property” of Belgium, they were repatriated to Brussels.</p>
+      <blockquote class="pullquote">“At the institute, we often wondered why we were so far from our parents. What had we done to be set apart?”</blockquote>
+      <p>The young Rwandans and Burundians were sent back to their homelands, as Ruanda-Urundi still belonged to Belgium. An American missionary accompanied Eveline to Bujumbura, in Burundi, to find her biological father. “He wanted me to be sent to Europe with the others. I was 7. When we arrived, we were placed in a Protestant boarding school in Uccle, under the guardianship of a Swedish pastor. None of us went through the Belgian adoption services.”</p>
+      <p>The boarding school wanted to find them Protestant adoptive families, which were hardly thick on the ground in Belgium. After about a year, the pastor found a family in Boston, in the United States, willing to take Eveline in. A few letters were exchanged and the matter was settled: she was sent across the Atlantic. All this without the involvement of a social worker or a psychologist, and without any enquiry into the family in question. “This third turning point in my life was a disaster. My new American family consisted of a young nurse and her disabled mother. They belonged to a cult around which they organised all their activities. I could only go to the schools and see the members of their group; it was an unhealthy environment. But what broke my heart even more was the thought that my mother would never be able to find me after all these moves.”</p>
+      <blockquote class="pullquote">“Neither my father nor my mother ever visited me. No parents came to see the children: we were left entirely to the missionaries.”</blockquote>
+      <p>Sadly, what followed proved her right. Yet Eveline searched relentlessly for her mother for years. “I did a huge amount of research through embassies, but it never led anywhere. I ended up telling myself she was dead. I later discovered that, when my father took me to the orphanage in Ndoluma, he changed my first name, my date of birth and my mother’s name, to make sure she would not find me. My searches were completely in vain.” Many Métis had their papers falsified in this way. In Eveline’s case, her biological father wanted to make sure her African family would not come looking for her at the boarding school. In other cases, the colonist had a family in Belgium and did not want his wife to learn of the existence of an illegitimate child who was, on top of that, half Black. Only a tenth of the 10,000 Métis children were legally recognised by their fathers. White men feared being dismissed from their posts if they revealed the existence of their offspring. That was the case with Eveline’s father, who chose to wait until he had retired before signing a proper birth certificate.</p>
+
+      <h3>Healing the wounds</h3>
+      <p>Eveline moved back to Belgium at 29. Her father never agreed to help her identify her mother. He wanted her to start a family in Europe and shed her African roots completely. “My father had been asking me to come back for several years. When I arrived, I no longer spoke any French, so I struggled to find work. I started studying medicine at UCL, which I gave up five years later when I was offered a job in a laboratory. I got married and never thought about moving again.” Eveline went back to Rwanda for the first time at the age of 60. She was terrified of the Land of a Thousand Hills: all she imagined of her native country was violence, murder, abduction and corruption. She discovered a healthy society, welcoming people and breathtaking landscapes. She never found anyone from her African family, however.</p>
+      <blockquote class="pullquote">“Our terrible story deserves to be known. It is time to break the silence.”</blockquote>
+      <p>There are as many different stories as there are Métis. That does not stop Eveline from feeling bound to all children of mixed blood: “There is something that made all of us suffer and that forged our shared identity. It is the feeling of not belonging to any group. Of always being seen as the outsider. In Africa, people pointed at me in the street and sometimes made fun of me. In Belgium, parents would not let their children play with me because of the colour of my skin and because I was an orphan. In the United States, people in the African-American community rejected me when they found out my father was white. Everywhere I lived, the same pattern repeated itself: there were Black people, white people, and then me, there, in between.” The traumas of her childhood and adolescence have marked Eveline for ever. Today she is finally able to put her past pain into words: she is writing a book that she hopes to publish one day. “Our terrible story deserves to be known. By reading about my life, other Métis may find the courage to tell their own stories too. Writing about my misfortunes has eased my anger. It is time to break the silence.”</p>
+
+      <ol class="footnotes">
+        <li><sup>1</sup> This figure, from the African archives of the Ministry of Foreign Affairs in Brussels, is fairly approximate, as many Métis children were not registered at birth.</li>
+        <li><sup>2</sup> Remarks dating from 1930, quoted in Assumani Budagwa’s book “Noir, Blanc, Métis. La Belgique et la ségrégation des Métis du Congo belge et du Ruanda-Urundi (1908-1960)” (2014), p. 84.</li>
+        <li><sup>3</sup> Quoted from the article “Entre deux mondes. Le déplacement des enfants métis du Ruanda-Urundi colonial vers la Belgique” (2012), Sarah Heynssens. Read it in full <a href="https://rhei.revues.org/3385" target="_blank" rel="noopener">here</a>.</li>
+      </ol>
+    </div>
+  </Fragment>
+
+  <Fragment slot="luc-charles">
+    <div class="wrap">
+      <h2 class="story-title">“They took us for savages”</h2>
+      <p class="story-lead">The Métis Question was a subject of debate within the administration of the Belgian Congo. Some feared the Métis would become the instigators of a revolt; others thought they would make capable foremen. On the whole, everyone agreed on one thing: they had to be isolated from the rest of society. Charles Géradin and Luc Van Damme describe the harsh daily life of an institute for Métis children.</p>
+    </div>
+
+    <figure class="figure">
+      <img src={`${base}/images/projects/couleur/luc-charles.jpg`} alt="Charles Géradin and Luc Van Damme." width="605" height="417" loading="lazy" />
+      <figcaption>Charles Géradin and Luc Van Damme.</figcaption>
+    </figure>
+
+    <div class="wrap">
+      <p>Luc Van Damme (right in the photo) entered the Save institute (pronounced Savé) at the age of 4, in 1958. “When I was little, I wet the bed. In the morning, the children who had soiled their sheets were beaten in front of everyone. It traumatised me so much that I had problems at night until I was 14.” The institute was run by the White Sisters of Africa. The cruelty they inflicted on the children left all of them with painful memories. Charles Géradin, another Métis from Save (left in the photo), was born in 1945 and lived at the institute from 1951. Sixty years on, his memory is still intact: “Sister Assumpta had nettles picked and left them to soak in water overnight. In the morning, she whipped the children with the wet stems. She took great pleasure in it. I think she was at the end of her tether; she had too much work. Violence was her outlet.” This memory is just one example of the mistreatment that mulatto children suffered every day in the “school colonies” of the Belgian Congo and Ruanda-Urundi.</p>
+      <p>In 1909, the Catholic mission of Save opened its doors in Butare, Rwanda, near the Burundian border. An orphanage at first, the mission run by the White Sisters of Africa soon became an institute for Métis children. Around a hundred young mulattoes received a very strict Catholic education there. Derived from the word for “mule”, mulatto refers to people born to a European father and an African mother: a rather ugly term, now politically incorrect. One of the sisters at the mission, Elisabeth de la Trinité, described her impressions on arriving at the institute in a letter: “At first glance, these children do not seem happy. They are all different: there are little blonde girls with milky complexions, almost black faces with frizzy hair and every shade of mixing in between. They wear a uniform: a blue cotton dress for the girls, shorts and a short-sleeved shirt for the boys. Children of every hue and every age, from little ones of two up to the eldest girls, who are twenty-eight…”<sup>1</sup> The Métis grew up apart from African society, almost cut off from the world, under the guardianship of the Sisters, who ran the boarding school with an iron fist.</p>
+
+      <h3>“White blood” in their veins</h3>
+      <p>If young mulattoes were separated from their parents and grouped together in special schools, it was (among other reasons) because high-ranking colonists saw them as a future high-quality workforce. More intelligent than the native population, they would supposedly be more productive while remaining cheap. The colonists talked of creating a “Métis caste”, as Lissia Jeurissen, a Belgian historian and contributor to the Centre d’Études Ethnicité et Migrations (CEDEM), explains: “An intermediate social class that would develop separately from the other racial communities (residential areas, schools) in order to avoid frustrations likely to fuel a desire for revenge or protest. The Métis would then enjoy a specific status, higher than that of the Black natives but slightly below that of Europeans.”<sup>2</sup> The colonial authorities therefore placed their education in the hands of religious missions, such as the one at Save.</p>
+      <blockquote class="pullquote">“Sister Assumpta whipped the children with wet nettle stems. Violence was her outlet.”<cite>Charles Géradin</cite></blockquote>
+      <p>At the institute, the children’s contact with the outside world was kept to a minimum. They were taught much as children were back in Belgium: “We learned to count with drawings of apples and pears, even though those fruits did not exist in Africa,” Luc recalls. Sarah Heynssens, a Belgian historian specialising in the colonial era, describes the institution’s various tactics for setting the Métis apart from Black people: “Western clothes, shoes and haircuts emphasised the physical differences. The food was more varied and richer than that of most Africans. Thanks to this preferential treatment, the children looked and felt ‘superior’, but in return they were increasingly cut off from African society.”<sup>3</sup></p>
+
+      <h3>Belgian exile</h3>
+      <p>In 1959, the machinery of independence was being set in motion in Congo. White people sensed they were no longer welcome. Sister Lutgardis, the head of Save, did everything she could to send the young mulattoes to Belgium. According to Luc Van Damme, she was afraid they would be massacred: “She feared the Congolese people would take reprisals against the colonists’ children. On the Rwandan side, tensions between Hutus and Tutsis were worsening, and many of us had Tutsi mothers.” It is an explanation disputed by others, including his friend Charles Géradin: “The colonial authorities had us evacuated because they were afraid we would turn against them. They preferred to keep their potential future enemies under their thumb.” Whatever the reason, Sister Lutgardis, backed by the Association Pour la Protection des Mulâtres (APPM), travelled across the region in the hope of finding the children’s mothers: their consent was essential to take the youngsters to Europe. The journey was presented as an evacuation needed to secure the children’s future and give them a good education. Many of the African women, who were illiterate, signed the document with their thumbprint without knowing what they were indirectly agreeing to: the adoption of their child in Belgium. Those who refused to sign were threatened with having to pay the institute’s school fees in full. After a few weeks of persuasion, most of the mothers agreed to let their children go.</p>
+      <blockquote class="pullquote">“We learned to count with drawings of apples and pears, even though those fruits did not exist in Africa.”<cite>Luc Van Damme</cite></blockquote>
+      <p>On 4 November 1959, the first café-au-lait children flew off to Belgian soil. “The adults loaded us onto open-topped lorries,” Luc recalls. “Standing in the back, the wind in my hair, I was over the moon! We did not know where they were taking us, but we were all excited to be leaving the institute. When we got to the airport, I was thrilled at the idea of flying. My father came with us to say goodbye. He waved to me through the window, but I did not look at him because I was terrified of him. If anything, I was happy to be leaving Rwanda.” Between 1959 and 1961, nearly 300 Métis children were sent to Belgium. On arrival, some went straight to a foster family, like Luc, then aged 6, who ended up with a French-speaking couple with two children. Charles, who was older, went to the Jesuit school in Namur. “An English aristocratic family had got into the habit of taking me on holiday with them. I got on very well with their four children. One day they suggested I come and live with them, and they welcomed me as a real member of the family. I was lucky.”</p>
+      <p>Charles and Luc found a degree of peace within their new families. That was not the case for all Métis children. Luc’s sister was placed in a household where she was treated almost as a servant. She was only 8. Sadly, Luc would only learn of his big sister’s misfortune years later. “The associations that had found us foster families preferred us not to keep in touch with members of our own family. They did not want us to be able to compare our situations. I did not see my brothers and sisters for ten years. When we found each other again, we no longer spoke the same language, because they had grown up in Flanders. It was hard to rebuild the bond between us.”</p>
+
+      <aside class="callout">
+        <h4>A chance encounter</h4>
+        <p>In 1978, Luc went back to Kigali to teach at the Belgian school. “I had heard nothing from my mother since I left Save. One day, as I came out of class, I came across three Rwandans, among them a small woman with a beautiful colourful turban and bare feet. ‘Are you Mr Van Damme?’ one of the two men asked. When I said yes, he pointed to the small woman and said: ‘I would like to introduce you to your mother.’ After twenty years apart, she held me in her arms for a long time. Her son had finally come back.”</p>
+      </aside>
+
+      <h3>Black against white</h3>
+      <p>Even though the colonial era was over, the racist and paternalistic mindset of the Belgians clung to them. “In Belgium in the 1960s, people took us for savages,” Luc says critically. “When I started teaching, I struggled to find my place in the school. I felt I had to earn the trust of my colleagues and of my pupils’ parents.” Belgium was still reluctant to make room in society for these half-African individuals.</p>
+      <blockquote class="pullquote">“Children of sin”, they bear the shameful fault of their parents on their faces and, so it was said, deserve to be punished for that lapse.</blockquote>
+      <p>Charles also points out that recognition by a Belgian father did not give them Belgian nationality. “At 18, I was summoned to the town hall. They asked me whether I wanted Belgian or Rwandan nationality. I did not even know I was not legally Belgian!” Those who chose African nationality would later bitterly regret it: unless they married, they would never be Belgian on paper.</p>
+      <p>“When I talk about the past, about Save, it does not make me sad. It is true that we went through difficult experiences, but it gave us strength,” says Charles, putting things in perspective. Luc adds: “I feel for people our age who have not managed to put it behind them. I think I overcame my past thanks to my success in my personal and professional life.” Both men have healed their wounds, supported first by their adoptive families and then by those close to them. Luc stresses that healing comes above all from a positive state of mind: “Métis does not mean 50/50. It means 100 + 100. Thinking like that lifts you up. We are 200%.”</p>
+
+      <ol class="footnotes">
+        <li><sup>1</sup> Quoted in Assumani Budagwa’s book “Noir, Blanc, Métis. La Belgique et la ségrégation des Métis du Congo belge et du Ruanda-Urundi (1908-1960)” (2014), p. 173.</li>
+        <li><sup>2</sup> “La question mulâtre, colonisation et métissage”, by Lissia Jeurissen. Read it in an <a href="https://web.archive.org/web/20170319045443/http://www.cbai.be/revuearticle/740/print/" target="_blank" rel="noopener">archived version</a> (the CBAI original is no longer online).</li>
+        <li><sup>3</sup> “Entre deux mondes. Le déplacement des enfants métis du Ruanda-Urundi colonial vers la Belgique”, by Sarah Heynssens. Read it <a href="https://rhei.revues.org/3385" target="_blank" rel="noopener">here</a>.</li>
+      </ol>
+    </div>
+  </Fragment>
+
+  <Fragment slot="francois">
+    <div class="wrap">
+      <h2 class="story-title">“They did not want to mix us with the other children”</h2>
+      <p class="story-lead">Born of adulterous relationships, Métis children were frowned upon from birth in the Catholic, conservative Belgian Congo. Despite the accusing looks, some couples chose to marry and raise their children together. François Milliex and his brothers were among the young people who, thanks to their parents, escaped a sad fate.</p>
+    </div>
+
+    <figure class="figure">
+      <img src={`${base}/images/projects/couleur/francois.jpg`} alt="François Milliex." width="605" height="403" loading="lazy" />
+      <figcaption>François Milliex.</figcaption>
+    </figure>
+
+    <div class="wrap">
+      <p>“When my father’s colleagues saw my mother sit down at the table with us, they would ask my father awkwardly: ‘Oh, you eat with your housekeeper?’” François Milliex remembers precisely the words the colonials used. And for good reason: “housekeeper” was the term for a colonist’s local partner during his stay in the Belgian Congo. White men commonly took a mistress to escape loneliness (then known as the coup de bambou, a bout of depression brought on by being far from home). They did not imagine that children could be born of these relationships and, when nature took its course, they preferred to abandon the woman and find another. Lissia Jeurissen, a Belgian historian, recalls the mindset of the time regarding these relationships: “This ‘fixed-term’ cohabitation, though officially discouraged by the colonial authorities, was very common, since most agents came to Congo without their Belgian families. The Black concubines were then called housekeepers, and were sometimes married according to native custom. But these couples seemed doomed to break up. Once his colonial contract was over, the bwana [white colonist, in Swahili, Ed.] very often left for a new posting without looking back, feeling bound by no legal or moral obligation towards his tropical companion.”<sup>1</sup></p>
+      <p>François and his twin brother were born in 1945 in Bukavu, Congo. Their father had a plantation in Jimbi, Burundi, near the Congolese border. Of French origin, he chose to take responsibility for his children. Perhaps because the French colonial mindset differed from the Belgian one: whereas France settled in Africa with the idea of populating the land (in Algeria, for example), Congo was a colony of exploitation, where those in power envisaged neither the mass immigration of Belgian families nor the integration of colonials into native society.</p>
+
+      <h3>In the white schoolyard</h3>
+      <p>“The colonial authorities in Ruanda-Urundi advised my father to put us in a boarding school for Métis children. It was ‘the best thing to do’. They did not really want to mix Métis children with Black and white children.” In 1953, François and his brother were sent to the institute for Métis children at Save (pronounced Savé), a Catholic mission in southern Rwanda. They would not stay long. “We went into the institute at 7. It was a terrible experience,” he recalls with emotion. “The other children were jealous of us because Dad came to collect us for the holidays. They never had any visitors; they were like orphans. The Sisters were very harsh with us too. After a year, we complained about the mistreatment and our father moved us to another school.”</p>
+      <blockquote class="pullquote">“When my father’s colleagues saw my mother sit down at the table, they would ask awkwardly: ‘Oh, you eat with your housekeeper?’”</blockquote>
+      <p>The twins were among the first Métis children to attend a white school (their presence had been forbidden before 1948). They were taught the history of Belgium, Julius Caesar and ancient Greece, but not a word about Africa. Little by little, the colonial administration let in Black pupils but kept a clear distinction between the two groups. “Even though Belgium did not officially introduce legal segregation as such in its colony, colonial law nonetheless distinguished between natives (indigenous people) and non-natives (European workers),” Belgian historian Lissia Jeurissen explains. “In the canteen, my brothers and I ate with the white people. The Black people ate on the other side of the room,” François recalls. During his childhood in Africa, he was considered part of the European “camp”. “In the end, I too saw myself as white. Arriving in Belgium was a shock! Here it was the opposite, of course. People did not see my mix: I was Black, full stop.” Most Métis children experienced this kind of stigmatisation, Lissia Jeurissen observes: “In the eyes of the general public, the Belgian Métis is perceived a priori as a foreigner, an African, or is reduced to their dual roots, regardless of their legal nationality and personal history.”<sup>2</sup></p>
+
+      <h3>“Europe at last!”</h3>
+      <p>“In 1959, Sister Lutgardis, the head of the Save institute, came to the house to talk to my father. She explained that the Métis children were being evacuated and that he had to send us to Belgium to keep us safe from a massacre of Tutsis. We were not too sad to leave, because we were convinced we would come back and take over Dad’s plantation,” François remembers. He and his six brothers and sisters arrived on the continent with stars in their eyes. “We had high hopes of life in Europe. For years, in my father’s office, we had seen calendars with Swiss chalets, snowy landscapes and blue skies. We dreamed of it! The day we landed in Brussels, it was freezing. We had never been cold in our lives; we really did not expect that.” The eldest, François and two of his brothers, were sent to a children’s home in Rhode-Saint-Genèse. The four youngest were taken in by a wealthy Flemish family. “I had almost no news of them for years. The Association Pour la Protection des Mulâtres was reluctant to give us their address. When we found each other again, we no longer spoke the same language.”</p>
+      <p>The problem of not being recognised by their father arises sooner or later for all mulattoes. “At 18, we could choose between Belgian and Rwandan nationality. I had not understood what was at stake, and I opted for Rwandan papers. When the country became independent, I was considered to be there irregularly. Mountains of administrative problems followed. Signing employment contracts, for example, still causes complications. These problems follow me even in everyday life: when I go to France, I am sometimes stopped at the border and forbidden to leave Belgian territory,” François grumbles.</p>
+      <blockquote class="pullquote">“In the canteen, my brothers and I ate with the white people. The Black people ate on the other side of the room.”</blockquote>
+
+      <h3>No hard feelings?</h3>
+      <p>François Milliex does not wish to dwell on his past. He knows he is one of the “lucky ones”: he knew both his parents and grew up with his brothers, whereas most mulattoes had to fight to find their biological parents and understand what had happened to them. “I have met Métis people with whom I did not feel in tune at all. They were so troubled and unhappy… They put all their problems down to being Métis. But it is true that my past was not as hard as theirs.”</p>
+      <blockquote class="pullquote">“In Belgium, people did not see my mix: I was Black, full stop.”</blockquote>
+      <p>Whatever path they took, the Métis of Belgian colonisation in Africa were marked by separation, deportation and discrimination. Today some have found peace, while others still carry, like a heavy burden, a past they have never managed to put behind them. Their story bears witness to the injustice and the wrongs of Belgian colonisation, and to a post-colonialist mindset that Belgium long struggled to shake off. For nearly twenty years, Assumani Budagwa gathered archive documents and testimonies. In 2014 he published “Noir, Blanc, Métis. La Belgique et la ségrégation des Métis du Congo belge et du Ruanda-Urundi (1908-1960)”, the first book to dig deep into the history of the Métis born during Belgian colonisation. In it he points out that, while this research should not lead to a one-sided judgement against the former colonists, “certain conduct or administrative measures created victims, so it is legitimate to raise the question of recognition, forgiveness and reparations.” The Association Métis de Belgique intends to obtain a public apology from the federal government for the discrimination against the Métis during the colonial period and their removal to Belgium in 1959. It will first plead its case before the French-speaking Brussels Parliament on 20 October. Long buried in oblivion, this chapter of our colonial history is slowly coming to light.</p>
+
+      <aside class="callout">
+        <h4>The Association Métis de Belgique</h4>
+        <p>In August 2015, François Milliex and his friend François D’Adesky set up an association to represent Métis people born in territories under Belgian colonial rule. The non-profit’s aim is to raise public awareness of the history of the Métis, to uphold a duty of remembrance and to help those concerned gain access to their personal archives, all while ensuring that “these actions are carried out without hatred, calmly, without a spirit of revenge but with tenacity”, as stated on the association’s website.</p>
+      </aside>
+
+      <ol class="footnotes">
+        <li><sup>1</sup> “La question mulâtre, colonisation et métissage” (2011), by Lissia Jeurissen. Read it in an <a href="https://web.archive.org/web/20170319045443/http://www.cbai.be/revuearticle/740/print/" target="_blank" rel="noopener">archived version</a> (the CBAI original is no longer online).</li>
+        <li><sup>2</sup> Ibid.</li>
+      </ol>
+    </div>
+  </Fragment>
+
+</CouleurDuPeche>

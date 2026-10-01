@@ -1,0 +1,520 @@
+---
+// The Fête des plantes project page, shared by every locale's route
+// (/work/, /en/work/, /es/work/). Text comes from src/i18n/work/fete-des-plantes.js.
+import { existsSync } from 'node:fs';
+import { join } from 'node:path';
+import Base from '../../layouts/Base.astro';
+import ProjectCard from '../ProjectCard.astro';
+import { useTranslations, localizedPath } from '../../i18n';
+import { copy as allCopy, shared } from '../../i18n/work/fete-des-plantes.js';
+
+const { locale } = Astro.props;
+const c = allCopy[locale];
+const t = useTranslations(locale);
+
+// Strip any trailing slash so `${base}/path` resolves correctly whether or not
+// BASE_URL ends in one (config base is '/', so BASE_URL is '/').
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+
+// Images live under public/images/projects/fete-des-plantes/ (see the README
+// there). Until a file is dropped in, its slot renders as a labelled dashed
+// frame; once the file exists it shows automatically on the next build.
+const imgDir = 'images/projects/fete-des-plantes';
+const img = (file, { alt, label }) => ({
+  src: `${base}/${imgDir}/${file}`,
+  exists: existsSync(join(process.cwd(), 'public', imgDir, file)),
+  alt,
+  label,
+});
+const images = {
+  hero: img('evenement.jpg', c.images.hero),
+  poster: img('affiche-a3.jpg', c.images.poster),
+  exhibitors: img('exposants.jpg', c.images.exhibitors),
+  team: img('equipe.jpg', c.images.team),
+};
+
+// Three Instagram posts, shown in one row next to the A3 poster.
+const posts = ['instagram-food.jpg', 'instagram-still-we-glow.jpg', 'instagram-pollen.jpg']
+  .map((file, i) => img(file, c.posts[i]));
+
+const facts = [
+  { term: c.facts.event, value: 'Les Jardins de l’HippoDrohme' },
+  { term: c.facts.website, value: 'fetedesplantes.be', url: shared.websiteUrl },
+  { term: c.facts.role, value: c.facts.roleValue },
+  { term: c.facts.when, value: c.facts.whenValue },
+];
+
+// Press wall: one card per outlet, with the piece's real title. `featured`
+// outlets get a wide card on the first row; the rest a compact tile. Each card
+// shows the outlet's own preview image (its og:image), saved under press/,
+// and its publication date (none found for Bruxelles Today, an event listing).
+// '2026-09-05' -> '05/09/2026'
+const formatDate = (iso) => iso.split('-').reverse().join('/');
+
+const testimonials = shared.testimonials.map((q, i) => ({ ...q, quote: c.quotes[i] }));
+
+const newTab = `(${t.a11y.newTab})`;
+---
+
+<Base subpage title={c.title} description={c.description} image="og/fete-des-plantes.jpg" imageAlt={c.shareImageAlt}>
+  <article class="project">
+    <!-- 1. Hero: full-bleed photo with the title overlaid (same treatment as
+         the Métis page) -->
+    <header class="hero">
+      {images.hero.exists
+        ? <img src={images.hero.src} alt={images.hero.alt} width="1600" height="900" loading="eager" />
+        : <div class="slot" role="img" aria-label={images.hero.alt}><span>{c.imageLabel} · {images.hero.label}</span></div>}
+      <div class="hero-inner">
+        <h1 class="title">{c.heroTitle}</h1>
+        <p class="hero-meta">{c.heroMeta}</p>
+      </div>
+    </header>
+
+    <div class="container">
+      <!-- 2. Intro -->
+      <div class="intro">
+        <a class="back" href={`${localizedPath(locale)}#work`}>← {c.back}</a>
+      </div>
+
+      <!-- 3. Key figures -->
+      <dl class="stats">
+        {c.stats.map((s) => (
+          <div class="stat">
+            <dt class="stat-label">{s.label}</dt>
+            <dd class="stat-value">{s.value}</dd>
+          </div>
+        ))}
+      </dl>
+
+      <!-- 4. Project sheet + the constraint -->
+      <div class="split split--sheet">
+        <dl class="facts">
+          {facts.map((f) => (
+            <div>
+              <dt>{f.term}</dt>
+              <dd>
+                {f.url
+                  ? <a href={f.url} target="_blank" rel="noopener noreferrer">{f.value}<span class="sr-only"> {newTab}</span></a>
+                  : f.value}
+              </dd>
+            </div>
+          ))}
+        </dl>
+        <section class="block">
+          <p class="eyebrow"><span class="slash">·</span>{c.constraint.eyebrow}</p>
+          <h2 class="block-title">{c.constraint.title}</h2>
+          <p>
+            {c.constraint.body}
+          </p>
+        </section>
+      </div>
+
+      <!-- 5. Decision: press over ads -->
+      <section class="chapter">
+        <div class="split">
+          <div aria-hidden="true"></div>
+          <div class="block">
+            <p class="eyebrow"><span class="slash">·</span>{c.decision.eyebrow}</p>
+            <h2 class="block-title">{c.decision.title}</h2>
+            <p>
+              {c.decision.body}
+            </p>
+          </div>
+        </div>
+
+        {/* Same card component (and hover reveal) as the homepage projects. */}
+        <div class="press">
+          {shared.press.map((m) => (
+            <div class={m.featured ? 'press-item press-item--featured' : 'press-item'}>
+              <ProjectCard
+                c={{
+                  category: 'storytelling',
+                  image: `/${imgDir}/press/${m.image}`,
+                  alt: '',
+                  title: m.title,
+                  subtitle: m.name,
+                  date: m.date,
+                  dateLabel: m.date && formatDate(m.date),
+                  url: m.url,
+                }}
+                d={{ cta: c.formats[m.format].action }}
+                base={base}
+                labels={{ newTab: t.a11y.newTab }}
+                service={c.formats[m.format].label}
+              />
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <!-- 6. Brand identity -->
+      <section class="chapter">
+        <div class="split">
+          <div aria-hidden="true"></div>
+          <div class="block">
+            <p class="eyebrow"><span class="slash">·</span>{c.identity.eyebrow}</p>
+            <h2 class="block-title">{c.identity.title}</h2>
+            <p>
+              {c.identity.body}
+            </p>
+            <p class="gallery-link">
+              <a href={shared.instagramUrl} target="_blank" rel="noopener noreferrer">
+                {c.identity.instagram}<span aria-hidden="true"> ↗</span><span class="sr-only"> {newTab}</span>
+              </a>
+            </p>
+          </div>
+        </div>
+
+        <div class="gallery">
+          {images.poster.exists && (
+            <figure class="media media--poster">
+              <img src={images.poster.src} alt={images.poster.alt} loading="lazy" />
+            </figure>
+          )}
+          {posts.filter((im) => im.exists).map((im) => (
+            <figure class="media media--post">
+              <img src={im.src} alt={im.alt} loading="lazy" />
+            </figure>
+          ))}
+        </div>
+      </section>
+
+      <!-- 7. The team -->
+      <section class="chapter">
+        <div class="split split--center">
+          <figure class="media media--team">
+            {images.team.exists
+              ? <img src={images.team.src} alt={images.team.alt} loading="lazy" />
+              : <div class="slot" role="img" aria-label={images.team.alt}><span>{c.imageLabel} · {images.team.label}</span></div>}
+          </figure>
+          <div class="block">
+            <p class="eyebrow"><span class="slash">·</span>{c.team.eyebrow}</p>
+            <h2 class="block-title">{c.team.title}</h2>
+            <p>
+              {c.team.body}
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- 8. Testimonials -->
+      <section class="chapter">
+        <div class="quotes">
+          {testimonials.map((q) => (
+            <figure class="quote">
+              <blockquote><p>{q.quote}</p></blockquote>
+              <figcaption>
+                {q.name}, <a href={q.url} target="_blank" rel="noopener noreferrer">{q.company}<span class="sr-only"> {newTab}</span></a>
+              </figcaption>
+            </figure>
+          ))}
+        </div>
+      </section>
+
+      <!-- 9. What's next -->
+      <section class="chapter">
+        <div class="split">
+          <div aria-hidden="true"></div>
+          <div class="block">
+            <p class="eyebrow"><span class="slash">·</span>{c.next.eyebrow}</p>
+            <p class="next">{c.next.body}</p>
+          </div>
+        </div>
+        {images.exhibitors.exists && (
+          <figure class="media media--exhibitors">
+            <img src={images.exhibitors.src} alt={images.exhibitors.alt} loading="lazy" />
+          </figure>
+        )}
+      </section>
+    </div>
+  </article>
+</Base>
+
+<style>
+  .project {
+    font-family: var(--font-display);
+    color: var(--color-text);
+    /* No top padding: the hero image runs to the top, under the floating nav. */
+    padding-bottom: var(--space-6);
+  }
+  /* The global `section` rule adds big section gaps; chapters use their own. */
+  .project section { padding-block: 0; }
+
+  .sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    white-space: nowrap;
+  }
+
+  /* --- 1. Full-bleed hero: the event photo with the title overlaid at the
+     bottom. Same recipe as the Métis page (couleur-du-peche.astro). */
+  .hero {
+    position: relative;
+    isolation: isolate;
+    margin-bottom: var(--space-5);
+  }
+  .hero img,
+  .hero .slot {
+    display: block;
+    width: 100%;
+    height: clamp(20rem, 60vh, 36rem);
+    object-fit: cover;
+    object-position: center;
+    border-radius: 0;
+  }
+  .hero::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    background: linear-gradient(to bottom, rgba(20, 12, 6, 0.05) 40%, rgba(20, 12, 6, 0.62) 100%);
+  }
+  .hero-inner {
+    position: absolute;
+    inset: auto 0 0 0;
+    z-index: 2;
+    max-width: var(--maxw);
+    margin-inline: auto;
+    padding-inline: var(--gutter);
+    padding-bottom: clamp(2rem, 5vh, 3.5rem);
+    color: #ffffff;
+  }
+  .hero .title { color: #ffffff; }
+  .hero-meta {
+    margin-top: var(--space-2);
+    font-family: var(--font-body);
+    font-size: var(--fs-small);
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: rgba(255, 255, 255, 0.85);
+  }
+
+  /* --- 2. Intro */
+  .intro { max-width: 56rem; }
+  .back {
+    display: inline-block;
+    font-size: var(--fs-small);
+    color: var(--color-muted);
+    text-decoration: none;
+  }
+  .back:hover { color: var(--color-primary); }
+  .title {
+    font-size: clamp(2.25rem, 1.4rem + 3.4vw, 3.5rem);
+    font-weight: 800;
+    line-height: 1.08;
+    letter-spacing: -0.02em;
+  }
+
+  /* --- Images and their placeholder frames */
+  .media { margin: 0; }
+  .media img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: var(--radius-card);
+  }
+  .slot {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+    padding: var(--space-2);
+    text-align: center;
+    border: 1px dashed var(--color-muted-soft);
+    border-radius: var(--radius-card);
+    background: var(--color-section-bg-alt);
+    font-family: var(--font-body);
+    font-size: var(--fs-small);
+    color: var(--color-muted);
+  }
+
+  /* --- 3. Key figures: one dark-orange card per value, 4 across, 2 x 2 on
+     phones */
+  .stats {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: var(--space-2);
+    margin: var(--space-4) 0 0;
+  }
+  /* Value reads first visually, label underneath. */
+  .stat {
+    display: flex;
+    flex-direction: column-reverse;
+    justify-content: flex-end;
+    padding: var(--space-3);
+    border-radius: var(--radius-card);
+    background: var(--color-primary);
+    color: #ffffff;
+  }
+  .stat-value {
+    margin: 0;
+    font-size: var(--fs-h1);
+    font-weight: 800;
+    line-height: 1;
+    letter-spacing: -0.02em;
+  }
+  .stat-label {
+    margin-top: var(--space-1);
+    font-family: var(--font-body);
+    font-size: var(--fs-small);
+  }
+
+  /* --- Two-column grid (1/3 + 2/3) shared by the text chapters */
+  .split {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 2fr);
+    gap: var(--space-5);
+    align-items: start;
+  }
+  .split--center { align-items: center; }
+  .split--sheet { margin-top: var(--space-5); }
+  .chapter { margin-top: var(--space-6); }
+
+  .eyebrow {
+    font-family: var(--font-body);
+    font-size: var(--fs-h4);
+    letter-spacing: 0.04em;
+    color: var(--color-primary);
+    margin-bottom: var(--space-1);
+  }
+  .eyebrow .slash { margin-right: 0.4em; }
+  .block-title {
+    font-size: var(--fs-h2);
+    font-weight: 700;
+    line-height: 1.15;
+    letter-spacing: -0.02em;
+    margin-bottom: var(--space-2);
+  }
+  .block p:not(.eyebrow) {
+    font-size: 1.0625rem;
+    line-height: 1.7;
+  }
+  .block p:not(.eyebrow) + p { margin-top: var(--space-2); }
+
+  /* --- 4. Project sheet */
+  .facts {
+    margin: 0;
+    display: grid;
+    gap: var(--space-2);
+  }
+  .facts dt {
+    font-family: var(--font-body);
+    font-size: var(--fs-eyebrow);
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--color-muted);
+  }
+  .facts dd {
+    margin: 0.25rem 0 0;
+    font-size: var(--fs-body);
+    line-height: 1.5;
+  }
+  .facts dd a { color: var(--color-primary); font-weight: 600; }
+  .facts dd a:hover { color: var(--color-primary-deep); }
+
+  /* --- 5. Press wall: featured outlets three across,
+     the other outlets as compact tiles four across. 12-column grid so both
+     rows fill the width. */
+  .press {
+    margin-top: var(--space-4);
+    display: grid;
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+    gap: var(--space-block) 1.25rem; /* same gaps as the homepage grid */
+  }
+  .press-item { grid-column: span 3; display: flex; }
+  .press-item--featured { grid-column: span 4; }
+  .press-item > :global(.card) { flex: 1; }
+  .quote figcaption a {
+    color: var(--color-primary);
+    font-weight: 600;
+  }
+  .quote figcaption a:hover { color: var(--color-primary-deep); }
+
+  /* --- 6. Identity gallery: the A3 poster then three Instagram posts in one
+     row. Column widths follow each image's ratio (A3 = 1 / 1.414, post = 4 / 5)
+     so all four come out the same height without cropping the poster. */
+  .gallery {
+    display: grid;
+    grid-template-columns: minmax(0, 0.707fr) repeat(3, minmax(0, 0.8fr));
+    gap: var(--space-2);
+    margin-top: var(--space-4);
+  }
+  .media--poster { aspect-ratio: 1 / 1.414; }
+  .media--post { aspect-ratio: 4 / 5; }
+  .gallery-link { margin-top: var(--space-2); }
+  .gallery-link a {
+    color: var(--color-primary);
+    font-weight: 600;
+  }
+  .gallery-link a:hover { color: var(--color-primary-deep); }
+
+  /* --- 7. Team photo */
+  .media--team { aspect-ratio: 4 / 5; }
+
+  /* --- 8. Testimonials */
+  .quotes {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: var(--space-2);
+  }
+  .quote {
+    margin: 0;
+    padding: var(--space-3);
+    border: 1px solid var(--color-line);
+    border-radius: var(--radius-card);
+    background: var(--color-card);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+  }
+  .quote blockquote { margin: 0; }
+  .quote blockquote p {
+    font-size: var(--fs-h4);
+    font-weight: 700;
+    line-height: 1.4;
+  }
+  .quote figcaption {
+    margin-top: auto;
+    font-size: var(--fs-small);
+    color: var(--color-muted);
+  }
+
+  /* --- 9. What's next */
+  .next {
+    font-size: 1.25rem;
+    line-height: 1.6;
+  }
+  .media--exhibitors { margin-top: var(--space-4); }
+  .media--exhibitors img { height: auto; }
+
+  /* --- Tablet and phones: one column */
+  @media (max-width: 860px) {
+    .split { grid-template-columns: 1fr; gap: var(--space-3); }
+    /* The empty spacer column only exists to offset text on wide screens. */
+    .split > [aria-hidden='true'] { display: none; }
+    .quotes { grid-template-columns: 1fr; }
+    .press-item,
+    .press-item--featured { grid-column: span 6; }
+    .chapter { margin-top: var(--space-5); }
+    /* One column: the team photo drops below its text, just before the quotes. */
+    .media--team { aspect-ratio: 4 / 3; order: 1; }
+  }
+  /* Phones: one press card per row, as on the homepage (the card switches to
+     its touch layout at the same 720px breakpoint). */
+  @media (max-width: 720px) {
+    .press-item,
+    .press-item--featured { grid-column: 1 / -1; }
+  }
+  @media (max-width: 640px) {
+    .stats { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--space-1); }
+    .stat { padding: var(--space-2); }
+    /* Phones: poster full width, the three posts in a row underneath. */
+    .gallery { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--space-1); }
+    .media--poster { grid-column: 1 / -1; }
+  }
+</style>

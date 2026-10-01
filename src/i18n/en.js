@@ -173,7 +173,7 @@ export default {
         slug: 'oyas-belgique',
         image: '/images/projects/jdh.jpg',
         alt: 'Illustrated poster for the Brussels plant festival, 26-27 September 2026, in front of the striped red-brick racecourse buildings',
-        url: '/work/fete-des-plantes',
+        url: '/en/work/fete-des-plantes',
         category: 'storytelling',
         tag: 'sustainability',
         subtitle: 'Oyas Belgique & DROHME Park',
@@ -218,7 +218,7 @@ export default {
         slug: 'couleur-du-peche',
         image: '/images/projects/couleur-du-peche.jpg',
         alt: 'Two older men sitting side by side by a window, one in a blue sweater and one in a yellow polo shirt',
-        url: '/work/couleur-du-peche', // INTERNAL link - opens dedicated page on this site
+        url: '/en/work/couleur-du-peche', // INTERNAL link - opens dedicated page on this site
         category: 'storytelling',
         tag: 'Slow journalism',
         subtitle: '24h01 · revue belge',

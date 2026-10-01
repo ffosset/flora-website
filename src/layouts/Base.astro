@@ -13,9 +13,10 @@ const year = new Date().getFullYear(); // SSR fallback; a client script keeps it
 // `subpage` marks a standalone route (e.g. /privacy/): the floating nav still
 // renders, but its section links resolve against the home page (they'd point at
 // #services etc., which don't exist off the home page), and the bar starts as
-// the pill since there's no hero to sit borderless over. Home + the work
-// article omit it (default).
-const { title, description, subpage = false } = Astro.props;
+// the pill since there's no hero to sit borderless over. Only the home page
+// omits it (default).
+// `image` / `imageAlt` override the default share image (path under public/).
+const { title, description, subpage = false, image, imageAlt } = Astro.props;
 const pageTitle = title ?? t.meta.title; // used for <title> and og:/twitter: titles
 const pageDescription = description ?? t.meta.description; // used for meta + og/twitter
 
@@ -32,7 +33,8 @@ const abs = (p) => absPath(`${base}/${p}`);
 // Absolute URL of `path` in locale `loc` (default locale unprefixed).
 const absIn = (loc, p) => absPath(localizedPath(loc, p));
 const canonical = absIn(locale, pagePath);
-const ogImage = abs('og-img.png');
+const ogImage = abs(image ?? 'og-img.png');
+const ogImageType = /\.jpe?g$/i.test(ogImage) ? 'image/jpeg' : 'image/png';
 const siteHome = abs(''); // absolute default-locale homepage (JSON-LD url + x-default)
 
 // Per-locale OG locale codes (regional variants) + the alternates for the other two.
@@ -48,13 +50,13 @@ const ogImageAlts = {
   fr: 'Flora Fosset · profil senior en design, Bruxelles et Madrid',
   es: 'Flora Fosset · perfil sénior en diseño, Bruselas y Madrid',
 };
-const ogImageAlt = ogImageAlts[locale] ?? ogImageAlts[defaultLang];
+const ogImageAlt = imageAlt ?? ogImageAlts[locale] ?? ogImageAlts[defaultLang];
 
-// hreflang: pages that exist in all three locales (home + privacy) emit the
-// full reciprocal set + x-default → the default-locale copy. Single-locale
-// pages (e.g. the work article) only self-reference by their own locale, plus
+// hreflang: pages that exist in all three locales (home, privacy, the project
+// pages) emit the full reciprocal set + x-default → the default-locale copy.
+// Any single-locale page would only self-reference by its own locale, plus
 // x-default → default homepage. No fake fr/es URLs.
-const translatedPaths = new Set(['', 'privacy/']);
+const translatedPaths = new Set(['', 'privacy/', 'work/fete-des-plantes/', 'work/couleur-du-peche/']);
 const alternates = translatedPaths.has(pagePath)
   ? [
       ...Object.keys(languages).map((l) => ({ hreflang: l, href: absIn(l, pagePath) })),
@@ -120,7 +122,7 @@ const personLd = {
       <meta property="og:locale:alternate" content={l} />
     ))}
     <meta property="og:image" content={ogImage} />
-    <meta property="og:image:type" content="image/png" />
+    <meta property="og:image:type" content={ogImageType} />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
     <meta property="og:image:alt" content={ogImageAlt} />

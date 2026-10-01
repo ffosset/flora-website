@@ -1,0 +1,324 @@
+---
+// Shared shell of the "Métis, la couleur du péché" article: hero, story tabs,
+// script and styles. Each locale's page (/work/, /en/work/, /es/work/) passes
+// its UI copy as `copy` and the article text through named slots: `intro`,
+// then one slot per story id. The styles are global (but all scoped under
+// .article) because slotted markup doesn't get this component's scoped styles.
+import Base from '../../layouts/Base.astro';
+
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+const { copy, home } = Astro.props;
+const stories = copy.stories;
+const panels = await Promise.all(stories.map((s) => Astro.slots.render(s.id)));
+---
+
+<Base subpage title={copy.title} description={copy.description}>
+  <article class="article">
+    <header class="article-hero">
+      <img src={`${base}/images/projects/couleur/save.jpg`} alt={copy.heroAlt} width="930" height="407" loading="eager" />
+      <div class="article-hero-inner">
+        <h1 class="article-title">{copy.heroTitle}</h1>
+        <p class="article-hero-meta">{copy.heroMeta}</p>
+      </div>
+    </header>
+
+    <div class="wrap">
+      <a class="back" href={`${home}#work`}>← {copy.back}</a>
+      <slot name="intro" />
+    </div>
+
+    <div class="wrap">
+      <div class="story-nav" role="tablist" aria-label={copy.tabsLabel} data-story-tabs>
+        {stories.map((s, i) => (
+          <button
+            class="story-tab"
+            role="tab"
+            id={`tab-${s.id}`}
+            aria-controls={`panel-${s.id}`}
+            aria-selected={i === 0 ? 'true' : 'false'}
+            tabindex={i === 0 ? 0 : -1}
+          >
+            {s.tab}
+          </button>
+        ))}
+      </div>
+    </div>
+
+    {stories.map((s, i) => (
+      <section class="story" id={`panel-${s.id}`} role="tabpanel" aria-labelledby={`tab-${s.id}`} data-story-panel hidden={i !== 0}>
+        <Fragment set:html={panels[i]} />
+      </section>
+    ))}
+  </article>
+</Base>
+
+<script>
+  const tablist = document.querySelector('[data-story-tabs]');
+  if (tablist) {
+    const tabs = Array.from(tablist.querySelectorAll('[role="tab"]'));
+    const panels = Array.from(document.querySelectorAll('[data-story-panel]'));
+    const select = (i, focus) => {
+      tabs.forEach((tab, j) => {
+        const on = j === i;
+        tab.setAttribute('aria-selected', String(on));
+        tab.tabIndex = on ? 0 : -1;
+        if (panels[j]) panels[j].hidden = !on;
+      });
+      if (focus) tabs[i].focus();
+      // Start the newly selected story from the top of the selector.
+      const y = tablist.getBoundingClientRect().top + window.scrollY - 96;
+      window.scrollTo({ top: y, behavior: 'auto' });
+    };
+    tabs.forEach((tab, i) => {
+      tab.addEventListener('click', () => select(i));
+      tab.addEventListener('keydown', (e) => {
+        if (e.key !== 'ArrowRight' && e.key !== 'ArrowLeft') return;
+        e.preventDefault();
+        const dir = e.key === 'ArrowRight' ? 1 : -1;
+        select((i + dir + tabs.length) % tabs.length, true);
+      });
+    });
+  }
+</script>
+
+<style is:global>
+  /* Inter throughout - far more comfortable than the mono for long reading. */
+  .article {
+    font-family: var(--font-display);
+    color: var(--color-text);
+    /* No top padding: the hero image runs to the top, under the floating nav. */
+    padding-bottom: var(--space-6);
+  }
+
+  /* Full-bleed hero: the lead photo with the title overlaid at the bottom. */
+  .article .article-hero {
+    position: relative;
+    isolation: isolate;
+    margin-bottom: var(--space-5);
+  }
+  .article .article-hero img {
+    width: 100%;
+    height: clamp(20rem, 60vh, 36rem);
+    object-fit: cover;
+    object-position: center;
+    display: block;
+  }
+  .article .article-hero::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    background: linear-gradient(to bottom, rgba(20, 12, 6, 0.05) 40%, rgba(20, 12, 6, 0.62) 100%);
+  }
+  .article .article-hero-inner {
+    position: absolute;
+    inset: auto 0 0 0;
+    z-index: 2;
+    max-width: var(--maxw);
+    margin-inline: auto;
+    padding-inline: var(--gutter);
+    padding-bottom: clamp(2rem, 5vh, 3.5rem);
+    color: #ffffff;
+  }
+  .article .article-hero .article-title { color: #ffffff; }
+  .article .article-hero-meta {
+    margin-top: var(--space-2);
+    font-family: var(--font-body);
+    font-size: var(--fs-small);
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: rgba(255, 255, 255, 0.85);
+  }
+
+  /* Reading column: a touch wider than before. */
+  .article .wrap {
+    max-width: 48rem;
+    margin-inline: auto;
+    padding-inline: var(--gutter);
+  }
+
+  .article .back {
+    display: inline-block;
+    margin-bottom: var(--space-4);
+    font-size: var(--fs-small);
+    color: var(--color-muted);
+    text-decoration: none;
+  }
+  .article .back:hover { color: var(--color-primary); }
+
+  .article .eyebrow {
+    font-size: var(--fs-small);
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--color-muted-soft);
+    margin-bottom: var(--space-2);
+  }
+  .article .article-title {
+    font-size: clamp(2.25rem, 1.4rem + 3.4vw, 3.5rem);
+    font-weight: 800;
+    line-height: 1.08;
+    letter-spacing: -0.02em;
+  }
+  .article .article-sub {
+    margin-top: var(--space-3);
+    font-size: 1.25rem;
+    line-height: 1.6;
+    font-weight: 400;
+    color: var(--color-muted);
+  }
+
+  /* Figures - generous, rounded, quiet captions. */
+  .article .figure {
+    margin-block: var(--space-5);
+    margin-inline: auto;
+    max-width: 56rem;
+    padding-inline: var(--gutter);
+  }
+  .article .figure img {
+    width: 100%;
+    height: auto;
+    display: block;
+    border-radius: var(--radius-card);
+  }
+  .article .figure .ph {
+    aspect-ratio: 3 / 2;
+    border-radius: var(--radius-card);
+    background: var(--color-bg-soft);
+    display: grid;
+    place-items: center;
+    color: color-mix(in srgb, var(--color-primary) 55%, transparent);
+    font-size: var(--fs-small);
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+  .article .figure figcaption {
+    margin-top: var(--space-2);
+    font-size: var(--fs-small);
+    color: var(--color-muted);
+    text-align: center;
+  }
+
+  /* Story selector - sticky just under the floating nav. */
+  .article .story-nav {
+    position: sticky;
+    top: 4.75rem;
+    z-index: 2;
+    display: flex;
+    gap: 0.6rem;
+    margin-block: var(--space-4);
+    padding-block: var(--space-2);
+    background: color-mix(in srgb, var(--color-bg) 88%, transparent);
+    -webkit-backdrop-filter: blur(6px);
+    backdrop-filter: blur(6px);
+  }
+  /* Tabs share the full reading width. */
+  .article .story-tab {
+    flex: 1;
+    text-align: center;
+    font-size: 1rem;
+    font-weight: 500;
+    border: 1px solid var(--color-line);
+    border-radius: var(--radius-pill);
+    padding: 0.7rem 0.75rem;
+    color: var(--color-muted);
+    transition: all 0.2s var(--ease);
+  }
+  .article .story-tab:hover { border-color: var(--color-primary); color: var(--color-primary); }
+  .article .story-tab[aria-selected='true'] {
+    background: var(--color-primary);
+    border-color: var(--color-primary);
+    color: var(--color-ink-on-primary);
+  }
+
+  /* Body copy tuned for reading: 19px, line-height 1.75. */
+  .article .story { font-size: 1.1875rem; line-height: 1.75; }
+  .article .story p { margin-top: var(--space-3); }
+  .article .story-title {
+    font-size: clamp(1.625rem, 1.2rem + 1.6vw, 2.25rem);
+    font-weight: 700;
+    line-height: 1.2;
+    letter-spacing: -0.01em;
+    margin-bottom: var(--space-3);
+  }
+  .article .story-lead {
+    font-size: 1.375rem;
+    line-height: 1.5;
+    color: var(--color-muted);
+    margin-bottom: var(--space-4);
+  }
+  .article .story h3 {
+    font-size: 1.375rem;
+    font-weight: 700;
+    line-height: 1.25;
+    letter-spacing: -0.01em;
+    margin-top: var(--space-5);
+    margin-bottom: calc(var(--space-2) * -1 + var(--space-3));
+  }
+  .article .story sup {
+    color: var(--color-primary);
+    font-weight: 600;
+    font-size: 0.7em;
+    padding-left: 0.1em;
+  }
+
+  .article .pullquote {
+    margin-block: var(--space-4);
+    padding-left: var(--space-3);
+    border-left: 3px solid var(--color-primary);
+    font-size: 1.5rem;
+    line-height: 1.35;
+    font-weight: 500;
+    color: var(--color-primary);
+  }
+  .article .pullquote cite {
+    display: block;
+    margin-top: var(--space-2);
+    font-size: 0.85rem;
+    font-style: normal;
+    font-weight: 500;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--color-muted-soft);
+  }
+
+  /* Callout box for the association note. */
+  .article .callout {
+    margin-block: var(--space-5);
+    padding: var(--space-3) var(--space-4);
+    background: var(--color-secondary);
+    border-radius: var(--radius-card);
+    font-size: 1.0625rem;
+    line-height: 1.6;
+  }
+  .article .callout h4 {
+    font-size: 1.0625rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    margin-bottom: var(--space-2);
+    color: var(--color-primary);
+  }
+
+  /* Footnotes. */
+  .article .footnotes {
+    margin-top: var(--space-5);
+    padding-top: var(--space-3);
+    border-top: 1px solid var(--color-line);
+    list-style: none;
+    font-size: 0.9375rem;
+    line-height: 1.55;
+    color: var(--color-muted);
+  }
+  .article .footnotes li { margin-top: var(--space-2); }
+  .article .footnotes sup { margin-right: 0.35em; }
+  .article .footnotes a { color: var(--color-primary); }
+  .article .footnotes--intro {
+    margin-top: 0;
+    border-top: 0;
+    padding-top: 0;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .article .story-tab { transition: none; }
+  }
+</style>
