@@ -8,7 +8,6 @@ it shows a labelled placeholder frame).
 | --------------------- | -------------------------------------- | --------------- |
 | `evenement.jpg`       | Photo de l'événement avec du monde     | 16:9            |
 | `affiche-a3.jpg`      | Affiche A3                             | portrait (A3)   |
-| `flyer-a5.jpg`        | Flyer A5 recto-verso                   | 2:1             |
-| `posts-instagram.jpg` | Posts Instagram                        | 1:1             |
-| `affiche-rue.jpg`     | Affiche dans la rue                    | 1:1             |
+| `instagram-*.jpg`     | Posts Instagram (food, still-we-glow, pollen) | 4:5         |
 | `equipe.jpg`          | Photo de Marie et moi                  | 4:5             |
+| `exposants.jpg`       | Photo de groupe des exposants (« Et ensuite ») | free     |

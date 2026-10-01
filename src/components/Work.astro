@@ -61,7 +61,7 @@ const ordered = ORDER
           d={{ ...DESIGN[p.slug], cta: t.work.ctas[DESIGN[p.slug].cta] }}
           base={base}
           labels={cardLabels}
-          service={p.label ?? t.work.filters[p.category]}
+          service={t.work.filters[p.category]}
         />
       ))}
     </div>

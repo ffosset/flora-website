@@ -85,7 +85,9 @@ const href = hasUrl ? (isExternal ? c.url : base + c.url) : undefined;
     display: flex;
     flex-direction: column;
     min-width: 0;
-    height: 34.5rem; /* every card the same height; fits a 5-line title */
+    /* Height follows the content; cards sharing a grid row are stretched to
+       the tallest one (align-items: stretch in Work.astro), so no reserved gap. */
+    --media-h: 12.5rem; /* image height, mirrored by .card-overlay */
     border-radius: 4px;
     overflow: hidden;
     /* Soft tint of the category colour - kept the same at rest and on hover. */
@@ -117,10 +119,10 @@ const href = hasUrl ? (isExternal ? c.url : base + c.url) : undefined;
   }
 
   /* --- Media (top): the image, with the pills overlaid and the colour reveal
-     covering it on hover. Its height (36%) is mirrored by .card-overlay. */
+     covering it on hover. Its height (--media-h) is mirrored by .card-overlay. */
   .card-media {
     position: relative;
-    flex: 0 0 36%;
+    flex: 0 0 var(--media-h);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -171,7 +173,7 @@ const href = hasUrl ? (isExternal ? c.url : base + c.url) : undefined;
     line-height: 1.2;
     letter-spacing: -0.01em;
     color: var(--color-text);
-    /* Bound the longest titles so the body can't overflow its fixed height. */
+    /* Bound the longest titles so one card can't stretch its whole row. */
     display: -webkit-box;
     -webkit-line-clamp: 5;
     -webkit-box-orient: vertical;
@@ -206,7 +208,7 @@ const href = hasUrl ? (isExternal ? c.url : base + c.url) : undefined;
     top: 0;
     left: 0;
     right: 0;
-    height: 36%; /* mirrors .card-media's flex-basis so it covers just the image */
+    height: var(--media-h); /* mirrors .card-media so it covers just the image */
     z-index: 2;
     display: flex;
     flex-direction: column;
@@ -324,9 +326,7 @@ const href = hasUrl ? (isExternal ? c.url : base + c.url) : undefined;
      dark text, and padding aligned with the body - so the tags and link read as
      part of the card's main content. */
   @media (max-width: 720px) {
-    .card { height: auto; }
-    /* Card height is auto here, so a % basis has nothing to resolve against. */
-    .card-media { flex-basis: 12rem; }
+    .card { --media-h: 12rem; }
     /* Tighter inner padding on phones. */
     .card-body { padding: 1.25rem 1.25rem 1.25rem; }
     /* Vertical rhythm below the body, top -> bottom: a small gap to the tags

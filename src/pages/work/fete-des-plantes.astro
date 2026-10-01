@@ -10,7 +10,6 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 // Images live under public/images/projects/fete-des-plantes/ (see the README
 // there). Until a file is dropped in, its slot renders as a labelled dashed
 // frame; once the file exists it shows automatically on the next build.
-// TODO: add the 6 image files listed below.
 const imgDir = 'images/projects/fete-des-plantes';
 const img = (file, alt, label) => ({
   src: `${base}/${imgDir}/${file}`,
@@ -19,19 +18,18 @@ const img = (file, alt, label) => ({
   label,
 });
 const images = {
-  // TODO: photo de l'événement avec du monde
-  hero: img('evenement.jpg', 'Des visiteurs se promènent entre les stands des exposants lors de la fête des plantes de Bruxelles, à l’Hippodrome de Boitsfort', 'Photo de l’événement avec du monde'),
-  // TODO: affiche A3
-  poster: img('affiche-a3.jpg', 'Affiche A3 de la fête des plantes de Bruxelles, avec son identité visuelle vive et colorée', 'Affiche A3'),
-  // TODO: flyer A5 recto-verso
-  flyer: img('flyer-a5.jpg', 'Recto et verso du flyer A5 de la fête des plantes de Bruxelles', 'Flyer A5 recto-verso'),
-  // TODO: posts Instagram
-  instagram: img('posts-instagram.jpg', 'Sélection de posts Instagram annonçant la fête des plantes de Bruxelles', 'Posts Instagram'),
-  // TODO: affiche dans la rue
-  street: img('affiche-rue.jpg', 'Affiche de la fête des plantes de Bruxelles placardée dans la rue', 'Affiche dans la rue'),
-  // TODO: photo de Marie et moi
-  team: img('equipe.jpg', 'Marie et Flora, les deux coordinatrices de la fête des plantes de Bruxelles', 'Photo de Marie et moi'),
+  hero: img('evenement.jpg', 'Vue d’en haut de la fête des plantes de Bruxelles : les stands des exposants et les visiteurs dans la cour ensoleillée de l’Hippodrome de Boitsfort', 'Photo de l’événement avec du monde'),
+  poster: img('affiche-a3.jpg', 'Affiche A3 de la fête des plantes de Bruxelles : le titre en lettres manuscrites vert foncé au-dessus d’une illustration aquarelle de l’Hippodrome de Boitsfort, et les dates du 26 et 27 septembre 2026 sur un bandeau jaune', 'Affiche A3'),
+  exhibitors: img('exposants.jpg', 'Photo de groupe des exposants et de l’équipe sur la pelouse de l’Hippodrome, avec le message « Merci pour cette fantastique première édition »', 'Photo des exposants'),
+  team: img('equipe.jpg', 'Marie et Flora côte à côte entre les stands, dans le t-shirt de l’événement', 'Photo de Marie et moi'),
 };
+
+// Three Instagram posts, shown in one row next to the A3 poster.
+const posts = [
+  img('instagram-food.jpg', 'Post Instagram « On s’occupe de vous du petit dej à l’apéro » : une mosaïque de plats et de boissons servis sur place', 'Post Instagram'),
+  img('instagram-still-we-glow.jpg', 'Post Instagram présentant l’exposante Still we glow : de vraies fleurs transformées à la main en bijoux', 'Post Instagram'),
+  img('instagram-pollen.jpg', 'Post Instagram présentant l’exposant Pollen Atelier : fleurs séchées, bouquets et compositions sur mesure', 'Post Instagram'),
+];
 
 const stats = [
   { value: '4 600', label: 'visiteurs' },
@@ -70,6 +68,8 @@ const testimonials = [
   { quote: '« Ça faisait longtemps qu’on n’avait pas participé à un évènement aussi bien organisé ! »', name: 'Cléo', company: 'Compostez-moi !', url: 'https://compostez-moi.be/' },
   { quote: '« Merci Marie et Flora pour l’organisation juste parfaite. »', name: 'Julie', company: 'MOOS Deco Design', url: 'https://moos-decodesign.com/' },
 ];
+
+const instagramUrl = 'https://www.instagram.com/fetedesplantesbxl/';
 
 const newTab = '(s’ouvre dans un nouvel onglet)';
 ---
@@ -121,7 +121,7 @@ const newTab = '(s’ouvre dans un nouvel onglet)';
           ))}
         </dl>
         <section class="block">
-          <p class="eyebrow"><span class="slash">·</span>La contrainte</p>
+          <p class="eyebrow"><span class="slash">·</span>Contrainte</p>
           <h2 class="block-title">Faire venir du monde sans acheter l’attention</h2>
           <p>
             Une première édition part de zéro : pas de public, pas de notoriété, et un format que beaucoup connaissent déjà ailleurs en Europe. Il fallait donner une raison de venir à des gens qui n’avaient jamais entendu parler de l’événement. Le budget pub tenait en trois chiffres ; acheter de la visibilité n’était pas une option.
@@ -181,14 +181,22 @@ const newTab = '(s’ouvre dans un nouvel onglet)';
         </div>
 
         <div class="gallery">
-          {[['poster', images.poster], ['flyer', images.flyer], ['instagram', images.instagram], ['street', images.street]].map(([key, im]) => (
-            <figure class={`media media--${key}`}>
-              {im.exists
-                ? <img src={im.src} alt={im.alt} loading="lazy" />
-                : <div class="slot" role="img" aria-label={im.alt}><span>Image · {im.label}</span></div>}
+          {images.poster.exists && (
+            <figure class="media media--poster">
+              <img src={images.poster.src} alt={images.poster.alt} loading="lazy" />
+            </figure>
+          )}
+          {posts.filter((im) => im.exists).map((im) => (
+            <figure class="media media--post">
+              <img src={im.src} alt={im.alt} loading="lazy" />
             </figure>
           ))}
         </div>
+        <p class="gallery-link">
+          <a href={instagramUrl} target="_blank" rel="noopener noreferrer">
+            Voir le compte Instagram<span aria-hidden="true"> ↗</span><span class="sr-only"> {newTab}</span>
+          </a>
+        </p>
       </section>
 
       <!-- 7. The team -->
@@ -200,7 +208,7 @@ const newTab = '(s’ouvre dans un nouvel onglet)';
               : <div class="slot" role="img" aria-label={images.team.alt}><span>Image · {images.team.label}</span></div>}
           </figure>
           <div class="block">
-            <p class="eyebrow"><span class="slash">·</span>L’équipe</p>
+            <p class="eyebrow"><span class="slash">·</span>Équipe</p>
             <h2 class="block-title">Arrivée en renfort, partie co-organisatrice</h2>
             <p>Marie a lancé et porté le projet. Je l’ai rejointe pour gérer les réseaux sociaux.</p>
             <p>
@@ -233,13 +241,12 @@ const newTab = '(s’ouvre dans un nouvel onglet)';
             <p class="next">Oyas et DROHME m’ont demandé de revenir pour la deuxième édition, qui se fera en 2027.</p>
           </div>
         </div>
+        {images.exhibitors.exists && (
+          <figure class="media media--exhibitors">
+            <img src={images.exhibitors.src} alt={images.exhibitors.alt} loading="lazy" />
+          </figure>
+        )}
       </section>
-
-      <!-- 10. Call to action: points at the site's contact footer -->
-      <aside class="cta">
-        <p class="cta-title">Vous lancez un projet et vous avez besoin de visibilité ?</p>
-        <a class="cta-btn btn-outline" href="#contact">Parlons-en</a>
-      </aside>
     </div>
   </article>
 </Base>
@@ -466,18 +473,23 @@ const newTab = '(s’ouvre dans un nouvel onglet)';
   .coverage-list a:hover,
   .quote figcaption a:hover { color: var(--color-primary-deep); }
 
-  /* --- 6. Identity gallery: tall A3 left; flyer on top right, two below */
+  /* --- 6. Identity gallery: the A3 poster then three Instagram posts in one
+     row. Column widths follow each image's ratio (A3 = 1 / 1.414, post = 4 / 5)
+     so all four come out the same height without cropping the poster. */
   .gallery {
     display: grid;
-    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) minmax(0, 1fr);
-    grid-template-rows: auto auto;
+    grid-template-columns: minmax(0, 0.707fr) repeat(3, minmax(0, 0.8fr));
     gap: var(--space-2);
     margin-top: var(--space-4);
   }
-  .media--poster { grid-column: 1; grid-row: 1 / span 2; min-height: 28rem; }
-  .media--flyer { grid-column: 2 / span 2; grid-row: 1; aspect-ratio: 2 / 1; }
-  .media--instagram { grid-column: 2; grid-row: 2; aspect-ratio: 1; }
-  .media--street { grid-column: 3; grid-row: 2; aspect-ratio: 1; }
+  .media--poster { aspect-ratio: 1 / 1.414; }
+  .media--post { aspect-ratio: 4 / 5; }
+  .gallery-link { margin-top: var(--space-2); }
+  .gallery-link a {
+    color: var(--color-primary);
+    font-weight: 600;
+  }
+  .gallery-link a:hover { color: var(--color-primary-deep); }
 
   /* --- 7. Team photo */
   .media--team { aspect-ratio: 4 / 5; }
@@ -515,32 +527,8 @@ const newTab = '(s’ouvre dans un nouvel onglet)';
     font-size: 1.25rem;
     line-height: 1.6;
   }
-
-  /* --- 10. Call to action */
-  .cta {
-    margin-top: var(--space-6);
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: var(--space-3);
-    padding: var(--space-4);
-    border: 1px solid var(--color-line);
-    border-radius: var(--radius-card);
-    background: var(--color-card);
-  }
-  .cta-title {
-    max-width: 30ch;
-    font-size: var(--fs-h3);
-    font-weight: 700;
-    line-height: 1.25;
-  }
-  .cta-btn {
-    flex-shrink: 0;
-    padding: 0.7rem 1.7rem;
-    font-size: 1rem;
-    color: var(--color-primary);
-    text-decoration: none;
-  }
+  .media--exhibitors { margin-top: var(--space-4); }
+  .media--exhibitors img { height: auto; }
 
   /* --- Tablet and phones: one column */
   @media (max-width: 860px) {
@@ -553,11 +541,8 @@ const newTab = '(s’ouvre dans un nouvel onglet)';
   }
   @media (max-width: 640px) {
     .stats { grid-template-columns: repeat(2, minmax(0, 1fr)); padding: var(--space-3) var(--space-2); }
-    .gallery { grid-template-columns: 1fr 1fr; }
-    .media--poster { grid-column: 1 / span 2; grid-row: auto; min-height: 0; aspect-ratio: 3 / 4; }
-    .media--flyer { grid-column: 1 / span 2; grid-row: auto; }
-    .media--instagram,
-    .media--street { grid-column: auto; grid-row: auto; }
-    .cta { flex-direction: column; align-items: flex-start; padding: var(--space-3); }
+    /* Phones: poster full width, the three posts in a row underneath. */
+    .gallery { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--space-1); }
+    .media--poster { grid-column: 1 / -1; }
   }
 </style>
