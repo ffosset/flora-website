@@ -43,25 +43,27 @@ const facts = [
   { term: 'Site web', value: 'fetedesplantes.be', url: 'https://www.fetedesplantes.be' },
   { term: 'Mon rôle', value: 'Relations presse, direction artistique et identité visuelle, réseaux sociaux, relation exposants, coordination sur place' },
   { term: 'Quand, où', value: '26–27 septembre 2026, Hippodrome de Boitsfort' },
-  { term: 'Soutiens', value: 'Bruxelles Environnement, commune de Watermael-Boitsfort' },
 ];
 
-// Press wall: one card per outlet. Outlets with an `angles` entry (the angle
-// I pitched them) get a wide featured card; the rest a compact tile. Each card
-// shows the outlet's own preview image (its og:image), saved under press/.
+// Press wall: one card per outlet, with the piece's real title. `featured`
+// outlets get a wide card on the first row; the rest a compact tile. Each card
+// shows the outlet's own preview image (its og:image), saved under press/,
+// and its publication date (none found for Bruxelles Today, an event listing).
+const formatDate = (iso) =>
+  new Date(`${iso}T12:00:00`).toLocaleDateString('fr-BE', { day: 'numeric', month: 'long', year: 'numeric' });
 const formats = {
   article: { label: 'article', action: 'Lire' },
   radio: { label: 'radio', action: 'Écouter' },
   tv: { label: 'télévision', action: 'Regarder' },
 };
 const press = [
-  { name: 'RTBF', image: 'rtbf.jpg', format: 'article', angles: ['La biodiversité ramenée en ville', 'Reconnecter les citadins à la nature'], url: 'https://www.rtbf.be/article/a-bruxelles-une-nouvelle-fete-des-plantes-veut-reconnecter-les-citadins-a-la-nature-11772180' },
-  { name: 'So Soir', image: 'sosoir.jpg', format: 'article', angles: ['L’ampleur : 1 000 m² de jardinage'], url: 'https://sosoir.lesoir.be/768814/article/2026-09-03/1-000-m2-de-jardinage-la-toute-premiere-foire-aux-plantes-debarque-bruxelles' },
-  { name: 'Le Bonbon', image: 'le-bonbon.jpg', format: 'article', angles: ['La sortie gratuite du week-end'], url: 'https://www.lebonbon.be/bruxelles/loisirs/premiere-grande-fete-plantes-bruxelles-gratuit/' },
-  { name: 'Bruxelles Secrète', image: 'bruxelles-secrete.jpg', format: 'article', url: 'https://bruxellessecrete.com/fete-des-plantes-hippodrome-de-boitsfort/' },
-  { name: 'Bruxelles Today', image: 'bruxelles-today.jpg', format: 'article', url: 'https://www.bruxellestoday.be/que-faire/la-premiere-grande-fete-des-plantes-de-bruxelles-26-27-sept-15192854.html' },
-  { name: 'BXFM', image: 'bxfm.jpg', format: 'radio', url: 'https://open.spotify.com/episode/6mrJmU7kOdV7mA8d3pIw5f' },
-  { name: 'BX1', image: 'bx1.jpg', format: 'tv', url: 'https://youtu.be/nSaFr2Hc_Ko' },
+  { name: 'RTBF', image: 'rtbf.jpg', date: '2026-09-05', format: 'article', title: 'À Bruxelles, une nouvelle fête des plantes veut reconnecter les citadins à la nature', featured: true, url: 'https://www.rtbf.be/article/a-bruxelles-une-nouvelle-fete-des-plantes-veut-reconnecter-les-citadins-a-la-nature-11772180' },
+  { name: 'So Soir', image: 'sosoir.jpg', date: '2026-09-03', format: 'article', title: '1 000 m² de jardinage : la toute première foire aux plantes débarque à Bruxelles', featured: true, url: 'https://sosoir.lesoir.be/768814/article/2026-09-03/1-000-m2-de-jardinage-la-toute-premiere-foire-aux-plantes-debarque-bruxelles' },
+  { name: 'Le Bonbon', image: 'le-bonbon.jpg', date: '2026-08-31', format: 'article', title: 'La première grande fête des plantes débarque à Bruxelles ce week-end... et c’est gratuit !', featured: true, url: 'https://www.lebonbon.be/bruxelles/loisirs/premiere-grande-fete-plantes-bruxelles-gratuit/' },
+  { name: 'BX1', image: 'bx1.jpg', date: '2026-09-30', format: 'tv', title: 'Les Jardins de l’HippoDrohme, 1ère édition', url: 'https://youtu.be/nSaFr2Hc_Ko' },
+  { name: 'BXFM', image: 'bxfm.jpg', date: '2026-09-25', format: 'radio', title: 'La Fête des plantes à l’hypodrome de boisfort 26 et 27-09', url: 'https://open.spotify.com/episode/6mrJmU7kOdV7mA8d3pIw5f' },
+  { name: 'Bruxelles Secrète', image: 'bruxelles-secrete.jpg', date: '2026-09-04', format: 'article', title: 'Plantes rares, conseils et découvertes : ce nouveau rendez-vous bruxellois arrive juste à temps pour ceux qui veulent verdir leur intérieur', url: 'https://bruxellessecrete.com/fete-des-plantes-hippodrome-de-boitsfort/' },
+  { name: 'Bruxelles Today', image: 'bruxelles-today.jpg', format: 'article', title: 'La première grande fête des plantes de Bruxelles', url: 'https://www.bruxellestoday.be/que-faire/la-premiere-grande-fete-des-plantes-de-bruxelles-26-27-sept-15192854.html' },
 ];
 
 const testimonials = [
@@ -147,18 +149,16 @@ const newTab = '(s’ouvre dans un nouvel onglet)';
         <h3 class="press-title">Ils en ont parlé</h3>
         <ul class="press">
           {press.map((m) => (
-            <li class={m.angles ? 'press-item press-item--featured' : 'press-item'}>
+            <li class={m.featured ? 'press-item press-item--featured' : 'press-item'}>
               <a class="press-card" href={m.url} target="_blank" rel="noopener noreferrer">
                 <img class="press-img" src={`${base}/${imgDir}/press/${m.image}`} alt="" loading="lazy" width="800" height="450" />
                 <span class="press-body">
-                <span class="press-format">{formats[m.format].label}</span>
+                <span class="press-meta">
+                  <span class="press-format">{formats[m.format].label}</span>
+                  {m.date && <time class="press-date" datetime={m.date}>{formatDate(m.date)}</time>}
+                </span>
                 <span class="press-name">{m.name}</span>
-                {m.angles && (
-                  <span class="press-angles">
-                    <span class="press-angles-label">Angle proposé</span>
-                    {m.angles.map((a) => <span class="press-angle">« {a} »</span>)}
-                  </span>
-                )}
+                <span class="press-headline">{m.title}</span>
                 <span class="press-action">
                   {formats[m.format].action}<span aria-hidden="true"> ↗</span><span class="sr-only"> {newTab}</span>
                 </span>
@@ -440,7 +440,7 @@ const newTab = '(s’ouvre dans un nouvel onglet)';
   .facts dd a { color: var(--color-primary); font-weight: 600; }
   .facts dd a:hover { color: var(--color-primary-deep); }
 
-  /* --- 5. Press wall: featured outlets (with the pitched angle) three across,
+  /* --- 5. Press wall: featured outlets three across,
      the other outlets as compact tiles four across. 12-column grid so both
      rows fill the width. */
   .press-title {
@@ -497,6 +497,17 @@ const newTab = '(s’ouvre dans un nouvel onglet)';
     padding: var(--space-3);
   }
   .press-card:focus-visible { outline: 2px solid var(--color-primary); outline-offset: 2px; }
+  .press-meta {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.4rem 0.6rem;
+  }
+  .press-date {
+    font-family: var(--font-body);
+    font-size: 0.82rem;
+    color: var(--color-muted);
+  }
   .press-format {
     font-family: var(--font-body);
     font-size: 0.82rem;
@@ -512,23 +523,11 @@ const newTab = '(s’ouvre dans un nouvel onglet)';
     line-height: 1.15;
     letter-spacing: -0.01em;
   }
-  .press-angles {
-    display: flex;
-    flex-direction: column;
-    gap: 0.35rem;
-    margin-top: var(--space-1);
-  }
-  .press-angles-label {
-    font-family: var(--font-body);
-    font-size: var(--fs-eyebrow);
-    text-transform: uppercase;
-    letter-spacing: 0.12em;
-    color: var(--color-muted);
-  }
-  .press-angle {
-    font-size: 1.125rem;
+  /* The piece's real headline. */
+  .press-headline {
+    font-size: 1.0625rem;
     font-weight: 600;
-    line-height: 1.35;
+    line-height: 1.4;
     color: var(--color-primary);
   }
   .press-action {

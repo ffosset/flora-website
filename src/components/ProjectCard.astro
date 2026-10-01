@@ -14,7 +14,7 @@ const isExternal = hasUrl && c.url.startsWith('http');
 const href = hasUrl ? (isExternal ? c.url : base + c.url) : undefined;
 ---
 
-<article class="card" style={`--cat: var(--cat-${c.category})`} data-cat={c.category}>
+<article class="card" style={`--cat: var(--cat-${c.category})`} data-cat={c.category} data-linked={hasUrl ? '' : undefined}>
   <div class="card-media">
     <img src={base + c.image} alt={c.alt ?? c.subtitle} loading="lazy" />
   </div>
@@ -79,6 +79,22 @@ const href = hasUrl ? (isExternal ? c.url : base + c.url) : undefined;
   </div>
 </article>
 
+<script>
+  // Make the whole card clickable, not just the image area: a click anywhere
+  // on a linked card follows its link. Real links inside the card (the CTA,
+  // award links) keep their own behaviour, and selecting text doesn't navigate.
+  document.querySelectorAll<HTMLElement>('.card[data-linked]').forEach((card) => {
+    const cta = card.querySelector<HTMLAnchorElement>('.card-cta');
+    if (!cta) return;
+    card.addEventListener('click', (e) => {
+      if ((e.target as Element).closest('a')) return;
+      if (window.getSelection()?.toString()) return;
+      if (e.metaKey || e.ctrlKey) window.open(cta.href, '_blank', 'noopener');
+      else cta.click();
+    });
+  });
+</script>
+
 <style>
   .card {
     position: relative;
@@ -103,6 +119,7 @@ const href = hasUrl ? (isExternal ? c.url : base + c.url) : undefined;
     box-shadow: 0 0 0 0 var(--cat-shadow, transparent);
     transition: box-shadow 0.35s var(--ease);
   }
+  .card[data-linked] { cursor: pointer; }
   /* Per-category hard-shadow colour, driven on hover. */
   .card[data-cat='landing']      { --cat-shadow: #9C5A0C; }
   .card[data-cat='storytelling'] { --cat-shadow: #235C48; }
