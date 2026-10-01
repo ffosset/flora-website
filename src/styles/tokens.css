@@ -201,7 +201,10 @@
 
 * { box-sizing: border-box; margin: 0; padding: 0; }
 
-html { scroll-behavior: smooth; }
+/* Smooth only once the page has loaded (Base.astro adds the class), so
+   arriving on a section from another page jumps straight there instead of
+   gliding down from the top, which looked like scrolling the old page. */
+html.smooth-scroll { scroll-behavior: smooth; }
 
 body {
   background: var(--color-bg);

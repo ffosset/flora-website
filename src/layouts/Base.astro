@@ -199,6 +199,13 @@ const personLd = {
     </footer>
 
     <script>
+      // Turn on smooth scrolling after the initial jump to any #section in the
+      // URL (see html.smooth-scroll in tokens.css).
+      const enableSmooth = () =>
+        setTimeout(() => document.documentElement.classList.add('smooth-scroll'), 0);
+      if (document.readyState === 'complete') enableSmooth();
+      else window.addEventListener('load', enableSmooth, { once: true });
+
       const toggle = document.querySelector('[data-menu-toggle]');
       const menu = document.querySelector('[data-nav-menu]');
       const scrim = document.querySelector('[data-nav-scrim]');
